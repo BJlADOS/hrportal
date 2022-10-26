@@ -1,0 +1,14 @@
+<form [formGroup]="signInForm" (submit)="signIn()">
+    <label class="control-name">Email</label>
+    <input id="email" formControlName="email" type="email" class="form-control">
+    <label
+        class="text-danger"
+        *ngIf="signInForm.controls['email'].hasError('email')" @textAppears
+    >
+        Введите верный email!
+    </label>
+    <label class="control-name">Пароль</label>
+    <input id="password" formControlName="password" type="password" class="form-control">
+    <input type="submit" value="Войти" [disabled]="signInForm.invalid">
+    </form>
+    <i (click)="forgotPassword()">Забыли пароль?</i>

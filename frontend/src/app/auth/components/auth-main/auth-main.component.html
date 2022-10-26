@@ -1,0 +1,18 @@
+<p>auth-main works!</p>
+<div class="wrapper">
+    <div class="title">
+        <h1>HRPortal</h1>
+        <div class="title-buttons">
+            <button (click)="setAuthType('sign-in')">Вход</button>
+            <label class="title-buttons-separator">|</label>
+            <button (click)="setAuthType('sign-up')">Регистрация</button>
+        </div>
+    </div>
+    <div class="content" *ngIf="authType === 'sign-in' else signUpBlock">
+        <app-auth></app-auth>
+    </div>
+    <ng-template #signUpBlock>
+        <app-registration></app-registration>
+    </ng-template>
+    {{authType}}
+</div>
