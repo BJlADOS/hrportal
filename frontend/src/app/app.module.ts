@@ -5,6 +5,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { appRouting } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptorService } from './services/jwt-interceptor.service';
+import { CookieModule } from 'ngx-cookie';
 
 @NgModule({
   declarations: [
@@ -13,10 +16,18 @@ import { MainComponent } from './main/main.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     appRouting,
     ReactiveFormsModule,
+    CookieModule.withOptions(),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

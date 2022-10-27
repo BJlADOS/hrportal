@@ -1,14 +1,7 @@
-<form [formGroup]="signInForm" (submit)="signIn()">
-    <label class="control-name">Email</label>
-    <input id="email" formControlName="email" type="email" class="form-control">
-    <label
-        class="text-danger"
-        *ngIf="signInForm.controls['email'].hasError('email')" @textAppears
-    >
-        Введите верный email!
-    </label>
-    <label class="control-name">Пароль</label>
-    <input id="password" formControlName="password" type="password" class="form-control">
-    <input type="submit" value="Войти" [disabled]="signInForm.invalid">
-    </form>
+<form [formGroup]="signInForm" (submit)="signIn()" class="form">
+    <input id="email" formControlName="email" type="email" class="form-control" placeholder="Электронная почта">
+    <input id="password" formControlName="password" type="password" class="form-control" placeholder="Пароль">
     <i (click)="forgotPassword()">Забыли пароль?</i>
+    <input type="submit" value="ВХОД" [disabled]="signInForm.invalid">
+</form>
+<!-- <button (click)="makeRequest()">makeRequest</button> -->

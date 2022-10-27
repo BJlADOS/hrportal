@@ -1,6 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { SHA256 } from 'crypto-js';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -11,7 +14,9 @@ export class AuthComponent implements OnInit {
 
   public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
 
-  constructor() { }
+  constructor(
+    public auth: AuthService,
+  ) { }
 
   ngOnInit(): void {
   }
@@ -21,6 +26,10 @@ export class AuthComponent implements OnInit {
   }
 
   public forgotPassword(): void { //not implemented
+  }
+
+  public makeRequest(): void { 
+    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
   }
 
 }

@@ -1,1 +1,34 @@
 /* You can add global styles to this file, and also import other style files */
+html {
+    --white: #fff;
+    --primary-color: #ffffff;
+    --black: #000;
+    --font-primary: #4C4C4C;
+    --main-accent-color: #FDC04E;
+    --main-accent-color-hover: #be913d;
+    --main-accent-color-active: #8e6f2d;
+    --main-accent-grey: #323535;
+    --additional-accent-color: #f9f9f9;
+    --disabled-color: #949597;
+    --border-color: #949597;
+    --box-shadow-color: rgba(76, 76, 76, 0.2);
+
+    --main-font-family: 'Montserrat', sans-serif;
+}
+
+body {
+    font-family: var(--main-font-family);
+    font-size: 16px;
+    color: var(--font-primary);
+    background-color: var(--additional-accent-color);
+    margin: 0;
+    padding: 0;
+}
+
+.column-4-10 {
+    grid-column: 4 / 10;
+}
+
+.row-1-2 {
+    grid-row: 1 / 2;
+}

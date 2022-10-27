@@ -5,6 +5,8 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { AuthMainComponent } from './components/auth-main/auth-main.component';
 import { authRouting } from './auth-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -18,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     authRouting,
     ReactiveFormsModule,
+    HttpClientModule,
   ]
 })
 export class AuthModule { }
