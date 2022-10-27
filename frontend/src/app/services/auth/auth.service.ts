@@ -36,7 +36,7 @@ export class AuthService {
 
   public signIn(email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.get(`${this.apiURL}/auth`, { params: {email: email, password: passwordHash } }).subscribe((data) => {
+    this.http.post(`${this.apiURL}/auth`, { params: {email: email, password: passwordHash } }).subscribe((data) => {
       const token: IToken = data as IToken;
       this.cookie.put('token', token.token);
       console.log(data);
