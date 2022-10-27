@@ -32,3 +32,9 @@ class AuthenticationView(APIView):
         user = authenticate(email=email, password=password)
 
         return Response({'token': user.token}, status=status.HTTP_200_OK)
+
+
+class TestView(APIView):
+    @staticmethod
+    def get(request):
+        return Response({'detail': 'Authentication passed'}, status=status.HTTP_200_OK)
