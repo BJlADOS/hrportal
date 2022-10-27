@@ -1,0 +1,16 @@
+<div class="wrapper-grid">
+    <div class="wrapper-flex column-4-10">
+        <div class="title">
+            <h1>HR-portal</h1>
+            <div class="title-buttons">
+                <label (click)="setAuthType('sign-in')" [class.active]="authType === 'sign-in'">Авторизация</label>
+                <label class="title-buttons-separator">|</label>
+                <label (click)="setAuthType('sign-up')" [class.active]="authType === 'sign-up'">Регистрация</label>
+            </div>
+        </div>
+        <div class="content">
+            <app-auth *ngIf="authType === 'sign-in'"></app-auth>
+            <app-registration *ngIf="authType === 'sign-up'"></app-registration>
+        </div>
+    </div>
+</div>

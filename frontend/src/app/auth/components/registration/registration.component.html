@@ -1,0 +1,15 @@
+<form [formGroup]="signUpForm" (submit)="signUp()">
+    <label class="control-name">Имя</label>
+    <input id="name" formControlName="name" type="text" class="form-control">
+    <label class="control-name">Фамилия</label>
+    <input id="firstName" formControlName="firstName" type="text" class="form-control">
+    <label class="control-name">Отчество</label>
+    <input id="middleName" formControlName="middleName" type="text" class="form-control">
+    <label class="control-name">Email</label>
+    <input id="email" formControlName="email" type="email" class="form-control">
+    <label class="control-name">Пароль</label>
+    <input id="password" formControlName="password" type="password" class="form-control">
+    <label class="control-name">Подтвердите пароль</label>
+    <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
+    <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid">
+</form>
