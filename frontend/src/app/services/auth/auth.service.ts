@@ -41,7 +41,6 @@ export class AuthService {
       const token: IToken = data as IToken;
       this.cookie.put('token', token.token);
       console.log(data);
-      console.log(this.cookie.get('token'));
     });
   }
 
