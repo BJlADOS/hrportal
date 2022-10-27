@@ -24,14 +24,14 @@ export class AuthComponent implements OnInit {
   }
 
   public signIn(): void { //not implemented
-    console.log(this.signInForm.value);
+    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
   }
 
   public forgotPassword(): void { //not implemented
   }
 
   public makeRequest(): void { 
-    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
+    // this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
   }
 
   public passwordBlur(): void { 

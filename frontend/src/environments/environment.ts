@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiURL: 'https://virtserver.swaggerhub.com/angst-storm/hr-portal-api/1.0.0',
+  // apiURL: 'https://virtserver.swaggerhub.com/angst-storm/hr-portal-api/1.0.0',
+  apiURL: 'http://127.0.0.1:8000/'
 };
 
 /*
