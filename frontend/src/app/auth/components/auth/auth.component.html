@@ -1,6 +1,6 @@
 <form [formGroup]="signInForm" (submit)="signIn()" class="form">
-    <input id="email" formControlName="email" type="email" class="form-control" placeholder="Электронная почта">
-    <input id="password" formControlName="password" type="password" class="form-control" placeholder="Пароль">
+    <input id="email" formControlName="email" type="email" class="form-control" [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()">
+    <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()">
     <i (click)="forgotPassword()">Забыли пароль?</i>
     <input type="submit" value="ВХОД" [disabled]="signInForm.invalid">
 </form>

@@ -12,6 +12,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class AuthComponent implements OnInit {
 
+  public passwordPlaceholder: string = 'Пароль';
+  public emailPlaceholder: string = 'Электронная почта'
   public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
 
   constructor(
@@ -30,6 +32,22 @@ export class AuthComponent implements OnInit {
 
   public makeRequest(): void { 
     this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
+  }
+
+  public passwordBlur(): void { 
+    this.passwordPlaceholder = 'Пароль';
+  }
+
+  public passwordFocus(): void {
+    this.passwordPlaceholder = 'Используйте 6-20 символов (только A-Z, a-z, 0-9)';
+  }
+
+  public emailBlur(): void {
+    this.emailPlaceholder = 'Электронная почта';
+  }
+
+  public emailFocus(): void {
+    this.emailPlaceholder = 'Используйте корпоративную почту';
   }
 
 }
