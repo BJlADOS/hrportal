@@ -29,14 +29,15 @@ export class AuthService {
 
   public signUp(name: string, firstName: string, middleName: string, email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${ this.apiURL }/reg`, { params: { name: name, firstName: firstName, middleName: middleName, email: email, password: passwordHash } }).subscribe((data) => {
+    const fullname: string = `${name} ${firstName} ${middleName}`;
+    this.http.post(`${ this.apiURL }/reg`, { fullname: fullname, email: email, password: passwordHash  }).subscribe((data) => {
       console.log(data);
     });
   }
 
   public signIn(email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${this.apiURL}/auth`, { params: {email: email, password: passwordHash } }).subscribe((data) => {
+    this.http.post(`${this.apiURL}/auth`, { email: email, password: passwordHash }).subscribe((data) => {
       const token: IToken = data as IToken;
       this.cookie.put('token', token.token);
       console.log(data);
@@ -52,6 +53,7 @@ export class AuthService {
 
   public logOut(): void { 
     this.currentUserSubject.next(null);
+    this.cookie.remove('token');
   }
 
 }
