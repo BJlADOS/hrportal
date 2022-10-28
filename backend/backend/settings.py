@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'jwt_auth.apps.JwtAuthConfig',
     'hr_api.apps.HrApiConfig'
 ]
 
@@ -86,7 +85,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'jwt_auth.User'
+AUTH_USER_MODEL = 'hr_api.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -111,7 +110,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'jwt_auth.authentication.JWTAuthentication',
+        'hr_api.authentication.JWTAuthentication',
     ),
 }
 

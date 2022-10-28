@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from hr_api.models import Department
+from .models import Department
 
 
 class Manager(permissions.BasePermission):
