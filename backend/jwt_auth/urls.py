@@ -7,5 +7,6 @@ urlpatterns = [
     re_path(r'^unique-email/?$', UniqueEmailView.as_view(), name='unique-email'),
     re_path(r'^auth/?$', AuthenticationView.as_view(), name='auth'),
     re_path(r'^valid-token/?$', ValidTokenView.as_view(), name='valid-token'),
-    re_path(r'^test/?$', TestView.as_view(), name='test')
+    re_path(r'^test/?$', TestView.as_view(), name='test'),
+    re_path(r'^manager-test/?$', ManagerTestView.as_view(), name='manager-test')
 ]

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .authentication import JWTAuthentication
+from .permissions import Manager
 from .serializers import *
 
 
@@ -72,6 +73,14 @@ class UniqueEmailView(APIView):
 
 
 class TestView(APIView):
+    @staticmethod
+    def get(request):
+        return response_with_detail('Authentication passed', status.HTTP_200_OK)
+
+
+class ManagerTestView(APIView):
+    permission_classes = [Manager]
+
     @staticmethod
     def get(request):
         return response_with_detail('Authentication passed', status.HTTP_200_OK)
