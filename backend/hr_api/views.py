@@ -73,6 +73,14 @@ class UniqueEmailView(APIView):
         return Response({'unique': result}, status=status.HTTP_200_OK)
 
 
+class UserDetail(APIView):
+    serializer_class = UserSerializer
+
+    def get(self, request):
+        serializer = self.serializer_class(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class TestView(APIView):
     @staticmethod
     def get(request):
