@@ -51,6 +51,21 @@ class ValidTokenView(APIView):
         return Response({'valid': result}, status=status.HTTP_200_OK)
 
 
+class UniqueEmailView(APIView):
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def post(request):
+        email = request.data['email']
+        result = True
+        try:
+            User.objects.get(email=email)
+            result = False
+        except User.DoesNotExist:
+            pass
+        return Response({'unique': result}, status=status.HTTP_200_OK)
+
+
 class TestView(APIView):
     @staticmethod
     def get(request):
