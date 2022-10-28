@@ -41,11 +41,13 @@ class ValidTokenView(APIView):
     @staticmethod
     def post(request):
         token = request.data['token']
+        result = False
         try:
             JWTAuthentication.authenticate_credentials(token)
-            return Response({'valid': True}, status=status.HTTP_200_OK)
+            result = True
         except exceptions.AuthenticationFailed:
-            return Response({'valid': False}, status=status.HTTP_200_OK)
+            pass
+        return Response({'valid': result}, status=status.HTTP_200_OK)
 
 
 class TestView(APIView):
