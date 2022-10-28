@@ -1,8 +1,21 @@
+import os
+
 import jwt
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core import validators
 from django.db import models
+from django.utils import timezone
+from django.utils.text import slugify
+from transliterate import translit
+
+
+def get_upload_path(instance, filename):
+    date = timezone.now().strftime('%d.%m.%Y')
+    filename, ext = os.path.splitext(filename)
+    filename = slugify(translit(filename, 'ru', reversed=True))
+    result = os.path.join(instance.__class__.__name__, date, f"{filename}{ext}").lower()
+    return result
 
 
 class UserManager(BaseUserManager):
@@ -50,6 +63,39 @@ class User(AbstractBaseUser, PermissionsMixin):
 
         return jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
 
+    existing_skills = models.ManyToManyField('Skill', blank=True)
+
+    contact = models.CharField(max_length=255, blank=True)
+
+    EXPERIENCE_CHOICES = [
+        ('<1', 'Меньше 1 года'),
+        ('1-3', 'От 1 года до 3 лет'),
+        ('3-6', 'От 3 до 6 лет'),
+        ('>6', 'Больше 6 лет')
+    ]
+
+    experience = models.CharField(max_length=3, choices=EXPERIENCE_CHOICES, null=True, blank=True)
+
+    current_department = models.OneToOneField(to='Department', on_delete=models.SET_NULL, null=True, blank=True)
+
+    photo = models.ImageField(upload_to=get_upload_path, blank=True)
+
+    @property
+    def filled(self):
+        return self.experience is not None and self.current_department is not None
+
+    @property
+    def is_manager(self):
+        try:
+            _ = self.department
+            return True
+        except Department.DoesNotExist:
+            return False
+
+    @property
+    def is_admin(self):
+        return self.is_superuser
+
     def get_full_name(self):
         return self.fullname
 
@@ -65,4 +111,11 @@ class Department(models.Model):
     manager = models.OneToOneField(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"Department({self.name})"
+
+
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Skill({self.name})"
