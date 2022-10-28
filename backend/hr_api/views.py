@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from rest_framework import status, exceptions
+from rest_framework import status, exceptions, generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -79,6 +79,26 @@ class UserDetail(APIView):
     def get(self, request):
         serializer = self.serializer_class(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DepartmentList(generics.ListCreateAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class DepartmentDetail(generics.RetrieveDestroyAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+
+class SkillList(generics.ListCreateAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+
+
+class SkillDetail(generics.RetrieveDestroyAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
 
 
 class TestView(APIView):

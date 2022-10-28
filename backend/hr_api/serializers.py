@@ -46,7 +46,7 @@ class UniqueEmailSerializer(serializers.Serializer):
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
-    managerId = serializers.IntegerField(source='manager_id')
+    managerId = serializers.IntegerField(source='manager_id', required=False)
 
     class Meta:
         model = Department
