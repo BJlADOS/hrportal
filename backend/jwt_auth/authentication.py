@@ -12,18 +12,27 @@ class JWTAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         request.user = None
 
+        token = self.extract_token(request, self.authentication_header_prefix)
+
+        if token is None:
+            return None
+
+        return self.authenticate_credentials(token)
+
+    @staticmethod
+    def extract_token(request, expected_prefix):
         auth_header = authentication.get_authorization_header(request).split()
 
-        if not auth_header or len(auth_header) == 1 or len(auth_header) > 2:
+        if len(auth_header) != 2:
             return None
 
         prefix = auth_header[0].decode('utf-8')
         token = auth_header[1].decode('utf-8')
 
-        if prefix.lower() != self.authentication_header_prefix.lower():
+        if prefix.lower() != expected_prefix.lower():
             return None
 
-        return self.authenticate_credentials(token)
+        return token
 
     @staticmethod
     def authenticate_credentials(token):
