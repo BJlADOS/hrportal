@@ -3,37 +3,40 @@ from rest_framework import status, exceptions
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .authentication import JWTAuthentication
 
-from .models import User
+from .authentication import JWTAuthentication
+from .serializers import *
 
 
 class RegistrationView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = RegistrationSerializer
 
-    @staticmethod
-    def post(request):
-        fullname = request.data['fullname']
-        email = request.data['email']
-        password = request.data['password']
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        User.objects.create_user(fullname, email, password)
-
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class AuthenticationView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = AuthSerializer
 
-    @staticmethod
-    def post(request):
-        email = request.data['email']
-        password = request.data['password']
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        user = authenticate(email=email, password=password)
+        user = authenticate(username=request.data['email'], password=request.data['password'])
 
-        return Response({'token': user.token}, status=status.HTTP_200_OK) if user is not None else \
-            response_with_detail("User don't exist or wrong password", status.HTTP_401_UNAUTHORIZED)
+        if user is None:
+            return response_with_detail('A user with this email and password was not found.', status.HTTP_401_UNAUTHORIZED)
+
+        if not user.is_active:
+            return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
+
+        return Response({'token': user.token}, status=status.HTTP_200_OK)
 
 
 class ValidTokenView(APIView):
@@ -54,13 +57,14 @@ class ValidTokenView(APIView):
 
 class UniqueEmailView(APIView):
     permission_classes = [AllowAny]
+    serializer_class = UniqueEmailSerializer
 
-    @staticmethod
-    def post(request):
-        email = request.data['email']
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
         result = True
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=request.data['email'])
             result = False
         except User.DoesNotExist:
             pass
