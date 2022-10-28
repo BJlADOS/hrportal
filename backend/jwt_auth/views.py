@@ -32,7 +32,8 @@ class AuthenticationView(APIView):
 
         user = authenticate(email=email, password=password)
 
-        return Response({'token': user.token}, status=status.HTTP_200_OK)
+        return Response({'token': user.token}, status=status.HTTP_200_OK) if user is not None else \
+            response_with_detail("User don't exist or wrong password", status.HTTP_401_UNAUTHORIZED)
 
 
 class ValidTokenView(APIView):
@@ -69,4 +70,8 @@ class UniqueEmailView(APIView):
 class TestView(APIView):
     @staticmethod
     def get(request):
-        return Response({'detail': 'Authentication passed'}, status=status.HTTP_200_OK)
+        return response_with_detail('Authentication passed', status.HTTP_200_OK)
+
+
+def response_with_detail(message, response_status):
+    return Response({'detail': message}, status=response_status)
