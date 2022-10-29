@@ -10,6 +10,7 @@ from .serializers import *
 
 
 class RegistrationView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = RegistrationSerializer
 
@@ -21,7 +22,8 @@ class RegistrationView(APIView):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class AuthenticationView(APIView):
+class LoginView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = AuthSerializer
 
@@ -41,6 +43,17 @@ class AuthenticationView(APIView):
         return add_auth(Response(status=status.HTTP_200_OK), user)
 
 
+class LogoutView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    @staticmethod
+    def get(request):
+        response = Response(status=status.HTTP_200_OK)
+        response.delete_cookie('Authorization')
+        return response
+
+
 class AuthorizedView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
@@ -58,6 +71,7 @@ class AuthorizedView(APIView):
 
 
 class UniqueEmailView(APIView):
+    authentication_classes = []
     permission_classes = [AllowAny]
     serializer_class = UniqueEmailSerializer
 
