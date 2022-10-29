@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate
 from rest_framework import status, exceptions, generics
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .authentication import JWTAuthentication
-from .permissions import Manager
+from .permissions import IsManagerUser
 from .serializers import *
 
 
@@ -108,20 +109,36 @@ class DepartmentList(generics.ListCreateAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
 
 class DepartmentDetail(generics.RetrieveDestroyAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
+    permission_classes = [IsAdminUser]
 
 
 class SkillList(generics.ListCreateAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
 
 class SkillDetail(generics.RetrieveDestroyAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
+    permission_classes = [IsAdminUser]
 
 
 class TestView(APIView):
@@ -131,7 +148,7 @@ class TestView(APIView):
 
 
 class ManagerTestView(APIView):
-    permission_classes = [Manager]
+    permission_classes = [IsManagerUser]
 
     @staticmethod
     def get(request):
