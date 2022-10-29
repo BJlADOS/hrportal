@@ -106,6 +106,41 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"User({self.fullname}, {self.email})"
 
 
+class Resume(models.Model):
+    employee = models.OneToOneField(to='User', on_delete=models.CASCADE)
+
+    desired_position = models.CharField(max_length=255)
+
+    desired_salary = models.IntegerField()
+
+    EMPLOYMENT_CHOICES = [
+        ('PART', 'Частичная занятость'),
+        ('FULL', 'Полная занятость'),
+    ]
+
+    desired_employment = models.CharField(max_length=4, choices=EMPLOYMENT_CHOICES)
+
+    SCHEDULE_CHOICES = [
+        ('DISTANT', 'Удаленная работа'),
+        ('FLEX', 'Гибкий график'),
+        ('SHIFT', 'Сменный график'),
+        ('FULL', 'Полная работа')
+    ]
+
+    desired_schedule = models.CharField(max_length=7, choices=SCHEDULE_CHOICES)
+
+    resume = models.FileField(upload_to=get_upload_path)
+
+    is_active = models.BooleanField()
+
+    modified_at = models.DateTimeField(auto_now=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Resume({self.desired_position}, {self.employee.fullname})"
+
+
 class Department(models.Model):
     name = models.CharField(max_length=255)
     manager = models.OneToOneField(to=User, on_delete=models.SET_NULL, null=True, blank=True)
