@@ -21,7 +21,7 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     @staticmethod
     def extract_token(request, expected_prefix):
-        auth_header = request.COOKIES.get('Authorization', '').split()
+        auth_header = request.session.get('Authorization', '').split()
 
         if len(auth_header) != 2:
             return None

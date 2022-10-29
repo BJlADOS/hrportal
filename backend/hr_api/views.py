@@ -41,7 +41,9 @@ class LoginView(APIView):
         if not user.is_active:
             return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
 
-        return add_auth(Response(status=status.HTTP_200_OK), user)
+        add_auth(request, user)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class LogoutView(APIView):
@@ -50,9 +52,8 @@ class LogoutView(APIView):
 
     @staticmethod
     def get(request):
-        response = Response(status=status.HTTP_200_OK)
-        response.delete_cookie('Authorization')
-        return response
+        request.session.flush()
+        return Response(status=status.HTTP_200_OK)
 
 
 class AuthorizedView(APIView):
@@ -101,8 +102,9 @@ class UserDetail(APIView):
         put_serializer.is_valid(raise_exception=True)
         put_serializer.save()
 
+        add_auth(request, user)
         get_serializer = GetUserSerializer(user)
-        return add_auth(Response(get_serializer.data, status=status.HTTP_200_OK), user)
+        return Response(get_serializer.data, status=status.HTTP_200_OK)
 
 
 class DepartmentList(generics.ListCreateAPIView):
@@ -155,9 +157,8 @@ class ManagerTestView(APIView):
         return response_with_detail('Authentication passed', status.HTTP_200_OK)
 
 
-def add_auth(response, user):
-    response.set_cookie('Authorization', f'Bearer {user.token}')
-    return response
+def add_auth(request, user):
+    request.session['Authorization'] = f'Bearer {user.token}'
 
 
 def response_with_detail(message, response_status):
