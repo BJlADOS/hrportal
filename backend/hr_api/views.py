@@ -74,11 +74,17 @@ class UniqueEmailView(APIView):
 
 
 class UserDetail(APIView):
-    serializer_class = UserSerializer
-
-    def get(self, request):
-        serializer = self.serializer_class(request.user)
+    @staticmethod
+    def get(request):
+        serializer = GetUserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def patch(request):
+        serializer = PutUserSerializer(request.user, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'token': request.user.token}, status=status.HTTP_200_OK)
 
 
 class DepartmentList(generics.ListCreateAPIView):

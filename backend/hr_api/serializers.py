@@ -59,7 +59,7 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class GetUserSerializer(serializers.ModelSerializer):
     currentDepartment = DepartmentSerializer(source='current_department')
     existingSkills = SkillSerializer(source='existing_skills', many=True)
     isManager = serializers.BooleanField(source='is_manager')
@@ -80,3 +80,32 @@ class UserSerializer(serializers.ModelSerializer):
             'isManager',
             'isAdmin'
         ]
+
+
+class PutUserSerializer(serializers.ModelSerializer):
+    fullname = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    contact = serializers.CharField(required=False)
+    experience = serializers.ChoiceField(required=False, choices=User.EXPERIENCE_CHOICES)
+    photo = serializers.ImageField(required=False)
+    currentDepartmentId = serializers.PrimaryKeyRelatedField(required=False, queryset=Department.objects.all(),
+                                                             source='current_department')
+    existingSkillsIds = serializers.PrimaryKeyRelatedField(required=False, queryset=Skill.objects.all(), many=True,
+                                                           source='existing_skills')
+
+    class Meta:
+        model = User
+        fields = [
+            'fullname',
+            'email',
+            'contact',
+            'experience',
+            'photo',
+            'currentDepartmentId',
+            'existingSkillsIds'
+        ]
+
+    def update(self, instance, validated_data):
+        if 'existingSkillsIds' not in self.initial_data and 'existing_skills' in validated_data:
+            del validated_data['existing_skills']
+        return super(PutUserSerializer, self).update(instance, validated_data)
