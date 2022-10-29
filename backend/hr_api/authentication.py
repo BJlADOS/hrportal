@@ -21,13 +21,13 @@ class JWTAuthentication(authentication.BaseAuthentication):
 
     @staticmethod
     def extract_token(request, expected_prefix):
-        auth_header = authentication.get_authorization_header(request).split()
+        auth_header = request.COOKIES.get('Authorization', '').split()
 
         if len(auth_header) != 2:
             return None
 
-        prefix = auth_header[0].decode('utf-8')
-        token = auth_header[1].decode('utf-8')
+        prefix = auth_header[0]
+        token = auth_header[1]
 
         if prefix.lower() != expected_prefix.lower():
             return None

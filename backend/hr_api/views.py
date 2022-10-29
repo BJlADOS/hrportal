@@ -38,10 +38,10 @@ class AuthenticationView(APIView):
         if not user.is_active:
             return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
 
-        return Response({'token': user.token}, status=status.HTTP_200_OK)
+        return add_auth(Response(status=status.HTTP_200_OK), user)
 
 
-class ValidTokenView(APIView):
+class AuthorizedView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
 
@@ -54,7 +54,7 @@ class ValidTokenView(APIView):
                 result = True
         except exceptions.AuthenticationFailed:
             pass
-        return Response({'valid': result}, status=status.HTTP_200_OK)
+        return Response({'authorized': result}, status=status.HTTP_200_OK)
 
 
 class UniqueEmailView(APIView):
@@ -81,10 +81,13 @@ class UserDetail(APIView):
 
     @staticmethod
     def patch(request):
-        serializer = PutUserSerializer(request.user, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'token': request.user.token}, status=status.HTTP_200_OK)
+        user = request.user
+        put_serializer = PutUserSerializer(user, data=request.data)
+        put_serializer.is_valid(raise_exception=True)
+        put_serializer.save()
+
+        get_serializer = GetUserSerializer(user)
+        return add_auth(Response(get_serializer.data, status=status.HTTP_200_OK), user)
 
 
 class DepartmentList(generics.ListCreateAPIView):
@@ -119,6 +122,11 @@ class ManagerTestView(APIView):
     @staticmethod
     def get(request):
         return response_with_detail('Authentication passed', status.HTTP_200_OK)
+
+
+def add_auth(response, user):
+    response.set_cookie('Authorization', f'Bearer {user.token}')
+    return response
 
 
 def response_with_detail(message, response_status):
