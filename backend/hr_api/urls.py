@@ -1,18 +1,20 @@
-from django.urls import path, re_path
+from django.urls import path
 
 from .views import *
 
 urlpatterns = [
-    re_path(r'^reg/?$', RegistrationView.as_view(), name='reg'),
-    re_path(r'^unique-email/?$', UniqueEmailView.as_view(), name='unique-email'),
-    re_path(r'^login/?$', LoginView.as_view(), name='login'),
-    re_path(r'^authorized/?$', AuthorizedView.as_view(), name='authorized'),
-    re_path(r'^logout/?$', LogoutView.as_view(), name='logout'),
-    re_path(r'^user/?$', UserDetail.as_view(), name='user-detail'),
+    path('reg/', RegistrationView.as_view(), name='reg'),
+    path('unique-email/', UniqueEmailView.as_view(), name='unique-email'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('authorized/', AuthorizedView.as_view(), name='authorized'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('user/', AuthorizedUserDetail.as_view(), name='auth-user-detail'),
+    path('users/', UserList.as_view(), name='user-list'),
+    path('users/<int:pk>/', UserDetail.as_view(), name='user-detail'),
     path('departments/', DepartmentList.as_view(), name='department-list'),
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),
     path('skills/', SkillList.as_view(), name='skill-list'),
     path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail'),
-    re_path(r'^test/?$', TestView.as_view(), name='test'),
-    re_path(r'^manager-test/?$', ManagerTestView.as_view(), name='manager-test')
+    path('resumes/', ResumeList.as_view(), name='resume-list'),
+    path('resumes/<int:pk>/', ResumeDetail.as_view(), name='resume-detail')
 ]

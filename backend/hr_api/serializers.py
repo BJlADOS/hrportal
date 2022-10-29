@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import serializers
 
 from .models import *
@@ -64,6 +66,7 @@ class GetUserSerializer(serializers.ModelSerializer):
     existingSkills = SkillSerializer(source='existing_skills', many=True)
     isManager = serializers.BooleanField(source='is_manager')
     isAdmin = serializers.BooleanField(source='is_admin')
+    resumeId = serializers.PrimaryKeyRelatedField(source='resume', read_only=True)
 
     class Meta:
         model = User
@@ -77,6 +80,7 @@ class GetUserSerializer(serializers.ModelSerializer):
             'photo',
             'existingSkills',
             'filled',
+            'resumeId',
             'isManager',
             'isAdmin'
         ]
@@ -85,11 +89,11 @@ class GetUserSerializer(serializers.ModelSerializer):
 class PutUserSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
-    contact = serializers.CharField(required=False)
-    experience = serializers.ChoiceField(required=False, choices=User.EXPERIENCE_CHOICES)
-    photo = serializers.ImageField(required=False)
+    contact = serializers.CharField(required=False, allow_null=True)
+    experience = serializers.ChoiceField(required=False, choices=User.EXPERIENCE_CHOICES, allow_null=True)
+    photo = serializers.ImageField(required=False, allow_null=True)
     currentDepartmentId = serializers.PrimaryKeyRelatedField(required=False, queryset=Department.objects.all(),
-                                                             source='current_department')
+                                                             source='current_department', allow_null=True)
     existingSkillsIds = serializers.PrimaryKeyRelatedField(required=False, queryset=Skill.objects.all(), many=True,
                                                            source='existing_skills')
 
@@ -109,3 +113,37 @@ class PutUserSerializer(serializers.ModelSerializer):
         if 'existingSkillsIds' not in self.initial_data and 'existing_skills' in validated_data:
             del validated_data['existing_skills']
         return super(PutUserSerializer, self).update(instance, validated_data)
+
+
+class TimestampField(serializers.Field):
+    def to_internal_value(self, data):
+        return datetime.fromtimestamp(data)
+
+    def to_representation(self, value):
+        return int(value.timestamp())
+
+
+class ResumeSerializer(serializers.ModelSerializer):
+    employeeId = serializers.PrimaryKeyRelatedField(source='employee', read_only=True)
+    desiredPosition = serializers.CharField(source='desired_position')
+    desiredSalary = serializers.IntegerField(source='desired_salary')
+    desiredEmployment = serializers.CharField(source='desired_employment')
+    desiredSchedule = serializers.CharField(source='desired_schedule')
+    isActive = serializers.BooleanField(source='is_active')
+    modifiedAt = TimestampField(source='modified_at')
+    createdAt = TimestampField(source='created_at')
+
+    class Meta:
+        model = Resume
+        fields = [
+            'id',
+            'employeeId',
+            'desiredPosition',
+            'desiredSalary',
+            'desiredEmployment',
+            'desiredSchedule',
+            'resume',
+            'isActive',
+            'modifiedAt',
+            'createdAt'
+        ]

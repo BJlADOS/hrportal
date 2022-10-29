@@ -89,7 +89,19 @@ class UniqueEmailView(APIView):
         return Response({'unique': result}, status=status.HTTP_200_OK)
 
 
-class UserDetail(APIView):
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = GetUserSerializer
+    permission_classes = [IsManagerUser | IsAdminUser]
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = GetUserSerializer
+    permission_classes = [IsManagerUser | IsAdminUser]
+
+
+class AuthorizedUserDetail(APIView):
     @staticmethod
     def get(request):
         serializer = GetUserSerializer(request.user)
@@ -143,18 +155,21 @@ class SkillDetail(generics.RetrieveDestroyAPIView):
     permission_classes = [IsAdminUser]
 
 
-class TestView(APIView):
-    @staticmethod
-    def get(request):
-        return response_with_detail('Authentication passed', status.HTTP_200_OK)
+class ResumeList(generics.ListAPIView):
+    queryset = Resume.objects.all()
+    serializer_class = ResumeSerializer
+    permission_classes = [IsManagerUser | IsAdminUser]
 
 
-class ManagerTestView(APIView):
-    permission_classes = [IsManagerUser]
+class ResumeDetail(generics.RetrieveAPIView):
+    queryset = Resume.objects.all()
+    serializer_class = ResumeSerializer
+    permission_classes = [IsManagerUser | IsAdminUser]
 
-    @staticmethod
-    def get(request):
-        return response_with_detail('Authentication passed', status.HTTP_200_OK)
+
+class UserResumeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Resume.objects.all()
+    serializer_class = ResumeSerializer
 
 
 def add_auth(request, user):
