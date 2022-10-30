@@ -207,7 +207,7 @@ def resume_response(request, pk):
     if resume is None:
         return response_with_detail('Resume not found', status.HTTP_404_NOT_FOUND)
     result = sent_resume_response(resume, request.user)
-    return Response(result, status=status.HTTP_200_OK)
+    return response_with_detail(result, status.HTTP_200_OK)
 
 
 def sent_resume_response(resume, manager):
