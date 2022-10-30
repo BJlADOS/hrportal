@@ -146,13 +146,13 @@ class SkillDetail(generics.RetrieveDestroyAPIView):
 
 class ResumeList(generics.ListAPIView):
     queryset = Resume.objects.all()
-    serializer_class = PatchResumeSerializer
+    serializer_class = ResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
 
 class ResumeDetail(generics.RetrieveAPIView):
     queryset = Resume.objects.all()
-    serializer_class = PatchResumeSerializer
+    serializer_class = ResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
 
@@ -198,6 +198,24 @@ class UserResumeView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Resume.DoesNotExist:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+@permission_classes([IsManagerUser | IsAdminUser])
+def resume_response(request, pk):
+    resume = Resume.objects.get(id=pk)
+    if resume is None:
+        return response_with_detail('Resume not found', status.HTTP_404_NOT_FOUND)
+    result = sent_resume_response(resume, request.user)
+    return Response(result, status=status.HTTP_200_OK)
+
+
+def sent_resume_response(resume, manager):
+    text = f"Cотруднику по имени {resume.employee.fullname} с ID={resume.employee.id} " \
+           f"отправлен отклик на его резюме на должность {resume.desired_position} с ID={resume.id} " \
+           f"от руководителя отдела '{manager.department.name}' c ID={manager.department.id} " \
+           f"по имени {manager.fullname} с ID={manager.id}"
+    return text
 
 
 def add_auth(request, user):

@@ -13,6 +13,7 @@ urlpatterns = [
     path('users/<int:pk>/', UserDetail.as_view(), name='user-detail'),
     path('resumes/', ResumeList.as_view(), name='resume-list'),
     path('resumes/<int:pk>/', ResumeDetail.as_view(), name='resume-detail'),
+    path('resumes/<int:pk>/response', resume_response, name='resume_response'),
     path('user/resume/', UserResumeView.as_view(), name='user-resume'),
     path('departments/', DepartmentList.as_view(), name='department-list'),
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),
