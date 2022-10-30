@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.core.mail import send_mail
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
@@ -211,11 +212,18 @@ def resume_response(request, pk):
 
 
 def sent_resume_response(resume, manager):
-    text = f"Cотруднику по имени {resume.employee.fullname} с ID={resume.employee.id} " \
-           f"отправлен отклик на его резюме на должность {resume.desired_position} с ID={resume.id} " \
-           f"от руководителя отдела '{manager.department.name}' c ID={manager.department.id} " \
-           f"по имени {manager.fullname} с ID={manager.id}"
-    return text
+    subject = 'Отклик на ваше резюме на HR-портале "Очень Интересно"'
+    message = f'Уважаемый {resume.employee.fullname}!\n\n' \
+              f'На ваше резюме на должность "{resume.desired_position}" ' \
+              f'получен отклик от руководителя отдела "{manager.department.name}".\n\n' \
+              f'Контакты для связи:\n' \
+              f'ФИО - {manager.fullname}\n' \
+              f'Email - {manager.email}'
+    message += f'\nДополнительный контакт: {manager.contact}' if manager.contact else ''
+    result = send_mail(subject, message, None, [resume.employee.email])
+    result_message = f'Response from Manager(ID={manager.id}) to Employee(ID={resume.employee.id}) '
+    result_message += 'successful' if bool(result) else 'failed'
+    return result_message
 
 
 def add_auth(request, user):
