@@ -86,7 +86,7 @@ class GetUserSerializer(serializers.ModelSerializer):
         ]
 
 
-class PutUserSerializer(serializers.ModelSerializer):
+class PatchUserSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     contact = serializers.CharField(required=False, allow_null=True)
@@ -112,7 +112,7 @@ class PutUserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         if 'existingSkillsIds' not in self.initial_data and 'existing_skills' in validated_data:
             del validated_data['existing_skills']
-        return super(PutUserSerializer, self).update(instance, validated_data)
+        return super(PatchUserSerializer, self).update(instance, validated_data)
 
 
 class TimestampField(serializers.Field):
@@ -124,14 +124,14 @@ class TimestampField(serializers.Field):
 
 
 class ResumeSerializer(serializers.ModelSerializer):
-    employeeId = serializers.PrimaryKeyRelatedField(source='employee', read_only=True)
+    employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
     desiredPosition = serializers.CharField(source='desired_position')
     desiredSalary = serializers.IntegerField(source='desired_salary')
-    desiredEmployment = serializers.CharField(source='desired_employment')
-    desiredSchedule = serializers.CharField(source='desired_schedule')
+    desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=Resume.EMPLOYMENT_CHOICES)
+    desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=Resume.SCHEDULE_CHOICES)
     isActive = serializers.BooleanField(source='is_active')
-    modifiedAt = TimestampField(source='modified_at')
-    createdAt = TimestampField(source='created_at')
+    modifiedAt = TimestampField(source='modified_at', required=False)
+    createdAt = TimestampField(source='created_at', required=False)
 
     class Meta:
         model = Resume
@@ -146,4 +146,29 @@ class ResumeSerializer(serializers.ModelSerializer):
             'isActive',
             'modifiedAt',
             'createdAt'
+        ]
+
+
+class PatchResumeSerializer(serializers.ModelSerializer):
+    desiredPosition = serializers.CharField(source='desired_position', required=False)
+    desiredSalary = serializers.IntegerField(source='desired_salary', required=False)
+    desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=Resume.EMPLOYMENT_CHOICES, required=False)
+    desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=Resume.SCHEDULE_CHOICES, required=False)
+    resume = serializers.FileField(required=False, allow_null=True)
+    isActive = serializers.BooleanField(source='is_active', required=False, allow_null=True)
+
+    def update(self, instance, validated_data):
+        if 'isActive' not in self.initial_data and 'is_active' in validated_data:
+            del validated_data['is_active']
+        return super(PatchResumeSerializer, self).update(instance, validated_data)
+
+    class Meta:
+        model = Resume
+        fields = [
+            'desiredPosition',
+            'desiredSalary',
+            'desiredEmployment',
+            'desiredSchedule',
+            'resume',
+            'isActive'
         ]

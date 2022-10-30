@@ -101,7 +101,7 @@ class UserDetail(generics.RetrieveAPIView):
     permission_classes = [IsManagerUser | IsAdminUser]
 
 
-class AuthorizedUserDetail(APIView):
+class AuthorizedUserView(APIView):
     @staticmethod
     def get(request):
         serializer = GetUserSerializer(request.user)
@@ -110,7 +110,7 @@ class AuthorizedUserDetail(APIView):
     @staticmethod
     def patch(request):
         user = request.user
-        put_serializer = PutUserSerializer(user, data=request.data)
+        put_serializer = PatchUserSerializer(user, data=request.data)
         put_serializer.is_valid(raise_exception=True)
         put_serializer.save()
 
@@ -157,19 +157,58 @@ class SkillDetail(generics.RetrieveDestroyAPIView):
 
 class ResumeList(generics.ListAPIView):
     queryset = Resume.objects.all()
-    serializer_class = ResumeSerializer
+    serializer_class = PatchResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
 
 class ResumeDetail(generics.RetrieveAPIView):
     queryset = Resume.objects.all()
-    serializer_class = ResumeSerializer
+    serializer_class = PatchResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
 
-class UserResumeDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Resume.objects.all()
-    serializer_class = ResumeSerializer
+class UserResumeView(APIView):
+    @staticmethod
+    def get(request):
+        try:
+            resume = request.user.resume
+            serializer = ResumeSerializer(resume)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Resume.DoesNotExist:
+            return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
+
+    @staticmethod
+    def post(request):
+        try:
+            _ = request.user.resume
+            return response_with_detail('This employee already has a resume', status.HTTP_409_CONFLICT)
+        except Resume.DoesNotExist:
+            request.data['employeeId'] = request.user.id
+            serializer = ResumeSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def patch(request):
+        try:
+            resume = request.user.resume
+            patch_serializer = PatchResumeSerializer(resume, data=request.data)
+            patch_serializer.is_valid(raise_exception=True)
+            patch_serializer.save()
+            serializer = ResumeSerializer(resume)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Resume.DoesNotExist:
+            return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
+
+    @staticmethod
+    def delete(request):
+        try:
+            resume = request.user.resume
+            resume.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Resume.DoesNotExist:
+            return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
 
 def add_auth(request, user):
