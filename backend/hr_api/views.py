@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from rest_framework import status, exceptions, generics
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -10,83 +11,73 @@ from .permissions import IsManagerUser
 from .serializers import *
 
 
-class RegistrationView(APIView):
-    authentication_classes = []
-    permission_classes = [AllowAny]
-    serializer_class = RegistrationSerializer
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def registration_view(request):
+    serializer = RegistrationSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_201_CREATED)
 
 
-class LoginView(APIView):
-    authentication_classes = []
-    permission_classes = [AllowAny]
-    serializer_class = AuthSerializer
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def login_view(request):
+    serializer = AuthSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
 
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    user = authenticate(username=request.data['email'], password=request.data['password'])
 
-        user = authenticate(username=request.data['email'], password=request.data['password'])
+    if user is None:
+        return response_with_detail('A user with this email and password was not found.',
+                                    status.HTTP_401_UNAUTHORIZED)
 
-        if user is None:
-            return response_with_detail('A user with this email and password was not found.',
-                                        status.HTTP_401_UNAUTHORIZED)
+    if not user.is_active:
+        return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
 
-        if not user.is_active:
-            return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
+    add_auth(request, user)
 
-        add_auth(request, user)
-
-        return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_200_OK)
 
 
-class LogoutView(APIView):
-    authentication_classes = []
-    permission_classes = [AllowAny]
-
-    @staticmethod
-    def get(request):
-        request.session.flush()
-        return Response(status=status.HTTP_200_OK)
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def logout_view(request):
+    request.session.flush()
+    return Response(status=status.HTTP_200_OK)
 
 
-class AuthorizedView(APIView):
-    authentication_classes = []
-    permission_classes = [AllowAny]
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def authorized_view(request):
+    result = False
+    try:
+        auth_result = JWTAuthentication().authenticate(request)
+        if auth_result is not None:
+            result = True
+    except exceptions.AuthenticationFailed:
+        pass
+    return Response({'authorized': result}, status=status.HTTP_200_OK)
 
-    @staticmethod
-    def get(request):
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def unique_email_view(request):
+    serializer = UniqueEmailSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    result = True
+    try:
+        User.objects.get(email=request.data['email'])
         result = False
-        try:
-            auth_result = JWTAuthentication().authenticate(request)
-            if auth_result is not None:
-                result = True
-        except exceptions.AuthenticationFailed:
-            pass
-        return Response({'authorized': result}, status=status.HTTP_200_OK)
-
-
-class UniqueEmailView(APIView):
-    authentication_classes = []
-    permission_classes = [AllowAny]
-    serializer_class = UniqueEmailSerializer
-
-    def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        result = True
-        try:
-            User.objects.get(email=request.data['email'])
-            result = False
-        except User.DoesNotExist:
-            pass
-        return Response({'unique': result}, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        pass
+    return Response({'unique': result}, status=status.HTTP_200_OK)
 
 
 class UserList(generics.ListAPIView):
@@ -125,10 +116,9 @@ class DepartmentList(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = [IsAuthenticated]
+            return [IsAuthenticated()]
         else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
+            return [IsAdminUser()]
 
 
 class DepartmentDetail(generics.RetrieveDestroyAPIView):
@@ -143,10 +133,9 @@ class SkillList(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == 'GET':
-            permission_classes = [IsAuthenticated]
+            return [IsAuthenticated()]
         else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
+            return [IsAdminUser()]
 
 
 class SkillDetail(generics.RetrieveDestroyAPIView):
