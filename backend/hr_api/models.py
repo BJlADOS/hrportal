@@ -154,7 +154,7 @@ class Vacancy(models.Model):
 
     schedule = models.CharField(max_length=7, choices=SCHEDULE_CHOICES)
 
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     is_active = models.BooleanField()
 

@@ -123,7 +123,7 @@ class TimestampField(serializers.Field):
         return int(value.timestamp())
 
 
-class ResumeSerializer(serializers.ModelSerializer):
+class GetResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
     desiredPosition = serializers.CharField(source='desired_position')
     desiredSalary = serializers.IntegerField(source='desired_salary')
@@ -171,4 +171,28 @@ class PatchResumeSerializer(serializers.ModelSerializer):
             'desiredSchedule',
             'resume',
             'isActive'
+        ]
+
+
+class GetVacancySerializer(serializers.ModelSerializer):
+    department = DepartmentSerializer()
+    requiredSkills = SkillSerializer(source='required_skills', many=True)
+    isActive = serializers.BooleanField(source='is_active')
+    modifiedAt = TimestampField(source='modified_at', required=False)
+    createdAt = TimestampField(source='created_at', required=False)
+
+    class Meta:
+        model = Vacancy
+        fields = [
+            'id',
+            'department',
+            'position',
+            'salary',
+            'employment',
+            'schedule',
+            'description',
+            'requiredSkills',
+            'isActive',
+            'modifiedAt',
+            'createdAt'
         ]
