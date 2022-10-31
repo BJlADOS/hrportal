@@ -127,8 +127,8 @@ class ResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
     desiredPosition = serializers.CharField(source='desired_position')
     desiredSalary = serializers.IntegerField(source='desired_salary')
-    desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=Resume.EMPLOYMENT_CHOICES)
-    desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=Resume.SCHEDULE_CHOICES)
+    desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
+    desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
     isActive = serializers.BooleanField(source='is_active')
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
@@ -152,8 +152,8 @@ class ResumeSerializer(serializers.ModelSerializer):
 class PatchResumeSerializer(serializers.ModelSerializer):
     desiredPosition = serializers.CharField(source='desired_position', required=False)
     desiredSalary = serializers.IntegerField(source='desired_salary', required=False)
-    desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=Resume.EMPLOYMENT_CHOICES, required=False)
-    desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=Resume.SCHEDULE_CHOICES, required=False)
+    desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES, required=False)
+    desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES, required=False)
     resume = serializers.FileField(required=False, allow_null=True)
     isActive = serializers.BooleanField(source='is_active', required=False, allow_null=True)
 

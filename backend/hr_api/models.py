@@ -9,6 +9,18 @@ from django.utils import timezone
 from django.utils.text import slugify
 from transliterate import translit
 
+SCHEDULE_CHOICES = [
+    ('DISTANT', 'Удаленная работа'),
+    ('FLEX', 'Гибкий график'),
+    ('SHIFT', 'Сменный график'),
+    ('FULL', 'Полная работа')
+]
+
+EMPLOYMENT_CHOICES = [
+    ('PART', 'Частичная занятость'),
+    ('FULL', 'Полная занятость'),
+]
+
 
 def get_upload_path(instance, filename):
     date = timezone.now().strftime('%d.%m.%Y')
@@ -113,19 +125,7 @@ class Resume(models.Model):
 
     desired_salary = models.IntegerField()
 
-    EMPLOYMENT_CHOICES = [
-        ('PART', 'Частичная занятость'),
-        ('FULL', 'Полная занятость'),
-    ]
-
     desired_employment = models.CharField(max_length=4, choices=EMPLOYMENT_CHOICES)
-
-    SCHEDULE_CHOICES = [
-        ('DISTANT', 'Удаленная работа'),
-        ('FLEX', 'Гибкий график'),
-        ('SHIFT', 'Сменный график'),
-        ('FULL', 'Полная работа')
-    ]
 
     desired_schedule = models.CharField(max_length=7, choices=SCHEDULE_CHOICES)
 
@@ -141,8 +141,37 @@ class Resume(models.Model):
         return f"Resume({self.desired_position}, {self.employee.fullname})"
 
 
+class Vacancy(models.Model):
+    department = models.ForeignKey(to='Department', on_delete=models.CASCADE)
+
+    required_skills = models.ManyToManyField(to='Skill', blank=True)
+
+    position = models.CharField(max_length=255)
+
+    salary = models.IntegerField()
+
+    employment = models.CharField(max_length=4, choices=EMPLOYMENT_CHOICES)
+
+    schedule = models.CharField(max_length=7, choices=SCHEDULE_CHOICES)
+
+    description = models.TextField()
+
+    is_active = models.BooleanField()
+
+    modified_at = models.DateTimeField(auto_now=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Vacancies"
+
+    def __str__(self):
+        return f"Vacancy({self.position}, {self.department.name})"
+
+
 class Department(models.Model):
     name = models.CharField(max_length=255)
+
     manager = models.OneToOneField(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
