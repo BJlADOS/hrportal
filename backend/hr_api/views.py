@@ -211,14 +211,39 @@ def resume_response(request, pk):
     return response_with_detail(result, status.HTTP_200_OK)
 
 
-class VacancyList(generics.ListAPIView):
+class VacancyList(generics.ListCreateAPIView):
+    queryset = Vacancy.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetVacancySerializer
+        else:
+            return None
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        else:
+            return [IsManagerUser()]
+
+    def post(self, request, *args, **kwargs):
+        post_serializer = PostVacancySerializer(data=request.data)
+        post_serializer.department = request.user.department
+        post_serializer.is_valid(raise_exception=True)
+        vacancy = post_serializer.save()
+        get_serializer = GetVacancySerializer(vacancy)
+        return Response(get_serializer.data, status=status.HTTP_201_CREATED)
+
+
+class VacancyDetail(generics.RetrieveDestroyAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = GetVacancySerializer
 
-
-class VacancyDetail(generics.RetrieveAPIView):
-    queryset = Vacancy.objects.all()
-    serializer_class = GetVacancySerializer
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        else:
+            return [IsManagerUser()]
 
 
 def sent_resume_response(resume, manager):
