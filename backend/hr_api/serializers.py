@@ -214,3 +214,13 @@ class PostVacancySerializer(serializers.ModelSerializer):
             'requiredSkillsIds',
             'isActive'
         ]
+
+
+class VacancyResponseSerializer(serializers.Serializer):
+    resume = serializers.FileField()
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass

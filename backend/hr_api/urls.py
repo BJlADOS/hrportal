@@ -16,6 +16,7 @@ urlpatterns = [
     path('resumes/<int:pk>/response', resume_response, name='resume_response'),
     path('vacancies/', VacancyList.as_view(), name='vacancy-list'),
     path('vacancies/<int:pk>/', VacancyDetail.as_view(), name='vacancy-detail'),
+    path('vacancies/<int:pk>/response', vacancy_response, name='vacancy_response'),
     path('user/resume/', UserResumeView.as_view(), name='user-resume'),
     path('departments/', DepartmentList.as_view(), name='department-list'),
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),

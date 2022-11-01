@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
@@ -245,6 +245,30 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
             return [IsManagerUser()]
 
 
+@api_view(['POST'])
+def vacancy_response(request, pk):
+    vacancy = Vacancy.objects.get(id=pk)
+    if vacancy is None:
+        return response_with_detail('Vacancy not found', status.HTTP_404_NOT_FOUND)
+
+    manager = vacancy.department.manager
+    if manager is None:
+        return response_with_detail('Vacancy department does not have manager', status.HTTP_404_NOT_FOUND)
+
+    resume = request.data.get('resume', None)
+    if resume is None:
+        try:
+            resume = request.user.resume.resume
+        except Resume.DoesNotExist:
+            return response_with_detail('Employee does not have resume', status.HTTP_400_BAD_REQUEST)
+
+    serializer = VacancyResponseSerializer(data={'resume': resume})
+    serializer.is_valid(raise_exception=True)
+    result = sent_vacancy_response(request.user, manager, vacancy, resume)
+
+    return response_with_detail(result, status.HTTP_200_OK)
+
+
 def sent_resume_response(resume, manager):
     subject = 'Отклик на ваше резюме на HR-портале "Очень Интересно"'
     message = f'Уважаемый {resume.employee.fullname}!\n\n' \
@@ -256,6 +280,23 @@ def sent_resume_response(resume, manager):
     message += f'\nДополнительный контакт: {manager.contact}' if manager.contact else ''
     result = send_mail(subject, message, None, [resume.employee.email])
     result_message = f'Response from Manager(ID={manager.id}) to Employee(ID={resume.employee.id}) '
+    result_message += 'successful' if bool(result) else 'failed'
+    return result_message
+
+
+def sent_vacancy_response(employee, manager, vacancy, pdf_resume):
+    subject = 'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"'
+    message = f'Уважаемый {manager.fullname}!\n\n' \
+              f'На ваше вакансию на должность "{vacancy.position}" получен отклик\n\n' \
+              f'Контакты для связи:\n' \
+              f'ФИО - {employee.fullname}\n' \
+              f'Email - {employee.email}'
+    message += f'\nДополнительный контакт: {employee.contact}' if employee.contact else ''
+    message += f'\n\nРезюме сотрудника приложено к письму'
+    mail = EmailMessage(subject, message, None, [manager.email])
+    mail.attach("resume.pdf", pdf_resume.read())
+    result = mail.send()
+    result_message = f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) '
     result_message += 'successful' if bool(result) else 'failed'
     return result_message
 
