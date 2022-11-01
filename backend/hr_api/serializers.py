@@ -199,20 +199,18 @@ class GetVacancySerializer(serializers.ModelSerializer):
 
 
 class PostVacancySerializer(serializers.ModelSerializer):
-    departmentId = serializers.PrimaryKeyRelatedField(source='department', queryset=Department.objects.all())
     isActive = serializers.BooleanField(source='is_active')
-    requiredSkills = serializers.PrimaryKeyRelatedField(source='required_skills',
-                                                        queryset=Skill.objects.all(), many=True)
+    requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
+                                                           many=True)
 
     class Meta:
         model = Vacancy
         fields = [
-            'departmentId',
             'position',
             'salary',
             'employment',
             'schedule',
             'description',
-            'requiredSkills',
+            'requiredSkillsIds',
             'isActive'
         ]

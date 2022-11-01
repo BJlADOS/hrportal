@@ -173,8 +173,8 @@ class UserResumeView(APIView):
             _ = request.user.resume
             return response_with_detail('This employee already has a resume', status.HTTP_409_CONFLICT)
         except Resume.DoesNotExist:
-            request.data['employeeId'] = request.user.id
-            serializer = GetResumeSerializer(data=request.data)
+            serializer = GetResumeSerializer(data=request.data, partial=True)
+            serializer.initial_data['employeeId'] = request.user.id
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -228,14 +228,13 @@ class VacancyList(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         post_serializer = PostVacancySerializer(data=request.data)
-        post_serializer.department = request.user.department
         post_serializer.is_valid(raise_exception=True)
-        vacancy = post_serializer.save()
+        vacancy = post_serializer.save(department=request.user.department)
         get_serializer = GetVacancySerializer(vacancy)
         return Response(get_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class VacancyDetail(generics.RetrieveDestroyAPIView):
+class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vacancy.objects.all()
     serializer_class = GetVacancySerializer
 
