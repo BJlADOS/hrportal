@@ -2,6 +2,8 @@ from datetime import datetime
 
 from rest_framework import serializers
 
+from django.core.validators import FileExtensionValidator
+
 from .models import *
 
 
@@ -130,6 +132,7 @@ class GetResumeSerializer(serializers.ModelSerializer):
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
     isActive = serializers.BooleanField(source='is_active')
+    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf'])])
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
 
@@ -154,7 +157,7 @@ class PatchResumeSerializer(serializers.ModelSerializer):
     desiredSalary = serializers.IntegerField(source='desired_salary', required=False)
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES, required=False)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES, required=False)
-    resume = serializers.FileField(required=False, allow_null=True)
+    resume = serializers.FileField(required=False, allow_null=True, validators=[FileExtensionValidator(['pdf'])])
     isActive = serializers.BooleanField(source='is_active', required=False, allow_null=True)
 
     def update(self, instance, validated_data):
@@ -217,7 +220,7 @@ class PostVacancySerializer(serializers.ModelSerializer):
 
 
 class VacancyResponseSerializer(serializers.Serializer):
-    resume = serializers.FileField()
+    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf'])])
 
     def create(self, validated_data):
         pass
