@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { IInputError } from 'src/app/interfaces/errors';
+import { IAuthError, IInputError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -18,7 +18,9 @@ export class AuthComponent implements OnInit {
   public passwordPlaceholder: string = 'Пароль';
   public emailPlaceholder: string = 'Электронная почта'
   public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
-  public errors: IInputError[] = [];
+  public errors: IAuthError = { email: null, password: null };
+
+  private _FormManager: FormManager = FormManager.getInstance();
 
   constructor(
     public auth: AuthService,
@@ -29,18 +31,18 @@ export class AuthComponent implements OnInit {
   }
 
   public signIn(): void { //not implemented
-    this.checkErrors();
-    if (this.errors.length !== 0) {
-      return;
-    }
     this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
   }
 
   public forgotPassword(): void { //not implemented
   }
 
-  public checkErrors(): void {
-    this.errors = FormManager.getInstance().checkErrorsForSignInForm(this.signInForm);
+  public emailChange(): void {
+    this.errors.email = this._FormManager.checkEmail(this.signInForm);
+  }
+
+  public passwordChange(): void {
+    this.errors.password = this._FormManager.checkPassword(this.signInForm);
   }
 
   public toSignUp(): void { 

@@ -14,9 +14,8 @@ export class CustomValidators {
     public static passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
         const password: string = control.get('password')!.value; 
         const confirmPassword: string = control.get('confirmPassword')!.value; 
-        if (password !== confirmPassword) {
+        if (password !== confirmPassword && confirmPassword.length !== 0) {
             control.get('confirmPassword')!.setErrors({ NoPassswordMatch: true });
-            
             return { NoPassswordMatch: true };
         }
         

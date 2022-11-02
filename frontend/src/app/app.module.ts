@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { appRouting } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +12,7 @@ import { CookieModule } from 'ngx-cookie';
 import { AuthComponent } from './auth/components/auth/auth.component';
 import { RegistrationComponent } from './auth/components/registration/registration.component';
 import { ErrorsComponent } from './auth/components/errors/errors.component';
+import { ErrorComponent } from './auth/components/error/error.component';
 
 @NgModule({
   declarations: [
@@ -19,9 +21,11 @@ import { ErrorsComponent } from './auth/components/errors/errors.component';
     AuthComponent,
     RegistrationComponent,
     ErrorsComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     appRouting,
     ReactiveFormsModule,

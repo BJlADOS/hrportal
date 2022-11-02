@@ -14,100 +14,68 @@ export class FormManager {
         return FormManager._formManager;
     }
 
-
-    public checkErrorsForSignInForm(form: FormGroup): IInputError[] {
-        const errors: IInputError[] = [];
+    public checkEmail(form: FormGroup): IInputError | null{
 
         if (form.controls['email'].hasError('required')) {
-            errors.push({
-                message: 'Введите почту'
-            });
+            return { message: 'Введите email.' };
         }
 
         if (form.controls['email'].hasError('email')) {
-            errors.push({
-                message: 'Введите корректную почту'
-            });
+            return { message: 'Введите корректную почту.' };
         }
 
-        if (form.controls['password'].hasError('required')) {
-            errors.push({
-                message: 'Введите пароль'
-            });
-        }
-
-        return errors;
+        return null;
     }
 
-    public checkErrorsForSignUpForm(form: FormGroup): IInputError[] {
-        const errors: IInputError[] = [];
-
-        if (form.controls['fullname'].hasError('required')) {
-            errors.push({
-                message: 'Введите ФИО'
-            });
-        }
-
-        if (form.controls['fullname'].hasError('minlength')) {
-            errors.push({
-                message: 'ФИО должно быть не менее 3 символов'
-            });
-        }
-
-        if (form.controls['fullname'].hasError('shouldBeOnlyRussian')) {
-            errors.push({
-                message: 'ФИО должно состоять только из русских букв'
-            });
-        }
-
-        if (form.controls['email'].hasError('required')) {
-            errors.push({
-                message: 'Введите почту'
-            });
-        }
-
-        if (form.controls['email'].hasError('email')) {
-            errors.push({
-                message: 'Введите корректную почту'
-            });
-        }
+    public checkPassword(form: FormGroup): IInputError | null {
 
         if (form.controls['password'].hasError('required')) {
-            errors.push({
-                message: 'Введите пароль'
-            });
-        }
-
-        if (form.controls['password'].hasError('minlength')) {
-            errors.push({
-                message: 'Пароль должен быть не менее 6 символов'
-            });
-        }
-
-        if (form.controls['password'].hasError('maxlength')) {
-            errors.push({
-                message: 'Пароль должен быть не более 20 символов'
-            });
+            return { message: 'Введите пароль.' };
         }
 
         if (form.controls['password'].hasError('pattern')) {
-            errors.push({
-                message: 'Пароль должен содержать только латинские буквы и цифры'
-            });
+            return { message: 'Пароль должен состоять из латинских букв и цифр.' };
         }
 
+        if (form.controls['password'].hasError('minlength')) {
+            return { message: 'Пароль должен быть не менее 6 символов.' };
+        }
+
+        if (form.controls['password'].hasError('maxlength')) {
+            return { message: 'Пароль должен быть не более 20 символов.' };
+        }
+
+        return null;
+    }
+
+    public checkFullname(form: FormGroup): IInputError | null {
+
+        if (form.controls['fullname'].hasError('required')) {
+            return { message: 'Введите ФИО.' };
+        }
+
+        if (form.controls['fullname'].hasError('minlength')) {
+            return { message: 'ФИО должно быть не менее 3 символов.' };
+        }
+
+        if (form.controls['fullname'].hasError('shouldBeCorrect')) {
+            return { message: 'ФИО должно быть в формате Фамилия Имя Отчество.' };
+        }
+
+        return null;
+    }
+
+    public checkConfirmPassword(form: FormGroup): IInputError | null {
+
         if (form.controls['confirmPassword'].hasError('required')) {
-            errors.push({
-                message: 'Подтвердите пароль'
-            });
+            return { message: 'Подтвердите пароль.' };
         }
 
         if (form.controls['confirmPassword'].hasError('NoPassswordMatch')) {
-            errors.push({
-                message: 'Пароли не совпадают'
-            });
+            return { message: 'Пароли не совпадают.' };
         }
 
-        return errors;
+        return null;
     }
+
 }

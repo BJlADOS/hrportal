@@ -1,1 +1,14 @@
-<p>errors works!</p>
+<div class="errors-block" [@contentExpansion]="errors.fullname? 'expanded' : 'collapsed'">
+    <app-error *ngIf="errors.fullname" [error]="errors.fullname"></app-error>
+</div>
+<div class="errors-block" [@contentExpansion]="errors.email? 'expanded' : 'collapsed'">
+    <app-error *ngIf="errors.email" [error]="errors.email"></app-error>
+</div>
+<div class="errors-block" [@contentExpansion]="errors.password? 'expanded' : 'collapsed'">
+    <app-error *ngIf="errors.password" [error]="errors.password"></app-error>
+</div>
+<div class="errors-block" [@contentExpansion]="errors.confirmPassword? 'expanded' : 'collapsed'">
+    <app-error *ngIf="errors.confirmPassword" [error]="errors.confirmPassword"></app-error>
+</div>
+
+

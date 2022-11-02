@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
+import { FormManager } from 'src/app/classes/form-manager/form-manager';
+import { IAuthError, IInputError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -15,6 +17,9 @@ export class RegistrationComponent implements OnInit {
   public passwordPlaceholder: string = 'Пароль';
   public emailPlaceholder: string = 'Электронная почта';
   public isEmailUnique: boolean = true;
+  public errors: IAuthError = { fullname: null, email: null, password: null, confirmPassword: null };
+
+  private _FormManager: FormManager = FormManager.getInstance();
 
   constructor(
     public auth: AuthService,
@@ -28,10 +33,30 @@ export class RegistrationComponent implements OnInit {
   public signUp(): void { //not implemented
     this.auth.checkEmail(this.signUpForm.value.email).subscribe((data) => {
       const isEmailUnique: boolean = (data as { unique: boolean }).unique;
+      if (isEmailUnique) {
+        this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password);
+      } else {
       console.log(data);
       this.isEmailUnique = isEmailUnique;
+      }
     });
-    this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password);
+    
+  }
+
+  public fullnameChange(): void {
+    this.errors.fullname = this._FormManager.checkFullname(this.signUpForm);
+  }
+
+  public emailChange(): void {
+    this.errors.email = this._FormManager.checkEmail(this.signUpForm);
+  }
+
+  public passwordChange(): void {
+    this.errors.password = this._FormManager.checkPassword(this.signUpForm);
+  }
+
+  public confirmPasswordChange(): void {
+    this.errors.confirmPassword = this._FormManager.checkConfirmPassword(this.signUpForm);
   }
 
   public toSignIn(): void {

@@ -5,10 +5,11 @@
             <label>РЕГИСТРАЦИЯ</label>
         </div>  
     <form class="form" [formGroup]="signUpForm" (submit)="signUp()">
-        <input id="fullname" formControlName="fullname" type="fullname" class="form-control" placeholder="ФИО">
-        <input id="email" formControlName="email" type="email" class="form-control" [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()">
-        <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()">
-        <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" placeholder="Подтвердите пароль">
+        <input id="fullname" formControlName="fullname" type="fullname" class="form-control" placeholder="ФИО" (input)="fullnameChange()">
+        <input id="email" formControlName="email" type="email" class="form-control" [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()" (input)="emailChange()">
+        <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()" (input)="passwordChange()">
+        <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" placeholder="Подтвердите пароль" (input)="confirmPasswordChange()">
+        <app-errors [errors]="errors"></app-errors>
         <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid">
     </form>
     <div class="navigation">
