@@ -1,7 +1,20 @@
-<form [formGroup]="signInForm" (submit)="signIn()" class="form">
-    <input id="email" formControlName="email" type="email" class="form-control" [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()">
-    <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()">
-    <i (click)="forgotPassword()">Забыли пароль?</i>
-    <input type="submit" value="ВХОД" [disabled]="signInForm.invalid">
-</form>
-<!-- <button (click)="makeRequest()">makeRequest</button> -->
+<div class="wrapper-grid">
+    <div class="wrapper-flex column-4-10">
+        <div class="title">
+            <h1>HR-portal</h1>
+            <label>АВТОРИЗАЦИЯ</label>
+        </div>  
+        <form [formGroup]="signInForm" (submit)="signIn()" class="form">
+            <input id="email" formControlName="email" type="email" class="form-control" [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()">
+            <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()">
+            <label class="forgot-password" (click)="forgotPassword()">Забыли пароль?</label>
+            <input type="submit" value="ВХОД" [disabled]="signInForm.invalid">
+        </form>
+        <div class="navigation">
+            <label>Нет аккаунта?</label>
+            <label class="navigation-button" (click)="toSignUp()">Создать</label>
+        </div>
+    </div>
+</div>
+
+

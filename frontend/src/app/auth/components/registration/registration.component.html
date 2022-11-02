@@ -1,15 +1,19 @@
-<form [formGroup]="signUpForm" (submit)="signUp()">
-    <label class="control-name">Имя</label>
-    <input id="name" formControlName="name" type="text" class="form-control">
-    <label class="control-name">Фамилия</label>
-    <input id="firstName" formControlName="firstName" type="text" class="form-control">
-    <label class="control-name">Отчество</label>
-    <input id="middleName" formControlName="middleName" type="text" class="form-control">
-    <label class="control-name">Email</label>
-    <input id="email" formControlName="email" type="email" class="form-control">
-    <label class="control-name">Пароль</label>
-    <input id="password" formControlName="password" type="password" class="form-control">
-    <label class="control-name">Подтвердите пароль</label>
-    <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control">
-    <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid">
-</form>
+<div class="wrapper-grid">
+    <div class="wrapper-flex column-4-10">
+        <div class="title">
+            <h1>HR-portal</h1>
+            <label>РЕГИСТРАЦИЯ</label>
+        </div>  
+    <form class="form" [formGroup]="signUpForm" (submit)="signUp()">
+        <input id="fullname" formControlName="fullname" type="fullname" class="form-control" placeholder="ФИО">
+        <input id="email" formControlName="email" type="email" class="form-control" [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()">
+        <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()">
+        <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" placeholder="Подтвердите пароль">
+        <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid">
+    </form>
+    <div class="navigation">
+        <label>Есть аккаунт?</label>
+        <label class="navigation-button" (click)="toSignIn()">Войти</label>
+    </div>
+</div>
+</div>

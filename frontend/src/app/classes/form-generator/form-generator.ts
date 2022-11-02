@@ -22,17 +22,7 @@ export class FormGenerator {
     public getSignUpForm(): FormGroup {
         return this._fb.group(        
             {   
-                name: [null, Validators.compose([ 
-                    Validators.required,
-                    Validators.minLength(3),
-                    CustomValidators.patternValidator(/^([а-яА-Яё]+)$/, { shouldBeOnlyRussian: true }),
-                ])],
-                firstName: [null, Validators.compose([ 
-                    Validators.required,
-                    Validators.minLength(3),
-                    CustomValidators.patternValidator(/^([а-яА-Яё]+)$/, { shouldBeOnlyRussian: true }),
-                ])],
-                middleName: [null, Validators.compose([ 
+                fullname: [null, Validators.compose([ 
                     Validators.required,
                     Validators.minLength(3),
                     CustomValidators.patternValidator(/^([а-яА-Яё]+)$/, { shouldBeOnlyRussian: true }),
@@ -43,10 +33,7 @@ export class FormGenerator {
                 ])],
                 password: [null, Validators.compose([
                     Validators.required,
-                    CustomValidators.patternValidator(/\d/, { hasNumber: true }),
-                    CustomValidators.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
-                    CustomValidators.patternValidator(/[a-z]/, { hasSmallCase: true }),
-                    CustomValidators.patternValidator(/[!@#$%^&*()_+/\-=[\]]+/, { hasSpecialCharacters: true }),
+                    CustomValidators.patternValidator(/[A-Z]|[a-z]|\d/, { pattern: true }),
                     Validators.minLength(8)
                 ])],
                 confirmPassword: [null, Validators.compose([Validators.required])]

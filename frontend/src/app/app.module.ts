@@ -8,11 +8,17 @@ import { MainComponent } from './main/main.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptorService } from './services/jwt-interceptor.service';
 import { CookieModule } from 'ngx-cookie';
+import { AuthComponent } from './auth/components/auth/auth.component';
+import { RegistrationComponent } from './auth/components/registration/registration.component';
+import { ErrorsComponent } from './auth/components/errors/errors.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
+    AuthComponent,
+    RegistrationComponent,
+    ErrorsComponent,
   ],
   imports: [
     BrowserModule,
