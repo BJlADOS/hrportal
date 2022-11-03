@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { CookieService } from 'ngx-cookie';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { IToken, IValidToken } from 'src/app/interfaces/Token';
 import { IUser } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
@@ -23,6 +23,7 @@ export class AuthService {
     private cookie: CookieService,
     private _router: Router,
     ) { 
+      console.log('auth service');
     }
 
   public get currentUserValue(): IUser | null { //placeholder
@@ -52,7 +53,7 @@ export class AuthService {
     }});
   }
 
-  public checkEmail(email: string): Observable<object> {
+  public checkEmail(email: string): Observable<Object> {
     return this.http.post(`${this.apiURL}/unique-email/`, { email: email });
   }
 

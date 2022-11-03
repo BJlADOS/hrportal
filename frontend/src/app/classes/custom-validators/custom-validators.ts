@@ -1,10 +1,19 @@
-import { ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, Injector } from '@angular/core';
+import { ValidationErrors, ValidatorFn, AbstractControl, AsyncValidatorFn } from '@angular/forms';
+import { map, Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
+@Injectable({
+    providedIn: 'root'
+})
 export class CustomValidators {
 
-    public static patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
+    constructor(
+        private _auth: AuthService,
+    ) {}
+
+    public patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
         return (control: AbstractControl): { [key: string]: boolean } | null => {
             if (!control.value) {
                 return null;
@@ -15,7 +24,7 @@ export class CustomValidators {
         };
     }
 
-    public static passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    public passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
         const password: string = control.get('password')!.value; 
         const confirmPassword: string = control.get('confirmPassword')!.value; 
         if (password !== confirmPassword && confirmPassword.length !== 0) {
@@ -24,5 +33,15 @@ export class CustomValidators {
         }
         
         return null;
+    }
+
+    public emailUniqueValidator(): AsyncValidatorFn {
+        return (control: AbstractControl): Observable<ValidationErrors | null> => {
+            const email: string = control!.value;
+            return this._auth.checkEmail(email).pipe(map((data) => {
+                const unique = data as { unique: boolean };
+                return unique.unique ? null : { unique: true };
+            }));
+        }
     }
 }

@@ -1,23 +1,17 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../custom-validators/custom-validators';
 
+@Injectable({
+    providedIn: 'root'
+  })
 export class FormGenerator {
-    private static _formGenerator: FormGenerator;
 
-    public static getInstance(): FormGenerator {
-        if (FormGenerator._formGenerator) {
-            return FormGenerator._formGenerator;
-        }
-        FormGenerator._formGenerator = new FormGenerator();
+    private _fb: FormBuilder = new FormBuilder();
 
-        return FormGenerator._formGenerator;
-    }
-
-    private _fb: FormBuilder;
-
-    private constructor() { 
-        this._fb = new FormBuilder();
-    }
+    constructor(
+        private _customValidators: CustomValidators,
+    ) { }
 
     public getSignUpForm(): FormGroup {
         return this._fb.group(        
@@ -25,15 +19,16 @@ export class FormGenerator {
                 fullname: ['', Validators.compose([ 
                     Validators.required,
                     Validators.minLength(3),
-                    CustomValidators.patternValidator(/^([А-Я][а-я]{1,}|[А-Я][а-я]{1,}-([А-Я][а-я]{1,}))(\040[А-Я][а-я]{1,})(\040[А-Я][а-я]{1,})?$/, { shouldBeCorrect: true }),
+                    this._customValidators.patternValidator(/^([А-Я][а-я]{1,}|[А-Я][а-я]{1,}-([А-Я][а-я]{1,}))(\040[А-Я][а-я]{1,})(\040[А-Я][а-я]{1,})?$/, { shouldBeCorrect: true }),
                 ])],
-                email: ['', Validators.compose([
-                    Validators.email, 
+                email: new FormControl('', Validators.compose([
                     Validators.required,
-                ])],
+                    this._customValidators.patternValidator(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, { email: true }),
+                ]),
+                this._customValidators.emailUniqueValidator()),
                 password: ['', Validators.compose([
                     Validators.required,
-                    CustomValidators.patternValidator(/^([A-Za-z\d]+)$/, { pattern: true }),
+                    this._customValidators.patternValidator(/^([A-Za-z\d]+)$/, { pattern: true }),
                     Validators.minLength(6),
                     Validators.maxLength(20),
                 ])],
@@ -42,7 +37,7 @@ export class FormGenerator {
                 ])]
             }, 
             {
-                validators: CustomValidators.passwordMatchValidator
+                validators: this._customValidators.passwordMatchValidator
             }
         );
     }

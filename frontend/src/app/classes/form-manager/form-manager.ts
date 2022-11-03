@@ -14,14 +14,17 @@ export class FormManager {
         return FormManager._formManager;
     }
 
-    public checkEmail(form: FormGroup): IInputError | null{
-
+    public checkEmail(form: FormGroup): IInputError | null {
         if (form.controls['email'].hasError('required')) {
             return { message: 'Введите email.' };
         }
 
         if (form.controls['email'].hasError('email')) {
             return { message: 'Введите корректную почту.' };
+        }
+
+        if (form.controls['email'].hasError('unique')) {
+            return { message: 'Почта уже занята.' };
         }
 
         return null;

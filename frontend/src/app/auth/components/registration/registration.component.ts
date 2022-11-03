@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { map, takeUntil } from 'rxjs';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { IAuthError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 
 @Component({
   selector: 'app-registration',
@@ -13,7 +15,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 })
 export class RegistrationComponent implements OnInit {
 
-  public signUpForm: FormGroup = FormGenerator.getInstance().getSignUpForm();
+  public signUpForm: FormGroup = this.formGenerator.getSignUpForm();
   public passwordPlaceholder: string = 'Пароль';
   public emailPlaceholder: string = 'Электронная почта';
   public isEmailUnique: boolean = true;
@@ -23,23 +25,27 @@ export class RegistrationComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
-    public router: Router
+    public router: Router,
+    public formGenerator: FormGenerator,
+    private _destroy$: DestroyService
   ) { }
 
-  ngOnInit(): void {
-    
+  public ngOnInit(): void {
+    this.signUpForm.controls['email'].statusChanges.pipe(takeUntil(this._destroy$), map((data) => data === 'INVALID')).subscribe(() => {
+      this.errors.email = this._FormManager.checkEmail(this.signUpForm);
+    });
   }
 
   public signUp(): void { //not implemented
-    this.auth.checkEmail(this.signUpForm.value.email).subscribe((data) => {
-      const isEmailUnique: boolean = (data as { unique: boolean }).unique;
-      if (isEmailUnique) {
-        this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password);
-      } else {
-      console.log(data);
-      this.isEmailUnique = isEmailUnique;
-      }
-    });
+    // this.auth.checkEmail(this.signUpForm.value.email).subscribe((data) => {
+    //   const isEmailUnique: boolean = (data as { unique: boolean }).unique;
+    //   if (isEmailUnique) {
+    //     this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password);
+    //   } else {
+    //   console.log(data);
+    //   this.isEmailUnique = isEmailUnique;
+    //   }
+    // });
     
   }
 

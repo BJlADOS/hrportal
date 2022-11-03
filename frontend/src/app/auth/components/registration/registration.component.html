@@ -10,7 +10,7 @@
         <input id="password" formControlName="password" type="password" class="form-control" [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()" (input)="passwordChange()">
         <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control" placeholder="Подтвердите пароль" (input)="confirmPasswordChange()">
         <app-errors [errors]="errors"></app-errors>
-        <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid">
+        <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid || signUpForm.pending">
     </form>
     <div class="navigation">
         <label>Есть аккаунт?</label>

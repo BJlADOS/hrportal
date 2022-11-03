@@ -17,7 +17,7 @@ export class AuthComponent implements OnInit {
 
   public passwordPlaceholder: string = 'Пароль';
   public emailPlaceholder: string = 'Электронная почта'
-  public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
+  public signInForm: FormGroup = this._formGenerator.getSignInForm();
   public errors: IAuthError = { email: null, password: null };
 
   private _returnUrl: string | undefined;
@@ -27,6 +27,7 @@ export class AuthComponent implements OnInit {
     public auth: AuthService,
     public router: Router,
     public activeRoute: ActivatedRoute,
+    private _formGenerator: FormGenerator
   ) { }
 
   public ngOnInit(): void {

@@ -14,6 +14,7 @@ import { RegistrationComponent } from './auth/components/registration/registrati
 import { ErrorsComponent } from './auth/components/errors/errors.component';
 import { ErrorComponent } from './auth/components/error/error.component';
 import { AuthGuard } from './Guards/auth-guard/auth.guard';
+import { DestroyService } from './services/destoy/destroy.service';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AuthGuard } from './Guards/auth-guard/auth.guard';
       useClass: JwtInterceptorService,
       multi: true
     },
+    DestroyService,
   ],
   bootstrap: [AppComponent]
 })
