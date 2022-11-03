@@ -14,13 +14,12 @@ export class JwtInterceptorService implements HttpInterceptor {
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const currentUser = this._auth.currentUserValue;
-      if (this._cookie.hasKey('token') && currentUser) {
-          req = req.clone({
-              setHeaders: {
-                  Authorization: `Bearer ${this._cookie.get('token')}`
-              }
-          });
-      }
+        req = req.clone({
+            // setHeaders: {
+            //     Authorization: `Bearer ${this._cookie.get('token')}`
+            // }
+            withCredentials: true
+        });
 
       return next.handle(req);
   }

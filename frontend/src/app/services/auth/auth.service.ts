@@ -41,9 +41,9 @@ export class AuthService {
 
   public signIn(email: string, password: string, returnUrl: string | undefined): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${this.apiURL}/login`, { email: email, password: passwordHash }).subscribe({ next: (data) => {
-      const token: IToken = data as IToken;
-      this.cookie.put('token', token.token);
+    this.http.post(`${this.apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: (data) => {
+      // const token: IToken = data as IToken;
+      // this.cookie.put('token', token.token);
       this.validateToken();
       if (returnUrl) {
         this._router.navigate([returnUrl]);
@@ -71,11 +71,12 @@ export class AuthService {
   }
 
   public init(): void {
+    // this.cookie.put('sessionid', 'jpwubk91b9gt72fr1kuqabmi9b8kvfcv', { expires: new Date('2022-12-31'), path: '/', domain: 'localhost', httpOnly: false });
     this.validateToken();
   }
 
   private validateToken(): void { //placeholder request
-    this.http.get(`${this.apiURL}/authorized` ).subscribe((data) => {
+    this.http.get(`${this.apiURL}/authorized`).subscribe((data) => {
       const valid = data as IValidToken;
       console.log(data);
       if (valid.authorized) {
