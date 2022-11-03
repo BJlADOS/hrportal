@@ -12,17 +12,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ('fullname', 'email', 'password')
 
-    password = serializers.CharField(
-        required=True,
-        min_length=6,
-        max_length=20,
-        validators=[
-            validators.RegexValidator(
-                regex='^[a-zA-Z]*$',
-                message='Field can only contain the characters a-z and A-Z',
-                code='invalid_password'
-            ),
-        ])
+    password = serializers.CharField(required=True)
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
