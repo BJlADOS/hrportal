@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -20,6 +21,7 @@ export class AuthService {
   constructor(
     public http: HttpClient,
     private cookie: CookieService,
+    private _router: Router,
     ) { 
     }
 
@@ -31,15 +33,25 @@ export class AuthService {
     const passwordHash: string = SHA256(password).toString();
     this.http.post(`${ this.apiURL }/reg`, { fullname: fullname, email: email, password: passwordHash  }).subscribe((data) => {
       console.log(data);
+      this._router.navigate(['/vacancies']);
+    }, (error) => {
+      console.log(error);
     });
   }
 
-  public signIn(email: string, password: string): void {
+  public signIn(email: string, password: string, returnUrl: string | undefined): void {
     const passwordHash: string = SHA256(password).toString();
     this.http.post(`${this.apiURL}/auth`, { email: email, password: passwordHash }).subscribe((data) => {
       const token: IToken = data as IToken;
       this.cookie.put('token', token.token);
       this.validateToken();
+      if (returnUrl) {
+        this._router.navigate([returnUrl]);
+      } else {
+        this._router.navigate(['/vacancies']);
+      }
+    }, (error) => {
+      console.log(error);
     });
   }
 
@@ -48,8 +60,14 @@ export class AuthService {
   }
 
   public logOut(): void { 
-    this.currentUserSubject.next(null);
-    this.cookie.remove('token');
+    this.http.get(`${this.apiURL}/logout`).subscribe((data) => { 
+
+    }, (error) => {
+      console.log(error);
+    });
+
+    // this.currentUserSubject.next(null);
+    // this.cookie.remove('token');
   }
 
   public init(): void {

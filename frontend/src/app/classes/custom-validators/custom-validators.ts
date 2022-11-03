@@ -1,6 +1,9 @@
 import { ValidationErrors, ValidatorFn, AbstractControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 export class CustomValidators {
+
     public static patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
         return (control: AbstractControl): { [key: string]: boolean } | null => {
             if (!control.value) {
@@ -11,6 +14,7 @@ export class CustomValidators {
             return valid ? null : error;
         };
     }
+
     public static passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
         const password: string = control.get('password')!.value; 
         const confirmPassword: string = control.get('confirmPassword')!.value; 
