@@ -31,7 +31,7 @@ export class AuthService {
 
   public signUp(fullname: string, email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${ this.apiURL }/reg`, { fullname: fullname, email: email, password: passwordHash  }).subscribe((data) => {
+    this.http.post(`${ this.apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe((data) => {
       console.log(data);
       this._router.navigate(['/vacancies']);
     }, (error) => {
@@ -41,7 +41,7 @@ export class AuthService {
 
   public signIn(email: string, password: string, returnUrl: string | undefined): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${this.apiURL}/auth`, { email: email, password: passwordHash }).subscribe((data) => {
+    this.http.post(`${this.apiURL}/login`, { email: email, password: passwordHash }).subscribe({ next: (data) => {
       const token: IToken = data as IToken;
       this.cookie.put('token', token.token);
       this.validateToken();
@@ -50,37 +50,35 @@ export class AuthService {
       } else {
         this._router.navigate(['/vacancies']);
       }
-    }, (error) => {
+    }, error: (error) => {
       console.log(error);
-    });
+    }});
   }
 
   public checkEmail(email: string): Observable<object> {
-    return this.http.post(`${this.apiURL}/enique-email`, { email: email });
+    return this.http.post(`${this.apiURL}/unique-email/`, { email: email });
   }
 
   public logOut(): void { 
-    this.http.get(`${this.apiURL}/logout`).subscribe((data) => { 
+    this.http.get(`${this.apiURL}/logout`).subscribe( { next: (data) => { 
 
-    }, (error) => {
+    }, error: (error) => {
       console.log(error);
-    });
+    }});
 
     // this.currentUserSubject.next(null);
     // this.cookie.remove('token');
   }
 
   public init(): void {
-    if (this.cookie.get('token')) {
-      this.validateToken();
-    }
+    this.validateToken();
   }
 
   private validateToken(): void { //placeholder request
-    this.http.post(`${this.apiURL}/valid-token`, { token: this.cookie.get('token') } ).subscribe((data) => {
+    this.http.get(`${this.apiURL}/authorized` ).subscribe((data) => {
       const valid = data as IValidToken;
       console.log(data);
-      if (valid.valid) {
+      if (valid.authorized) {
         //this.getUserInfo();
       } else {
         //this.logOut();

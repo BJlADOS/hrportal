@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { IAuthError, IInputError } from 'src/app/interfaces/errors';
+import { IAuthError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
