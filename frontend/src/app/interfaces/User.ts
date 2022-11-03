@@ -1,12 +1,14 @@
 export interface IUser {
     id: number,
-    fullName: string,
+    fullname: string,
     email: string,
     contact: string,
     expirience: number,
     currentDepartment: IDepartment,
-    imageURL: string,
+    photo: string,
     existingSkills: ISkill[],
+    filled: boolean,
+    resumeId: number,
     isManager: boolean,
     isAdmin: boolean
 }
