@@ -3,5 +3,5 @@ export interface IToken {
 }
 
 export interface IValidToken {
-    valid: boolean
+    authorized: boolean
 }
