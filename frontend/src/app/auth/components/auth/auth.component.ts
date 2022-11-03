@@ -1,8 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
+import { FormManager } from 'src/app/classes/form-manager/form-manager';
+import { IAuthError, IInputError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -15,23 +18,40 @@ export class AuthComponent implements OnInit {
   public passwordPlaceholder: string = 'Пароль';
   public emailPlaceholder: string = 'Электронная почта'
   public signInForm: FormGroup = FormGenerator.getInstance().getSignInForm();
+  public errors: IAuthError = { email: null, password: null };
+
+  private _returnUrl: string | undefined;
+  private _FormManager: FormManager = FormManager.getInstance();
 
   constructor(
     public auth: AuthService,
+    public router: Router,
+    public activeRoute: ActivatedRoute,
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.activeRoute.queryParams.subscribe(params => {
+      this._returnUrl = params['returnUrl'];
+    });
   }
 
   public signIn(): void { //not implemented
-    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
+    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password, this._returnUrl);
   }
 
   public forgotPassword(): void { //not implemented
   }
 
-  public makeRequest(): void { 
-    // this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password);
+  public emailChange(): void {
+    this.errors.email = this._FormManager.checkEmail(this.signInForm);
+  }
+
+  public passwordChange(): void {
+    this.errors.password = this._FormManager.checkPassword(this.signInForm);
+  }
+
+  public toSignUp(): void { 
+    this.router.navigate(['register']);
   }
 
   public passwordBlur(): void { 
