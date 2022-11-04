@@ -4,6 +4,7 @@ html {
     --primary-color: #ffffff;
     --black: #000;
     --font-primary: #4C4C4C;
+    --font-disabled: rgba(76, 76, 76, 0.5);
     --main-accent-color: #FDC04E;
     --main-accent-color-hover: #be913d;
     --main-accent-color-active: #8e6f2d;
@@ -24,10 +25,15 @@ body {
     font-size: 16px;
     color: var(--font-primary);
     background-color: var(--additional-accent-color);
+    font-weight: 400;
     margin: 0;
     padding: 0;
 }
 
 .column-4-10 {
     grid-column: 4 / 10;
+}
+
+.column-1-13 {
+    grid-column: 1 / 13;
 }

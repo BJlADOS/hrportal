@@ -17,7 +17,6 @@ export class AuthGuard implements CanActivate {
   ) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const currentUser = this._auth.currentUserValue;
     return this.http.get(`${environment.apiURL}/authorized`).pipe(map((data) => {
       const token = data as IValidToken;
       if (token.authorized) {

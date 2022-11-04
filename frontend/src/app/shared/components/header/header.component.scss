@@ -1,0 +1,114 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-height: 80px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.wrapper-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 80px);
+    grid-column-gap: 1em;
+}
+
+.wrapper-flex {
+    max-height: 80px;
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.logo {
+    max-height: 80px;
+    h1 {
+        position: relative;
+        bottom: 4px;
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--main-accent-color);       
+        white-space: nowrap;
+        // line-height: 24px;
+        letter-spacing: 0.12em;
+    }
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+
+    &-left {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        gap: 1em;
+        
+        p {
+           text-align: center;
+           vertical-align: text-bottom; 
+           transition: .3s ease;
+
+           &:hover {
+            font-weight: 700;
+            cursor: pointer;
+            }
+        }
+
+    }
+
+    &-right {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        align-items: center;
+        gap: 2em;
+
+        & p {
+            &:hover {
+                font-weight: 700;
+                cursor: pointer;
+            }
+        }
+
+        .inactive {
+            color: var(--font-disabled);
+        
+            &:hover {
+                font-weight: 400;
+                cursor: default;
+            }
+        }
+
+        & .profile {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            img { 
+                max-height: 35px;             
+                border-radius: 50%;
+            }
+
+            &:hover {
+                font-weight: 700;
+                cursor: pointer;
+            }
+        }
+
+        & .logout {
+            max-height: 35px;
+            transition: .3s ease;
+
+            &:hover {             
+                cursor: pointer;  
+                transform: scale(1.2);
+            }
+        }
+    }
+}
+
+.active-route {
+    font-weight: 700;
+}

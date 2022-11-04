@@ -7,7 +7,7 @@ import { appRouting } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainComponent } from './main/main.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptorService } from './services/jwt-interceptor.service';
+import { JwtInterceptorService } from './services/jwt-interceptor/jwt-interceptor.service';
 import { CookieModule } from 'ngx-cookie';
 import { AuthComponent } from './auth/components/auth/auth.component';
 import { RegistrationComponent } from './auth/components/registration/registration.component';
@@ -15,6 +15,7 @@ import { ErrorsComponent } from './auth/components/errors/errors.component';
 import { ErrorComponent } from './auth/components/error/error.component';
 import { AuthGuard } from './Guards/auth-guard/auth.guard';
 import { DestroyService } from './services/destoy/destroy.service';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { DestroyService } from './services/destoy/destroy.service';
     appRouting,
     ReactiveFormsModule,
     CookieModule.withOptions(),
+    RouterModule,
   ],
   providers: [
     {

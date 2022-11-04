@@ -1,6 +1,5 @@
 .wrapper {
     display: flex;
-    flex-direction: column;
     justify-content: center;   
 }
 
@@ -8,7 +7,7 @@
     display: grid;
     grid-template-columns: repeat(12, 80px);
     grid-column-gap: 1em;
-    transform: translateY(30%);
+    transform: translateY(10%);
 }
 
 .wrapper-flex {

@@ -24,8 +24,7 @@ export class FormGenerator {
                 email: new FormControl('', Validators.compose([
                     Validators.required,
                     this._customValidators.patternValidator(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, { email: true }),
-                ]),
-                this._customValidators.emailUniqueValidator()),
+                ])),
                 password: ['', Validators.compose([
                     Validators.required,
                     this._customValidators.patternValidator(/^([A-Za-z\d]+)$/, { pattern: true }),

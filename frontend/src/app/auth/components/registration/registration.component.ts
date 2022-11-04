@@ -18,7 +18,6 @@ export class RegistrationComponent implements OnInit {
   public signUpForm: FormGroup = this.formGenerator.getSignUpForm();
   public passwordPlaceholder: string = 'Пароль';
   public emailPlaceholder: string = 'Электронная почта';
-  public isEmailUnique: boolean = true;
   public errors: IAuthError = { fullname: null, email: null, password: null, confirmPassword: null };
 
   private _FormManager: FormManager = FormManager.getInstance();
@@ -37,15 +36,17 @@ export class RegistrationComponent implements OnInit {
   }
 
   public signUp(): void { //not implemented
-    // this.auth.checkEmail(this.signUpForm.value.email).subscribe((data) => {
-    //   const isEmailUnique: boolean = (data as { unique: boolean }).unique;
-    //   if (isEmailUnique) {
-    //     this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password);
-    //   } else {
-    //   console.log(data);
-    //   this.isEmailUnique = isEmailUnique;
-    //   }
-    // });
+    this.auth.checkEmail(this.signUpForm.value.email).subscribe({ next: (data) => {
+      const isEmailUnique: boolean = (data as { unique: boolean }).unique;
+      if (isEmailUnique) {
+        this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password);
+      } else {
+      console.log(data);
+      this.errors.email = { message: 'Пользователь с такой почтой уже существует' };
+      }
+    }, error: (err) => {
+      console.log(err);
+    }});
     
   }
 

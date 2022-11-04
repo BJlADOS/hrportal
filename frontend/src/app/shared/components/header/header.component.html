@@ -1,0 +1,24 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <div class="logo">
+                <h1>HR-портал</h1>
+            </div>
+            <div class="content">
+                <div class="content-left">
+                    <p [class.active-route]="isActive('/vacancies')" (click)="redirectTo('vacancies', true)">Вакансии</p>
+                    <p [class.active-route]="isActive('/departments')" (click)="redirectTo('departments', true)">Департаменты</p>
+                </div>
+                <div class="content-right">
+                    <p class="inactive" (click)="redirectTo('profile/resume', false)">РЕЗЮМЕ</p>
+                    <div class="profile" (click)="redirectTo('profile', true)">
+                        <img src="assets/img/profile-placeholder.png"> 
+                        <!-- placeholder image need to be fixed -->
+                        <p *ngIf="user | async as user">{{getUserName(user.fullname)}}</p>
+                    </div>
+                    <img class="logout" src="assets/img/logout.svg" (click)="logout()">
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>

@@ -23,10 +23,6 @@ export class FormManager {
             return { message: 'Введите корректную почту.' };
         }
 
-        if (form.controls['email'].hasError('unique')) {
-            return { message: 'Почта уже занята.' };
-        }
-
         return null;
     }
 
