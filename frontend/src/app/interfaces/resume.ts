@@ -10,3 +10,21 @@ export interface IResume {
     modifiedAt: number;
     createdAt: number;
 }
+
+export enum Expirience {
+    '<1',
+    '1-3',
+    '3-6',
+    '>6',
+}
+export enum Employment {
+    'PART',
+    'FULL',
+}
+
+export enum Schedule {
+    'DISTANT',
+    'PART',
+    'SHIFT',
+    'FULL',
+}

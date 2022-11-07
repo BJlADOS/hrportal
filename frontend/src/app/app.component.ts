@@ -17,7 +17,6 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.auth.init();
-    this.user.getUserInfo();
   }
 
 }

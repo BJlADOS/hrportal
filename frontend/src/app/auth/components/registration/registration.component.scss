@@ -1,16 +1,16 @@
 .wrapper {
     display: flex;
     justify-content: center;
+    width: 100%;
 }
 
 .wrapper-grid {
-    display: grid;
+    width: auto;
     grid-template-columns: repeat(12, 80px);
-    grid-column-gap: 1em;
-    transform: translateY(5%);
 }
 
 .wrapper-flex {
+    margin-top: 5%; 
     box-sizing: border-box;
     padding: 3em 2em 4em 2em;
     border: 1px solid var(--border-color);

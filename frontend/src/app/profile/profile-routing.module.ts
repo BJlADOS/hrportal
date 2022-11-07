@@ -7,9 +7,10 @@ import { ResumeComponent } from './resume/resume.component';
 
 
 const routes: Routes = [
-    { path: '', component: ProfileMainComponent, children: [
-        { path: '', component: ProfileComponent, pathMatch: 'full' },
-        { path: 'resume', component: ResumeComponent, pathMatch: 'full' },   
+    { path: '', component: ProfileMainComponent ,children: [
+        { path: '', component: ProfileComponent, pathMatch: 'full', data: { breadcrumb: 'Профиль'}, children: [
+            { path: 'resume', component: ResumeComponent, pathMatch: 'full', data: { breadcrumb: 'Резюме' } },
+        ] },         
     ]},
 
 ];

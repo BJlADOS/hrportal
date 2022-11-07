@@ -6,19 +6,32 @@
             </div>
             <div class="content">
                 <div class="content-left">
-                    <p [class.active-route]="isActive('/vacancies')" (click)="redirectTo('vacancies', true)">Вакансии</p>
-                    <p [class.active-route]="isActive('/departments')" (click)="redirectTo('departments', true)">Департаменты</p>
+                    <p [class.active-route]="isActive('/vacancies')" (click)="redirectTo('vacancies', true)">Вакансии
+                    </p>
+                    <p [class.active-route]="isActive('/departments')" (click)="redirectTo('departments', true)">
+                        Департаменты</p>
                 </div>
                 <div class="content-right">
                     <p class="inactive" (click)="redirectTo('profile/resume', false)">РЕЗЮМЕ</p>
                     <div class="profile" (click)="redirectTo('profile', true)">
-                        <img src="assets/img/profile-placeholder.png"> 
+                        <img src="assets/img/profile-placeholder.png">
                         <!-- placeholder image need to be fixed -->
                         <p *ngIf="user | async as user">{{getUserName(user.fullname)}}</p>
                     </div>
                     <img class="logout" src="assets/img/logout.svg" (click)="logout()">
                 </div>
             </div>
-        </div>       
+        </div>
+    </div>
+</div>
+<div class="wrapper-bottom">
+    <div class="wrapper-grid">
+        <div class="wrapper-breadcrumbs column-1-13">
+            <app-breadcrumb [url]="''" [label]="'HR-портал'"></app-breadcrumb>
+            <div class="wrapper-breadcrumbs-breadcrumb" *ngFor="let breadcrumb of breadcrumbs; index as i">
+                <p>></p>
+                <app-breadcrumb [url]="breadcrumb.url" [label]="breadcrumb.label"></app-breadcrumb>
+            </div>
+        </div>
     </div>
 </div>

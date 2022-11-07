@@ -9,8 +9,8 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
-  public currentUserSubject: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
-  public currentUser: Observable<IUser | null> = this.currentUserSubject.asObservable();
+  public currentUserSubject$: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
+  public currentUser$: Observable<IUser | null> = this.currentUserSubject$.asObservable();
 
   private apiURL: string = environment.apiURL;
 
@@ -24,11 +24,11 @@ export class UserService {
 
   public getUserInfo(): void {
     this.http.get(`${this.apiURL}/user`).subscribe((data) => {
-      this.currentUserSubject.next(data as IUser);
+      this.currentUserSubject$.next(data as IUser);
     });
   }
 
   public logOut(): void {
-    this.currentUserSubject.next(null);
+    this.currentUserSubject$.next(null);
   }
 }

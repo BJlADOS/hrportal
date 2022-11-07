@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRoute, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent, Scroll, UrlSegment } from '@angular/router';
+import { filter, Observable, takeUntil } from 'rxjs';
+import { IBreadcrumb } from 'src/app/interfaces/breadcrumb';
 import { IUser } from 'src/app/interfaces/User';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
@@ -12,15 +14,22 @@ import { UserService } from 'src/app/services/user/user.service';
 })
 export class HeaderComponent implements OnInit {
 
-  public user: Observable<IUser | null> = this._user.currentUser;
+  public user: Observable<IUser | null> = this._user.currentUser$;
+  public breadcrumbs: IBreadcrumb[] = [];
 
   constructor(
+    public activatedRoute: ActivatedRoute,
     private _user: UserService,
     private _auth: AuthService,
     private _router: Router,
+    private _destroy$: DestroyService,
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+        this._router.events
+            .pipe(filter((event: RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll) => event instanceof NavigationEnd), takeUntil(this._destroy$))
+            .subscribe(() => this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root));
   }
 
   public redirectTo(to: string, isAllowed: boolean): void {
@@ -41,5 +50,28 @@ export class HeaderComponent implements OnInit {
   public logout(): void {
     this._auth.logOut();
   }
+
+  private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {
+    const children: ActivatedRoute[] = route.children;
+    if (children.length === 0) {
+        return breadcrumbs;
+    }
+
+    for (const child of children) {
+        const routeURL: string = child.snapshot.url.map((segment: UrlSegment) => segment.path).join('/');
+        if (routeURL !== '') {
+            url += `/${routeURL}`;
+        }
+
+        const label: string = child.snapshot.data['breadcrumb'];
+        if (label) {
+            breadcrumbs.push({ label, url });
+        }
+
+        return this.createBreadcrumbs(child, url, breadcrumbs);
+    }
+
+    return breadcrumbs;
+}
 
 }

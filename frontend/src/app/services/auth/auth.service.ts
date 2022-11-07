@@ -36,7 +36,6 @@ export class AuthService {
   public signIn(email: string, password: string, returnUrl: string | undefined): void {
     const passwordHash: string = SHA256(password).toString();
     this.http.post(`${this.apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: () => {
-      this._user.getUserInfo();
       if (returnUrl) {
         this._router.navigate([returnUrl]);
       } else {

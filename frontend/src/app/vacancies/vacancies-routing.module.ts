@@ -7,9 +7,9 @@ import { VacancyComponent } from './vacancy/vacancy.component';
 
 
 const routes: Routes = [
-    {path: '', component: VacanciesMainComponent, children: [
-        { path: '', component: VacanciesComponent, pathMatch: 'full' },
-        { path: ':id', component: VacancyComponent, pathMatch: 'full' },
+    {path: '', component: VacanciesMainComponent, data: { breadcrumb: 'Вакансии' }, children: [
+        { path: '', component: VacanciesComponent, pathMatch: 'full', data: { breadcrumb: null } },  
+        { path: 'vacancy/:id', component: VacancyComponent, pathMatch: 'full', data: { breadcrumb: 'Вакансия' } },    
     ]},    
 ];
 

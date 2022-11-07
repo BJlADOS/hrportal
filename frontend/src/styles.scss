@@ -30,10 +30,36 @@ body {
     padding: 0;
 }
 
+.wrapper-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column-gap: 1em;
+    width: 90%;
+}
+
 .column-4-10 {
     grid-column: 4 / 10;
 }
 
 .column-1-13 {
     grid-column: 1 / 13;
+}
+
+@media screen 
+    and (min-width: 1280px)
+{
+    .wrapper-grid {
+        width: 90%;
+        grid-template-columns: repeat(12, 1fr);
+    }
+}
+
+@media screen
+    and (max-width: 1000px)
+    and (min-width: 700px)
+{
+    .wrapper-grid {
+        width: 90%;
+        grid-template-columns: repeat(12, 1fr);
+    }
 }
