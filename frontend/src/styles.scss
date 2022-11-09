@@ -17,6 +17,8 @@ html {
     --error-background-color: rgba(255, 0, 0, 0.1);
     --error-text-color: #ff0000;
 
+    --box-shadow--main: 0px 0px 30px 2px var(--box-shadow-color);
+
     --main-font-family: 'Montserrat', sans-serif;
 }
 
@@ -34,7 +36,7 @@ body {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     grid-column-gap: 1em;
-    width: 90%;
+    width: 80%;
 }
 
 .column-4-10 {
@@ -49,7 +51,7 @@ body {
     and (min-width: 1280px)
 {
     .wrapper-grid {
-        width: 90%;
+        width: 80%;
         grid-template-columns: repeat(12, 1fr);
     }
 }
@@ -59,7 +61,7 @@ body {
     and (min-width: 700px)
 {
     .wrapper-grid {
-        width: 90%;
+        width: 80%;
         grid-template-columns: repeat(12, 1fr);
     }
 }

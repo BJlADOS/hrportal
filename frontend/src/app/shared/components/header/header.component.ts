@@ -2,20 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent, Scroll, UrlSegment } from '@angular/router';
 import { filter, Observable, takeUntil } from 'rxjs';
 import { IBreadcrumb } from 'src/app/interfaces/breadcrumb';
-import { IUser } from 'src/app/interfaces/User';
+import { IRoute, IUser } from 'src/app/interfaces/User';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { adminButtons } from 'src/app/user-type-data/admin-header-buttons';
+import { managerButtons } from 'src/app/user-type-data/manager-header-buttons';
+import { userButtons } from 'src/app/user-type-data/user-header-buttons';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
 
   public user: Observable<IUser | null> = this._user.currentUser$;
   public breadcrumbs: IBreadcrumb[] = [];
+  public routes: IRoute[] = [];
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -30,6 +34,15 @@ export class HeaderComponent implements OnInit {
         this._router.events
             .pipe(filter((event: RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll) => event instanceof NavigationEnd), takeUntil(this._destroy$))
             .subscribe(() => this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root));
+    this.user.pipe(takeUntil(this._destroy$)).subscribe((user: IUser | null) => {
+      if (user?.isManager) {
+        this.routes = managerButtons;
+      } else if (user?.isAdmin) {
+        this.routes = adminButtons;
+      } else {
+        this.routes = userButtons;
+      }
+    });
   }
 
   public redirectTo(to: string, isAllowed: boolean): void {
@@ -62,7 +75,6 @@ export class HeaderComponent implements OnInit {
         if (routeURL !== '') {
             url += `/${routeURL}`;
         }
-
         const label: string = child.snapshot.data['breadcrumb'];
         if (label) {
             breadcrumbs.push({ label, url });

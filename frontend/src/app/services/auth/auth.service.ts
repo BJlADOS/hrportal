@@ -14,7 +14,7 @@ import { UserService } from '../user/user.service';
 })
 export class AuthService {
 
-  private apiURL: string = environment.apiURL;
+  private _apiURL: string = environment.apiURL;
 
   constructor(
     public http: HttpClient,
@@ -26,7 +26,7 @@ export class AuthService {
 
   public signUp(fullname: string, email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${ this.apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe({ next: () => {
+    this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe({ next: () => {
       this._router.navigate(['/auth']);
     }, error: (error) => {
       console.log(error);
@@ -35,7 +35,7 @@ export class AuthService {
 
   public signIn(email: string, password: string, returnUrl: string | undefined): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${this.apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: () => {
+    this.http.post(`${this._apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: () => {
       if (returnUrl) {
         this._router.navigate([returnUrl]);
       } else {
@@ -47,11 +47,11 @@ export class AuthService {
   }
 
   public checkEmail(email: string): Observable<Object> {
-    return this.http.post(`${this.apiURL}/unique-email/`, { email: email });
+    return this.http.post(`${this._apiURL}/unique-email/`, { email: email });
   }
 
   public logOut(): void { 
-    this.http.get(`${this.apiURL}/logout`).subscribe( { next: (data) => { 
+    this.http.get(`${this._apiURL}/logout`).subscribe( { next: (data) => { 
       this._user.logOut();
       this._router.navigate(['/auth']);
     }, error: (error) => {
@@ -67,7 +67,7 @@ export class AuthService {
   }
 
   private validateToken(): void { //placeholder request
-    this.http.get(`${this.apiURL}/authorized`).subscribe((data) => {
+    this.http.get(`${this._apiURL}/authorized`).subscribe((data) => {
       const valid = data as IValidToken;
       console.log(data);
       if (valid.authorized) {

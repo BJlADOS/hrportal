@@ -7,9 +7,10 @@
 }
 
 .wrapper-flex {
-    max-height: 80px;
+    height: 80px;
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 2em;
 }
 
@@ -17,6 +18,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: 2em;
 }
 
 .wrapper-breadcrumbs {
@@ -36,14 +38,14 @@
 
 .logo {
     max-height: 80px;
+
     h1 {
         position: relative;
         bottom: 4px;
-        font-size: 28px;
+        font-size: 20px;
         font-weight: 800;
-        color: var(--main-accent-color);       
+        color: var(--main-accent-color);
         white-space: nowrap;
-        // line-height: 24px;
         letter-spacing: 0.12em;
     }
 }
@@ -60,15 +62,25 @@
         justify-content: flex-start;
         flex-direction: row;
         gap: 1em;
-        
-        p {
-           text-align: center;
-           vertical-align: text-bottom; 
-           transition: .3s ease;
 
-           &:hover {
+        p {
+            text-align: center;
+            vertical-align: text-bottom;
+            transition: .3s ease;
+
+            &:hover {
+                color: var(--main-accent-color);
+                cursor: pointer;
+            }
+        }
+
+
+        & .active-route {
             font-weight: 700;
-            cursor: pointer;
+
+            &:hover {
+                cursor: default;
+                color: var(--font-primary-color);
             }
         }
 
@@ -79,20 +91,22 @@
         justify-content: flex-end;
         flex-direction: row;
         align-items: center;
-        gap: 2em;
+        gap: 2em;  
 
         & p {
+            transition: .3s ease;
+
             &:hover {
-                font-weight: 700;
+                color: var(--main-accent-color);
                 cursor: pointer;
             }
         }
 
         .inactive {
             color: var(--font-disabled);
-        
+
             &:hover {
-                font-weight: 400;
+                color: var(--font-disabled);
                 cursor: default;
             }
         }
@@ -101,13 +115,15 @@
             display: flex;
             align-items: center;
             gap: 1em;
-            img { 
-                max-height: 35px;             
+            text-transform: uppercase;
+
+            img {
+                max-height: 35px;
                 border-radius: 50%;
             }
 
             &:hover {
-                font-weight: 700;
+                color: var(--main-accent-color);
                 cursor: pointer;
             }
         }
@@ -116,24 +132,26 @@
             max-height: 35px;
             transition: .3s ease;
 
-            &:hover {             
-                cursor: pointer;  
+            &:hover {
+                cursor: pointer;
                 transform: scale(1.2);
+                .outer {
+                    stroke: var(--main-accent-color);
+                }
+
+                .inner {
+                    fill: var(--main-accent-color);
+                }
             }
         }
     }
 }
 
-.active-route {
-    font-weight: 700;
-}
-
-@media screen 
-    and (max-width: 1000px)
-{
+@media screen and (max-width: 1000px) {
     .content {
         justify-content: flex-end;
     }
+
     .content-left {
         display: none;
     }

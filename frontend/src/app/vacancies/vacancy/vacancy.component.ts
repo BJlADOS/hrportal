@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { IVacancy } from 'src/app/interfaces/vacancy';
 
 @Component({
   selector: 'app-vacancy',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VacancyComponent implements OnInit {
 
-  constructor() { }
+  @Input() public vacancy!: IVacancy;
+
+  constructor(
+    public router: Router,
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  public skillsToString(skills: IVacancy['requiredSkills']): string {
+    return skills.map((skill) => skill.name).join(', ');
+  }
+
+  public openVacancy(): void {
+    this.router.navigate([`vacancies/${this.vacancy.id}`]);
+  }
+
+  public responseVacancy(): void {
+    console.log('Response vacancy');
   }
 
 }

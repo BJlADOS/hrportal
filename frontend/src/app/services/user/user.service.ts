@@ -12,7 +12,7 @@ export class UserService {
   public currentUserSubject$: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
   public currentUser$: Observable<IUser | null> = this.currentUserSubject$.asObservable();
 
-  private apiURL: string = environment.apiURL;
+  private _apiURL: string = environment.apiURL;
 
   constructor(
     public http: HttpClient,
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   public getUserInfo(): void {
-    this.http.get(`${this.apiURL}/user`).subscribe((data) => {
+    this.http.get(`${this._apiURL}/user`).subscribe((data) => {
       this.currentUserSubject$.next(data as IUser);
     });
   }

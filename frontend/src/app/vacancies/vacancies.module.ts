@@ -5,6 +5,7 @@ import { VacanciesComponent } from './vacancies/vacancies.component';
 import { vacanciesRouting } from './vacancies-routing.module';
 import { VacanciesMainComponent } from './vacancies-main/vacancies-main.component';
 import { SharedModule } from '../shared/shared.module';
+import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.component';
 
 
 
@@ -12,7 +13,8 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [
     VacanciesComponent,
     VacancyComponent,
-    VacanciesMainComponent
+    VacanciesMainComponent,
+    VacancyDetailComponent
   ],
   imports: [
     CommonModule,

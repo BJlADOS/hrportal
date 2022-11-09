@@ -1,1 +1,15 @@
-<p>vacancies works!</p>
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <div class="additional-buttons">
+                <!-- empty for now -->
+            </div>
+            <div class="content">
+                <div class="error" *ngIf="loadingError">{{loadingError}}</div>
+                <app-vacancy class="width" *ngFor="let vacancy of vacancies" [vacancy]="vacancy"></app-vacancy>
+            </div>          
+        </div>      
+    </div>
+    
+</div>
+

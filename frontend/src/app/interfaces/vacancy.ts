@@ -1,3 +1,4 @@
+import { Expirience } from "./resume";
 import { IDepartment, ISkill } from "./User";
 
 export interface IVacancy {
@@ -5,10 +6,11 @@ export interface IVacancy {
     department: IDepartment;
     position: string;
     salary: number;
+    expirience: Expirience,
     employment: string;
     schedule: string;
     description: string;
-    reqiredSkills: ISkill[];
+    requiredSkills: ISkill[];
     isActive: boolean;
     modifiedAt: number;
     createdAt: number;

@@ -23,3 +23,8 @@ export interface ISkill {
     id: number,
     name: string
 }
+
+export interface IRoute {
+    path: string,
+    name: string,
+}

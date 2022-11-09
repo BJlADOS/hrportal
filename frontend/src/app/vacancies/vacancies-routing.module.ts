@@ -1,15 +1,15 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { IVacancy } from '../interfaces/vacancy';
+import { VacancyResolverService } from '../services/vacancy-resolver/vacancy-resolver.service';
 import { VacanciesMainComponent } from './vacancies-main/vacancies-main.component';
 import { VacanciesComponent } from './vacancies/vacancies.component';
-import { VacancyComponent } from './vacancy/vacancy.component';
-
-
+import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.component';
 
 const routes: Routes = [
     {path: '', component: VacanciesMainComponent, data: { breadcrumb: 'Вакансии' }, children: [
         { path: '', component: VacanciesComponent, pathMatch: 'full', data: { breadcrumb: null } },  
-        { path: 'vacancy/:id', component: VacancyComponent, pathMatch: 'full', data: { breadcrumb: 'Вакансия' } },    
+        { path: ':id', component: VacancyDetailComponent, pathMatch: 'full', resolve: { breadcrumb: VacancyResolverService }},    
     ]},    
 ];
 
