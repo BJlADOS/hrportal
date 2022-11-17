@@ -1,11 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+@function hex-to-rgb($hex) {
+    @return red($hex), green($hex), blue($hex);
+}
+
 html {
     --white: #fff;
     --primary-color: #ffffff;
     --black: #000;
+    --grey: #D9D9D9;
     --font-primary: #4C4C4C;
     --font-disabled: rgba(76, 76, 76, 0.5);
     --main-accent-color: #FDC04E;
+    --main-accent-color-rgb: #{hex-to-rgb(#FDC04E)};
     --main-accent-color-hover: #be913d;
     --main-accent-color-active: #8e6f2d;
     --main-accent-grey: #323535;
@@ -18,13 +24,15 @@ html {
     --error-text-color: #ff0000;
 
     --box-shadow--main: 0px 0px 30px 2px var(--box-shadow-color);
+    --font-size--main: 16px;
+    --font-size--small: 12px;
 
     --main-font-family: 'Montserrat', sans-serif;
 }
 
 body {
     font-family: var(--main-font-family);
-    font-size: 16px;
+    font-size: var(--font-size--main);
     color: var(--font-primary);
     background-color: var(--additional-accent-color);
     font-weight: 400;
@@ -39,12 +47,24 @@ body {
     width: 80%;
 }
 
+.column-1-6 {
+    grid-column: 1 / span 6; //fix if didn't work
+}
+
+.column-1-9 {
+    grid-column: 1 / 9;
+}
+
 .column-4-10 {
     grid-column: 4 / 10;
 }
 
 .column-1-13 {
     grid-column: 1 / 13;
+}
+
+.column-11-13 {
+    grid-column: 11 / 13;
 }
 
 @media screen 

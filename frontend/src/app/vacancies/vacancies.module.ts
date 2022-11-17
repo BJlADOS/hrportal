@@ -6,6 +6,9 @@ import { vacanciesRouting } from './vacancies-routing.module';
 import { VacanciesMainComponent } from './vacancies-main/vacancies-main.component';
 import { SharedModule } from '../shared/shared.module';
 import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.component';
+import { UploadModalComponent } from './upload-modal/upload-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DragAndDropDirective } from './directives/drag-and-drop/drag-and-drop.directive';
 
 
 
@@ -14,12 +17,15 @@ import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.componen
     VacanciesComponent,
     VacancyComponent,
     VacanciesMainComponent,
-    VacancyDetailComponent
+    VacancyDetailComponent,
+    UploadModalComponent,
+    DragAndDropDirective,
   ],
   imports: [
     CommonModule,
     vacanciesRouting,
     SharedModule,
+    ReactiveFormsModule,
   ]
 })
 export class VacanciesModule { }

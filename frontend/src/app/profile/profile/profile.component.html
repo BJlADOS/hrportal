@@ -1,1 +1,69 @@
-<p>profile works!</p>
+<div class="wrapper" *ngIf="user">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-6">
+            <form class="form" [formGroup]="userForm">
+                <div class="title">
+                    <div class="photo">
+                        <img src="assets/img/profile-placeholder.png">
+                    </div>
+                    <div class="name">
+                        <h1><textarea formControlName="fullname"></textarea></h1>
+                        <h2 *ngIf="user.isManager">Руководитель <span>{{user.currentDepartment.name}}</span></h2>
+                        <h2 *ngIf="!user.isAdmin">Администратор</h2>
+                    </div>
+                </div>
+                <div class="data">
+                    <div class="personal-data">
+                        <label class="block-label">Персональная информация</label>
+                        <div class="input-label">
+                            <label>Корпоративная почта</label>
+                            <input id="email" type="email" placeholder="IVAN.IVANOV@GMAIL.COM" formControlName="email">
+                        </div>
+                        <div class="input-label">
+                            <label>Контакт для связи</label>
+                            <input id="contacts" type="text" placeholder="TG: @IVANOV" formControlName="contact">
+                        </div>
+                    </div>
+                    <div class="career">
+                        <label class="block-label">Карьера</label>
+                        <div class="input-label">
+                            <label>Ваш департамент</label>
+                            <!-- <select>
+                                <option value="" hidden disabled selected>Департамент</option>
+                                <option *ngFor="let department of departments; index as i" [ngValue]="department.id">
+                                    {{department.name}}</option>
+                            </select> -->
+                            <app-select *ngIf="departments.length > 0" [title]="'Департамент'" [options]="departments"
+                                [startValue]="user.currentDepartment.id"
+                                (currentValueChange)="changedDepartment($event)"></app-select>
+                        </div>
+                        <div class="input-label">
+                            <label>Ваш опыт работы</label>
+                            <!-- <select>
+                                <option value="" hidden disabled selected>Опыт работы</option>
+                                <option *ngFor="let value of expirience.values; index as i" [ngValue]="value">
+                                    {{expirience.labels[i]}}</option>
+                            </select> -->
+                            <app-select [title]="'Опыт'" *ngIf="experience.length > 0" [options]="experience"
+                                [startValue]="user.experience" (currentValueChange)="changedExperience($event)">
+                            </app-select>
+                        </div>
+                    </div>
+                    <div class="skills">
+                        <label class="block-label">Навыки</label>
+                        <div class="skills__box">
+                            <span class="no-skills" *ngIf="!user.existingSkills.length">Нет навыков</span>
+                            <span class="skill" *ngFor="let skill of user.existingSkills">{{skill.name}}</span>
+                        </div>
+                        <span class="skills__add" *ngIf="!isAddingSkill" (click)="isAddingSkill = true">Добавить</span>
+                        <div class="skills__search" *ngIf="isAddingSkill">
+                            <app-select-with-search [options]="skills" [alreadySelected]="user.existingSkills"  [isActive]="isAddingSkill"
+                                (closed)="isAddingSkill = $event" (currentValueChange)="addedSkill($event)"></app-select-with-search>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

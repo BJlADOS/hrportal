@@ -20,3 +20,10 @@ export interface IAuthError {
     password?: IInputError | null;
     confirmPassword?: IInputError | null;
 }
+
+export interface IUserUpdateError {
+    email?: string[],
+    expiriense?: string[],
+    currentDepartmentId?: string[],
+    existingSkillsIds?: string[],
+}

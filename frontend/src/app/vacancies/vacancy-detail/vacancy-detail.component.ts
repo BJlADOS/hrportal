@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { takeUntil } from 'rxjs';
+import { ModalRef } from 'src/app/classes/modal/modalRef';
 import { IVacancy } from 'src/app/interfaces/vacancy';
 import { DestroyService } from 'src/app/services/destoy/destroy.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 import { VacancyService } from 'src/app/services/vacancy/vacancy.service';
+import { UploadModalComponent } from '../upload-modal/upload-modal.component';
 
 @Component({
   selector: 'app-vacancy-detail',
@@ -18,6 +21,7 @@ export class VacancyDetailComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _destroy$: DestroyService,
     private _vacancy: VacancyService,
+    private _modalServise: ModalService,
   ) { }
 
   public ngOnInit(): void {
@@ -27,6 +31,13 @@ export class VacancyDetailComponent implements OnInit {
         this.vacancy = vacancy;
       }
       );
+  });
+  }
+
+  public responseVacancy(): void {
+    const modalRef: ModalRef = this._modalServise.open(UploadModalComponent, {
+      vacancyId: this.vacancy?.id,
+      vacancyName: this.vacancy?.position,
   });
   }
 

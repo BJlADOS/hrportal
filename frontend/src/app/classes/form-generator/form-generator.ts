@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { IUser } from 'src/app/interfaces/User';
 import { CustomValidators } from '../custom-validators/custom-validators';
 
 @Injectable({
@@ -55,4 +56,38 @@ export class FormGenerator {
         );
     }
 
+    public getUploadResumeForm(): FormGroup {
+        return this._fb.group(        
+            {   
+                file: [null, Validators.compose([
+                    Validators.required,
+                ])],
+            }
+        );
+    }
+
+    public getUserDataForm(user: IUser): FormGroup {
+        return this._fb.group(
+            {
+                fullname: [user.fullname, Validators.compose([
+                    Validators.required,
+                    Validators.minLength(3),
+                    this._customValidators.patternValidator(/^([А-Я][а-я]{1,}|[А-Я][а-я]{1,}-([А-Я][а-я]{1,}))(\040[А-Я][а-я]{1,})(\040[А-Я][а-я]{1,})?$/, { shouldBeCorrect: true }),
+                ])],
+                email: new FormControl(user.email, Validators.compose([
+                    Validators.required,
+                    this._customValidators.patternValidator(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, { email: true }),
+                ])),
+                contact: new FormControl(user.contact, Validators.compose([
+                    Validators.required,
+                ])),
+                experience: new FormControl(user.experience, Validators.compose([
+                    Validators.required,
+                ])),
+                departmentId: new FormControl(user.currentDepartment.id, Validators.compose([
+                    Validators.required,
+                ])),
+            }
+        );
+    }
 }

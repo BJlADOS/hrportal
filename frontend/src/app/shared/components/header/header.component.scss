@@ -18,7 +18,6 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 2em;
 }
 
 .wrapper-breadcrumbs {
@@ -42,7 +41,7 @@
     h1 {
         position: relative;
         bottom: 4px;
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 800;
         color: var(--main-accent-color);
         white-space: nowrap;
@@ -128,7 +127,7 @@
             }
         }
 
-        & .logout {
+        & .logout-button {
             max-height: 35px;
             transition: .3s ease;
 
@@ -142,6 +141,21 @@
                 .inner {
                     fill: var(--main-accent-color);
                 }
+            }
+        }
+
+        & .settings-button {
+            max-height: 35px;
+            transition: .3s ease;
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.2);
+                path {
+                    stroke: var(--main-accent-color);
+                }
+                
+
             }
         }
     }

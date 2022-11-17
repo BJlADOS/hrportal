@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IUser } from 'src/app/interfaces/User';
+import { IUser, IUserUpdate } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -18,14 +18,24 @@ export class UserService {
     public http: HttpClient,
   ) { }
 
-  public get currentUserValue(): IUser | null { //placeholder
-    return { fullname: 'test', email: 'test', contact: 'test', expirience: 1, currentDepartment: { id: 1, name: 'test', managerId: 1 }, photo: 'test', existingSkills: [{ id: 1, name: 'test' }], isManager: true, isAdmin: true, id: 1, filled: true, resumeId: 1 };
+  public get currentUserValue(): IUser | null { 
+    return this.currentUserSubject$.value;
   }
 
   public getUserInfo(): void {
-    this.http.get(`${this._apiURL}/user`).subscribe((data) => {
+    this.http.get(`${this._apiURL}/user`).subscribe({ next: (data) => {
       this.currentUserSubject$.next(data as IUser);
-    });
+    } });
+  }
+
+  public updateUserInfo(user: IUserUpdate): void { //put inside component that updates user info
+    this.http.patch(`${this._apiURL}/user`, user).subscribe({ next: (data) => {
+      this.currentUserSubject$.next(data as IUser);
+    } });
+  }
+
+  public getUserById(id: number): Observable<IUser> {
+    return this.http.get(`${this._apiURL}/user/${id}`) as Observable<IUser>;
   }
 
   public logOut(): void {

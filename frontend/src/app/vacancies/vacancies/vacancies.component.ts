@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Expirience } from 'src/app/interfaces/resume';
-import { IVacancy } from 'src/app/interfaces/vacancy';
+import { Observable } from 'rxjs';
+import { IUser } from 'src/app/interfaces/User';
+import { Employment, Experience, IVacancy, Schedule } from 'src/app/interfaces/vacancy';
+import { UserService } from 'src/app/services/user/user.service';
 import { VacancyService } from 'src/app/services/vacancy/vacancy.service';
 
 @Component({
@@ -12,13 +14,15 @@ export class VacanciesComponent implements OnInit {
 
   public vacancies: IVacancy[] = [];
   public loadingError: string | undefined;
+  public user: Observable<IUser | null> = this._user.currentUser$;
 
   constructor(
-    private vacancyService: VacancyService,
+    private _vacancy: VacancyService,
+    private _user: UserService,
   ) { }
 
   public ngOnInit(): void {
-    this.vacancyService.getVacancies().subscribe({ next: (data) => {
+    this._vacancy.getVacancies().subscribe({ next: (data) => {
       this.vacancies = data;
       for (let i = 0; i < 4; i++) {
         this.vacancies.push({
@@ -30,9 +34,8 @@ export class VacanciesComponent implements OnInit {
           },
           position: 'Frontend Developer',
           salary: 1000,
-          expirience: Expirience['1-3'],
-          employment: 'Full-time',
-          schedule: 'Full-time',
+          employment: Employment['FULL'],
+          schedule: Schedule['FULL'],
           description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc. Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.',
           requiredSkills: [
             {

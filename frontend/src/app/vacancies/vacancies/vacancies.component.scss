@@ -7,9 +7,30 @@
 .wrapper-flex {
     width: 100%;
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
+}
+
+.additional-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+    & .manager-button {
+        border: none;
+        border-radius: 20px;
+        font-size: var(--font-size--main);
+        background-color: var(--main-accent-color);
+        color: var(--white);
+        padding: 0.8rem 1.6rem;
+        text-transform: uppercase;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--font-primary);
+        }
+    }
 }
 
 .content {
@@ -17,6 +38,7 @@
     display: flex;
     justify-content: center;
     gap: 2em;
+    margin-top: 2.5rem;
     flex-direction: column;
     align-items: center;
 }

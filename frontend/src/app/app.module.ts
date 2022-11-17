@@ -16,6 +16,7 @@ import { ErrorComponent } from './auth/components/error/error.component';
 import { AuthGuard } from './Guards/auth-guard/auth.guard';
 import { DestroyService } from './services/destoy/destroy.service';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [

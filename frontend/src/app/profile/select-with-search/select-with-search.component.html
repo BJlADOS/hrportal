@@ -1,0 +1,32 @@
+<div class="dropdown-collection" appClickOutside (clickOutside)="closeDropdown()">
+    <div class="dropdown-button" [class.opened]="dropdownOpen" aria-haspopup="listbox"
+        aria-labelledby="dropdown-label" #head>
+        <input class="dropdown-input" placeholder="Навык" [formControl]="searchControl">
+    </div>
+
+    <div class="dropdown-list" role="listbox" aria-expanded="true">
+
+        <div class="wrapper">
+            <cdk-virtual-scroll-viewport class="dropdown-list__scroll" itemSize="10"
+                [style.height.px]="34 * visibleOptions" [class.no-scroll]="visibleOptions >= options.length">
+                    <div class="dropdown-item" *ngIf="!options.length" [class.no-scroll]="visibleOptions >= options.length" (click)="closeDropdown()">Нет результатов...</div>
+
+                    <div class="dropdown-item" [class.no-scroll]="visibleOptions >= options.length" *cdkVirtualFor="let option of options" (click)="select(option)">
+                        {{ option.name }}
+                    </div>
+            </cdk-virtual-scroll-viewport>
+        </div>
+        <!-- <div class="wrap">
+        <div class="dropdown-item" *ngFor="let option of options" (click)="select(option)">
+                {{ option.name }}
+            </div>
+        </div> -->
+    </div>
+
+    <!-- <ul class="dropdown-list" role="listbox" aria-expanded="true" [ngClass]="{'dropdown-open' : dropdownOpen}">
+        <li *ngFor="let option of options"
+            tabindex="0"
+            (click)="select(option)"
+            role="option">{{option.name}}</li>
+    </ul> -->
+</div>

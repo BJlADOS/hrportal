@@ -1,9 +1,11 @@
+import { Experience } from "./vacancy"
+
 export interface IUser {
     id: number,
     fullname: string,
     email: string,
     contact: string,
-    expirience: number,
+    experience: Experience,
     currentDepartment: IDepartment,
     photo: string,
     existingSkills: ISkill[],
@@ -11,6 +13,16 @@ export interface IUser {
     resumeId: number,
     isManager: boolean,
     isAdmin: boolean
+}
+
+export interface IUserUpdate {
+    fullname: string,
+    email: string,
+    contact: string,
+    experience: Experience,
+    currentDepartmentId: number,
+    existingSkillsIds: number[],
+    photo: File, // Тут не понятно, какой тип данных
 }
 
 export interface IDepartment {

@@ -1,11 +1,11 @@
 <div class="wrapper">
     <div class="wrapper-hover" (click)="openVacancy()">
         <div class="title">
-            <div class="title-position">
+            <div class="title__position">
                 <h1>{{vacancy.position}}</h1>
                 <p>от {{vacancy.salary}} рублей</p>
             </div>
-            <p class="title-date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
+            <p class="title__date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
         </div>
     </div>
     <div class="department">
