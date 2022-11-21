@@ -38,10 +38,8 @@ export class UploadModalComponent extends Modal {
   }
 
   public onFileChange(event: any): void {
-    console.log(event.target);
     const file: File = event.target.files[0];
     this.file = file;
-    console.log(file);
   }
 
   public onFileDropped(files: FileList): void {
@@ -55,7 +53,6 @@ export class UploadModalComponent extends Modal {
         console.log(response);
       } }
     );
-    
   }
 
   public getUsername(): string {

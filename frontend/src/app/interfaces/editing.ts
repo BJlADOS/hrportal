@@ -1,0 +1,18 @@
+export interface IUserEditing {
+    name: boolean;
+    photo: boolean;
+    email: boolean;
+    contact: boolean;
+    experience: boolean;
+    department: boolean;
+    skills: boolean;
+}
+
+export interface IVacancyEditing {
+    position: boolean;
+    salary: boolean;
+    employment: boolean;
+    schedule: boolean;
+    description: boolean;
+    skills: boolean;
+}

@@ -16,6 +16,7 @@ export class SelectWithSearchComponent implements OnInit {
   @Input() startValue: any;
   @Input() alreadySelected: any[] = [];
   @Input() isActive: boolean = false;
+
   @Output() currentValueChange = new EventEmitter();
   @Output() closed = new EventEmitter();
 

@@ -84,9 +84,10 @@ export class FormGenerator {
                 experience: new FormControl(user.experience, Validators.compose([
                     Validators.required,
                 ])),
-                departmentId: new FormControl(user.currentDepartment.id, Validators.compose([
+                department: new FormControl(user.currentDepartment, Validators.compose([
                     Validators.required,
                 ])),
+                skills: new FormControl(user.existingSkills.slice()),
             }
         );
     }

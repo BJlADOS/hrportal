@@ -10,8 +10,7 @@
     &__header {
         display: flex;
         justify-content: flex-end;
-        transform: translateX(1.5rem);
-        color: var(--main-accent-color);
+        transform: translate(1.5rem, 100%);
 
         & span {
             cursor: pointer;
@@ -24,7 +23,7 @@
     }
 
     &__body {
-        padding: 1.5rem;
+        padding: 2rem 2.5rem;
         border-radius: 20px;
         box-shadow: var(--box-shadow-main);
         border: 3px solid var(--main-accent-color);
@@ -114,6 +113,8 @@
 }
 
 .success-text {
+    text-align: center;
+
     & .bold {
         font-weight: 700;
     }

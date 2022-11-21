@@ -36,7 +36,7 @@ export class AuthComponent implements OnInit {
     });
   }
 
-  public signIn(): void { //not implemented
+  public signIn(): void {
     this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password, this._returnUrl);
   }
 

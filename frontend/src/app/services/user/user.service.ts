@@ -22,16 +22,25 @@ export class UserService {
     return this.currentUserSubject$.value;
   }
 
+  public updateCurrentUser(user: IUser): void {
+    this.currentUserSubject$.next(this.fixPhotoUrl(user));
+  }
+
   public getUserInfo(): void {
     this.http.get(`${this._apiURL}/user`).subscribe({ next: (data) => {
-      this.currentUserSubject$.next(data as IUser);
+      const user = data as IUser;
+      this.currentUserSubject$.next(this.fixPhotoUrl(user));
     } });
   }
 
-  public updateUserInfo(user: IUserUpdate): void { //put inside component that updates user info
-    this.http.patch(`${this._apiURL}/user`, user).subscribe({ next: (data) => {
-      this.currentUserSubject$.next(data as IUser);
-    } });
+  public updateUserInfo(user: any): Observable<IUser> {
+    const data = new FormData();
+    Object.keys(user).forEach((key, i) => {
+      if (Object.values(user)[i]) {
+        data.append(key, Object.values(user)[i] as string | Blob); 
+      }
+    });
+    return this.http.patch(`${this._apiURL}/user/`, data) as Observable<IUser>;
   }
 
   public getUserById(id: number): Observable<IUser> {
@@ -40,5 +49,12 @@ export class UserService {
 
   public logOut(): void {
     this.currentUserSubject$.next(null);
+  }
+
+  private fixPhotoUrl(user: IUser): IUser {
+    if (user.photo) {
+      user.photo = `${this._apiURL}${user.photo}`;
+    }
+    return user;
   }
 }

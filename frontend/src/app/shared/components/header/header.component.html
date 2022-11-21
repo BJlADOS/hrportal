@@ -12,7 +12,7 @@
                 <div class="content-right">
                     <p class="inactive" (click)="redirectTo('profile/resume', false)">РЕЗЮМЕ</p>
                     <div class="profile" (click)="redirectTo('profile', true)">
-                        <img src="assets/img/profile-placeholder.png">
+                        <img [src]="user.photo || 'assets/img/profile-placeholder.png'">
                         <!-- placeholder image need to be fixed -->
                         <p>{{getUserName(user.fullname)}}</p>
                     </div>

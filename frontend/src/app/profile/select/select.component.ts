@@ -1,53 +1,77 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
+
+export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
+  provide: NG_VALUE_ACCESSOR,
+  useExisting: forwardRef(() => SelectComponent),
+  multi: true
+};
 
 @Component({
   selector: 'app-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
-  animations: [contentExpansion]
+  animations: [contentExpansion],
+  providers: [CUSTOM_SELECT_VALUE_ACCESSOR]
 })
-export class SelectComponent implements OnInit {
+export class SelectComponent implements OnInit, ControlValueAccessor {
 
   @Input() options: any[] =[];
   @Input() title: string = 'Select';
-  @Input() startValue: any;
-  @Output() currentValueChange = new EventEmitter();
 
   public currentValue: any;
   public dropdownOpen: boolean = false;
+  public disabled: boolean = false;
+  public onChange: any;
 
   constructor(
       private elem: ElementRef
   ) { }
 
+  public writeValue(obj: any): void {
+    // Если у объекта есть свойство id, то берём сам объект, иначе ищем объект с таким id
+    this.currentValue = obj?.id ? obj : this.options.find((option) => option.id === obj);
+    this.closeDropdown();
+  }
+  public registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+  public registerOnTouched(fn: any): void {
+    this.closeDropdown();
+  }
+  public setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
+  }
+
   public ngOnInit(): void {
-    if (this.startValue) {
-      this.currentValue = this.options.find((option) => option.id === this.startValue);
-    } 
   }
 
   public get dropdownElement(): Element {return this.elem.nativeElement.querySelector('.dropdown-list')}
 
-  public closeDropdown() {
+  public closeDropdown(): void {
       this.dropdownElement.setAttribute('aria-expanded', "false");
       this.dropdownOpen = false;
   }
 
-  public selectByIndex(i: number) {
+  public selectByIndex(i: number): void {
       let value = this.options[i];
       this.select(value);
   }
 
-  public select(value: any) {
+  public select(value: any): void {
       this.currentValue = value;
       this.closeDropdown();
-      this.currentValueChange.emit(this.currentValue);
+      this.onChange(value);
   }
 
-  public toggleDropdown() {
-      this.dropdownOpen = !this.dropdownOpen;
-      this.dropdownElement.setAttribute('aria-expanded', this.dropdownOpen ? "true" : "false");
+  public toggleDropdown():void {
+    if (this.disabled) {
+      return;
+    }
+    
+    this.dropdownOpen = !this.dropdownOpen;
+    this.dropdownElement.setAttribute('aria-expanded', this.dropdownOpen ? "true" : "false");
   }
 
 }

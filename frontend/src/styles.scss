@@ -38,6 +38,27 @@ body {
     font-weight: 400;
     margin: 0;
     padding: 0;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    &::-webkit-scrollbar-track {
+        display: none;
+        background-color: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: var(--main-accent-color); 
+        border-radius: 10px;
+
+        &:hover {
+            background: var(--main-accent-color-hover);
+        }
+    }
 }
 
 .wrapper-grid {

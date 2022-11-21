@@ -6,7 +6,7 @@ export interface IUser {
     email: string,
     contact: string,
     experience: Experience,
-    currentDepartment: IDepartment,
+    currentDepartment: IDepartment | null,
     photo: string,
     existingSkills: ISkill[],
     filled: boolean,
@@ -16,13 +16,13 @@ export interface IUser {
 }
 
 export interface IUserUpdate {
-    fullname: string,
-    email: string,
-    contact: string,
-    experience: Experience,
-    currentDepartmentId: number,
-    existingSkillsIds: number[],
-    photo: File, // Тут не понятно, какой тип данных
+    fullname?: string,
+    email?: string,
+    contact?: string,
+    experience?: Experience,
+    currentDepartmentId?: number,
+    existingSkillsIds?: number[],
+    photo?: File, // Тут не понятно, какой тип данных
 }
 
 export interface IDepartment {

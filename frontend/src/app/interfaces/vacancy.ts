@@ -61,13 +61,25 @@ export enum ExperienceRussian {
     '>6' = 'Больше 6 лет',
 }
 
-export function getExperienceRussianAsArray(): { values: string[], labels: ExperienceRussian[] } {
-    const labels = Object.values(ExperienceRussian);
-    const values = Object.keys(ExperienceRussian);
-    const expirience = {
-        values: values,
-        labels: labels,
-    }
+    //Todo Сделать функции для остальных enum
 
-    return expirience;
+export function getExperienceRussianAsArray(): { name: string, id: string }[] {
+    const experience: { name: string, id: string }[] = [];
+    Object.values(ExperienceRussian).map((value, i) => experience.push({ name: value, id: Object.values(Experience)[i] }));
+
+    return experience;
+}
+
+export function getScheduleRussianAsArray(): { name: string, id: string }[] {
+    const schedule: { name: string, id: string }[] = [];
+    Object.values(ScheduleRussian).map((value, i) => schedule.push({ name: value, id: Object.values(Schedule)[i] }));
+
+    return schedule;
+}
+
+export function getEmploymentRussianAsArray(): { name: string, id: string }[] {
+    const employment: { name: string, id: string }[] = [];
+    Object.values(EmploymentRussian).map((value, i) => employment.push({ name: value, id: Object.values(Employment)[i] }));
+
+    return employment;
 }

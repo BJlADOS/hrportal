@@ -32,6 +32,7 @@
             fill: var(--main-accent-color);
         }
     }
+
 }
 
 .dropdown-button {
@@ -49,6 +50,8 @@
 
     & .arrow-icon {
         transition: .3s ease;
+        margin-right: 1rem;
+        fill: var(--border-color);
     }
 
     
@@ -83,7 +86,7 @@
     transform: translateY(100%);
 
     li {
-        padding: 1rem 0.5rem;
+        padding: 0.75rem 1rem;
         cursor: pointer;
         font-weight: 300;
 
