@@ -5,8 +5,6 @@
     </div>
 
     <div class="dropdown-list" role="listbox" aria-expanded="true">
-
-        <div class="wrapper">
             <cdk-virtual-scroll-viewport 
             class="dropdown-list__scroll" itemSize="10"
                 [style.height.px]="34 * visibleOptions" 
@@ -21,6 +19,5 @@
                     {{ option.name }}
                 </div>
             </cdk-virtual-scroll-viewport>
-        </div>
     </div>
 </div>
