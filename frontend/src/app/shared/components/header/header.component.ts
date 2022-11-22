@@ -35,13 +35,7 @@ export class HeaderComponent implements OnInit {
             .pipe(filter((event: RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll) => event instanceof NavigationEnd), takeUntil(this._destroy$))
             .subscribe(() => this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root));
     this.user.pipe(takeUntil(this._destroy$)).subscribe((user: IUser | null) => {
-      if (user?.isManager) {
-        this.routes = managerButtons;
-      } else if (user?.isAdmin) {
-        this.routes = adminButtons;
-      } else {
-        this.routes = userButtons;
-      }
+      this.routes = user?.isAdmin ? adminButtons : user?.isManager ? managerButtons : userButtons;
     });
   }
 

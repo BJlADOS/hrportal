@@ -7,6 +7,10 @@ import { SchedulePipe } from '../pipes/schedule/schedule.pipe';
 import { EmploymentPipe } from '../pipes/employment/employment.pipe';
 import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
 import { ErrorComponent } from './components/error/error.component';
+import { SelectComponent } from './components/select/select.component';
+import { SelectWithSearchComponent } from './components/select-with-search/select-with-search.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 
@@ -18,10 +22,14 @@ import { ErrorComponent } from './components/error/error.component';
     EmploymentPipe,
     ClickOutsideDirective,
     ErrorComponent,
+    SelectComponent,
+    SelectWithSearchComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
+    ScrollingModule,
   ],
   exports: [
     HeaderComponent,
@@ -29,6 +37,8 @@ import { ErrorComponent } from './components/error/error.component';
     EmploymentPipe,
     ClickOutsideDirective,
     ErrorComponent,
+    SelectComponent,
+    SelectWithSearchComponent,
   ]
 })
 export class SharedModule { }
