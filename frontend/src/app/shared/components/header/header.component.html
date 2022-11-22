@@ -13,7 +13,6 @@
                     <p class="inactive" (click)="redirectTo('profile/resume', false)">РЕЗЮМЕ</p>
                     <div class="profile" (click)="redirectTo('profile', true)">
                         <img [src]="user.photo || 'assets/img/profile-placeholder.png'">
-                        <!-- placeholder image need to be fixed -->
                         <p>{{getUserName(user.fullname)}}</p>
                     </div>
                     <svg class="logout-button" (click)="logout()" width="18" height="23" viewBox="0 0 18 23" fill="none"
