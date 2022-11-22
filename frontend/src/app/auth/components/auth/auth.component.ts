@@ -1,11 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SHA256 } from 'crypto-js';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { IAuthError, IInputError } from 'src/app/interfaces/errors';
+import { IAuthError, IInputError, ISubmitError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({

@@ -19,6 +19,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   @Input() options: any[] =[];
   @Input() title: string = 'Select';
+  @Input() required: boolean = false;
 
   public currentValue: any;
   public dropdownOpen: boolean = false;

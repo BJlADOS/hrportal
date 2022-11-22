@@ -37,18 +37,21 @@
                             <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Фамилия Имя
                                 Отчество</label>
                             <input id="fullname" type="fullname" formControlName="fullname" [readOnly]="!isEditing"
-                                placeholder="Иван Иванов Иванович">
+                                placeholder="Иван Иванов Иванович" (input)="fullnameChange()">
+                            <app-error [@contentExpansion]="errors.fullname ? 'expanded' : 'collapsed'" [error]="errors.fullname!"></app-error>
                         </div>
                         <div class="input-label">
                             <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Корпоративная
                                 почта</label>
-                            <input id="email" type="email" placeholder="IVAN.IVANOV@GMAIL.COM" formControlName="email"
-                                [readOnly]="!isEditing">
+                            <input id="email" type="email" [placeholder]="isEditing? 'IVAN.IVANOV@GMAIL.COM' : 'Почта'" formControlName="email"
+                                [readOnly]="!isEditing" [class.required]="!userForm.controls['email'].value && !isEditing" (input)="emailChange()">
+                                <app-error [@contentExpansion]="errors.email ? 'expanded' : 'collapsed'" [error]="errors.email!"></app-error>
                         </div>
                         <div class="input-label">
                             <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Контакт для связи</label>
-                            <input id="contacts" type="text" placeholder="TG: @IVANOV" formControlName="contact"
-                                [readOnly]="!isEditing">
+                            <input id="contacts" type="text" [placeholder]="isEditing ? 'TG: @IVANOV' : 'Контакт'" formControlName="contact"
+                                [readOnly]="!isEditing" [class.required]="!userForm.controls['contact'].value && !isEditing" (input)="contactChange()">
+                                <app-error [@contentExpansion]="errors.contact ? 'expanded' : 'collapsed'" [error]="errors.contact!"></app-error>
                         </div>
                     </div>
                     <div class="career">
@@ -56,13 +59,15 @@
                         <div class="input-label">
                             <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Ваш департамент:</label>
                             <app-select *ngIf="departments.length > 0" [title]="'Департамент'" [options]="departments"
-                                formControlName="department"></app-select>
+                                formControlName="department" [required]="!userForm.controls['department'].value && !isEditing" (ngModelChange)="departmentChange()"></app-select>
+                                <app-error [@contentExpansion]="errors.department ? 'expanded' : 'collapsed'" [error]="errors.department!"></app-error>
                         </div>
                         <div class="input-label">
                             <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Ваш опыт работы:</label>
                             <app-select [title]="'Опыт работы'" *ngIf="experience.length > 0" [options]="experience"
-                                formControlName="experience">
+                                formControlName="experience" [required]="!userForm.controls['experience'].value && !isEditing" (ngModelChange)="experienceChange()">
                             </app-select>
+                            <app-error [@contentExpansion]="errors.experience ? 'expanded' : 'collapsed'" [error]="errors.experience!"></app-error>
                         </div>
                     </div>
                     <div class="skills">
@@ -90,8 +95,11 @@
                         </div>
                     </div>
                     <div class="submit" [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">
-                        <input type="submit" value="СОХРАНИТЬ ИЗМЕНЕНИЯ" [disabled]="!checkFormChanges() || !userForm.valid">
-                        <div (click)="cancelEditing()">ОТМЕНИТЬ ИЗМЕНЕНИЯ</div>
+                        <div class="buttons">
+                            <input type="submit" value="СОХРАНИТЬ ИЗМЕНЕНИЯ" [disabled]="!checkFormChanges() || !userForm.valid">
+                            <div (click)="cancelEditing()">ОТМЕНИТЬ ИЗМЕНЕНИЯ</div>
+                        </div>
+                        <app-error [error]="submitError"></app-error>
                     </div>
                 </div>
             </form>

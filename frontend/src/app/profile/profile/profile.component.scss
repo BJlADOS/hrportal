@@ -252,42 +252,48 @@
             
             & .submit {
                 display: flex;
-                flex-direction: row;
+                flex-direction: column;
                 gap: 1rem;
-    
-                input {
-                    padding: 0.5rem 1rem;
-                    border-radius: 20px;
-    
-                    border: none;
-                    background-color: var(--main-accent-color);
-                    color: var(--white);
-    
-                    &:hover {
-                        cursor: pointer;
+                & .buttons {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 1rem;
+        
+                    input {
+                        padding: 0.5rem 1rem;
+                        border-radius: 20px;
+        
+                        border: none;
+                        background-color: var(--main-accent-color);
+                        color: var(--white);
+        
+                        &:hover {
+                            cursor: pointer;
+                            color: var(--font-primary);
+                        }
+        
+                        &:disabled {
+                            background-color: var(--border-color);
+                        }
+                    }
+        
+                    div {
+                        padding: 0.5rem 1rem;
+                        border-radius: 20px;
+                        border: none;
+        
                         color: var(--font-primary);
-                    }
-    
-                    &:disabled {
-                        background-color: var(--border-color);
-                    }
-                }
-    
-                div {
-                    padding: 0.5rem 1rem;
-                    border-radius: 20px;
-                    border: none;
-    
-                    color: var(--font-primary);
-                    font-family: var(--main-font-family);
-                    font-size: var(--font-size--main);
-                    background-color: transparent;
-    
-                    &:hover {
-                        cursor: pointer;
-                        color: var(--main-accent-color);
+                        font-family: var(--main-font-family);
+                        font-size: var(--font-size--main);
+                        background-color: transparent;
+        
+                        &:hover {
+                            cursor: pointer;
+                            color: var(--main-accent-color);
+                        }
                     }
                 }
+                
             }
         }
     }
@@ -349,6 +355,15 @@
 
         &:disabled {
             background-color: var(--white);
+        }
+
+        &.required {
+           border-color: var(--main-accent-color);
+
+            &::placeholder {
+                color: var(--main-accent-color);
+                font-weight: 600;
+            }         
         }
     }
 }

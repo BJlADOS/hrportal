@@ -21,9 +21,21 @@ export interface IAuthError {
     confirmPassword?: IInputError | null;
 }
 
+export interface IUserFormError {
+    fullname?: IInputError | null;
+    email?: IInputError | null;
+    contact?: IInputError | null;
+    department?: IInputError | null;
+    experience?: IInputError | null;
+}
+
 export interface IUserUpdateError {
     email?: string[],
     expiriense?: string[],
     currentDepartmentId?: string[],
     existingSkillsIds?: string[],
+}
+
+export interface ISubmitError {
+    message: string;
 }

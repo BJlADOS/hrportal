@@ -1,5 +1,5 @@
 <div class="dropdown-collection" [class.opened]="dropdownOpen" [class.disabled]="disabled">
-    <div appClickOutside class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label" (click)="toggleDropdown()" (clickOutside)="dropdownOpen = false">
+    <div appClickOutside class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label" (click)="toggleDropdown()" (clickOutside)="dropdownOpen = false" [class.required]="required">
         <span class="dropdown-default" id="dropdown-label" *ngIf="!currentValue">{{title}} </span><span class="dropdown-value" *ngIf="currentValue">{{currentValue.name}}</span>
         <svg *ngIf="!disabled" class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
         width="24" height="24">

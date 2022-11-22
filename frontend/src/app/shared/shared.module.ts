@@ -6,6 +6,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { SchedulePipe } from '../pipes/schedule/schedule.pipe';
 import { EmploymentPipe } from '../pipes/employment/employment.pipe';
 import { ClickOutsideDirective } from './directives/click-outside/click-outside.directive';
+import { ErrorComponent } from './components/error/error.component';
 
 
 
@@ -16,6 +17,7 @@ import { ClickOutsideDirective } from './directives/click-outside/click-outside.
     SchedulePipe,
     EmploymentPipe,
     ClickOutsideDirective,
+    ErrorComponent,
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { ClickOutsideDirective } from './directives/click-outside/click-outside.
     SchedulePipe,
     EmploymentPipe,
     ClickOutsideDirective,
+    ErrorComponent,
   ]
 })
 export class SharedModule { }

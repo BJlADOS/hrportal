@@ -12,7 +12,7 @@ import { CookieModule } from 'ngx-cookie';
 import { AuthComponent } from './auth/components/auth/auth.component';
 import { RegistrationComponent } from './auth/components/registration/registration.component';
 import { ErrorsComponent } from './auth/components/errors/errors.component';
-import { ErrorComponent } from './auth/components/error/error.component';
+import { ErrorComponent } from './shared/components/error/error.component';
 import { AuthGuard } from './Guards/auth-guard/auth.guard';
 import { DestroyService } from './services/destoy/destroy.service';
 import { RouterModule } from '@angular/router';
@@ -25,7 +25,6 @@ import { SharedModule } from './shared/shared.module';
     AuthComponent,
     RegistrationComponent,
     ErrorsComponent,
-    ErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +34,7 @@ import { SharedModule } from './shared/shared.module';
     ReactiveFormsModule,
     CookieModule.withOptions(),
     RouterModule,
+    SharedModule,
   ],
   providers: [
     {
