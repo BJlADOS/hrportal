@@ -5,11 +5,81 @@ export interface IVacancy {
     department: IDepartment;
     position: string;
     salary: number;
-    employment: string;
-    schedule: string;
+    employment: Employment;
+    schedule: Schedule;
     description: string;
-    reqiredSkills: ISkill[];
+    requiredSkills: ISkill[];
     isActive: boolean;
     modifiedAt: number;
     createdAt: number;
+}
+
+export interface IVacancyResponseModel {
+    position: string;
+    salary: number;
+    employment: Employment;
+    schedule: Schedule;
+    description: string;
+    skillsIds: number[];
+}
+
+
+export enum Experience {
+    '<1' = '<1',
+    '1-3' = '1-3',
+    '3-6' = '3-6',
+    '>6' = '>6',
+}
+export enum Employment {
+    'PART' = 'PART',
+    'FULL' = 'FULL',
+}
+
+export enum Schedule {
+    'DISTANT' = 'DISTANT',
+    'PART' = 'PART',
+    'SHIFT' = 'SHIFT',
+    'FULL' = 'FULL',
+}
+
+export enum ScheduleRussian {
+    'DISTANT' = 'Удаленная работа',
+    'PART' = 'Частичная',
+    'SHIFT' = 'Сменная',
+    'FULL' = 'Полный день',
+}
+
+export enum EmploymentRussian {
+    'PART' = 'Частичная занятость',
+    'FULL' = 'Полная занятость',
+}
+
+export enum ExperienceRussian {
+    '<1' = 'Меньше года',
+    '1-3' = '1-3 года',
+    '3-6' = '3-6 лет',
+    '>6' = 'Больше 6 лет',
+}
+
+    //Todo Сделать функции для остальных enum
+
+export function getExperienceRussianAsArray(): { name: string, id: string }[] {
+    const experience: { name: string, id: string }[] = [];
+    Object.values(ExperienceRussian).map((value, i) => experience.push({ name: value, id: Object.values(Experience)[i] }));
+
+    return experience;
+}
+
+export function getScheduleRussianAsArray(): { name: string, id: string }[] {
+    const schedule: { name: string, id: string }[] = [];
+    Object.values(ScheduleRussian).map((value, i) => schedule.push({ name: value, id: Object.values(Schedule)[i] }));
+
+    return schedule;
+}
+
+export function getEmploymentRussianAsArray(): { name: string, id: string }[] {
+    const employment: { name: string, id: string }[] = [];
+    Object.values(EmploymentRussian).map((value, i) => employment.push({ name: value, id: Object.values(Employment)[i] }));
+
+    return employment;
 }

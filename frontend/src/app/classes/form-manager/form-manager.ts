@@ -23,10 +23,6 @@ export class FormManager {
             return { message: 'Введите корректную почту.' };
         }
 
-        if (form.controls['email'].hasError('unique')) {
-            return { message: 'Почта уже занята.' };
-        }
-
         return null;
     }
 
@@ -76,6 +72,30 @@ export class FormManager {
 
         if (form.controls['confirmPassword'].hasError('NoPassswordMatch')) {
             return { message: 'Пароли не совпадают.' };
+        }
+
+        return null;
+    }
+
+    public checkContact(form: FormGroup): IInputError | null {
+        if (form.controls['contact'].hasError('required')) {
+            return { message: 'Введите контакт для связи' }
+        }
+
+        return null;
+    }
+
+    public checkDepartment(form: FormGroup): IInputError | null {
+        if (form.controls['department'].hasError('required')) {
+            return { message: 'Выберите департамент' };
+        }
+
+        return null;
+    }
+
+    public checkExperience(form: FormGroup): IInputError | null {
+        if (form.controls['department'].hasError('required')) {
+            return { message: 'Выберите опыт работы' };
         }
 
         return null;

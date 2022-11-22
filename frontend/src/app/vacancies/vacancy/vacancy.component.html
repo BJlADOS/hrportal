@@ -1,1 +1,21 @@
-<p>vacancy works!</p>
+<div class="wrapper">
+    <div class="wrapper-hover" (click)="openVacancy()">
+        <div class="title">
+            <div class="title__position">
+                <h1>{{vacancy.position}}</h1>
+                <p>от {{vacancy.salary}} рублей</p>
+            </div>
+            <p class="title__date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
+        </div>
+    </div>
+    <div class="department">
+        {{vacancy.department.name}}
+    </div>
+    <div class="description">
+        {{vacancy.description}}
+    </div>
+    <div class="skills">
+        {{skillsToString(vacancy.requiredSkills)}}
+    </div>
+    <button class="response" (click)="responseVacancy()">Откликнуться</button>
+</div>

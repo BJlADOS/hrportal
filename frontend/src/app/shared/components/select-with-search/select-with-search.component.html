@@ -1,0 +1,23 @@
+<div class="dropdown-collection" appClickOutside (clickOutside)="closeDropdown()">
+    <div class="dropdown-button" [class.opened]="dropdownOpen" aria-haspopup="listbox" aria-labelledby="dropdown-label"
+        #head>
+        <input class="dropdown-input" placeholder="Навык" [formControl]="searchControl">
+    </div>
+
+    <div class="dropdown-list" role="listbox" aria-expanded="true">
+            <cdk-virtual-scroll-viewport 
+            class="dropdown-list__scroll" itemSize="10"
+                [style.height.px]="34 * visibleOptions" 
+                [class.no-scroll]="visibleOptions >= options.length">
+                <div class="dropdown-item" *ngIf="!options.length" 
+                [class.no-scroll]="visibleOptions >= options.length"
+                    (click)="closeDropdown()"
+                    >Нет результатов...</div>
+
+                <div class="dropdown-item" [class.no-scroll]="visibleOptions >= options.length"
+                    *cdkVirtualFor="let option of options" (click)="select(option)">
+                    {{ option.name }}
+                </div>
+            </cdk-virtual-scroll-viewport>
+    </div>
+</div>

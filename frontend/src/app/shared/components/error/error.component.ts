@@ -8,7 +8,7 @@ import { IInputError } from 'src/app/interfaces/errors';
 })
 export class ErrorComponent implements OnInit {
 
-  @Input() public error!: IInputError;
+  @Input() public error!: IInputError | null;
 
   constructor() { }
 

@@ -35,13 +35,13 @@ export class CustomValidators {
         return null;
     }
 
-    public emailUniqueValidator(): AsyncValidatorFn {
-        return (control: AbstractControl): Observable<ValidationErrors | null> => {
-            const email: string = control!.value;
-            return this._auth.checkEmail(email).pipe(map((data) => {
-                const unique = data as { unique: boolean };
-                return unique.unique ? null : { unique: true };
-            }));
-        }
-    }
+    // public emailUniqueValidator(): AsyncValidatorFn {
+    //     return (control: AbstractControl): Observable<ValidationErrors | null> => {
+    //         const email: string = control!.value;
+    //         return this._auth.checkEmail(email).pipe(map((data) => {
+    //             const unique = data as { unique: boolean };
+    //             return unique.unique ? null : { unique: true };
+    //         }));
+    //     }
+    // }
 }

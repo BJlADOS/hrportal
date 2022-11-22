@@ -4,6 +4,7 @@ import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { map, Observable } from "rxjs";
 import { IValidToken } from "src/app/interfaces/Token";
 import { AuthService } from "src/app/services/auth/auth.service";
+import { UserService } from "src/app/services/user/user.service";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -11,16 +12,16 @@ import { environment } from "src/environments/environment";
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private _router: Router,
     public http: HttpClient,
-    private _auth: AuthService
+    private _router: Router,
+    private _user: UserService,
   ) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const currentUser = this._auth.currentUserValue;
     return this.http.get(`${environment.apiURL}/authorized`).pipe(map((data) => {
       const token = data as IValidToken;
       if (token.authorized) {
+        this._user.getUserInfo()
         return true;
       } else {
         this._router.navigate(['/auth'], { queryParams: { returnUrl: state.url } });

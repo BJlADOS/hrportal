@@ -1,0 +1,174 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-height: 80px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.wrapper-flex {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2em;
+}
+
+.wrapper-bottom {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper-breadcrumbs {
+    margin-left: 2em;
+    margin-top: 1em;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    align-items: center;
+
+    &-breadcrumb {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
+    }
+}
+
+.logo {
+    max-height: 80px;
+
+    h1 {
+        position: relative;
+        bottom: 4px;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--main-accent-color);
+        white-space: nowrap;
+        letter-spacing: 0.12em;
+    }
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+
+    &-left {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        gap: 1em;
+
+        p {
+            text-align: center;
+            vertical-align: text-bottom;
+            transition: .3s ease;
+
+            &:hover {
+                color: var(--main-accent-color);
+                cursor: pointer;
+            }
+        }
+
+
+        & .active-route {
+            font-weight: 700;
+
+            &:hover {
+                cursor: default;
+                color: var(--font-primary-color);
+            }
+        }
+
+    }
+
+    &-right {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        align-items: center;
+        gap: 2em;  
+
+        & p {
+            transition: .3s ease;
+
+            &:hover {
+                color: var(--main-accent-color);
+                cursor: pointer;
+            }
+        }
+
+        .inactive {
+            color: var(--font-disabled);
+
+            &:hover {
+                color: var(--font-disabled);
+                cursor: default;
+            }
+        }
+
+        & .profile {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            text-transform: uppercase;
+
+            img {
+                height: 35px;
+                width: 35px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+            &:hover {
+                color: var(--main-accent-color);
+                cursor: pointer;
+            }
+        }
+
+        & .logout-button {
+            max-height: 35px;
+            transition: .3s ease;
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.2);
+                .outer {
+                    stroke: var(--main-accent-color);
+                }
+
+                .inner {
+                    fill: var(--main-accent-color);
+                }
+            }
+        }
+
+        & .settings-button {
+            max-height: 35px;
+            transition: .3s ease;
+
+            &:hover {
+                cursor: pointer;
+                transform: scale(1.2);
+                path {
+                    stroke: var(--main-accent-color);
+                }
+                
+
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .content {
+        justify-content: flex-end;
+    }
+
+    .content-left {
+        display: none;
+    }
+}

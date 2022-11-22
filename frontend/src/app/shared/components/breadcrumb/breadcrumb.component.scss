@@ -1,0 +1,8 @@
+.container {
+    text-decoration-skip-ink: none;
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}

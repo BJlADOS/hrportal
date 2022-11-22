@@ -1,0 +1,17 @@
+<div class="dropdown-collection" [class.opened]="dropdownOpen" [class.disabled]="disabled">
+    <div appClickOutside class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label" (click)="toggleDropdown()" (clickOutside)="dropdownOpen = false" [class.required]="required">
+        <span class="dropdown-default" id="dropdown-label" *ngIf="!currentValue">{{title}} </span><span class="dropdown-value" *ngIf="currentValue">{{currentValue.name}}</span>
+        <svg *ngIf="!disabled" class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+    </svg>
+    </div>
+    <ul class="dropdown-list" role="listbox" aria-expanded="false" [ngClass]="{'dropdown-open' : dropdownOpen}" [@contentExpansion]="dropdownOpen ? 'expanded' : 'collapsed'">
+        <li *ngFor="let option of options"
+            [ngClass]="{'selected' : currentValue?.id === option.id}"
+            tabindex="0"
+            (click)="select(option)"
+            role="option">{{option.name}}</li>
+    </ul>
+</div>

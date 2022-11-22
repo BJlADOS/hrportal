@@ -7,42 +7,35 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { IToken, IValidToken } from 'src/app/interfaces/Token';
 import { IUser } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  public currentUserSubject: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
-  public currentUser: Observable<IUser | null> = this.currentUserSubject.asObservable();
-
-  private apiURL: string = environment.apiURL;
+  private _apiURL: string = environment.apiURL;
 
   constructor(
     public http: HttpClient,
-    private cookie: CookieService,
     private _router: Router,
+    private _user: UserService,
     ) { 
       console.log('auth service');
     }
 
-  public get currentUserValue(): IUser | null { //placeholder
-    return { fullname: 'test', email: 'test', contact: 'test', expirience: 1, currentDepartment: { id: 1, name: 'test', managerId: 1 }, photo: 'test', existingSkills: [{ id: 1, name: 'test' }], isManager: true, isAdmin: true, id: 1, filled: true, resumeId: 1 };
-  }
-
   public signUp(fullname: string, email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${ this.apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe((data) => {
-      console.log(data);
-      this._router.navigate(['/vacancies']);
-    }, (error) => {
+    this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe({ next: () => {
+      this._router.navigate(['/auth']);
+    }, error: (error) => {
       console.log(error);
-    });
+    }});
   }
 
   public signIn(email: string, password: string, returnUrl: string | undefined): void {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${this.apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: () => {
+    this.http.post(`${this._apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: () => {
       if (returnUrl) {
         this._router.navigate([returnUrl]);
       } else {
@@ -54,11 +47,12 @@ export class AuthService {
   }
 
   public checkEmail(email: string): Observable<Object> {
-    return this.http.post(`${this.apiURL}/unique-email/`, { email: email });
+    return this.http.post(`${this._apiURL}/unique-email/`, { email: email });
   }
 
   public logOut(): void { 
-    this.http.get(`${this.apiURL}/logout`).subscribe( { next: (data) => { 
+    this.http.get(`${this._apiURL}/logout`).subscribe( { next: (data) => { 
+      this._user.logOut();
       this._router.navigate(['/auth']);
     }, error: (error) => {
       console.log(error);
@@ -73,20 +67,15 @@ export class AuthService {
   }
 
   private validateToken(): void { //placeholder request
-    this.http.get(`${this.apiURL}/authorized`).subscribe((data) => {
+    this.http.get(`${this._apiURL}/authorized`).subscribe((data) => {
       const valid = data as IValidToken;
       console.log(data);
       if (valid.authorized) {
-        this.getUserInfo();
+        this._user.getUserInfo();
       } else {
         this._router.navigate(['/auth']);
       }   
     });
   }
 
-  private getUserInfo(): void {
-    this.http.get(`${this.apiURL}/user`).subscribe((data) => {
-      this.currentUserSubject.next(data as IUser);
-    });
-  }
 }
