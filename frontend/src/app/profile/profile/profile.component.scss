@@ -236,6 +236,11 @@
                 }
         
                 &__add {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 0.5rem;
+                    justify-content: center;
+                    align-items: center;
                     width: fit-content;
                     text-transform: uppercase;
                     color: var(--main-accent-color);
@@ -246,6 +251,16 @@
         
                     &:hover {
                         cursor: pointer;
+                        background-color: rgba(var(--main-accent-color-rgb), 0.2);
+                    }
+
+                    & .add-icon {
+                        scale: 1.5;
+                        transform: rotate(45deg);
+
+                        & .stroke {
+                            stroke: var(--main-accent-color);
+                        }
                     }
                 }
             }   
@@ -365,6 +380,10 @@
                 font-weight: 600;
             }         
         }
+
+        &::placeholder {
+            color: rgba(var(--font-primary-rgb), 0.3);
+        } 
     }
 }
 

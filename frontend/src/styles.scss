@@ -9,6 +9,7 @@ html {
     --black: #000;
     --grey: #D9D9D9;
     --font-primary: #4C4C4C;
+    --font-primary-rgb: hex-to-rgb(#4C4C4C);
     --font-disabled: rgba(76, 76, 76, 0.5);
     --main-accent-color: #FDC04E;
     --main-accent-color-rgb: #{hex-to-rgb(#FDC04E)};

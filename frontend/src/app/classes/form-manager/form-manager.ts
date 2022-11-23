@@ -94,7 +94,7 @@ export class FormManager {
     }
 
     public checkExperience(form: FormGroup): IInputError | null {
-        if (form.controls['department'].hasError('required')) {
+        if (form.controls['experience'].hasError('required')) {
             return { message: 'Выберите опыт работы' };
         }
 

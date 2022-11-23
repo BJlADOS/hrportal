@@ -45,7 +45,7 @@ export enum Schedule {
 export enum ScheduleRussian {
     'DISTANT' = 'Удаленная работа',
     'PART' = 'Частичная',
-    'SHIFT' = 'Сменная',
+    'SHIFT' = 'Сменный график',
     'FULL' = 'Полный день',
 }
 
@@ -60,8 +60,6 @@ export enum ExperienceRussian {
     '3-6' = '3-6 лет',
     '>6' = 'Больше 6 лет',
 }
-
-    //Todo Сделать функции для остальных enum
 
 export function getExperienceRussianAsArray(): { name: string, id: string }[] {
     const experience: { name: string, id: string }[] = [];
