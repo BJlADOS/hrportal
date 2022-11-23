@@ -117,11 +117,11 @@ class PatchUserSerializer(serializers.ModelSerializer):
 
 
 class TimestampField(serializers.Field):
-    def to_internal_value(self, data):
-        return datetime.fromtimestamp(data)
+    def to_internal_value(self, timestamp):
+        return datetime.fromtimestamp(timestamp / 1000)
 
-    def to_representation(self, value):
-        return int(value.timestamp())
+    def to_representation(self, date):
+        return int(date.timestamp()) * 1000
 
 
 def validate_filesize(max_filesize):
