@@ -164,7 +164,7 @@ export class ProfileComponent implements OnInit {
       let sameSkillCounter: number = 0;
       user.existingSkills.forEach((skill: ISkill) => {
         if (!form.skills.some((s: ISkill) =>s.id === skill.id)) {
-          // Если в форме нет скилла, которого есть в юзере
+          // Если в форме нет скилла, который есть в юзере
           //console.log('check passed deleted existing');
           this.isUserEdited.skills = true;
           return;
@@ -218,27 +218,28 @@ export class ProfileComponent implements OnInit {
   }
 
   private createUserUpdateObject(): IUserUpdate  {
+    const form = this.userForm.value;
     const userUpdate: IUserUpdate = {}
     if (this.isUserEdited.name) {
-      userUpdate.fullname = this.userForm.controls['fullname'].value;
+      userUpdate.fullname = form.fullname;
     }
     if (this.isUserEdited.photo) {
       userUpdate.photo = this.uploadedPhoto!;
     }
     if (this.isUserEdited.email) {
-      userUpdate.email = this.userForm.controls['email'].value;
+      userUpdate.email = form.email;
     }
     if (this.isUserEdited.contact) {
-      userUpdate.contact = this.userForm.controls['contact'].value;
+      userUpdate.contact = form.contact;
     }
     if (this.isUserEdited.experience) {
-      userUpdate.experience = this.userForm.controls['experience'].value.id;
+      userUpdate.experience = form.experience;
     }
     if (this.isUserEdited.department) {
-      userUpdate.currentDepartmentId = this.userForm.controls['department'].value.id;
+      userUpdate.currentDepartmentId = form.department ? form.department.id : null;
     }
     if (this.isUserEdited.skills) {
-      userUpdate.existingSkillsIds = (this.userForm.controls['skills'].value as ISkill[]).map((skill: ISkill) => skill.id);
+      userUpdate.existingSkillsIds = (form.skills as ISkill[]).map((skill: ISkill) => skill.id);
     }
 
     return userUpdate;

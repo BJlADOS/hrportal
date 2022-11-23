@@ -33,13 +33,19 @@ export class UserService {
     } });
   }
 
-  public updateUserInfo(user: any): Observable<IUser> {
+  public updateUserInfo(user: IUserUpdate): Observable<IUser> {
     const data = new FormData();
     Object.keys(user).forEach((key, i) => {
       if (Object.values(user)[i]) {
-        data.append(key, Object.values(user)[i] as string | Blob); 
+        Array.isArray(Object.values(user)[i]) ? Object.values(user)[i].forEach((element: string) => {
+          console.log(element);
+          data.append(key, element);
+        }) : data.append(key, Object.values(user)[i]);
+        //data.append(key, Object.values(user)[i]); 
+        console.log(data.getAll(key));
       }
     });
+    ;
     return this.http.patch(`${this._apiURL}/user/`, data) as Observable<IUser>;
   }
 
