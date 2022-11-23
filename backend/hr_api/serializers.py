@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from rest_framework import serializers
-
 from django.core.validators import FileExtensionValidator
+from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from .models import *
 
@@ -115,6 +115,16 @@ class TimestampField(serializers.Field):
         return int(value.timestamp())
 
 
+def validate_filesize(max_filesize):
+    def return_function(value):
+        if value.size > max_filesize:
+            raise ValidationError(f"You cannot upload file more than {max_filesize} bytes")
+        else:
+            return value
+
+    return return_function
+
+
 class GetResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
     desiredPosition = serializers.CharField(source='desired_position')
@@ -122,7 +132,8 @@ class GetResumeSerializer(serializers.ModelSerializer):
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
     isActive = serializers.BooleanField(source='is_active')
-    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf'])])
+    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
+                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
 
@@ -147,7 +158,9 @@ class PatchResumeSerializer(serializers.ModelSerializer):
     desiredSalary = serializers.IntegerField(source='desired_salary', required=False)
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES, required=False)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES, required=False)
-    resume = serializers.FileField(required=False, allow_null=True, validators=[FileExtensionValidator(['pdf'])])
+    resume = serializers.FileField(required=False, allow_null=True,
+                                   validators=[FileExtensionValidator(['pdf']),
+                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     isActive = serializers.BooleanField(source='is_active', required=False, allow_null=True)
 
     def update(self, instance, validated_data):
@@ -210,7 +223,8 @@ class PostVacancySerializer(serializers.ModelSerializer):
 
 
 class VacancyResponseSerializer(serializers.Serializer):
-    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf'])])
+    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
+                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
 
     def create(self, validated_data):
         pass
