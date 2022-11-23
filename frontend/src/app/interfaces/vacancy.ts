@@ -1,3 +1,4 @@
+import { ISelectOption } from "./select";
 import { IDepartment, ISkill } from "./User";
 
 export interface IVacancy {
@@ -61,21 +62,21 @@ export enum ExperienceRussian {
     '>6' = 'Больше 6 лет',
 }
 
-export function getExperienceRussianAsArray(): { name: string, id: string }[] {
+export function getExperienceRussianAsArray(): ISelectOption[] {
     const experience: { name: string, id: string }[] = [];
     Object.values(ExperienceRussian).map((value, i) => experience.push({ name: value, id: Object.values(Experience)[i] }));
 
     return experience;
 }
 
-export function getScheduleRussianAsArray(): { name: string, id: string }[] {
+export function getScheduleRussianAsArray(): ISelectOption[] {
     const schedule: { name: string, id: string }[] = [];
     Object.values(ScheduleRussian).map((value, i) => schedule.push({ name: value, id: Object.values(Schedule)[i] }));
 
     return schedule;
 }
 
-export function getEmploymentRussianAsArray(): { name: string, id: string }[] {
+export function getEmploymentRussianAsArray(): ISelectOption[] {
     const employment: { name: string, id: string }[] = [];
     Object.values(EmploymentRussian).map((value, i) => employment.push({ name: value, id: Object.values(Employment)[i] }));
 

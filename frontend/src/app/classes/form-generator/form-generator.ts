@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ISelectOption } from 'src/app/interfaces/select';
 import { IUser } from 'src/app/interfaces/User';
 import { CustomValidators } from '../custom-validators/custom-validators';
 
@@ -66,7 +67,7 @@ export class FormGenerator {
         );
     }
 
-    public getUserDataForm(user: IUser): FormGroup {
+    public getUserDataForm(user: IUser, experience: ISelectOption[]): FormGroup {
         return this._fb.group(
             {
                 fullname: [user.fullname, Validators.compose([
@@ -81,7 +82,7 @@ export class FormGenerator {
                 contact: new FormControl(user.contact, Validators.compose([
                     Validators.required,
                 ])),
-                experience: new FormControl(user.experience, Validators.compose([
+                experience: new FormControl(experience.find((item: ISelectOption) => user.experience === item.id), Validators.compose([
                     Validators.required,
                 ])),
                 department: new FormControl(user.currentDepartment, Validators.compose([

@@ -88,9 +88,7 @@
     }
 
     &__scroll {
-        overflow-x: visible;
-        // margin-bottom: 3px;
-        // margin-right: 1px;
+        overscroll-behavior: contain;
         
         &.no-scroll {
             width: 100%;

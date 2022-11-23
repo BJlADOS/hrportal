@@ -1,5 +1,5 @@
 <div class="wrapper">
-    <div class="wrapper-grid">
+    <div class="wrapper-grid" *ngIf="user$ | async as user">
         <div class="wrapper-flex column-1-9" *ngIf="vacancy">
             <div class="title">
                 <div class="title__position">
@@ -22,7 +22,7 @@
                 <span>{{vacancy.schedule | schedule}}</span>             
             </div>
         </div>
-        <div class="wrapper-flex column-11-13">
+        <div class="wrapper-flex column-11-13" *ngIf="user.isAdmin && user.isManager">
             <div class="manager-button">
                 <span>Редактировать</span>
                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">

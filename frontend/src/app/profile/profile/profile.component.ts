@@ -70,7 +70,7 @@ export class ProfileComponent implements OnInit {
     const file: File = event.target.files[0];
 
     const mimeType = file.type;
-    if (mimeType.match(/image\/*/) == null) {
+    if (mimeType.match(/.(jpe?g?|png|gif)$/) == null) {
         return;
     }
 
@@ -90,7 +90,6 @@ export class ProfileComponent implements OnInit {
       return;
     }
     const userUpdate = this.createUserUpdateObject();
-
     this._user.updateUserInfo(userUpdate).subscribe({ next: (user: IUser) => {
       this._user.updateCurrentUser(user);
       this.isSavedChanges = true;
@@ -151,7 +150,7 @@ export class ProfileComponent implements OnInit {
       this.isUserEdited.name = form.fullname !== user.fullname;
       this.isUserEdited.email = form.email !== user.email;
       this.isUserEdited.contact = form.contact !== user.contact;
-      this.isUserEdited.experience = form.experience !== user.experience;
+      this.isUserEdited.experience = (form.experience ? form.experience.id : null) !== user.experience;
       this.isUserEdited.department = (form.department ? form.department.id : null) !== (user.currentDepartment ? user.currentDepartment!.id : null);
       form.skills.forEach((skill: ISkill) => {
         if (!user.existingSkills.some((s: ISkill) =>s.id === skill.id)) {
@@ -192,7 +191,7 @@ export class ProfileComponent implements OnInit {
 
   
   private resetForm(): void {
-    this.userForm = this._form.getUserDataForm(this.user!);
+    this.userForm = this._form.getUserDataForm(this.user!, this.experience);
     this.uploadedPhoto = null;
     this.uploadedPhotoUrl = null;
     this.isEditing = false;
@@ -233,7 +232,7 @@ export class ProfileComponent implements OnInit {
       userUpdate.contact = form.contact;
     }
     if (this.isUserEdited.experience) {
-      userUpdate.experience = form.experience;
+      userUpdate.experience = form.experience.id;
     }
     if (this.isUserEdited.department) {
       userUpdate.currentDepartmentId = form.department ? form.department.id : null;

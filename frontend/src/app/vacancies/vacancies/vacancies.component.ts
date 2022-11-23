@@ -24,39 +24,6 @@ export class VacanciesComponent implements OnInit {
   public ngOnInit(): void {
     this._vacancy.getVacancies().subscribe({ next: (data) => {
       this.vacancies = data;
-      for (let i = 0; i < 4; i++) {
-        this.vacancies.push({
-          id: 1,
-          department: {
-            id: 1,
-            name: 'IT',
-            managerId: 1,
-          },
-          position: 'Frontend Developer',
-          salary: 1000,
-          employment: Employment['FULL'],
-          schedule: Schedule['FULL'],
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc. Donec auctor, nisl eget aliquam tincidunt, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.',
-          requiredSkills: [
-            {
-              id: 1,
-              name: 'HTML',
-            },
-            {
-              id: 2,
-              name: 'CSS',
-            },
-            {
-              id: 3,
-              name: 'JavaScript',
-            },
-          ],
-          isActive: true,
-          modifiedAt: 1610000000000,
-          createdAt: 1610000000000,
-        })
-      }
-      console.log(data);
     }, error: (err) => {
       this.loadingError = err;
     }});

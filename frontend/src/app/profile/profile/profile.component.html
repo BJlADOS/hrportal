@@ -5,7 +5,7 @@
                 <div class="title">
                     <div class="photo">
                         <label class="photo__upload" for="photo-upload" *ngIf="isEditing">Изменить</label>
-                        <input id="photo-upload" type="file" hidden (change)="onPhotoChange($event)" accept="image/*">
+                        <input id="photo-upload" type="file" hidden (change)="onPhotoChange($event)" accept=".jpg, .jpeg, .png, .gif">
                         <img *ngIf="!user.photo && !uploadedPhotoUrl else profilePhoto"
                             src="assets/img/profile-placeholder.png">
                         <ng-template #profilePhoto><img [src]="uploadedPhotoUrl || user.photo"></ng-template>

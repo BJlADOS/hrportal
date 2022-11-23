@@ -33,10 +33,13 @@ export class VacancyService {
   }
 
   //TODO: fix resume type
-  public responseToVacancy(vacancyId: string, resume: any): Observable<Object> { 
+  public responseToVacancy(vacancyId: string, resume: any): void { 
     const formData = new FormData();
     formData.append('resume', resume);
-    return this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response`, formData);
+    this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response`, formData).subscribe({ next: (data) => {
+      console.log(data);
+    }
+    });
   }
 
   public createVacancy(vacancy: IVacancyResponseModel): Observable<Object> {

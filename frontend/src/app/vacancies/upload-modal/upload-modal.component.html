@@ -26,7 +26,8 @@
                 </div>
                 <div class="modal__form-group">
                     <button class="modal__form-submit" [class.disabled]="!file" (click)="uploadFile()"
-                        [disabled]="!file">Отправить</button>
+                        [disabled]="!file || uploadError">Отправить</button>
+                    <app-error [@contentExpansion]="uploadError ? 'expanded' : 'collapsed'" [error]="{ message : uploadError?? ''}"></app-error>
                 </div>
             </div>
         </div>

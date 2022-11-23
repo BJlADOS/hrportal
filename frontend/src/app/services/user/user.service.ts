@@ -42,7 +42,6 @@ export class UserService {
           data.append(key, element);
         }) : data.append(key, Object.values(user)[i]);
         //data.append(key, Object.values(user)[i]); 
-        console.log(data.getAll(key));
       }
     });
     ;
