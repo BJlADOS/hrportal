@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     experience = models.CharField(max_length=3, choices=EXPERIENCE_CHOICES, null=True, blank=True)
 
-    current_department = models.OneToOneField(to='Department', on_delete=models.SET_NULL, null=True, blank=True)
+    current_department = models.ForeignKey(to='Department', on_delete=models.SET_NULL, null=True, blank=True)
 
     photo = models.ImageField(upload_to=get_upload_path, blank=True)
 
