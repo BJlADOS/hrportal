@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.utils.text import slugify
 from transliterate import translit
 
+from django.db.models.signals import post_save
+
 SCHEDULE_CHOICES = [
     ('DISTANT', 'Удаленная работа'),
     ('FLEX', 'Гибкий график'),
@@ -174,8 +176,17 @@ class Department(models.Model):
 
     manager = models.OneToOneField(to=User, on_delete=models.SET_NULL, null=True, blank=True)
 
+    @staticmethod
+    def change_manager_department(sender, instance, created, **kwargs):
+        if instance.manager is not None:
+            instance.manager.current_department = instance
+            instance.manager.save()
+
     def __str__(self):
         return f"Department({self.name})"
+
+
+post_save.connect(Department.change_manager_department, sender=Department)
 
 
 class Skill(models.Model):

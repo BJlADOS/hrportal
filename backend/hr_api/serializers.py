@@ -89,6 +89,14 @@ class PatchUserSerializer(serializers.ModelSerializer):
     existingSkillsIds = serializers.PrimaryKeyRelatedField(required=False, queryset=Skill.objects.all(), many=True,
                                                            source='existing_skills')
 
+    def validate(self, attrs):
+        if self.instance.is_manager:
+            if self.instance.department != attrs['current_department']:
+                raise ValidationError(
+                    {'currentDepartmentId': f'User is manager of department {self.instance.department}'
+                                            f' and therefore cannot be in another department'})
+        return super(PatchUserSerializer, self).validate(attrs)
+
     class Meta:
         model = User
         fields = [
