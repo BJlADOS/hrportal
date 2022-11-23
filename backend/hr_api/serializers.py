@@ -90,11 +90,12 @@ class PatchUserSerializer(serializers.ModelSerializer):
                                                            source='existing_skills')
 
     def validate(self, attrs):
-        if self.instance.is_manager:
-            if self.instance.department != attrs['current_department']:
-                raise ValidationError(
-                    {'currentDepartmentId': f'User is manager of department {self.instance.department}'
-                                            f' and therefore cannot be in another department'})
+        if self.instance.is_manager and \
+                'current_department' in attrs and \
+                self.instance.department != attrs['current_department']:
+            raise ValidationError(
+                {'currentDepartmentId': f'User is manager of department {self.instance.department}'
+                                        f' and therefore cannot be in another department'})
         return super(PatchUserSerializer, self).validate(attrs)
 
     class Meta:
