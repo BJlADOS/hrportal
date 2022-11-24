@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, ActivationStart, ChildActivationEnd, ChildActivationStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterEvent, Scroll, UrlSegment } from '@angular/router';
-import { filter, Observable, takeUntil } from 'rxjs';
+import { filter, map, Observable, takeUntil } from 'rxjs';
 import { IBreadcrumb } from 'src/app/interfaces/breadcrumb';
 import { IRoute, IUser } from 'src/app/interfaces/User';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DestroyService } from 'src/app/services/destoy/destroy.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 import { UserService } from 'src/app/services/user/user.service';
 import { adminButtons } from 'src/app/user-type-data/admin-header-buttons';
 import { managerButtons } from 'src/app/user-type-data/manager-header-buttons';
 import { userButtons } from 'src/app/user-type-data/user-header-buttons';
+import { CreateResumeComponent } from '../create-resume/create-resume.component';
 
 @Component({
   selector: 'app-header',
@@ -21,11 +23,14 @@ export class HeaderComponent implements OnInit {
   public breadcrumbs: IBreadcrumb[] = [];
   public routes: IRoute[] = [];
 
+  public isCreatingResume: boolean = false;
+
   constructor(
     public activatedRoute: ActivatedRoute,
     private _user: UserService,
     private _auth: AuthService,
     private _router: Router,
+    private _modal: ModalService,
     private _destroy$: DestroyService,
   ) { }
 
@@ -39,10 +44,8 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  public redirectTo(to: string, isAllowed: boolean): void {
-    if (isAllowed) {
-      this._router.navigate([to]);
-    }
+  public redirectTo(to: string): void {
+    this._router.navigate([to]);
   }
 
   public isActive(path: string): boolean {
@@ -52,6 +55,13 @@ export class HeaderComponent implements OnInit {
   public getUserName(fullname: string): string {
     const name: string[] = fullname.split(' ');
     return `${name[0]} ${name[1]}`;
+  }
+
+  public createResume(): void {
+    this.isCreatingResume = true;
+    this._modal.open(CreateResumeComponent).onResult().pipe(takeUntil(this._destroy$), map(result => result === null)).subscribe((result: boolean) => {
+      this.isCreatingResume = result;
+    });
   }
 
   public logout(): void {

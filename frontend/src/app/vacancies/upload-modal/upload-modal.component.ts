@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
+import { Observer } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { Modal } from 'src/app/classes/modal/modal';
+import { IResume } from 'src/app/interfaces/resume';
 import { UserService } from 'src/app/services/user/user.service';
 import { VacancyService } from 'src/app/services/vacancy/vacancy.service';
 
@@ -15,6 +17,8 @@ export class UploadModalComponent extends Modal {
   public vacancyName: string = '';
   public file: File | null = null;
   public isSubmitted: boolean = false;
+  public submitTypeSelected: boolean = false;
+  public resume!: IResume;
 
   private _vacancyId: string = '';
   public uploadError: string | undefined;
@@ -27,6 +31,20 @@ export class UploadModalComponent extends Modal {
   }
 
   public ngOnInit(): void {
+    this._user.getResume().subscribe({ next: (resume: IResume) => {
+      this.resume = resume;
+    }, error: () => {
+    }});
+  }
+
+  public changeSubmitType(): void {
+    this.submitTypeSelected = true;
+  }
+
+  public backToSelectType(): void {
+    this.submitTypeSelected = false;
+    this.file = null;
+    this.uploadError = undefined;
   }
 
   public onInjectInputs(inputs: any): void {
@@ -40,23 +58,21 @@ export class UploadModalComponent extends Modal {
 
   public onFileChange(event: any): void {
     const file: File = event.target.files[0];
-    if (!this.checkFile(file)) {
-      return;
-    }
+    this.checkFile(file);
     this.file = file;
-    this.uploadError = undefined;
   }
 
   public onFileDropped(files: FileList): void {
-    if (!this.checkFile(files.item(0)!)) {
-      return;
-    }
+    this.checkFile(files.item(0)!);
     this.file= files.item(0);
-    this.uploadError = undefined;
+  }
+
+  public sendReadyResume(): void {
+    this.isSubmitted = true;
   }
 
   public uploadFile(): void {
-    this._vacancy.responseToVacancy(this._vacancyId, this.file);
+    this._vacancy.responseToVacancy(this._vacancyId, this.file!);
     this.isSubmitted = true;
   }
 
@@ -80,6 +96,7 @@ export class UploadModalComponent extends Modal {
       return false;
     }
 
+    this.uploadError = undefined;
     return true;
   }
 

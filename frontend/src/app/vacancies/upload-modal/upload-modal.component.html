@@ -1,37 +1,59 @@
 <div class="modal">
     <div class="modal__content">
         <div class="modal__header">
-            <span (click)="close()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.6068 13.3182C12.802 13.5135 13.1186 13.5135 13.3139 13.3182C13.5091 13.1229 13.5091 12.8064 13.3139 12.6111L7.58443 6.88164L13.3181 1.14799C13.5133 0.952725 13.5133 0.636142 13.3181 0.44088C13.1228 0.245618 12.8062 0.245618 12.611 0.44088L6.87732 6.17453L1.14367 0.44088C0.948406 0.245618 0.631823 0.245618 0.436561 0.44088C0.241299 0.636142 0.241299 0.952725 0.436561 1.14799L6.17021 6.88164L0.44076 12.6111C0.245498 12.8064 0.245498 13.1229 0.44076 13.3182C0.636022 13.5135 0.952605 13.5135 1.14787 13.3182L6.87732 7.58875L12.6068 13.3182Z" fill="#FDC04E"/>
+            <span (click)="close()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M12.6068 13.3182C12.802 13.5135 13.1186 13.5135 13.3139 13.3182C13.5091 13.1229 13.5091 12.8064 13.3139 12.6111L7.58443 6.88164L13.3181 1.14799C13.5133 0.952725 13.5133 0.636142 13.3181 0.44088C13.1228 0.245618 12.8062 0.245618 12.611 0.44088L6.87732 6.17453L1.14367 0.44088C0.948406 0.245618 0.631823 0.245618 0.436561 0.44088C0.241299 0.636142 0.241299 0.952725 0.436561 1.14799L6.17021 6.88164L0.44076 12.6111C0.245498 12.8064 0.245498 13.1229 0.44076 13.3182C0.636022 13.5135 0.952605 13.5135 1.14787 13.3182L6.87732 7.58875L12.6068 13.3182Z"
+                        fill="#FDC04E" />
                 </svg></span>
         </div>
-        <div class="modal__body dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)"
-            *ngIf="!isSubmitted else submitted">
-            <h2 class="modal__title">Отправить резюме на вакакансию «{{vacancyName}}»</h2>
-            <div class="modal__form">
-                <div class="modal__form-group">
-                    <input id="file" #fileDropRef type="file" class="modal__form-input" (change)="onFileChange($event)"
-                        accept=".pdf" />
-                    <label for="file" class="icon"><svg width="46" height="60" viewBox="0 0 46 60" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path class="icon__path"
-                                d="M22.5418 0V41.9606M22.5418 41.9606L33.3025 31.3803M22.5418 41.9606L12.7129 31.3803"
-                                stroke="#4C4C4C" />
-                            <path class="icon__path"
-                                d="M13.4339 18.9664H5.04776C3.69513 18.9664 1.23644 19.0927 1.38072 22.6034C1.52499 26.1142 1.44083 45.9683 1.38072 55.4565C1.2104 56.729 1.70538 59.2378 5.04776 59.0935C8.39015 58.9493 30.2662 59.0334 40.7864 59.0935C42.1991 59.1536 44.6338 58.793 44.6338 56.5386C44.6338 54.3282 44.5035 33.0034 44.6338 22.6034C44.6939 21.4011 44.724 18.9664 42.0789 18.9664C39.4338 18.9664 34.2839 18.9664 32.0396 18.9664"
-                                stroke="#4C4C4C" stroke-linecap="round" />
-                        </svg></label>
-                    <label class="upload" *ngIf="!file else fileName" for="file">Загрузите файл</label>
-                    <ng-template #fileName><label for="file" class="filename">{{file!.name}}</label></ng-template>
-                </div>
-                <div class="modal__form-group">
-                    <button class="modal__form-submit" [class.disabled]="!file" (click)="uploadFile()"
+    </div>
+    <div class="modal__body dropzone" appDragAndDrop (fileDropped)="submitTypeSelected ? onFileDropped($event): undefined"
+        *ngIf="!isSubmitted else submitted">
+        <h2 class="modal__title">Отправить резюме на вакакансию «{{vacancyName}}»</h2>
+        <div class="modal__form" *ngIf="submitTypeSelected else fileTypeNotSelected">
+            <div class="modal__form-group">
+                <input id="file" #fileDropRef type="file" class="modal__form-input" (change)="onFileChange($event)"
+                    accept=".pdf" />
+                <label for="file" class="icon"><svg width="46" height="60" viewBox="0 0 46 60" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path class="icon__path"
+                            d="M22.5418 0V41.9606M22.5418 41.9606L33.3025 31.3803M22.5418 41.9606L12.7129 31.3803"
+                            stroke="#4C4C4C" />
+                        <path class="icon__path"
+                            d="M13.4339 18.9664H5.04776C3.69513 18.9664 1.23644 19.0927 1.38072 22.6034C1.52499 26.1142 1.44083 45.9683 1.38072 55.4565C1.2104 56.729 1.70538 59.2378 5.04776 59.0935C8.39015 58.9493 30.2662 59.0334 40.7864 59.0935C42.1991 59.1536 44.6338 58.793 44.6338 56.5386C44.6338 54.3282 44.5035 33.0034 44.6338 22.6034C44.6939 21.4011 44.724 18.9664 42.0789 18.9664C39.4338 18.9664 34.2839 18.9664 32.0396 18.9664"
+                            stroke="#4C4C4C" stroke-linecap="round" />
+                    </svg></label>
+                <label class="upload" *ngIf="!file else fileName" for="file">Загрузите файл</label>
+                <ng-template #fileName><label for="file" class="filename">{{file!.name}}</label></ng-template>
+            </div>
+            <div class="modal__form-group">
+                <div class="button-block">
+                    <button class="modal__form-submit" [class.disabled]="!file || uploadError" (click)="uploadFile()"
                         [disabled]="!file || uploadError">Отправить</button>
-                    <app-error [@contentExpansion]="uploadError ? 'expanded' : 'collapsed'" [error]="{ message : uploadError?? ''}"></app-error>
+                    <app-error class="error" [@contentExpansion]="uploadError ? 'expanded' : 'collapsed'"
+                        [error]="{ message : uploadError?? ''}"></app-error>
+                    <button (click)="backToSelectType()" class="transparent-button">Назад</button>
                 </div>
             </div>
         </div>
     </div>
+    <ng-template #fileTypeNotSelected>
+        <div class="modal__form">
+            <div class="modal__form-group">
+                <div class="button-block">
+                    <button class="modal__form-submit" [class.disabled]="!resume" (click)="sendReadyResume()"
+                        [disabled]="!resume">Отправить</button>
+                    <app-error class="error" *ngIf="!resume"
+                        [error]="{ message : 'Для отправки готового резюме заполните его на сайте'}">
+                    </app-error>
+                    <label>или</label>
+                    <button (click)="changeSubmitType()" class="transparent-button">Загрузить другой файл</button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
     <ng-template #submitted>
         <div class="modal__body success">
             <svg width="50" height="51" viewBox="0 0 50 51" fill="none" xmlns="http://www.w3.org/2000/svg">

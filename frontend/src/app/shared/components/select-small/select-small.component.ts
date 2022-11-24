@@ -2,20 +2,20 @@ import { Component, ElementRef, forwardRef, Input, OnInit, Output } from '@angul
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 
-export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
+export const CUSTOM_SMALL_SELECT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => SelectComponent),
+  useExisting: forwardRef(() => SelectSmallComponent),
   multi: true
 };
 
 @Component({
-  selector: 'app-select',
-  templateUrl: './select.component.html',
-  styleUrls: ['./select.component.scss'],
+  selector: 'app-select-small',
+  templateUrl: './select-small.component.html',
+  styleUrls: ['./select-small.component.scss'],
   animations: [contentExpansion],
-  providers: [CUSTOM_SELECT_VALUE_ACCESSOR]
+  providers: [CUSTOM_SMALL_SELECT_VALUE_ACCESSOR]
 })
-export class SelectComponent implements OnInit, ControlValueAccessor {
+export class SelectSmallComponent implements OnInit, ControlValueAccessor {
 
   @Input() options: any[] =[];
   @Input() title: string = 'Select';

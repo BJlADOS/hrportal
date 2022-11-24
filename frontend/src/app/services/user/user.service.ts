@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { IResume, IResumeUpdate } from 'src/app/interfaces/resume';
 import { IUser, IUserUpdate } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
 
@@ -34,17 +35,8 @@ export class UserService {
   }
 
   public updateUserInfo(user: IUserUpdate): Observable<IUser> {
-    const data = new FormData();
-    Object.keys(user).forEach((key, i) => {
-      if (Object.values(user)[i]) {
-        Array.isArray(Object.values(user)[i]) ? Object.values(user)[i].forEach((element: string) => {
-          console.log(element);
-          data.append(key, element);
-        }) : data.append(key, Object.values(user)[i]);
-        //data.append(key, Object.values(user)[i]); 
-      }
-    });
-    ;
+    const data = this.parseToFormData(user);
+    
     return this.http.patch(`${this._apiURL}/user/`, data) as Observable<IUser>;
   }
 
@@ -52,9 +44,37 @@ export class UserService {
     return this.http.get(`${this._apiURL}/user/${id}`) as Observable<IUser>;
   }
 
+  public getResume(): Observable<IResume> {
+    return this.http.get(`${this._apiURL}/user/resume`) as Observable<IResume>;
+  }
+
+  public createResume(resume: IResumeUpdate): Observable<IResume> {
+    const data = this.parseToFormData(resume);
+    return this.http.post(`${this._apiURL}/user/resume/`, data) as Observable<IResume>;
+  }
+
+  public updateResume(resume: IResumeUpdate): Observable<IResume> {
+    const data = this.parseToFormData(resume);
+    return this.http.patch(`${this._apiURL}/user/resume`, data) as Observable<IResume>;
+  }
+    
+
   public logOut(): void {
     this.currentUserSubject$.next(null);
   }
+
+  private parseToFormData(data: any): FormData {
+    const formData = new FormData();
+    Object.keys(data).forEach((key, i) => {
+      if (Object.values(data)[i]) {
+        Array.isArray(Object.values(data)[i]) ? (Object.values(data)[i] as Array<any>).forEach((element: any) => {
+          formData.append(key, element);
+        }) : formData.append(key, Object.values(data)[i] as string | Blob);
+      }
+    });
+    return data;
+  }
+
 
   private fixPhotoUrl(user: IUser): IUser {
     if (user.photo) {

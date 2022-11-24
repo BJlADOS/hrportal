@@ -1,3 +1,5 @@
+import { Employment, Schedule } from "./vacancy";
+
 export interface IResume {
     id: number;
     employeeId: number;
@@ -9,4 +11,13 @@ export interface IResume {
     isActive: boolean;
     modifiedAt: number;
     createdAt: number;
+}
+
+export interface IResumeUpdate {
+    desiredPosition: string;
+    desiredSalary: number;
+    desiredEmployment: Employment;
+    desiredSchedule: Schedule;
+    resume: File;
+    isActive: boolean;
 }

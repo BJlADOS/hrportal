@@ -11,10 +11,12 @@ export class ModalRef {
         private _modal: ComponentRef<Modal>
     ) {
         this._modal.instance.modalInstanse = this;
+        document.body.style.overflow = "hidden";
     }
 
     public close(output: any): void {
         this._result$.next(output);
+        document.body.style.overflow = "auto";
         this.destroy$();
     }
 

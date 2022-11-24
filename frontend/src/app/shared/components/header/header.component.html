@@ -7,11 +7,11 @@
             <div class="content" *ngIf="user | async as user">
                 <div class="content-left">
                     <p *ngFor="let route of routes" [class.active-route]="isActive('/' + route.path)"
-                        (click)="redirectTo(route.path, true)">{{route.name}}</p>
+                        (click)="redirectTo(route.path)">{{route.name}}</p>
                 </div>
                 <div class="content-right">
-                    <p class="inactive" (click)="redirectTo('profile/resume', false)">РЕЗЮМЕ</p>
-                    <div class="profile" (click)="redirectTo('profile', true)">
+                    <button [disabled]="!user.filled" [class.active]="isCreatingResume" (click)="createResume()">Моё резюме</button>
+                    <div class="profile" (click)="redirectTo('profile')">
                         <img [src]="user.photo || 'assets/img/profile-placeholder.png'">
                         <p>{{getUserName(user.fullname)}}</p>
                     </div>

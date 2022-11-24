@@ -2,6 +2,7 @@
     z-index: 1200;
     position: absolute;
     display: flex;
+    flex-direction: column;
     left: 50%;
     top: 40%;
     transform: translate(-50%, -50%);
@@ -9,6 +10,7 @@
 
     &__header {
         display: flex;
+        flex-direction: row;
         justify-content: flex-end;
         transform: translate(1.5rem, 100%);
 
@@ -84,12 +86,26 @@
                 cursor: pointer;
             }
         }
+
+        & .button-block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            & .error {
+                margin-top: 0.25rem;
+            }
+
+            label {
+                margin-top: 0.5rem;
+            }
+        }
     }
 
     &__form-submit {
         border: none;
         border-radius: 20px;
-        font-size: 16px;
+        font-size: var(--font-size--main);
         text-transform: uppercase;
         padding: 0.75rem 1.5rem;
         color: var(--white);
@@ -110,6 +126,22 @@
         }
     }
 
+    & .transparent-button {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        border: none;
+        text-transform: uppercase;
+
+        color: var(--font-primary);
+        font-family: var(--main-font-family);
+        font-size: var(--font-size--main);
+        background-color: transparent;
+
+        &:hover {
+            cursor: pointer;
+            color: var(--main-accent-color);
+        }
+    }
 }
 
 .success-text {

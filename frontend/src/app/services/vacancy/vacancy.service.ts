@@ -32,8 +32,7 @@ export class VacancyService {
     return this.http.patch(`${this._apiUrl}/vacancies/${vacancyId}`, vacancy);
   }
 
-  //TODO: fix resume type
-  public responseToVacancy(vacancyId: string, resume: any): void { 
+  public responseToVacancy(vacancyId: string, resume: File): void { 
     const formData = new FormData();
     formData.append('resume', resume);
     this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response`, formData).subscribe({ next: (data) => {

@@ -39,7 +39,7 @@
     display: flex;
     border: 1px solid var(--border-color);
     box-sizing: border-box;
-    border-radius: 10px;
+    border-radius: 20px;
     position: relative;
     justify-content: space-between;
     background-color: var(--white);
@@ -63,7 +63,7 @@
     }
 
     span {
-        padding: 0.75rem 1rem;
+        padding: 0.55rem 0.7rem;
     }
 
 }
@@ -82,7 +82,7 @@
     border-left: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 20px 20px;
     position: absolute;
     bottom: 0;
     left: 0;
@@ -95,7 +95,7 @@
     li {
         cursor: pointer;
         font-weight: 300;
-        padding: 0.75rem 1rem;
+        padding: 0.55rem 0.7rem;
 
         &.selected {
             background-color: rgba(var(--main-accent-color-rgb), 0.2);

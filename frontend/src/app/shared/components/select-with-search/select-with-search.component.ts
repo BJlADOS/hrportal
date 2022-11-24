@@ -13,7 +13,6 @@ export class SelectWithSearchComponent implements OnInit {
 
   @Input() options: any[] =[];
   @Input() title: string = 'Select';
-  @Input() startValue: any;
   @Input() alreadySelected: any[] = [];
   @Input() isActive: boolean = false;
 
@@ -23,7 +22,6 @@ export class SelectWithSearchComponent implements OnInit {
 
   public searchControl: FormControl<any> = new FormControl();
   public optionsOriginal: any[] = [];
-  public dropdownOpen: boolean = false;
   public visibleOptions: number = 3;
 
   constructor(

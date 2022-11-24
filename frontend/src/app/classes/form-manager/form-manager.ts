@@ -101,4 +101,36 @@ export class FormManager {
         return null;
     }
 
+    public checkPosition(form: FormGroup): IInputError | null {
+        if (form.controls['desiredPosition'].hasError('required')) {
+            return { message: 'Выберите должность' };
+        }
+
+        return null;
+    }
+
+    public checkSalary(form: FormGroup): IInputError | null {
+        if (form.controls['desiredSalary'].hasError('required')) {
+            return { message: 'Введите желаемую зарплату' };
+        }
+
+        return null;
+    }
+
+    public checkSchedule(form: FormGroup): IInputError | null {
+        if (form.controls['desiredSchedule'].hasError('required')) {
+            return { message: 'Выберите график работы' };
+        }
+
+        return null;
+    }
+
+    public checkEmployment(form: FormGroup): IInputError | null {
+        if (form.controls['desiredEmployment'].hasError('required')) {
+            return { message: 'Выберите тип занятости' };
+        }
+
+        return null;
+    }
+
 }

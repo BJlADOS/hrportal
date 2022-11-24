@@ -8,7 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.component';
 import { UploadModalComponent } from './upload-modal/upload-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DragAndDropDirective } from './directives/drag-and-drop/drag-and-drop.directive';
+import { DragAndDropDirective } from '../shared/directives/drag-and-drop/drag-and-drop.directive';
 
 
 
@@ -19,7 +19,6 @@ import { DragAndDropDirective } from './directives/drag-and-drop/drag-and-drop.d
     VacanciesMainComponent,
     VacancyDetailComponent,
     UploadModalComponent,
-    DragAndDropDirective,
   ],
   imports: [
     CommonModule,

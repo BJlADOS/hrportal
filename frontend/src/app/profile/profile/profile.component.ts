@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, map, takeUntil } from 'rxjs';
+import { BehaviorSubject, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { IUserEditing } from 'src/app/interfaces/editing';
-import { IInputError, ISubmitError, IUserFormError } from 'src/app/interfaces/errors';
+import { ISubmitError, IUserFormError } from 'src/app/interfaces/errors';
 import { IDepartment, ISkill, IUser, IUserUpdate } from 'src/app/interfaces/User';
 import { getExperienceRussianAsArray } from 'src/app/interfaces/vacancy';
 import { DepartmentService } from 'src/app/services/department/department.service';
