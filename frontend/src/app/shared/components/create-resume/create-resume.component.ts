@@ -36,14 +36,14 @@ export class CreateResumeComponent extends Modal implements OnInit {
   private _formManager: FormManager = FormManager.getInstance();
 
   constructor(
+    public user: UserService,
     private _formGenerator: FormGenerator,
-    private _user: UserService,
     private _http: HttpClient,
   ) {
     super();
   }
   public ngOnInit(): void {
-    this._user.getResume().subscribe({ next: (resume: IResume) => {
+    this.user.getResume().subscribe({ next: (resume: IResume) => {
       this.resume = resume;
       //Парсим имя файла из ссылки или ставим заглушку
       this.loadPlaceholder = resume.resume.split('/').pop();
@@ -78,13 +78,13 @@ export class CreateResumeComponent extends Modal implements OnInit {
     const resume: IResumeUpdate = this.createUpdateResumeObject();
 
     if (this.resume) {
-      this._user.updateResume(resume).subscribe({ next: (resume: IResume) => {
+      this.user.updateResume(resume).subscribe({ next: (resume: IResume) => {
         this.isSubmitted = true;
       }, error: (error: any) => {
         //console.log(error);
       }});
     } else {
-      this._user.createResume(resume).subscribe({ next: (resume: IResume) => {
+      this.user.createResume(resume).subscribe({ next: (resume: IResume) => {
         this.isSubmitted = true;
       }, error: (error: any) => {
         //console.log(error);

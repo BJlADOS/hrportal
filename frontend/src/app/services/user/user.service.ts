@@ -58,6 +58,9 @@ export class UserService {
     return this.http.patch(`${this._apiURL}/user/resume/`, data) as Observable<IResume>;
   }
     
+  public getUserName(): string {
+    return `${this.currentUserValue?.fullname.split(' ')[0]} ${this.currentUserValue?.fullname.split(' ')[1]}`;
+  }
 
   public logOut(): void {
     this.currentUserSubject$.next(null);
