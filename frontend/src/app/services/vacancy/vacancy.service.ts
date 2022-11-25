@@ -41,6 +41,12 @@ export class VacancyService {
     });
   }
 
+  public responseToVacancyWithReadyResume(vacancyId: string, resumeId: number): void {
+    this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response`, {}, { params: { resumeId } }).subscribe({ next: (data) => {
+      console.log(data);
+    } });
+  }
+
   public createVacancy(vacancy: IVacancyResponseModel): Observable<Object> {
     return this.http.post(`${this._apiUrl}/vacancies`, vacancy);
   }

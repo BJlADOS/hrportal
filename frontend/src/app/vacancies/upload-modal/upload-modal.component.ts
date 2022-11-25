@@ -69,6 +69,7 @@ export class UploadModalComponent extends Modal {
 
   public sendReadyResume(): void {
     this.isSubmitted = true;
+    this._vacancy.responseToVacancyWithReadyResume(this._vacancyId, this.resume.id);
   }
 
   public uploadFile(): void {
