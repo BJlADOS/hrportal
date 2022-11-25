@@ -1,9 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { Modal } from 'src/app/classes/modal/modal';
+import { IResumeEditing } from 'src/app/interfaces/editing';
 import { IResumeFormError } from 'src/app/interfaces/errors';
 import { IResume, IResumeUpdate } from 'src/app/interfaces/resume';
 import { ISelectOption } from 'src/app/interfaces/select';
@@ -27,21 +29,28 @@ export class CreateResumeComponent extends Modal implements OnInit {
   public resume: IResume | null = null;
   public uploadError: string | undefined;
   public file: File | null = null;
+  public loadPlaceholder: string | undefined;
+
+  private isUserChanged: IResumeEditing = { desiredPosition: false, desiredSalary: false, desiredEmployment: false, desiredSchedule: false, resume: false };
 
   private _formManager: FormManager = FormManager.getInstance();
 
   constructor(
     private _formGenerator: FormGenerator,
     private _user: UserService,
+    private _http: HttpClient,
   ) {
     super();
   }
   public ngOnInit(): void {
-    this._user.getResume().subscribe({ next: (resume: IResume | null) => {
+    this._user.getResume().subscribe({ next: (resume: IResume) => {
       this.resume = resume;
-      this.resumeForm = this._formGenerator.getResumeForm(resume);
+      //Парсим имя файла из ссылки или ставим заглушку
+      this.loadPlaceholder = resume.resume.split('/').pop();
+      this.resumeForm = this._formGenerator.getResumeForm(this.resume);
     }, error: (error: any) => {
       this.resumeForm = this._formGenerator.getResumeForm(null);
+      this.loadPlaceholder = 'Загрузить';
     }});
   }
 
@@ -72,13 +81,13 @@ export class CreateResumeComponent extends Modal implements OnInit {
       this._user.updateResume(resume).subscribe({ next: (resume: IResume) => {
         this.isSubmitted = true;
       }, error: (error: any) => {
-        console.log(error);
+        //console.log(error);
       }});
     } else {
       this._user.createResume(resume).subscribe({ next: (resume: IResume) => {
         this.isSubmitted = true;
       }, error: (error: any) => {
-        console.log(error);
+        //console.log(error);
       }});
     }
   }
@@ -93,6 +102,23 @@ export class CreateResumeComponent extends Modal implements OnInit {
   public back(): void {
     this.close();
   }
+
+  public checkFileLoaded(): boolean {
+    return this.file !== null || this.resume !== null;
+  }
+
+  public checkFormChanges(): boolean {
+    const form = this.resumeForm.value;
+    const resume = this.resume;
+
+    this.isUserChanged.desiredPosition = form.desiredPosition !== resume?.desiredPosition;
+    this.isUserChanged.desiredSalary = form.desiredSalary !== resume?.desiredSalary;
+    this.isUserChanged.desiredEmployment = (form.desiredEmployment.id?? form.desiredEmployment) !== resume?.desiredEmployment;
+    this.isUserChanged.desiredSchedule = (form.desiredSchedule.id?? form.desiredSchedule) !== resume?.desiredSchedule;
+    this.isUserChanged.resume = this.file !== null || this.loadPlaceholder !== resume?.resume?.split('/').pop();
+
+    return this.isUserChanged.desiredPosition || this.isUserChanged.desiredSalary || this.isUserChanged.desiredEmployment || this.isUserChanged.desiredSchedule || this.isUserChanged.resume;
+  } 
 
   private checkFile(file: File): boolean {
     if (file.type !== 'application/pdf') {
@@ -109,11 +135,12 @@ export class CreateResumeComponent extends Modal implements OnInit {
   }
 
   private createUpdateResumeObject(): IResumeUpdate {
+    console.log(this.file);
     const resume: IResumeUpdate = {
       desiredPosition: this.resumeForm.value.desiredPosition as string,
       desiredSalary: parseInt(this.resumeForm.value.desiredSalary),
-      desiredEmployment: this.resumeForm.value.desiredEmployment.id as Employment,
-      desiredSchedule: this.resumeForm.value.desiredSchedule.id as Schedule,
+      desiredEmployment: (this.resumeForm.value.desiredEmployment.id?? this.resumeForm.value.desiredEmployment) as Employment,
+      desiredSchedule: (this.resumeForm.value.desiredSchedule.id?? this.resumeForm.value.desiredSchedule) as Schedule,
       isActive: this.resumeForm.value.isActive as boolean,
       resume: this.file!,
     };

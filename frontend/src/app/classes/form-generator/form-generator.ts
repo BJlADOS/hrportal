@@ -109,9 +109,6 @@ export class FormGenerator {
                 desiredSchedule: new FormControl(resume ? resume.desiredSchedule : '', Validators.compose([
                     Validators.required,
                 ])),
-                resume: new FormControl('', Validators.compose([
-                    Validators.required,
-                ])),
                 isActive: new FormControl(resume ? resume.isActive : true),
             }
         );

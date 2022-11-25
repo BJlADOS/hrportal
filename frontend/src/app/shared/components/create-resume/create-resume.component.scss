@@ -132,6 +132,10 @@
                 }
             }
 
+            & .uploaded {
+                word-break: break-all;
+            }
+
             & .file {
                 font-weight: 400;
                 color: var(--font-primary);

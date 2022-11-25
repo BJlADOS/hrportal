@@ -16,3 +16,11 @@ export interface IVacancyEditing {
     description: boolean;
     skills: boolean;
 }
+
+export interface IResumeEditing {
+    desiredPosition: boolean;
+    desiredSalary: boolean;
+    desiredEmployment: boolean;
+    desiredSchedule: boolean;
+    resume: boolean;
+}

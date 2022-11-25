@@ -55,7 +55,7 @@ export class UserService {
 
   public updateResume(resume: IResumeUpdate): Observable<IResume> {
     const data = this.parseToFormData(resume);
-    return this.http.patch(`${this._apiURL}/user/resume`, data) as Observable<IResume>;
+    return this.http.patch(`${this._apiURL}/user/resume/`, data) as Observable<IResume>;
   }
     
 
@@ -70,9 +70,10 @@ export class UserService {
         Array.isArray(Object.values(data)[i]) ? (Object.values(data)[i] as Array<any>).forEach((element: any) => {
           formData.append(key, element);
         }) : formData.append(key, Object.values(data)[i] as string | Blob);
+        console.log(formData.get(key));
       }
     });
-    return data;
+    return formData;
   }
 
 
