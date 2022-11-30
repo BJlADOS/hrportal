@@ -41,7 +41,7 @@ export class UserService {
   }
 
   public getUserById(id: number): Observable<IUser> {
-    return this.http.get(`${this._apiURL}/user/${id}`) as Observable<IUser>;
+    return this.http.get(`${this._apiURL}/users/${id}`) as Observable<IUser>;
   }
 
   public getResume(): Observable<IResume> {

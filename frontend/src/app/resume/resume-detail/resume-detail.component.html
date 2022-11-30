@@ -1,0 +1,25 @@
+<div class="wrapper">
+    <div class="wrapper-grid" *ngIf="resume">
+        <div class="wrapper-flex column-1-9" *ngIf="employee">
+            <div class="title">
+                <div class="title__position">
+                    <h1>{{resume.desiredPosition}}</h1>
+                </div>
+                <p class="title__date">{{resume.createdAt | date: 'dd.MM.yyyy'}}</p>
+            </div>
+            <div class="salary">{{resume.desiredSalary}} рублей</div>
+            <div class="resume">
+                <div class="response" (click)="showResume()">Резюме</div>
+                <span class="employee">{{employee.fullname}}</span>
+            </div>      
+            <div class="skills">
+                <span class="skill" *ngFor="let skill of employee.existingSkills">{{skill.name}}</span>
+            </div>
+            <div class="schedule">
+                <span>{{resume.desiredEmployment | employment}}</span>
+                <span>{{resume.desiredSchedule | schedule}}</span>
+            </div>
+            <div class="response" (click)="responseToResume()">Откликнуться</div>
+        </div>
+    </div>
+</div>

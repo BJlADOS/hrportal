@@ -35,7 +35,7 @@ export class VacancyDetailComponent implements OnInit {
         this.vacancy = vacancy;      
       }
       );
-  });
+    });
   }
 
   public responseVacancy(): void {

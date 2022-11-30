@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'register', component: RegistrationComponent, canActivate: [LoggedInGuard] },
   { path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule), canActivate: [AuthGuard] },
   { path: 'vacancies', loadChildren: () => import('./vacancies/vacancies.module').then(m => m.VacanciesModule), canActivate: [AuthGuard] },
+  { path: 'resumes', loadChildren: () => import('./resume/resume.module').then(m => m.ResumeModule), canActivate: [AuthGuard] },
 ];
 
 export const appRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot(routes);

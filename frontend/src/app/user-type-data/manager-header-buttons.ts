@@ -10,7 +10,7 @@ export const managerButtons: IRoute[] = [
         name: 'Департаменты',
     },
     {
-        path: '',
+        path: 'resumes',
         name: 'Резюме',
     },
 ];

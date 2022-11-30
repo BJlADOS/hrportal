@@ -51,13 +51,20 @@
 
 }
 
-.department {
-    margin-top: 1.5em;
+.schedule {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    span {
+        border: 1px solid var(--border-color);
+        border-radius: 1rem;
+        padding: 0.3rem 0.8rem;
+    }
 }
 
-.description {
+.fullname {
     margin-top: 1.5em;
     margin-bottom: 1em;
 }

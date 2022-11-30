@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="modal__body" *ngIf="!isSubmitted else submitted">
-        <h1 class="modal__title">Создание резюме</h1>
+        <h1 class="modal__title">{{ (resume? 'Изменение' :'Создание') + ' резюме'}}</h1>
         <form class="modal__form" *ngIf="resumeForm" [formGroup]="resumeForm" (ngSubmit)="submit()">
             <div class="modal__form-group">
                 <label>Введите название желаемой должности</label>
@@ -63,7 +63,7 @@
             <div class="modal__form-submit">
                 <div class="button-block">
                     <input type='submit' [disabled]="uploadError || resumeForm.invalid || !checkFormChanges() || !checkFileLoaded()"
-                        value="Добавить резюме">
+                        [value]="(resume ? 'Изменить' : 'Добавить') + ' резюме'">
                 </div>
                 <label (click)="back()" class="transparent-button">Отмена</label>
             </div>

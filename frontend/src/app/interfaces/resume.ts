@@ -5,8 +5,8 @@ export interface IResume {
     employeeId: number;
     desiredPosition: string;
     desiredSalary: number;
-    desiredEmployment: string;
-    desiredSchedule: string;
+    desiredEmployment: Employment;
+    desiredSchedule: Schedule;
     resume: string;
     isActive: boolean;
     modifiedAt: number;
