@@ -17,7 +17,7 @@ class RegAndAuthTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        User.objects.create_user(cls.user_data.fullname, cls.user_data.email, cls.user_data.password)
+        User.objects.create_user(**cls.user_data.__dict__)
 
     def setUp(self):
         self.client = Client()

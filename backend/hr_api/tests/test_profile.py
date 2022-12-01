@@ -12,8 +12,8 @@ class ProfileTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        User.objects.create_user(cls.employee_data.fullname, cls.employee_data.email, cls.employee_data.password)
-        manager = User.objects.create_user(cls.manager_data.fullname, cls.manager_data.email, cls.manager_data.password)
+        User.objects.create_user(**cls.employee_data.__dict__)
+        manager = User.objects.create_user(**cls.manager_data.__dict__)
         Department.objects.create(name="department", manager=manager).save()
 
     def setUp(self):
