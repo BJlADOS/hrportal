@@ -217,6 +217,7 @@ class PostVacancySerializer(serializers.ModelSerializer):
     isActive = serializers.BooleanField(source='is_active')
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True)
+    description = serializers.CharField()
 
     class Meta:
         model = Vacancy
