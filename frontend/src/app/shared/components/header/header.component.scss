@@ -92,22 +92,34 @@
         align-items: center;
         gap: 2em;  
 
-        & p {
+        & button {
             transition: .3s ease;
+            text-transform: uppercase;
+            background-color: transparent;
+            border: none;
+            color: var(--font-primary);
+            font-size: var(--font-size-main);
+            font-family: var(--main-font-family);
+            padding: 0;
+            margin: auto 0;
 
             &:hover {
                 color: var(--main-accent-color);
                 cursor: pointer;
             }
+
+            &:disabled {
+                color: var(--font-disabled);
+
+                &:hover {
+                    color: var(--font-disabled);
+                    cursor: default;
+                }
+            }
         }
 
-        .inactive {
-            color: var(--font-disabled);
-
-            &:hover {
-                color: var(--font-disabled);
-                cursor: default;
-            }
+        .active {
+            font-weight: 700;
         }
 
         & .profile {

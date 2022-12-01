@@ -36,6 +36,13 @@ export interface IUserUpdateError {
     existingSkillsIds?: string[],
 }
 
+export interface IResumeFormError {
+    desiredPosition?: IInputError | null;
+    desiredSalary?: IInputError | null;
+    desiredSchedule?: IInputError | null;
+    desiredEmployment?: IInputError | null;
+}
+
 export interface ISubmitError {
     message: string;
 }

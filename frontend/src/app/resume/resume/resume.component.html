@@ -1,0 +1,22 @@
+<div class="wrapper">
+    <div class="wrapper-hover" (click)="openResume()">
+        <div class="title">
+            <div class="title__position">
+                <h1>{{resume.desiredPosition}}</h1>
+                <p>от {{resume.desiredSalary}} рублей</p>
+            </div>
+            <p class="title__date">{{resume.createdAt | date: 'dd.MM.yyyy'}}</p>
+        </div>
+    </div>
+    <div class="skills" *ngIf="user">
+        {{skillsToString(user.existingSkills)}}
+    </div>
+    <div class="schedule">
+        <span>{{resume.desiredEmployment | employment}}</span>
+        <span>{{resume.desiredSchedule | schedule}}</span> 
+    </div>
+    <div class="fullname">
+        {{user?.fullname}}
+    </div>
+    <button class="response" (click)="responseResume()">Откликнуться</button>
+</div>

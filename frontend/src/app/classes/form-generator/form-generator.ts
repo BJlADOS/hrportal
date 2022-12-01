@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { IResume } from 'src/app/interfaces/resume';
 import { ISelectOption } from 'src/app/interfaces/select';
 import { IUser } from 'src/app/interfaces/User';
 import { CustomValidators } from '../custom-validators/custom-validators';
@@ -89,6 +90,26 @@ export class FormGenerator {
                     Validators.required,
                 ])),
                 skills: new FormControl(user.existingSkills.slice()),
+            }
+        );
+    }
+
+    public getResumeForm(resume: IResume | null): FormGroup {
+        return this._fb.group(
+            {
+                desiredPosition: new FormControl(resume ? resume.desiredPosition : '', Validators.compose([
+                    Validators.required,
+                ])),
+                desiredSalary: new FormControl(resume ? resume.desiredSalary : '', Validators.compose([
+                    Validators.required,
+                ])),
+                desiredEmployment: new FormControl(resume ? resume.desiredEmployment : '', Validators.compose([
+                    Validators.required,
+                ])),
+                desiredSchedule: new FormControl(resume ? resume.desiredSchedule : '', Validators.compose([
+                    Validators.required,
+                ])),
+                isActive: new FormControl(resume ? resume.isActive : true),
             }
         );
     }

@@ -38,14 +38,14 @@ export enum Employment {
 
 export enum Schedule {
     'DISTANT' = 'DISTANT',
-    'PART' = 'PART',
+    'FLEX' = 'FLEX',
     'SHIFT' = 'SHIFT',
     'FULL' = 'FULL',
 }
 
 export enum ScheduleRussian {
     'DISTANT' = 'Удаленная работа',
-    'PART' = 'Частичная',
+    'FLEX' = 'Гибкий график',
     'SHIFT' = 'Сменный график',
     'FULL' = 'Полный день',
 }

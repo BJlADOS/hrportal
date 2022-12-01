@@ -10,7 +10,7 @@ export const adminButtons: IRoute[] = [
         name: 'Департаменты',
     },
     {
-        path: '',
+        path: 'resumes',
         name: 'Резюме',
     },
 ];
