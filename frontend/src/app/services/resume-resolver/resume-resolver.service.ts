@@ -15,7 +15,6 @@ export class ResumeResolverService {
 
   public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<string> {
     const resumeId: string = route.paramMap.get('id') as string;
-    // return this._resume.getResumeById(resumeId).pipe(map((data: IResume) => data.desiredPosition));
-    return of('hi');
+    return this._resume.getResumeById(resumeId).pipe(map((data: IResume) => data.desiredPosition));
   }
 }

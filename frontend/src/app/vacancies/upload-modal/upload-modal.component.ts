@@ -78,9 +78,7 @@ export class UploadModalComponent extends Modal {
   }
 
   public getUsername(): string {
-    const surname: string = this._user.currentUserValue?.fullname.split(' ')[0] || '';
-    const firstName: string = this._user.currentUserValue?.fullname.split(' ')[1] || '';
-    return `${firstName} ${surname}`;
+    return this._user.getUserName();
   }
 
   public getUserEmail(): string {

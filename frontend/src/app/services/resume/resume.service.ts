@@ -21,7 +21,13 @@ export class ResumeService {
     return this._http.get<IResume>(`${environment.apiURL}/resumes/${id}`);
   }
 
-  public responseToResume(id: string): Observable<IResume> {
-    return this._http.post<IResume>(`${environment.apiURL}/resumes/${id}/response`, {}, { params: { id } });
+  public responseToResume(id: number): void {
+    this._http.post<{ detail: string}>(`${environment.apiURL}/resumes/${id}/response/`, {}, { params: { id } }).subscribe(
+      { next: (response: { detail: string}) => {
+        console.log(response.detail);
+      }, error: () => {
+        
+      }}
+    );
   }
 }

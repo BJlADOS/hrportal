@@ -6,6 +6,7 @@ import { ResumeDetailComponent } from './resume-detail/resume-detail.component';
 import { SharedModule } from '../shared/shared.module';
 import { resumeRouting } from './resume-routing.module';
 import { ResumeComponent } from './resume/resume.component';
+import { ResumeResponseModalComponent } from './resume-response-modal/resume-response-modal.component';
 
 
 
@@ -14,7 +15,8 @@ import { ResumeComponent } from './resume/resume.component';
     ResumeMainComponent,
     ResumeListComponent,
     ResumeDetailComponent,
-    ResumeComponent
+    ResumeComponent,
+    ResumeResponseModalComponent
   ],
   imports: [
     CommonModule,
