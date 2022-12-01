@@ -108,7 +108,7 @@ class ResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    # TODO Тесты на валидацию передаваемых в Post и Patch значений и создание и изменение пользователей
+    # TODO Тесты на валидацию передаваемых в Post и Patch значений и создание и изменение резюме
 
     def test_PostUserResume_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.post(f'/user/resume/')
