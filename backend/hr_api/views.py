@@ -204,9 +204,7 @@ class UserResumeView(APIView):
 @api_view(['POST'])
 @permission_classes([IsManagerUser])
 def resume_response(request, pk):
-    resume = Resume.objects.get(id=pk)
-    if resume is None:
-        return response_with_detail('Resume not found', status.HTTP_404_NOT_FOUND)
+    resume = get_object_or_404(Resume, id=pk)
     result = sent_resume_response(resume, request.user)
     return response_with_detail(result, status.HTTP_200_OK)
 
@@ -247,9 +245,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
 
 @api_view(['POST'])
 def vacancy_response(request, pk):
-    vacancy = Vacancy.objects.get(id=pk)
-    if vacancy is None:
-        return response_with_detail('Vacancy not found', status.HTTP_404_NOT_FOUND)
+    vacancy = get_object_or_404(Vacancy, id=pk)
 
     manager = vacancy.department.manager
     if manager is None:
