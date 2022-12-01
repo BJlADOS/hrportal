@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail, EmailMessage
+from django.shortcuts import get_object_or_404
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
@@ -169,12 +170,12 @@ class UserResumeView(APIView):
 
     @staticmethod
     def post(request):
-        try:
-            _ = request.user.resume
+        if hasattr(request.user, 'resume'):
             return response_with_detail('This employee already has a resume', status.HTTP_409_CONFLICT)
-        except Resume.DoesNotExist:
-            serializer = GetResumeSerializer(data=request.data, partial=True)
-            serializer.initial_data['employeeId'] = request.user.id
+        else:
+            data = request.data.dict()
+            data['employeeId'] = request.user.id
+            serializer = GetResumeSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
