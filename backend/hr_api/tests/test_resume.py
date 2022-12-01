@@ -1,34 +1,45 @@
 import json
 
-from django.core.files import File
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, Client
 
 from .test_reg_auth import UserData
 from ..serializers import *
 
 
+def create_resume_for(user, data):
+    return Resume.objects.create(employee=user,
+                                 desired_position=data['desiredPosition'],
+                                 desired_salary=data['desiredSalary'],
+                                 desired_employment=data['desiredEmployment'],
+                                 desired_schedule=data['desiredSchedule'],
+                                 resume=data['resume'],
+                                 is_active=data['isActive'])
+
+
+resume_data = {
+    'desiredPosition': 'position',
+    'desiredSalary': 0,
+    'desiredEmployment': 'PART',
+    'desiredSchedule': 'DISTANT',
+    'resume': SimpleUploadedFile('test.pdf', b'resume'),
+    'isActive': True
+}
+
+
 class ResumeTests(TestCase):
     employee_data = UserData('employee', 'employee@hrportal.com', 'password')
     manager_data = UserData('manager', 'manager@hrportal.com', 'password')
-    resume_data = {
-        'desiredPosition': 'position',
-        'desiredSalary': 0,
-        'desiredEmployment': 'PART',
-        'desiredSchedule': 'DISTANT',
-        'isActive': True
-    }
 
     @classmethod
     def setUpTestData(cls):
         employee = User.objects.create_user(**cls.employee_data.__dict__)
-        cls.create_resume_for(employee, cls)
+        create_resume_for(employee, resume_data)
         manager = User.objects.create_user(**cls.manager_data.__dict__)
         Department.objects.create(name="department", manager=manager).save()
 
     def setUp(self):
         self.client = Client()
-
-    # TODO Тесты на проверку возвращаемой информации о резюме
 
     def test_GetResumes_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.get('/resumes/', {})
@@ -69,7 +80,7 @@ class ResumeTests(TestCase):
         detail = json.loads(*response)['detail']
         self.assertEqual(detail, 'You do not have permission to perform this action.')
 
-    def test_GetResumeByPk_ShouldRaise404_OnNonExistentResumeId(self):
+    def test_GetResumeByPk_ShouldRaise404_OnNonExistentResume(self):
         self.login_user(self.client, self.manager_data)
 
         response = self.client.get(f'/resumes/{self.get_nonexistent_resume_id()}/')
@@ -108,8 +119,6 @@ class ResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    # TODO Тесты на валидацию передаваемых в Post и Patch значений и создание и изменение резюме
-
     def test_PostUserResume_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.post(f'/user/resume/')
 
@@ -143,10 +152,9 @@ class ResumeTests(TestCase):
     def test_PostUserResume_ShouldCreateResume(self):
         self.login_user(self.client, self.manager_data)
 
-        with open("hr_api/tests/test_resume.pdf", "rb") as pdf:
-            data = dict(self.resume_data)
-            data['resume'] = pdf
-            response = self.client.post(f'/user/resume/', data)
+        data = dict(resume_data)
+        data['resume'] = SimpleUploadedFile("test.pdf", b"resume")
+        response = self.client.post(f'/user/resume/', data)
 
         self.assertEqual(response.status_code, 200)
         User.objects.get(email=self.manager_data.email).resume.delete()
@@ -211,7 +219,7 @@ class ResumeTests(TestCase):
 
     def test_DeleteUserResume_ShouldDeleteResume(self):
         manager = User.objects.get(email=self.manager_data.email)
-        self.create_resume_for(manager, self)
+        create_resume_for(manager, resume_data)
         self.login_user(self.client, self.manager_data)
 
         response = self.client.delete('/user/resume/')
@@ -219,18 +227,44 @@ class ResumeTests(TestCase):
         self.assertEqual(response.status_code, 204)
         self.assertEqual(self.client.get('/user/resume/').status_code, 404)
 
-    @staticmethod
-    def create_resume_for(user, resume_tests):
-        with open("hr_api/tests/test_resume.pdf", "rb") as pdf:
-            return Resume.objects.create(employee=user,
-                                         desired_position=resume_tests.resume_data['desiredPosition'],
-                                         desired_salary=resume_tests.resume_data['desiredSalary'],
-                                         desired_employment=resume_tests.resume_data['desiredEmployment'],
-                                         desired_schedule=resume_tests.resume_data['desiredSchedule'],
-                                         resume=File(pdf),
-                                         is_active=resume_tests.resume_data['isActive'])
+    def test_ResumeResponse_ShouldRaise403_OnUnauthorizedClient(self):
+        response = self.client.post(f'/resumes/{self.get_existing_resume_id()}/response/')
 
-    # TODO Тесты на работу отклика на резюме
+        print(json.loads(*response))
+
+        self.assertEqual(response.status_code, 403)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Authentication credentials were not provided.')
+
+    def test_ResumeResponse_ShouldRaise403_OnEmployee(self):
+        self.login_user(self.client, self.employee_data)
+
+        response = self.client.post(f'/resumes/{self.get_existing_resume_id()}/response/')
+
+        self.assertEqual(response.status_code, 403)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'You do not have permission to perform this action.')
+
+    def test_ResumeResponse_ShouldRaise404_OnNonExistentResume(self):
+        self.login_user(self.client, self.manager_data)
+
+        response = self.client.post(f'/resumes/{self.get_nonexistent_resume_id()}/response/')
+
+        self.assertEqual(response.status_code, 404)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Not found.')
+
+    def test_ResumeResponse_ShouldSendResponse(self):
+        manager_id = User.objects.get(email=self.manager_data.email).id
+        resume_id = self.get_existing_resume_id()
+        employee_id = User.objects.get(resume__id=resume_id).id
+        self.login_user(self.client, self.manager_data)
+
+        response = self.client.post(f'/resumes/{resume_id}/response/')
+
+        self.assertEqual(response.status_code, 200)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, f'Response from Manager(ID={manager_id}) to Employee(ID={employee_id}) successful')
 
     @staticmethod
     def get_existing_resume_id():

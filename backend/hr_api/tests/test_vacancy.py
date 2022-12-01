@@ -2,7 +2,9 @@ import json
 
 from django.test import TestCase, Client
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from .test_reg_auth import UserData
+from .test_resume import resume_data, create_resume_for
 from ..serializers import *
 
 
@@ -43,16 +45,12 @@ class VacancyTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    # TODO Тесты на проверку возвращаемой информации о вакансии
-
     def test_GetVacancies_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.get('/vacancies/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
         self.assertEqual(detail, 'Authentication credentials were not provided.')
-
-    # TODO Тесты на валидацию передаваемых в Post и Patch значений и создание и изменение вакансии
 
     def test_PostVacancies_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.post('/vacancies/')
@@ -213,11 +211,7 @@ class VacancyTests(TestCase):
 
     def test_DeleteVacancyByPk_ShouldDeleteVacancy(self):
         department = User.objects.get(email=self.other_manager_data.email).department
-        data = dict(self.vacancy_data)
-        del data['isActive']
-        del data['requiredSkillsIds']
-        vacancy = Vacancy.objects.create(department=department, is_active=True, **data)
-        vacancy.save()
+        vacancy = self.create_vacancy_for(department)
         count_before = department.vacancy_set.count()
         self.login_user(self.client, self.other_manager_data)
 
@@ -227,7 +221,81 @@ class VacancyTests(TestCase):
         self.assertNotEqual(count_before, 0)
         self.assertEqual(department.vacancy_set.count(), 0)
 
-    # TODO Тесты на работу отклика на вакансию
+    def test_VacancyResponse_ShouldRaise403_OnUnauthorizedClient(self):
+        response = self.client.post(f'/vacancies/{self.get_existing_vacancy_id()}/response/')
+
+        print(json.loads(*response))
+
+        self.assertEqual(response.status_code, 403)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Authentication credentials were not provided.')
+
+    def test_VacancyResponse_ShouldRaise404_OnNonExistentVacancy(self):
+        self.login_user(self.client, self.employee_data)
+
+        response = self.client.post(f'/vacancies/{self.get_nonexistent_vacancy_id()}/response/')
+
+        self.assertEqual(response.status_code, 404)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Not found.')
+
+    def test_VacancyResponse_ShouldRaise400_WithoutAnyResume(self):
+        self.login_user(self.client, self.employee_data)
+
+        response = self.client.post(f'/vacancies/{self.get_existing_vacancy_id()}/response/')
+
+        self.assertEqual(response.status_code, 400)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Employee does not have resume')
+
+    def test_VacancyResponse_ShouldRaise400_OnVacancyDepartmentHasNotManager(self):
+        department = Department.objects.create(name="department_without_manager")
+        vacancy = self.create_vacancy_for(department)
+        self.login_user(self.client, self.employee_data)
+
+        response = self.client.post(f'/vacancies/{vacancy.id}/response/')
+
+        self.assertEqual(response.status_code, 404)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Vacancy department does not have manager')
+        department.delete()
+
+    def test_VacancyResponse_ShouldSendResponse_WithPdfResume(self):
+        self.login_user(self.client, self.employee_data)
+        vacancy_id = self.get_existing_vacancy_id()
+        vacancy = Vacancy.objects.get(id=vacancy_id)
+        manager_id = User.objects.get(department__id=vacancy.department.id)
+        employee_id = User.objects.get(email=self.employee_data.email).id
+
+        response = self.client.post(f'/vacancies/{vacancy_id}/response/',
+                                    {'resume': SimpleUploadedFile('test.pdf', b'resume')})
+
+        self.assertEqual(response.status_code, 200)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, f'Response from Employee(ID={employee_id}) to Manager(ID={manager_id}) successful')
+
+    def test_VacancyResponse_ShouldSendResponse_WithUserResume(self):
+        self.login_user(self.client, self.employee_data)
+        vacancy_id = self.get_existing_vacancy_id()
+        vacancy = Vacancy.objects.get(id=vacancy_id)
+        manager_id = User.objects.get(department__id=vacancy.department.id)
+        employee = User.objects.get(email=self.employee_data.email)
+        resume = create_resume_for(employee, resume_data)
+
+        response = self.client.post(f'/vacancies/{vacancy_id}/response/')
+
+        self.assertEqual(response.status_code, 200)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, f'Response from Employee(ID={employee.id}) to Manager(ID={manager_id}) successful')
+        resume.delete()
+
+    def create_vacancy_for(self, department):
+        data = dict(self.vacancy_data)
+        del data['isActive']
+        del data['requiredSkillsIds']
+        vacancy = Vacancy.objects.create(department=department, is_active=True, **data)
+        vacancy.save()
+        return vacancy
 
     @staticmethod
     def get_existing_vacancy_id():

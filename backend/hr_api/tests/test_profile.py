@@ -19,8 +19,6 @@ class ProfileTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    # TODO Тесты на проверку возвращаемой информации о пользователе
-
     def test_GetUser_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.get('/user/')
 
@@ -52,8 +50,6 @@ class ProfileTests(TestCase):
         self.assertEqual(response.status_code, 200)
         is_manager = json.loads(*response)['isManager']
         self.assertTrue(is_manager)
-
-    # TODO Тесты на валидацию передаваемых в Patch значений и изменение пользователя
 
     def test_PatchUser_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.patch('/user/', {})
