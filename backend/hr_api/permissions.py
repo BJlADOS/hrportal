@@ -6,5 +6,5 @@ class IsManagerUser(permissions.BasePermission):
         return request.user.is_authenticated and request.user.is_manager
 
     def has_object_permission(self, request, view, obj):
-        return request.user.department == obj.department
+        return request.method == 'GET' or request.user.department == obj.department
 
