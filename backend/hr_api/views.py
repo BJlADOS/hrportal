@@ -7,10 +7,13 @@ from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.pagination import LimitOffsetPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .authentication import JWTAuthentication
 from .permissions import IsManagerUser
 from .serializers import *
+from .filters import *
 
 
 @api_view(['POST'])
@@ -150,6 +153,9 @@ class ResumeList(generics.ListAPIView):
     queryset = Resume.objects.all()
     serializer_class = GetResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ResumeFilter
+    pagination_class = LimitOffsetPagination
 
 
 class ResumeDetail(generics.RetrieveAPIView):
@@ -212,6 +218,9 @@ def resume_response(request, pk):
 
 class VacancyList(generics.ListCreateAPIView):
     queryset = Vacancy.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = VacancyFilter
+    pagination_class = LimitOffsetPagination
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
