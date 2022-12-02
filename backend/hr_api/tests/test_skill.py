@@ -110,7 +110,7 @@ class SkillTests(TestCase):
     def test_DeleteSkillByPk_ShouldRaise403_onEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.delete('/skills/')
+        response = self.client.delete(f'/skills/{self.get_existing_skill_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
