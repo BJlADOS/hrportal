@@ -12,7 +12,9 @@ class ResumeFilter(FilterSet):
         ('desired_salary', 'salary'),
         ('modified_at', 'time')
     ])
-    skills = django_filters.ModelMultipleChoiceFilter(field_name='employee__existing_skills', queryset=Skill.objects.all())
+    skills = django_filters.ModelMultipleChoiceFilter(field_name='employee__existing_skills',
+                                                      queryset=Skill.objects.all(),
+                                                      conjoined=True)
 
     class Meta:
         model = Resume
@@ -29,7 +31,9 @@ class VacancyFilter(FilterSet):
         ('salary', 'salary'),
         ('modified_at', 'time')
     ])
-    skills = django_filters.ModelMultipleChoiceFilter(field_name='required_skills', queryset=Skill.objects.all())
+    skills = django_filters.ModelMultipleChoiceFilter(field_name='required_skills',
+                                                      queryset=Skill.objects.all(),
+                                                      conjoined=True)
 
     class Meta:
         model = Vacancy
