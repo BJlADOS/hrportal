@@ -11,17 +11,29 @@ from .models import *
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('fullname', 'email', 'password')
-
-    password = serializers.CharField(required=True)
+        fields = [
+            'fullname',
+            'email',
+            'password'
+        ]
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
 
 
+class VerificationSerializer(serializers.Serializer):
+    code = serializers.CharField()
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+
 class AuthSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField(max_length=128)
+    password = serializers.CharField()
 
     def create(self, validated_data):
         pass
@@ -59,6 +71,7 @@ class GetUserSerializer(serializers.ModelSerializer):
     existingSkills = SkillSerializer(source='existing_skills', many=True)
     isManager = serializers.BooleanField(source='is_manager')
     isAdmin = serializers.BooleanField(source='is_admin')
+    emailVerified = serializers.BooleanField(source='email_verified')
     resumeId = serializers.PrimaryKeyRelatedField(source='resume', read_only=True)
 
     class Meta:
@@ -75,7 +88,8 @@ class GetUserSerializer(serializers.ModelSerializer):
             'filled',
             'resumeId',
             'isManager',
-            'isAdmin'
+            'isAdmin',
+            'emailVerified'
         ]
 
 

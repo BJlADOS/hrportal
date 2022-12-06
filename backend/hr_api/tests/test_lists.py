@@ -44,7 +44,7 @@ class ListsTests(TestCase):
                               desired_position='position',
                               desired_employment=employment,
                               desired_schedule=schedule,
-                              resume=SimpleUploadedFile('resume', b'resume'),
+                              resume=SimpleUploadedFile('test.pdf', b'resume'),
                               is_active=True).save()
 
     @staticmethod

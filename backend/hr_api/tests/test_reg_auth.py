@@ -1,8 +1,12 @@
 import json
 
+from django.conf import settings
+from django.core import mail
 from django.test import TestCase, Client
 
 from ..models import *
+
+from ..tokens import create_user_token
 
 
 class UserData:
@@ -28,6 +32,11 @@ class RegAndAuthTests(TestCase):
         response = self.client.post('/reg/', reg_data)
 
         self.assertEqual(response.status_code, 201)
+        detail = json.loads(*response)['detail']
+        user = User.objects.get(email=reg_data['email'])
+        self.assertEqual(detail, f'Email verification mail to User(ID={user.id}) sending successful')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue(f'{settings.VERIFICATION_URL}?code={create_user_token(user)}' in str(mail.outbox[0].message()))
 
     def test_RegistrationView_ShouldRaiseValidationError_OnNonUniqueEmail(self):
         reg_data = {'fullname': 'newuser', 'email': self.user_data.email, 'password': 'password'}
@@ -38,10 +47,8 @@ class RegAndAuthTests(TestCase):
         errors = json.loads(*response)
         self.assertEqual(errors['email'][0], 'user with this email already exists.')
 
-    def test_RegistrationView_ShouldRaiseValidationError_OnIncompleteData(self):
-        reg_data = {}
-
-        response = self.client.post('/reg/', reg_data)
+    def test_RegistrationView_ShouldRaiseValidationError_OnBlankData(self):
+        response = self.client.post('/reg/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -160,6 +167,30 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(response.status_code, 200)
         authorized = json.loads(*response)['authorized']
         self.assertFalse(authorized)
+
+    def test_VerificationView_ShouldRaiseValidationError_OnBlankData(self):
+        response = self.client.post('/verification/', {})
+
+        self.assertEqual(response.status_code, 400)
+        errors = json.loads(*response)
+        self.assertEqual(errors['code'][0], 'This field is required.')
+
+    def test_VerificationView_ShouldRaise401_OnInvalidCode(self):
+        response = self.client.post('/verification/', {'code': 'code'})
+
+        self.assertEqual(response.status_code, 401)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Invalid verification code.')
+
+    def test_VerificationView_ShouldConfirmUserEmail(self):
+        user = User.objects.first()
+        self.assertFalse(user.email_verified)
+
+        response = self.client.post('/verification/', {'code': create_user_token(user)})
+
+        self.assertEqual(response.status_code, 200)
+        user.refresh_from_db()
+        self.assertTrue(user.email_verified)
 
     def client_is_login(self):
         return self.client.session.session_key is not None
