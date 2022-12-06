@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError

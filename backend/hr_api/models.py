@@ -1,15 +1,14 @@
 import os
 
-import jwt
-from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core import validators
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.text import slugify
 from transliterate import translit
 
-from django.db.models.signals import post_save
+from .tokens import create_user_token
 
 SCHEDULE_CHOICES = [
     ('DISTANT', 'Удаленная работа'),
@@ -70,12 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def token(self):
-        return self._generate_jwt_token()
-
-    def _generate_jwt_token(self):
-        payload = {"fullname": self.fullname, "email": self.email}
-
-        return jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        return create_user_token(self)
 
     existing_skills = models.ManyToManyField('Skill', blank=True)
 
