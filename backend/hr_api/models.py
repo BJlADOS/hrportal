@@ -8,8 +8,6 @@ from django.utils import timezone
 from django.utils.text import slugify
 from transliterate import translit
 
-from .tokens import create_user_token
-
 SCHEDULE_CHOICES = [
     ('DISTANT', 'Удаленная работа'),
     ('FLEX', 'Гибкий график'),
@@ -67,10 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    @property
-    def token(self):
-        return create_user_token(self)
-
     existing_skills = models.ManyToManyField('Skill', blank=True)
 
     contact = models.CharField(max_length=255, blank=True)
@@ -87,6 +81,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     current_department = models.ForeignKey(to='Department', on_delete=models.SET_NULL, null=True, blank=True)
 
     photo = models.ImageField(upload_to=get_upload_path, blank=True)
+
+    email_verified = models.BooleanField(default=False)
 
     @property
     def filled(self):

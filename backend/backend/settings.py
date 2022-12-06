@@ -62,7 +62,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['backend/hr_api/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -161,3 +161,5 @@ DEFAULT_FROM_EMAIL = 'server@hrportal.com'
 
 MAX_EMAIL_TEXT_SIZE = 1048576
 MAX_EMAIL_ATTACHMENT_SIZE = 4194304
+
+VERIFICATION_URL = os.environ.get('VERIFICATION_URL', '')

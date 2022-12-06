@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     path('reg/', registration_view, name='reg'),
+    path('verification/', verification_view, name='verification'),
     path('unique-email/', unique_email_view, name='unique-email'),
     path('login/', login_view, name='login'),
     path('authorized/', authorized_view, name='authorized'),
@@ -22,4 +23,5 @@ urlpatterns = [
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),
     path('skills/', SkillList.as_view(), name='skill-list'),
     path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail'),
+    path('plug/', plug_view, name='plug'),
 ]

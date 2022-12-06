@@ -1,19 +1,22 @@
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail, EmailMessage
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.pagination import LimitOffsetPagination
-from django_filters.rest_framework import DjangoFilterBackend
+from django.template import loader
 
 from .authentication import JWTAuthentication
+from .filters import *
 from .permissions import IsManagerUser
 from .serializers import *
-from .filters import *
+from .tokens import *
 
 
 @api_view(['POST'])
@@ -22,9 +25,35 @@ from .filters import *
 def registration_view(request):
     serializer = RegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
-    serializer.save()
+    user = serializer.save()
+    result = send_verification_email(user)
 
-    return Response(status=status.HTTP_201_CREATED)
+    return response_with_detail(result, status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def verification_view(request):
+    serializer = VerificationSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = get_token_user(serializer.data['code'])
+
+    if user is None:
+        return response_with_detail('Invalid verification code.', status.HTTP_401_UNAUTHORIZED)
+
+    user.email_verified = True
+    user.save()
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def plug_view(request):
+    template = loader.get_template('plug.html')
+    return HttpResponse(template.render())
 
 
 @api_view(['POST'])
@@ -212,7 +241,7 @@ class UserResumeView(APIView):
 @permission_classes([IsManagerUser])
 def resume_response(request, pk):
     resume = get_object_or_404(Resume, id=pk)
-    result = sent_resume_response(resume, request.user)
+    result = send_resume_response(resume, request.user)
     return response_with_detail(result, status.HTTP_200_OK)
 
 
@@ -270,12 +299,30 @@ def vacancy_response(request, pk):
 
     serializer = VacancyResponseSerializer(data={'resume': resume})
     serializer.is_valid(raise_exception=True)
-    result = sent_vacancy_response(request.user, manager, vacancy, resume)
+    result = send_vacancy_response(request.user, manager, vacancy, resume)
 
     return response_with_detail(result, status.HTTP_200_OK)
 
 
-def sent_resume_response(resume, manager):
+def send_verification_email(user):
+    subject = 'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"'
+
+    def verification_message(url):
+        return f'Для подтверждения адреса электронной почты перейдите по {url}' \
+               f'Если вы не регистрировались на HR-портале "Очень Интересно" ' \
+               f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
+
+    verification_url = settings.VERIFICATION_URL + f'?code={create_user_token(user)}'
+    plain_url = f'ссылке: {verification_url}.\n\n'
+    html_url = f'<a href="{verification_url}">ссылке.</a><br><br>'
+    result = send_mail(subject, verification_message(plain_url), None, [user.email],
+                       html_message=verification_message(html_url))
+    result_message = f'Email verification mail to User(ID={user.id}) sending '
+    result_message += 'successful' if bool(result) else 'failed'
+    return result_message
+
+
+def send_resume_response(resume, manager):
     subject = 'Отклик на ваше резюме на HR-портале "Очень Интересно"'
     message = f'Уважаемый {resume.employee.fullname}!\n\n' \
               f'На ваше резюме на должность "{resume.desired_position}" ' \
@@ -290,7 +337,7 @@ def sent_resume_response(resume, manager):
     return result_message
 
 
-def sent_vacancy_response(employee, manager, vacancy, pdf_resume):
+def send_vacancy_response(employee, manager, vacancy, pdf_resume):
     subject = 'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"'
     message = f'Уважаемый {manager.fullname}!\n\n' \
               f'На ваше вакансию на должность "{vacancy.position}" получен отклик\n\n' \
@@ -308,7 +355,7 @@ def sent_vacancy_response(employee, manager, vacancy, pdf_resume):
 
 
 def add_auth(request, user):
-    request.session['Authorization'] = f'Bearer {user.token}'
+    request.session['Authorization'] = f'Bearer {create_user_token(user)}'
 
 
 def response_with_detail(message, response_status):
