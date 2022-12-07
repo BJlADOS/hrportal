@@ -9,6 +9,8 @@ import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.componen
 import { UploadModalComponent } from './upload-modal/upload-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DragAndDropDirective } from '../shared/directives/drag-and-drop/drag-and-drop.directive';
+import { NgxMaskModule } from 'ngx-mask';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 
 
@@ -25,6 +27,8 @@ import { DragAndDropDirective } from '../shared/directives/drag-and-drop/drag-an
     vacanciesRouting,
     SharedModule,
     ReactiveFormsModule,
+    NgxMaskModule.forChild(),
+    EditorModule,
   ]
 })
 export class VacanciesModule { }

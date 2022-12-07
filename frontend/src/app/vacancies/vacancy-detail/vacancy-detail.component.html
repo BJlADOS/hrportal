@@ -1,29 +1,109 @@
 <div class="wrapper">
     <div class="wrapper-grid" *ngIf="user$ | async as user">
-        <div class="wrapper-flex column-1-9" *ngIf="vacancy">
+        <form class="form column-1-9" *ngIf="vacancy && vacancyForm" [formGroup]="vacancyForm"
+            [class.enabled]="isEditing">
             <div class="title">
                 <div class="title__position">
-                    <h1>{{vacancy.position}}</h1>
-                    <span>{{vacancy.department.name}}</span>
+                    <h1>{{vacancyForm.controls['position'].value}}</h1>
+                    <app-select-small formControlName="department" [options]="(departments$ | async)!"
+                        [title]="'Департамент'"></app-select-small>
                 </div>
                 <p class="title__date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
             </div>
-            <div class="salary">от {{vacancy.salary}} рублей</div>
-            <div class="response" (click)="responseVacancy()">Откликнуться</div>
+            <div class="salary">от {{vacancyForm.controls['salary'].value}} рублей</div>
+            <div class="response" [@contentExpansion]="isEditing? 'collapsed' : 'expanded'" (click)="responseVacancy()">
+                Откликнуться</div>
             <div class="skills">
-                <span class="skill" *ngFor="let skill of vacancy.requiredSkills">{{skill.name}}</span>
+                <div class="skills__box">
+                    <span class="no-skills" *ngIf="!vacancyForm.controls['requiredSkills'].value.length">Нет
+                        навыков</span>
+                    <div class="skill" *ngFor="let skill of vacancyForm.controls['requiredSkills'].value"
+                        (click)="deleteSkill(skill)">
+                        <span>{{skill.name}}</span>
+                        <svg *ngIf="isEditing" width="10" height="11" viewBox="0 0 10 11" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.67969 3.14685L7.27588 7.74304" stroke="#D9D9D9" stroke-linecap="round" />
+                            <path d="M2.67969 7.74304L7.27588 3.14685" stroke="#D9D9D9" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="skills__add" *ngIf="!isAddingSkill"
+                    [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'" (click)="isAddingSkill = true">
+                    <svg class="add-icon" width="10" height="11" viewBox="0 0 10 11" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path class="stroke" d="M2.67969 3.14685L7.27588 7.74304" stroke="#D9D9D9"
+                            stroke-linecap="round" />
+                        <path class="stroke" d="M2.67969 7.74304L7.27588 3.14685" stroke="#D9D9D9"
+                            stroke-linecap="round" />
+                    </svg><span>Добавить</span>
+                </div>
+                <div class="skills__search" *ngIf="isAddingSkill">
+                    <app-select-with-search [options]="(skills$ | async)!"
+                        [alreadySelected]="vacancyForm.controls['requiredSkills'].value" [isActive]="isAddingSkill"
+                        (closed)="isAddingSkill = $event" (currentValueChange)="addedSkill($event)">
+                    </app-select-with-search>
+                </div>
+            </div>
+            <div class="input-label" [@contentExpansion]="isEditing? 'expanded' : 'collapsed'">
+                <label>Введите название вакансии</label>
+                <div class="input-block">
+                    <input class="long-input" type="position" formControlName="position" placeholder="Должность"
+                        (input)="positionChange()">
+                    <app-error [@contentExpansion]="errors.position ? 'expanded' : 'collapsed'"
+                        [error]="errors.position!"></app-error>
+                </div>
+            </div>
+            <div class="input-label" [@contentExpansion]="isEditing? 'expanded' : 'collapsed'">
+                <label>Введите заработную плату</label>
+                <div class="input-block">
+                    <input class="input-60" type="salary" mask="09999999" suffix="₽" formControlName="salary"
+                        placeholder="Заработная плата" (input)="salaryChange()">
+                    <app-error [@contentExpansion]="errors.salary ? 'expanded' : 'collapsed'" [error]="errors.salary!">
+                    </app-error>
+                </div>
             </div>
             <div class="description">
-                <p>Описание:</p>
-                <p>{{vacancy.description}}</p>
+                <editor apiKey="uhxdv14l2ehb88ytf6psbig8e346kiy941wcfvgbv713nmxe" [init]="{
+                    icons: 'material',
+                    skin: 'borderless',
+                    menubar: false,
+                    menu: {},
+                    toolbar: false,
+                    statusbar: false,
+                    plugins: 'autoresize',
+                    autoresize_bottom_margin: 0,
+                    autoresize_overflow_padding: 0,
+                    content_style:
+                    'body { font-size: 16px; font-family: Montserrat, sans-serif; }'
+                  }" formControlName="description" [class.hidden]="isEditing"></editor>
+                  <editor apiKey="uhxdv14l2ehb88ytf6psbig8e346kiy941wcfvgbv713nmxe" [init]="{
+                    icons: 'material',
+                    skin: 'borderless',
+                    menubar: false,
+                    menu: {},
+                    toolbar: true,
+                    statusbar: false,
+                    plugins: 'autoresize',
+                    content_style:
+                    'body { font-size: 16px; font-family: Montserrat, sans-serif; }'
+                  }" formControlName="description" [class.hidden]="!isEditing"></editor>
             </div>
             <div class="schedule">
-                <span>{{vacancy.employment | employment}}</span>
-                <span>{{vacancy.schedule | schedule}}</span>
+                <app-select-small formControlName="employment" [options]="employment" [title]="'Занятость'">
+                </app-select-small>
+                <app-select-small formControlName="schedule" [options]="schedule" [title]="'График'"></app-select-small>
             </div>
-        </div>
-        <div class="wrapper-flex column-11-13" *ngIf="user.isAdmin && user.isManager">
-            <div class="manager-button">
+            <div class="submit" [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">
+                <div class="buttons">
+                    <input type="submit" value="СОХРАНИТЬ ИЗМЕНЕНИЯ"
+                        [disabled]="!checkFormChanges() || !vacancyForm.valid">
+                    <div (click)="cancelEditing()">ОТМЕНИТЬ ИЗМЕНЕНИЯ</div>
+                </div>
+                <app-error [error]="submitError"></app-error>
+            </div>
+        </form>
+        <div class="wrapper-flex column-11-13" *ngIf="(user.isAdmin || user.isManager) && !isEditing">
+            <div class="manager-button" (click)="editVacancy()">
                 <span>Редактировать</span>
                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path class="stroke"

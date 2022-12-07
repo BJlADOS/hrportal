@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { IResume } from 'src/app/interfaces/resume';
 import { ISelectOption } from 'src/app/interfaces/select';
 import { IUser } from 'src/app/interfaces/User';
+import { IVacancy } from 'src/app/interfaces/vacancy';
 import { CustomValidators } from '../custom-validators/custom-validators';
 
 @Injectable({
@@ -97,20 +98,48 @@ export class FormGenerator {
     public getResumeForm(resume: IResume | null): FormGroup {
         return this._fb.group(
             {
-                desiredPosition: new FormControl(resume ? resume.desiredPosition : '', Validators.compose([
+                position: new FormControl(resume ? resume.desiredPosition : '', Validators.compose([
                     Validators.required,
                 ])),
-                desiredSalary: new FormControl(resume ? resume.desiredSalary : '', Validators.compose([
+                salary: new FormControl(resume ? resume.desiredSalary : '', Validators.compose([
                     Validators.required,
                 ])),
-                desiredEmployment: new FormControl(resume ? resume.desiredEmployment : '', Validators.compose([
+                employment: new FormControl(resume ? resume.desiredEmployment : '', Validators.compose([
                     Validators.required,
                 ])),
-                desiredSchedule: new FormControl(resume ? resume.desiredSchedule : '', Validators.compose([
+                schedule: new FormControl(resume ? resume.desiredSchedule : '', Validators.compose([
                     Validators.required,
                 ])),
                 isActive: new FormControl(resume ? resume.isActive : true),
             }
         );
+    }
+
+    public getVacancyForm(vacancy: IVacancy | null): FormGroup {
+        return this._fb.group(
+            {
+                position: new FormControl(vacancy? vacancy.position : null, Validators.compose([
+                    Validators.required,
+                ])),
+                department: new FormControl(vacancy? vacancy.department : null, Validators.compose([
+                    Validators.required,
+                ])),
+                salary: new FormControl(vacancy? vacancy.salary : null, Validators.compose([
+                    Validators.required,
+                ])),
+                employment: new FormControl(vacancy? vacancy.employment : null, Validators.compose([
+                    Validators.required,
+                ])),
+                schedule: new FormControl(vacancy? vacancy.schedule : null, Validators.compose([
+                    Validators.required,
+                ])),
+                description: new FormControl(vacancy? vacancy.description : null, Validators.compose([
+                    Validators.required,
+                ])),
+                requiredSkills: new FormControl(vacancy? vacancy.requiredSkills.slice() : null, Validators.compose([
+                    Validators.required,
+                ])),
+            }
+        )
     }
 }

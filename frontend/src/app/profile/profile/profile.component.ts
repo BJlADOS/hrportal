@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { IUserEditing } from 'src/app/interfaces/editing';
@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
   public user: IUser | null = null;
   public experience: { name: string, id: string }[] = getExperienceRussianAsArray();
   public formManager: FormManager = FormManager.getInstance()
-  public departments: IDepartment[] = [];
+  public departments: Observable<IDepartment[]> = this._department.departments$;
   public skills: ISkill[] = [];
   public userForm!: FormGroup;
   public uploadedPhoto: File | null = null;
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit {
   public isSavedChanges: boolean = false;
 
   constructor(
-    public department: DepartmentService,
+    private _department: DepartmentService,
     private _user: UserService,
     private _form: FormGenerator,
     private _destroy$: DestroyService,
@@ -48,9 +48,9 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.department.getDepartments().subscribe({ next: (data: IDepartment[]) => {
-      this.departments = data;
-    } });
+    // this._department.getDepartments().subscribe({ next: (data: IDepartment[]) => {
+    //   this.departments = data;
+    // } });
 
     this._user.currentUser$.pipe(takeUntil(this._destroy$)).subscribe({ next: (user: IUser | null) => {
       this.user = user;
@@ -105,8 +105,14 @@ export class ProfileComponent implements OnInit {
   }
 
   public cancelEditing(): void {
-    this.userForm.disable();
     this.resetForm();
+    this.uploadedPhoto = null;
+    this.uploadedPhotoUrl = null;
+    this.isEditing = false;
+    this.isAddingSkill = false;
+    this.isUserEdited = { name: false, photo: false, email: false, contact: false, experience: false, department: false, skills: false };
+    this.errors = { fullname: null, email: null, contact: null, department: null, experience: null };
+    this.submitError = null;
   }
 
   public deleteSkill(skill: ISkill): void {
@@ -192,13 +198,6 @@ export class ProfileComponent implements OnInit {
   
   private resetForm(): void {
     this.userForm = this._form.getUserDataForm(this.user!, this.experience);
-    this.uploadedPhoto = null;
-    this.uploadedPhotoUrl = null;
-    this.isEditing = false;
-    this.isAddingSkill = false;
-    this.isUserEdited = { name: false, photo: false, email: false, contact: false, experience: false, department: false, skills: false };
-    this.errors = { fullname: null, email: null, contact: null, department: null, experience: null };
-    this.submitError = null;
     this.userForm.disable();
   }
 

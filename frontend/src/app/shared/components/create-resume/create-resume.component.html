@@ -15,17 +15,16 @@
             <div class="modal__form-group">
                 <label>Введите название желаемой должности</label>
                 <div class="input-block">
-                    <input class="long-input" type="desiredPosition" formControlName="desiredPosition"
+                    <input class="long-input" type="position" formControlName="position"
                         placeholder="Должность" (input)="positionChange()">
                     <app-error [@contentExpansion]="errors.desiredPosition ? 'expanded' : 'collapsed'"
                         [error]="errors.desiredPosition!"></app-error>
                 </div>
-
             </div>
             <div class="modal__form-group">
                 <label>Введите желаемую заработную плату</label>
                 <div class="input-block">
-                    <input class="input-60" type="desiredSalary" mask="09999999" suffix="₽" formControlName="desiredSalary"
+                    <input class="input-60" type="salary" mask="09999999" suffix="₽" formControlName="salary"
                     placeholder="Заработная плата" (input)="salaryChange()">
                 <app-error [@contentExpansion]="errors.desiredSalary ? 'expanded' : 'collapsed'"
                     [error]="errors.desiredSalary!"></app-error>
@@ -35,13 +34,13 @@
                 <label>Выберите желаемый режим работы</label>
                 <div class="select-group">
                     <div class="select-block">
-                        <app-select-small formControlName="desiredSchedule" [options]="schedule"
+                        <app-select-small formControlName="schedule" [options]="schedule"
                             [title]="'Тип занятости'" (ngModelChange)="scheduleChange()"></app-select-small>
                         <app-error [@contentExpansion]="errors.desiredSchedule ? 'expanded' : 'collapsed'"
                             [error]="errors.desiredSchedule!"></app-error>
                     </div>
                     <div class="select-block">
-                        <app-select-small formControlName="desiredEmployment" [options]="employment"
+                        <app-select-small formControlName="employment" [options]="employment"
                             [title]="'График работы'" (ngModelChange)="employmentChange()"></app-select-small>
                         <app-error [@contentExpansion]="errors.desiredEmployment ? 'expanded' : 'collapsed'"
                             [error]="errors.desiredEmployment!"></app-error>

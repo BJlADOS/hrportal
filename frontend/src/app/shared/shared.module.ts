@@ -37,7 +37,7 @@ import { CUSTOM_SMALL_SELECT_VALUE_ACCESSOR, SelectSmallComponent } from './comp
     RouterModule,
     ReactiveFormsModule,
     ScrollingModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forChild(),
   ],
   exports: [
     HeaderComponent,

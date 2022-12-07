@@ -1,6 +1,8 @@
 import { Component, ElementRef, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
+import { contentExpansionHorizontal } from 'src/app/animations/content-expansion/content-expansion-horizontal';
+import { rotate180 } from 'src/app/animations/rotate/rotate180';
 
 export const CUSTOM_SMALL_SELECT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -12,7 +14,7 @@ export const CUSTOM_SMALL_SELECT_VALUE_ACCESSOR: any = {
   selector: 'app-select-small',
   templateUrl: './select-small.component.html',
   styleUrls: ['./select-small.component.scss'],
-  animations: [contentExpansion],
+  animations: [contentExpansion, contentExpansionHorizontal, rotate180],
   providers: [CUSTOM_SMALL_SELECT_VALUE_ACCESSOR]
 })
 export class SelectSmallComponent implements OnInit, ControlValueAccessor {
