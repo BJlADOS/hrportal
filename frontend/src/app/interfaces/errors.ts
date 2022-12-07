@@ -43,6 +43,16 @@ export interface IResumeFormError {
     desiredEmployment?: IInputError | null;
 }
 
+export interface IVacancyFormError {
+    position?: IInputError | null;
+    department?: IInputError | null;
+    salary?: IInputError | null;
+    employment?: IInputError | null;
+    schedule?: IInputError | null;
+    description?: IInputError | null;
+    requiredSkills?: IInputError | null;
+}
+
 export interface ISubmitError {
     message: string;
 }

@@ -36,6 +36,7 @@ import { NgxMaskModule } from 'ngx-mask';
     CookieModule.withOptions(),
     RouterModule,
     SharedModule,
+    NgxMaskModule.forRoot(),
   ],
   providers: [
     {

@@ -28,7 +28,6 @@
         
 
         & .arrow-icon {      
-            transform: rotate(180deg);
             fill: var(--main-accent-color);
         }
     }
@@ -48,7 +47,6 @@
     align-items: center;
 
     & .arrow-icon {
-        transition: .3s ease;
         margin-right: 0.5rem;
         fill: var(--border-color);
     }
@@ -63,7 +61,7 @@
     }
 
     span {
-        padding: 0.55rem 0.7rem;
+        padding: 0.45rem 0.7rem;
     }
 
 }

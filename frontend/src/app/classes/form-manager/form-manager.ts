@@ -102,7 +102,7 @@ export class FormManager {
     }
 
     public checkPosition(form: FormGroup): IInputError | null {
-        if (form.controls['desiredPosition'].hasError('required')) {
+        if (form.controls['position'].hasError('required')) {
             return { message: 'Выберите должность' };
         }
 
@@ -110,7 +110,7 @@ export class FormManager {
     }
 
     public checkSalary(form: FormGroup): IInputError | null {
-        if (form.controls['desiredSalary'].hasError('required')) {
+        if (form.controls['salary'].hasError('required')) {
             return { message: 'Введите желаемую зарплату' };
         }
 
@@ -118,7 +118,7 @@ export class FormManager {
     }
 
     public checkSchedule(form: FormGroup): IInputError | null {
-        if (form.controls['desiredSchedule'].hasError('required')) {
+        if (form.controls['schedule'].hasError('required')) {
             return { message: 'Выберите график работы' };
         }
 
@@ -126,7 +126,7 @@ export class FormManager {
     }
 
     public checkEmployment(form: FormGroup): IInputError | null {
-        if (form.controls['desiredEmployment'].hasError('required')) {
+        if (form.controls['employment'].hasError('required')) {
             return { message: 'Выберите тип занятости' };
         }
 

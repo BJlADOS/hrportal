@@ -111,10 +111,10 @@ export class CreateResumeComponent extends Modal implements OnInit {
     const form = this.resumeForm.value;
     const resume = this.resume;
 
-    this.isUserChanged.desiredPosition = form.desiredPosition !== resume?.desiredPosition;
-    this.isUserChanged.desiredSalary = form.desiredSalary !== resume?.desiredSalary;
-    this.isUserChanged.desiredEmployment = (form.desiredEmployment.id?? form.desiredEmployment) !== resume?.desiredEmployment;
-    this.isUserChanged.desiredSchedule = (form.desiredSchedule.id?? form.desiredSchedule) !== resume?.desiredSchedule;
+    this.isUserChanged.desiredPosition = form.position !== resume?.desiredPosition;
+    this.isUserChanged.desiredSalary = form.salary !== resume?.desiredSalary;
+    this.isUserChanged.desiredEmployment = (form.employment.id?? form.employment) !== resume?.desiredEmployment;
+    this.isUserChanged.desiredSchedule = (form.schedule.id?? form.desiredSchedule) !== resume?.desiredSchedule;
     this.isUserChanged.resume = this.file !== null || this.loadPlaceholder !== resume?.resume?.split('/').pop();
 
     return this.isUserChanged.desiredPosition || this.isUserChanged.desiredSalary || this.isUserChanged.desiredEmployment || this.isUserChanged.desiredSchedule || this.isUserChanged.resume;
@@ -137,10 +137,10 @@ export class CreateResumeComponent extends Modal implements OnInit {
   private createUpdateResumeObject(): IResumeUpdate {
     console.log(this.file);
     const resume: IResumeUpdate = {
-      desiredPosition: this.resumeForm.value.desiredPosition as string,
-      desiredSalary: parseInt(this.resumeForm.value.desiredSalary),
-      desiredEmployment: (this.resumeForm.value.desiredEmployment.id?? this.resumeForm.value.desiredEmployment) as Employment,
-      desiredSchedule: (this.resumeForm.value.desiredSchedule.id?? this.resumeForm.value.desiredSchedule) as Schedule,
+      desiredPosition: this.resumeForm.value.position as string,
+      desiredSalary: parseInt(this.resumeForm.value.salary),
+      desiredEmployment: (this.resumeForm.value.employment.id?? this.resumeForm.value.employment) as Employment,
+      desiredSchedule: (this.resumeForm.value.schedule.id?? this.resumeForm.value.schedule) as Schedule,
       isActive: this.resumeForm.value.isActive as boolean,
       resume: this.file!,
     };

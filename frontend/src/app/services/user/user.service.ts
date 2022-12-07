@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { IResume, IResumeUpdate } from 'src/app/interfaces/resume';
 import { IUser, IUserUpdate } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
+import { DepartmentService } from '../department/department.service';
+import { SkillsService } from '../skills/skills.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,8 @@ export class UserService {
 
   constructor(
     public http: HttpClient,
+    private _department: DepartmentService,
+    private _skills: SkillsService,
   ) { }
 
   public get currentUserValue(): IUser | null { 
@@ -31,6 +35,8 @@ export class UserService {
     this.http.get(`${this._apiURL}/user`).subscribe({ next: (data) => {
       const user = data as IUser;
       this.currentUserSubject$.next(this.fixPhotoUrl(user));
+      this._department.getDepartments();
+      this._skills.getSkills();
     } });
   }
 

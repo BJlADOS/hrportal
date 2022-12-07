@@ -33,5 +33,4 @@ export class ResumeResponseModalComponent extends Modal implements OnInit {
     return this._user.getUserName();
   }
 
-
 }
