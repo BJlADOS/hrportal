@@ -1,7 +1,7 @@
 <div class="wrapper">
     <div class="wrapper-grid" *ngIf="user$ | async as user">
         <form class="form column-1-9" *ngIf="vacancy && vacancyForm" [formGroup]="vacancyForm"
-            [class.enabled]="isEditing">
+            [class.enabled]="isEditing" (ngSubmit)="submitFormChanges()">
             <div class="title">
                 <div class="title__position">
                     <h1>{{vacancyForm.controls['position'].value}}</h1>

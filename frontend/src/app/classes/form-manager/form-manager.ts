@@ -103,7 +103,7 @@ export class FormManager {
 
     public checkPosition(form: FormGroup): IInputError | null {
         if (form.controls['position'].hasError('required')) {
-            return { message: 'Выберите должность' };
+            return { message: 'Введите название должности' };
         }
 
         return null;

@@ -113,7 +113,7 @@
                                     stroke-linecap="round" />
                             </svg><span>Добавить</span></div>
                         <div class="skills__search" *ngIf="isAddingSkill">
-                            <app-select-with-search [options]="skills"
+                            <app-select-with-search [options]="(skills$ | async)!"
                                 [alreadySelected]="userForm.controls['skills'].value" [isActive]="isAddingSkill"
                                 (closed)="isAddingSkill = $event" (currentValueChange)="addedSkill($event)">
                             </app-select-with-search>

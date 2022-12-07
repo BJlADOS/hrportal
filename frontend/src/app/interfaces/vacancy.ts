@@ -16,12 +16,12 @@ export interface IVacancy {
 }
 
 export interface IVacancyResponseModel {
-    position: string;
-    salary: number;
-    employment: Employment;
-    schedule: Schedule;
-    description: string;
-    skillsIds: number[];
+    position?: string;
+    salary?: number;
+    employment?: Employment;
+    schedule?: Schedule;
+    description?: string;
+    requiredSkillsIds?: number[];
 }
 
 

@@ -11,11 +11,12 @@
     &-hover {
         &:hover {
             cursor: pointer;
+
             h1 {
                 color: var(--main-accent-color);
             }
         }
-        
+
     }
 }
 

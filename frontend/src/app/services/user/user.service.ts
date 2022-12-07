@@ -72,7 +72,7 @@ export class UserService {
     this.currentUserSubject$.next(null);
   }
 
-  private parseToFormData(data: any): FormData {
+  public parseToFormData(data: any): FormData {
     const formData = new FormData();
     Object.keys(data).forEach((key, i) => {
       if (Object.values(data)[i]) {
