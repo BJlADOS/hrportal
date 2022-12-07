@@ -26,7 +26,7 @@ export class ProfileComponent implements OnInit {
   public experience: { name: string, id: string }[] = getExperienceRussianAsArray();
   public formManager: FormManager = FormManager.getInstance()
   public departments: Observable<IDepartment[]> = this._department.departments$;
-  public skills: ISkill[] = [];
+  public skills$: Observable<ISkill[]> = this._skills.skills$;
   public userForm!: FormGroup;
   public uploadedPhoto: File | null = null;
   public uploadedPhotoUrl: string | ArrayBuffer | null = null;
@@ -60,10 +60,6 @@ export class ProfileComponent implements OnInit {
       
     } });
 
-    this._skills.getSkills().pipe(takeUntil(this._destroy$)).subscribe({ next: (skills: ISkill[]) => {
-      this.skills = skills;
-    } });
-
   }
 
   public onPhotoChange(event: any): void {
@@ -93,6 +89,7 @@ export class ProfileComponent implements OnInit {
     this._user.updateUserInfo(userUpdate).subscribe({ next: (user: IUser) => {
       this._user.updateCurrentUser(user);
       this.isSavedChanges = true;
+      this.cancelEditing();
     }, error: () => {
       this.submitError = { message: 'Произошла непредвиденная ошибка' };
     } });

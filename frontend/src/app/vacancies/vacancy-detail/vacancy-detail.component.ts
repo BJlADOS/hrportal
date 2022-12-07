@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subscription, takeUntil } from 'rxjs';
 import { ModalRef } from 'src/app/classes/modal/modalRef';
 import { IDepartment, ISkill, IUser } from 'src/app/interfaces/User';
-import { getEmploymentRussianAsArray, getScheduleRussianAsArray, IVacancy } from 'src/app/interfaces/vacancy';
+import { getEmploymentRussianAsArray, getScheduleRussianAsArray, IVacancy, IVacancyResponseModel } from 'src/app/interfaces/vacancy';
 import { DestroyService } from 'src/app/services/destoy/destroy.service';
 import { ModalService } from 'src/app/services/modal/modal.service';
 import { UserService } from 'src/app/services/user/user.service';
@@ -18,6 +18,7 @@ import { ISelectOption } from 'src/app/interfaces/select';
 import { SkillsService } from 'src/app/services/skills/skills.service';
 import { ISubmitError, IVacancyFormError } from 'src/app/interfaces/errors';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-vacancy-detail',
@@ -45,6 +46,7 @@ export class VacancyDetailComponent implements OnInit {
   public isUserEdited: IVacancyEditing = { position: false, department: false, salary: false, employment: false, schedule: false, description: false, skills: false };
   public errors: IVacancyFormError = { position: null, salary: null, department: null, employment: null, schedule: null, description: null, requiredSkills: null };
   public submitError: ISubmitError | null = null; 
+  public isSubmitted: boolean = false;
 
 
   public departments$: Observable<IDepartment[]> = this._department.departments$;
@@ -94,12 +96,9 @@ export class VacancyDetailComponent implements OnInit {
     this.vacancyForm.controls['requiredSkills'].setValue(this.vacancyForm.controls['requiredSkills'].value.filter((s: ISkill) => s.id !== skill.id));
   }
 
-  public checkFormChanges(): boolean {
-    return false;
-  }
-
   public editVacancy(): void {
     this.isEditing = true;
+    this.isSubmitted = false;
     this.vacancyForm.enable();
   }
 
@@ -110,6 +109,61 @@ export class VacancyDetailComponent implements OnInit {
     this.errors = { position: null, salary: null, department: null, employment: null, schedule: null, description: null, requiredSkills: null };
     this.submitError = null;
     this.isAddingSkill = false;
+  }
+
+  public submitFormChanges(): void {
+    const vacancyUpdate = this.createVacancyUpdateObject();
+    this._vacancy.editVacancy(this.vacancy!.id.toString(), vacancyUpdate).pipe(takeUntil(this._destroy$)).subscribe({ next: (vacancy: IVacancy) => {
+      this.vacancy = vacancy;
+      this.cancelEditing();
+      this.isSubmitted = true;
+    }
+  });
+}
+
+  public checkFormChanges(): boolean {
+    const form = this.vacancyForm.value;
+    const vacancy = this.vacancy;
+    if (vacancy && form) {
+      this.isUserEdited.description = form.description !== vacancy?.description;
+    this.isUserEdited.salary = form.salary !== vacancy?.salary;
+    this.isUserEdited.position = form.position !== vacancy?.position;
+    this.isUserEdited.department = (form.department.id?? form.department) !== vacancy?.department.id;
+    this.isUserEdited.employment = form.employment !== vacancy?.employment;
+    this.isUserEdited.schedule = form.schedule !== vacancy?.schedule;
+
+    form.requiredSkills.forEach((skill: ISkill) => {
+      if (!vacancy.requiredSkills.some((s: ISkill) =>s.id === skill.id)) {
+        // Если в форме есть скилл, которого нет в юзере
+        //console.log('check passed added new');
+        this.isUserEdited.skills = true;
+        return;
+      }
+    });
+    let sameSkillCounter: number = 0;
+    vacancy.requiredSkills.forEach((skill: ISkill) => {
+      if (!form.requiredSkills.some((s: ISkill) =>s.id === skill.id)) {
+        // Если в форме нет скилла, который есть в юзере
+        //console.log('check passed deleted existing');
+        this.isUserEdited.skills = true;
+        return;
+      } else {
+        sameSkillCounter++;
+      }
+    });
+      // Если в форме и в юзере разное количество скиллов
+      //console.log('check passed different length');
+      this.isUserEdited.skills = vacancy.requiredSkills.length !== form.requiredSkills.length;
+    
+      // если нету добавленных и удаленных скиллов и количество скиллов в форме и в юзере одинаковое
+      //console.log('check passed same length');
+      this.isUserEdited.skills = !((sameSkillCounter === form.requiredSkills.length) && (sameSkillCounter === vacancy.requiredSkills.length));
+    }
+
+    // console.log(form);
+    // console.log(vacancy);
+    
+    return this.isUserEdited.description || this.isUserEdited.salary || this.isUserEdited.position || this.isUserEdited.department || this.isUserEdited.employment || this.isUserEdited.schedule || this.isUserEdited.skills;
   }
 
   public responseVacancy(): void {
@@ -124,4 +178,28 @@ export class VacancyDetailComponent implements OnInit {
     this.vacancyForm.disable();
   }
 
+  private createVacancyUpdateObject(): IVacancyResponseModel  {
+    const form = this.vacancyForm.value;
+    const vacancyUpdate: IVacancyResponseModel = {}
+    if (this.isUserEdited.position) {
+      vacancyUpdate.position = form.position;
+    }
+    if (this.isUserEdited.salary) {
+      vacancyUpdate.salary = form.salary;
+    }
+    if (this.isUserEdited.description) {
+      vacancyUpdate.description = form.description;
+    }
+    if (this.isUserEdited.schedule) {
+      vacancyUpdate.schedule = form.schedule.id;
+    }
+    if (this.isUserEdited.employment) {
+      vacancyUpdate.employment = form.employment;
+    }
+    if (this.isUserEdited.skills) {
+      vacancyUpdate.requiredSkillsIds = (form.requiredSkills as ISkill[]).map((skill: ISkill) => skill.id);
+    }
+
+    return vacancyUpdate;
+  }
 }

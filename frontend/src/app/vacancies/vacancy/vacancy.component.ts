@@ -11,11 +11,20 @@ export class VacancyComponent implements OnInit {
 
   @Input() public vacancy!: IVacancy;
 
+  public description: string = '';
+
   constructor(
     public router: Router,
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    const maxDescriptionLength: number = 400;
+    const stringWithoutTags = this.vacancy.description.replace( /(<([^>]+)>)/ig, '')
+    if (stringWithoutTags.length < maxDescriptionLength) {
+      this.description = stringWithoutTags;
+    } else {
+      this.description = `${stringWithoutTags.slice(0, maxDescriptionLength)}...`;
+    }
   }
 
   public skillsToString(skills: IVacancy['requiredSkills']): string {
