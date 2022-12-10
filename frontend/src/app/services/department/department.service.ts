@@ -18,13 +18,11 @@ export class DepartmentService {
     public http: HttpClient,
   ) { }
 
-  public getDepartments(): Observable<IDepartment[]> {
+  public getDepartments(): void {
     this.http.get<IDepartment[]>(`${this.apiUrl}/departments`).subscribe({
       next: (departments: IDepartment[]) => {
         this.departmentsSubject$.next(departments);
       }
     });
-
-    return this.http.get(`${this.apiUrl}/departments`) as Observable<IDepartment[]>;
   }
 }
