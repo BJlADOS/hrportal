@@ -22,8 +22,10 @@
         border-radius: 20px;
         font-size: var(--font-size--main);
         background-color: var(--main-accent-color);
+        font-family: var(--main-font-family);
+        font-weight: 600;
         color: var(--white);
-        padding: 0.4rem 1.6rem;
+        padding: 0.8rem 1.6rem;
         text-transform: uppercase;
 
         &:hover {

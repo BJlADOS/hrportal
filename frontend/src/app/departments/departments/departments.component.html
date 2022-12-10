@@ -1,0 +1,14 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <div class="additional-buttons">
+                <button class="manager-button">Добавить департамент</button>
+                
+            </div>
+            <div class="content">
+                <div class="error" *ngIf="loadingError">{{loadingError}}</div>
+                <app-department class="width" *ngFor="let department of departments$ | async" [department]="department"></app-department>
+            </div>          
+        </div>      
+    </div>  
+</div>
