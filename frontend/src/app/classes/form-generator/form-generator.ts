@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IResume } from 'src/app/interfaces/resume';
 import { ISelectOption } from 'src/app/interfaces/select';
-import { IUser } from 'src/app/interfaces/User';
+import { IDepartment, IUser } from 'src/app/interfaces/User';
 import { IVacancy } from 'src/app/interfaces/vacancy';
 import { CustomValidators } from '../custom-validators/custom-validators';
 
 @Injectable({
     providedIn: 'root'
-  })
+})
 export class FormGenerator {
 
     private _fb: FormBuilder = new FormBuilder();
@@ -18,9 +18,9 @@ export class FormGenerator {
     ) { }
 
     public getSignUpForm(): FormGroup {
-        return this._fb.group(        
-            {   
-                fullname: ['', Validators.compose([ 
+        return this._fb.group(
+            {
+                fullname: ['', Validators.compose([
                     Validators.required,
                     Validators.minLength(3),
                     this._customValidators.patternValidator(/^([А-Я][а-я]{1,}|[А-Я][а-я]{1,}-([А-Я][а-я]{1,}))(\040[А-Я][а-я]{1,})(\040[А-Я][а-я]{1,})?$/, { shouldBeCorrect: true }),
@@ -38,7 +38,7 @@ export class FormGenerator {
                 confirmPassword: ['', Validators.compose([
                     Validators.required,
                 ])]
-            }, 
+            },
             {
                 validators: this._customValidators.passwordMatchValidator
             }
@@ -46,10 +46,10 @@ export class FormGenerator {
     }
 
     public getSignInForm(): FormGroup {
-        return this._fb.group(        
-            {   
+        return this._fb.group(
+            {
                 email: ['', Validators.compose([
-                    Validators.email, 
+                    Validators.email,
                     Validators.required,
                 ])],
                 password: ['', Validators.compose([
@@ -60,8 +60,8 @@ export class FormGenerator {
     }
 
     public getUploadResumeForm(): FormGroup {
-        return this._fb.group(        
-            {   
+        return this._fb.group(
+            {
                 file: [null, Validators.compose([
                     Validators.required,
                 ])],
@@ -118,25 +118,38 @@ export class FormGenerator {
     public getVacancyForm(vacancy: IVacancy | null): FormGroup {
         return this._fb.group(
             {
-                position: new FormControl(vacancy? vacancy.position : null, Validators.compose([
+                position: new FormControl(vacancy ? vacancy.position : null, Validators.compose([
                     Validators.required,
                 ])),
-                department: new FormControl(vacancy? vacancy.department : null, Validators.compose([
+                department: new FormControl(vacancy ? vacancy.department : null, Validators.compose([
                     Validators.required,
                 ])),
-                salary: new FormControl(vacancy? vacancy.salary : null, Validators.compose([
+                salary: new FormControl(vacancy ? vacancy.salary : null, Validators.compose([
                     Validators.required,
                 ])),
-                employment: new FormControl(vacancy? vacancy.employment : null, Validators.compose([
+                employment: new FormControl(vacancy ? vacancy.employment : null, Validators.compose([
                     Validators.required,
                 ])),
-                schedule: new FormControl(vacancy? vacancy.schedule : null, Validators.compose([
+                schedule: new FormControl(vacancy ? vacancy.schedule : null, Validators.compose([
                     Validators.required,
                 ])),
-                description: new FormControl(vacancy? vacancy.description : null, Validators.compose([
+                description: new FormControl(vacancy ? vacancy.description : null, Validators.compose([
                     Validators.required,
                 ])),
-                requiredSkills: new FormControl(vacancy? vacancy.requiredSkills.slice() : null, Validators.compose([
+                requiredSkills: new FormControl(vacancy ? vacancy.requiredSkills.slice() : null, Validators.compose([
+                    Validators.required,
+                ])),
+            }
+        )
+    }
+
+    public getDepartmentForm(department: IDepartment | null): FormGroup {
+        return this._fb.group(
+            {
+                departmentName: new FormControl(department ? department.name : null, Validators.compose([
+                    Validators.required,
+                ])),
+                managerId: new FormControl(department ? department.managerId : true, Validators.compose([
                     Validators.required,
                 ])),
             }

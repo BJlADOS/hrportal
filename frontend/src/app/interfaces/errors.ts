@@ -53,6 +53,11 @@ export interface IVacancyFormError {
     requiredSkills?: IInputError | null;
 }
 
+export interface IDepartmentFormError {
+    name?: IInputError | null;
+    manager?: IInputError | null;
+}
+
 export interface ISubmitError {
     message: string;
 }

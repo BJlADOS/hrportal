@@ -133,4 +133,12 @@ export class FormManager {
         return null;
     }
 
+    public checkDepartmentName(form: FormGroup): IInputError | null {
+        if (form.controls['departmentName'].hasError('required')) {
+            return { message: 'Введите название департамента' };
+        }
+
+        return null;
+    }
+
 }

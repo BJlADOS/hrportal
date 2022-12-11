@@ -25,4 +25,8 @@ export class DepartmentService {
       }
     });
   }
+
+  public createDepartment(department: IDepartment): Observable<IDepartment> {
+    return this.http.post<IDepartment>(`${this.apiUrl}/departments/`, department);
+  }
 }

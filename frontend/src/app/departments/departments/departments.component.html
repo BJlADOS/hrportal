@@ -1,9 +1,8 @@
 <div class="wrapper">
     <div class="wrapper-grid">
         <div class="wrapper-flex column-1-13">
-            <div class="additional-buttons">
-                <button class="manager-button">Добавить департамент</button>
-                
+            <div class="additional-buttons" *ngIf="user$ | async as user">
+                <button class="manager-button" (click)="createDepartment()" *ngIf="user.isAdmin">Добавить департамент</button>       
             </div>
             <div class="content">
                 <div class="error" *ngIf="loadingError">{{loadingError}}</div>

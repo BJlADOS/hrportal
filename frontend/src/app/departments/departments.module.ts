@@ -6,6 +6,11 @@ import { DepartmentComponent } from './department/department.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { departmentsRouting } from './departments-routing.module';
+import { CreateDepartmentModalComponent } from './create-department-modal/create-department-modal.component';
+import { EditDepartmentModalComponent } from './edit-department-modal/edit-department-modal.component';
+import { DeleteDepartmentModalComponent } from './delete-department-modal/delete-department-modal.component';
+import { ArchiveDepartmentModalComponent } from './archive-department-modal/archive-department-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -13,13 +18,18 @@ import { departmentsRouting } from './departments-routing.module';
   declarations: [
     DepartmentsMainComponent,
     DepartmentsComponent,
-    DepartmentComponent
+    DepartmentComponent,
+    CreateDepartmentModalComponent,
+    EditDepartmentModalComponent,
+    DeleteDepartmentModalComponent,
+    ArchiveDepartmentModalComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
     departmentsRouting,
+    ReactiveFormsModule,
   ]
 })
 export class DepartmentsModule { }
