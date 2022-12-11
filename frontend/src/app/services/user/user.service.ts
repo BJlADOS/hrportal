@@ -50,6 +50,10 @@ export class UserService {
     return this.http.get(`${this._apiURL}/users/${id}`) as Observable<IUser>;
   }
 
+  public getUsers(): Observable<IUser[]> {
+    return this.http.get(`${this._apiURL}/users`) as Observable<IUser[]>;
+  }
+
   public getResume(): Observable<IResume> {
     return this.http.get(`${this._apiURL}/user/resume`) as Observable<IResume>;
   }

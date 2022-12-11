@@ -15,6 +15,7 @@ import { DragAndDropDirective } from './directives/drag-and-drop/drag-and-drop.d
 import { CreateResumeComponent } from './components/create-resume/create-resume.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { CUSTOM_SMALL_SELECT_VALUE_ACCESSOR, SelectSmallComponent } from './components/select-small/select-small.component';
+import { SearchSelectFormComponent } from './components/search-select-form/search-select-form.component';
 
 
 
@@ -31,6 +32,7 @@ import { CUSTOM_SMALL_SELECT_VALUE_ACCESSOR, SelectSmallComponent } from './comp
     DragAndDropDirective,
     CreateResumeComponent,
     SelectSmallComponent,
+    SearchSelectFormComponent,
   ],
   imports: [
     CommonModule,
@@ -49,6 +51,7 @@ import { CUSTOM_SMALL_SELECT_VALUE_ACCESSOR, SelectSmallComponent } from './comp
     SelectWithSearchComponent,
     DragAndDropDirective,
     SelectSmallComponent,
+    SearchSelectFormComponent,
   ]
 })
 export class SharedModule { }
