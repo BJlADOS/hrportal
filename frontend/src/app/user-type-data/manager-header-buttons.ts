@@ -6,10 +6,6 @@ export const managerButtons: IRoute[] = [
         name: 'Вакансии',
     },
     {
-        path: 'departments',
-        name: 'Департаменты',
-    },
-    {
         path: 'resumes',
         name: 'Резюме',
     },
