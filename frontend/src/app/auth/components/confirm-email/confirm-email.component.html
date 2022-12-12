@@ -1,0 +1,25 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-4-10">
+            <div class="title">
+                <h1>HR-portal</h1>
+                <label>ПОДТВЕРЖДЕНИЕ ПОЧТЫ</label>
+            </div>
+            <div class="loader" *ngIf="isLoading else confirmed">
+                <img src="assets/img/loader.gif">
+            </div>
+            <ng-template #confirmed>
+                <div class="confirmed">
+                    <div class="text-block">
+                        <span class="text success" *ngIf="confirmMessage else error">{{ confirmMessage }}</span>
+                        <ng-template #error>
+                            <span class="text error">Ошибка подтверждения почты, проверьте ссылку</span>
+                        </ng-template>
+                        <span class="text">Вы будете перенаправлены на главную страницу в течении 5 секунд</span>
+                    </div>                 
+                    <span class="text">или нажмите <a class="link" routerLink="">сюда</a></span>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

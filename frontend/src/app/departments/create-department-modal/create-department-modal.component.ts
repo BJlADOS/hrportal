@@ -6,7 +6,7 @@ import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { Modal } from 'src/app/classes/modal/modal';
 import { IDepartmentFormError } from 'src/app/interfaces/errors';
 import { ISelectOption } from 'src/app/interfaces/select';
-import { IDepartment, IUser } from 'src/app/interfaces/User';
+import { IDepartment, IDepartmentUpdate, IUser } from 'src/app/interfaces/User';
 import { DepartmentService } from 'src/app/services/department/department.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -48,7 +48,9 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
   }
 
   public createDepartment(): void {
-    this._department.createDepartment(this.departmentForm.value).subscribe({ next: (department: IDepartment) => {
+    const department = this.createUpdateObject();
+
+    this._department.createDepartment(department).subscribe({ next: (department: IDepartment) => {
       this.departmentName = department.name;
       this.isSubmitted = true;
     }});
@@ -60,6 +62,14 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
 
   public cancel(): void {
     this.close();
+  }
+
+  private createUpdateObject(): IDepartmentUpdate {
+    const form = this.departmentForm.value;
+    return {
+      departmentName: form.name,
+      managerId: form.managerId,
+    }
   }
 
 }

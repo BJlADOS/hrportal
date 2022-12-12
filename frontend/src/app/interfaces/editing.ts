@@ -25,3 +25,8 @@ export interface IResumeEditing {
     desiredSchedule: boolean;
     resume: boolean;
 }
+
+export interface IDepartmentEditing {
+    name: boolean;
+    manager: boolean;
+}

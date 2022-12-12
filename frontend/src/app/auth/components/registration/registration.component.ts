@@ -7,6 +7,7 @@ import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { IAuthError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { DestroyService } from 'src/app/services/destoy/destroy.service';
+import { ModalService } from 'src/app/services/modal/modal.service';
 
 @Component({
   selector: 'app-registration',
@@ -26,7 +27,7 @@ export class RegistrationComponent implements OnInit {
     public auth: AuthService,
     public router: Router,
     public formGenerator: FormGenerator,
-    private _destroy$: DestroyService
+    private _destroy$: DestroyService,
   ) { }
 
   public ngOnInit(): void {

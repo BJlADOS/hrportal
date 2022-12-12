@@ -40,7 +40,7 @@ export class SearchSelectFormComponent implements OnInit, ControlValueAccessor {
 
   public writeValue(obj: any): void {
     // Если у объекта есть свойство id, то берём сам объект, иначе ищем объект с таким id
-    this.currentValue = obj?.id ? obj : this.options.find((option) => option.id === obj);
+    this.currentValue = obj?.id ? obj : this.options.find((option) => option.id === obj.toString());
     this.options = this.optionsOriginal.filter((item) => {
       return this.currentValue?.id !== item.id;
     });
@@ -89,7 +89,6 @@ export class SearchSelectFormComponent implements OnInit, ControlValueAccessor {
 
   public select(value: any): void {
       this.currentValue = value;
-      console.log(this.optionsOriginal);
       this.options = this.optionsOriginal.filter((item) => {
         return this.currentValue?.id !== item.id;
       });
@@ -101,7 +100,6 @@ export class SearchSelectFormComponent implements OnInit, ControlValueAccessor {
     if (this.disabled) {
       return;
     }
-    console.log(this.dropdownOpen);
     this.dropdownOpen = !this.dropdownOpen;
     this.dropdownElement.setAttribute('aria-expanded', this.dropdownOpen ? "true" : "false");
   }
@@ -109,6 +107,7 @@ export class SearchSelectFormComponent implements OnInit, ControlValueAccessor {
   private checkOptions(): void {
     if(this.options.length < 3) {
       this.visibleOptions = this.options.length === 0 ? 1 : this.options.length;
+      this.currentValue ? this.visibleOptions++ : null;
     } else {
       this.visibleOptions = 3;
     }

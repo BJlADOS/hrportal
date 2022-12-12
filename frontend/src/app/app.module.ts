@@ -18,6 +18,8 @@ import { DestroyService } from './services/destoy/destroy.service';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 import { NgxMaskModule } from 'ngx-mask';
+import { ConfirmEmailModalComponent } from './auth/components/confirm-email-modal/confirm-email-modal.component';
+import { ConfirmEmailComponent } from './auth/components/confirm-email/confirm-email.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { NgxMaskModule } from 'ngx-mask';
     AuthComponent,
     RegistrationComponent,
     ErrorsComponent,
+    ConfirmEmailModalComponent,
+    ConfirmEmailComponent,
   ],
   imports: [
     BrowserModule,

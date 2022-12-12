@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IDepartment, IUser } from 'src/app/interfaces/User';
+import { ModalService } from 'src/app/services/modal/modal.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ArchiveDepartmentModalComponent } from '../archive-department-modal/archive-department-modal.component';
+import { EditDepartmentModalComponent } from '../edit-department-modal/edit-department-modal.component';
 
 @Component({
   selector: 'app-department',
@@ -15,6 +18,7 @@ export class DepartmentComponent implements OnInit {
 
   constructor(
     private _user: UserService,
+    private _modal: ModalService,
   ) { }
 
   public ngOnInit(): void {
@@ -28,10 +32,10 @@ export class DepartmentComponent implements OnInit {
   }
   
   public editDepartment(): void {
-    console.log('editDepartment()');
+    this._modal.open(EditDepartmentModalComponent, { department: this.department });
   }
 
   public archiveDepartment(): void {
-    console.log('archiveDepartment()');
+    this._modal.open(ArchiveDepartmentModalComponent, { department: this.department });
   }
 }

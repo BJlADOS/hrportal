@@ -31,6 +31,11 @@ export interface IDepartment {
     managerId: number
 }
 
+export interface IDepartmentUpdate {
+    departmentName?: string,
+    managerId?: number
+}
+
 export interface ISkill {
     id: number,
     name: string

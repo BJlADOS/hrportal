@@ -46,6 +46,10 @@ export class UserService {
     return this.http.patch(`${this._apiURL}/user/`, data) as Observable<IUser>;
   }
 
+  public confirmEmail(token: string): Observable<any> {
+    return this.http.post(`${this._apiURL}/verification/`, { code: token }) as Observable<any>;
+  }
+
   public getUserById(id: number): Observable<IUser> {
     return this.http.get(`${this._apiURL}/users/${id}`) as Observable<IUser>;
   }

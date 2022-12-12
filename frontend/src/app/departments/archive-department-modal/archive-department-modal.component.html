@@ -1,1 +1,20 @@
-<p>archive-department-modal works!</p>
+<div class="modal">
+    <div class="modal__content">
+        <div class="modal__header">
+            <span (click)="close()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M12.6068 13.3182C12.802 13.5135 13.1186 13.5135 13.3139 13.3182C13.5091 13.1229 13.5091 12.8064 13.3139 12.6111L7.58443 6.88164L13.3181 1.14799C13.5133 0.952725 13.5133 0.636142 13.3181 0.44088C13.1228 0.245618 12.8062 0.245618 12.611 0.44088L6.87732 6.17453L1.14367 0.44088C0.948406 0.245618 0.631823 0.245618 0.436561 0.44088C0.241299 0.636142 0.241299 0.952725 0.436561 1.14799L6.17021 6.88164L0.44076 12.6111C0.245498 12.8064 0.245498 13.1229 0.44076 13.3182C0.636022 13.5135 0.952605 13.5135 1.14787 13.3182L6.87732 7.58875L12.6068 13.3182Z"
+                    fill="#FDC04E" />
+            </svg></span>
+        </div>
+    </div>
+    <div class="modal__body success">
+        <span class="success-text">Убрать <span class="bold">в архив </span>департамент <span
+        class="bold">«{{this.department.name}}»</span>?</span>
+        <div class="modal__buttons">
+            <button class="input-button confirm" (click)="archiveDepartment()">Да</button>
+            <button class="input-button cancel" (click)="cancelArchive()">Отмена</button>
+        </div>
+    </div>
+</div>
