@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, take } from 'rxjs';
-import { IDepartment } from 'src/app/interfaces/User';
+import { IDepartment, IDepartmentUpdate } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -26,7 +26,15 @@ export class DepartmentService {
     });
   }
 
-  public createDepartment(department: IDepartment): Observable<IDepartment> {
+  public createDepartment(department: IDepartmentUpdate): Observable<IDepartment> {
     return this.http.post<IDepartment>(`${this.apiUrl}/departments/`, department);
+  }
+
+  public editDepartment(department: IDepartmentUpdate, id: number): Observable<IDepartment> {
+    return this.http.patch<IDepartment>(`${this.apiUrl}/departments/${id}/`, department);
+  }
+
+  public deleteDepartment(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/departments/${id}/`);
   }
 }

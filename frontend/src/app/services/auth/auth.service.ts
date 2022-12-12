@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { SHA256 } from 'crypto-js';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject, map, Observable } from 'rxjs';
+import { ConfirmEmailModalComponent } from 'src/app/auth/components/confirm-email-modal/confirm-email-modal.component';
 import { IToken, IValidToken } from 'src/app/interfaces/Token';
 import { IUser } from 'src/app/interfaces/User';
 import { environment } from 'src/environments/environment';
+import { ModalService } from '../modal/modal.service';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -20,6 +22,7 @@ export class AuthService {
     public http: HttpClient,
     private _router: Router,
     private _user: UserService,
+    private _modal: ModalService,
     ) { 
       console.log('auth service');
     }
@@ -28,6 +31,7 @@ export class AuthService {
     const passwordHash: string = SHA256(password).toString();
     this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe({ next: () => {
       this._router.navigate(['/auth']);
+      this._modal.open(ConfirmEmailModalComponent, { email: email });
     }, error: (error) => {
       console.log(error);
     }});
