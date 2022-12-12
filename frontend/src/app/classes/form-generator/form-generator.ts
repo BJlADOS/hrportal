@@ -88,7 +88,7 @@ export class FormGenerator {
                     Validators.required,
                 ])),
                 department: new FormControl(user.currentDepartment, Validators.compose([
-                    Validators.required,
+                    user.isAdmin || user.isManager? null : Validators.required,
                 ])),
                 skills: new FormControl(user.existingSkills.slice()),
             }

@@ -10,7 +10,7 @@
                         (click)="redirectTo(route.path)">{{route.name}}</p>
                 </div>
                 <div class="content-right">
-                    <button [disabled]="!user.filled" [class.active]="isCreatingResume" (click)="createResume()">Моё резюме</button>
+                    <button *ngIf="!user.isAdmin" [disabled]="!user.filled" [class.active]="isCreatingResume" (click)="createResume()">Моё резюме</button>
                     <div class="profile" (click)="redirectTo('profile')">
                         <img [src]="user.photo || 'assets/img/profile-placeholder.png'">
                         <p>{{getUserName(user.fullname)}}</p>
