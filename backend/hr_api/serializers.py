@@ -21,8 +21,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-class VerificationSerializer(serializers.Serializer):
+class CodeSerializer(serializers.Serializer):
     code = serializers.CharField()
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
+
+
+class RecoverySerializer(serializers.Serializer):
+    code = serializers.CharField()
+    password = serializers.CharField()
 
     def create(self, validated_data):
         pass
@@ -42,7 +53,7 @@ class AuthSerializer(serializers.Serializer):
         pass
 
 
-class UniqueEmailSerializer(serializers.Serializer):
+class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def create(self, validated_data):

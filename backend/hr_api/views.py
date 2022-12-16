@@ -35,7 +35,7 @@ def registration_view(request):
 @authentication_classes([])
 @permission_classes([AllowAny])
 def verification_view(request):
-    serializer = VerificationSerializer(data=request.data)
+    serializer = CodeSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = get_token_user(serializer.data['code'])
 
@@ -43,6 +43,38 @@ def verification_view(request):
         return response_with_detail('Invalid verification code.', status.HTTP_401_UNAUTHORIZED)
 
     user.email_verified = True
+    user.save()
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def password_recovery_request_view(request):
+    serializer = EmailSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    try:
+        user = User.objects.get(email=serializer.data['email'])
+        send_password_recovery_email(user)
+    except User.DoesNotExist:
+        pass
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
+def password_recovery_view(request):
+    serializer = RecoverySerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = get_token_user(serializer.data['code'])
+
+    if user is None:
+        return response_with_detail('Invalid verification code.', status.HTTP_401_UNAUTHORIZED)
+
+    user.set_password(serializer.data['password'])
     user.save()
 
     return Response(status=status.HTTP_200_OK)
@@ -103,11 +135,11 @@ def authorized_view(request):
 @authentication_classes([])
 @permission_classes([AllowAny])
 def unique_email_view(request):
-    serializer = UniqueEmailSerializer(data=request.data)
+    serializer = EmailSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     result = True
     try:
-        User.objects.get(email=request.data['email'])
+        User.objects.get(email=serializer.data['email'])
         result = False
     except User.DoesNotExist:
         pass
@@ -313,8 +345,26 @@ def send_verification_email(user):
                f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
 
     verification_url = settings.VERIFICATION_URL + f'?code={create_user_token(user)}'
-    plain_url = f'ссылке: {verification_url}.\n\n'
+    plain_url = f'ссылке: {verification_url}\n\n'
     html_url = f'<a href="{verification_url}">ссылке.</a><br><br>'
+    result = send_mail(subject, verification_message(plain_url), None, [user.email],
+                       html_message=verification_message(html_url))
+    result_message = f'Email verification mail to User(ID={user.id}) sending '
+    result_message += 'successful' if bool(result) else 'failed'
+    return result_message
+
+
+def send_password_recovery_email(user):
+    subject = 'Восстановление пароля на HR-портале "Очень Интересно"'
+
+    def verification_message(url):
+        return f'Для восстановления пароля перейдите по {url}' \
+               f'Если вы не пытались восстановить пароль на HR-портале "Очень Интересно" ' \
+               f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
+
+    recovery_url = settings.RECOVERY_URL + f'?code={create_user_token(user)}'
+    plain_url = f'ссылке: {recovery_url}\n\n'
+    html_url = f'<a href="{recovery_url}">ссылке.</a><br><br>'
     result = send_mail(subject, verification_message(plain_url), None, [user.email],
                        html_message=verification_message(html_url))
     result_message = f'Email verification mail to User(ID={user.id}) sending '

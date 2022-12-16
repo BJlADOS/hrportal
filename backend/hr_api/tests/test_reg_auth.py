@@ -28,6 +28,8 @@ class RegAndAuthTests(TestCase):
 
     def test_RegistrationView_ShouldRegistrateUser(self):
         reg_data = {'fullname': 'newuser', 'email': 'newuser@hrportal.com', 'password': 'password'}
+        email_subject = 'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"'
+        emails_count_before = len(mail.outbox)
 
         response = self.client.post('/reg/', reg_data)
 
@@ -35,8 +37,10 @@ class RegAndAuthTests(TestCase):
         detail = json.loads(*response)['detail']
         user = User.objects.get(email=reg_data['email'])
         self.assertEqual(detail, f'Email verification mail to User(ID={user.id}) sending successful')
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertTrue(f'{settings.VERIFICATION_URL}?code={create_user_token(user)}' in str(mail.outbox[0].message()))
+        self.assertEqual(emails_count_before, len(mail.outbox) - 1)
+        emails = [m for m in mail.outbox if m.subject == email_subject]
+        self.assertEqual(len(emails), 1)
+        self.assertTrue(f'{settings.VERIFICATION_URL}?code={create_user_token(user)}' in str(emails[0].message()))
 
     def test_RegistrationView_ShouldRaiseValidationError_OnNonUniqueEmail(self):
         reg_data = {'fullname': 'newuser', 'email': self.user_data.email, 'password': 'password'}
@@ -191,6 +195,72 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(response.status_code, 200)
         user.refresh_from_db()
         self.assertTrue(user.email_verified)
+
+    def test_RecoveryRequestView_ShouldRaiseValidationError_OnBlankData(self):
+        response = self.client.post('/recovery-request/', {})
+
+        self.assertEqual(response.status_code, 400)
+        errors = json.loads(*response)
+        self.assertEqual(errors['email'][0], 'This field is required.')
+
+    def test_RecoveryRequestView_ShouldRaiseValidationError_OnInvalidEmail(self):
+        response = self.client.post('/recovery-request/', {'email': 'no email'})
+
+        self.assertEqual(response.status_code, 400)
+        errors = json.loads(*response)
+        self.assertEqual(errors['email'][0], 'Enter a valid email address.')
+
+    def test_RecoveryRequestView_ShouldDontSendRecoveryEmail_OnNonExistentEmail(self):
+        emails_count_before = len(mail.outbox)
+
+        response = self.client.post('/recovery-request/', {'email': 'error' + self.user_data.email})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(emails_count_before, len(mail.outbox))
+
+    def test_RecoveryRequestView_ShouldSendRecoveryEmail(self):
+        email_subject = 'Восстановление пароля на HR-портале "Очень Интересно"'
+        emails_count_before = len(mail.outbox)
+        user = User.objects.get(email=self.user_data.email)
+
+        response = self.client.post('/recovery-request/', {'email': user.email})
+
+        emails = [m for m in mail.outbox if m.subject == email_subject]
+        self.assertEqual(emails_count_before, len(mail.outbox) - 1)
+        self.assertEqual(len(emails), 1)
+        self.assertTrue(f'{settings.RECOVERY_URL}?code={create_user_token(user)}' in str(emails[0].message()))
+        self.assertEqual(response.status_code, 200)
+
+    def test_RecoveryView_ShouldRaiseValidationError_OnBlankData(self):
+        response = self.client.post('/recovery/', {})
+
+        self.assertEqual(response.status_code, 400)
+        errors = json.loads(*response)
+        self.assertEqual(errors['code'][0], 'This field is required.')
+        self.assertEqual(errors['password'][0], 'This field is required.')
+
+    def test_RecoveryView_ShouldRaise401_OnInvalidCode(self):
+        data = {'code': 'code', 'password': 'password'}
+
+        response = self.client.post('/recovery/', data)
+
+        self.assertEqual(response.status_code, 401)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Invalid verification code.')
+
+    def test_RecoveryView_ShouldChangePassword(self):
+        user = User.objects.get(email=self.user_data.email)
+        new_password = 'newpassword'
+        self.assertNotEqual(self.user_data.password, new_password)
+        password_before = user.password
+        data = {'code': create_user_token(user), 'password': new_password}
+
+        response = self.client.post('/recovery/', data)
+
+        self.assertEqual(response.status_code, 200)
+        user.refresh_from_db()
+        self.assertNotEqual(password_before, user.password)
+        self.user_data.password = new_password
 
     def client_is_login(self):
         return self.client.session.session_key is not None
