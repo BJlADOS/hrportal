@@ -1,0 +1,131 @@
+.wrapper {
+    display: flex;
+    justify-content: center;   
+    width: 100%;
+}
+
+.wrapper-grid {
+    width: auto;
+    grid-template-columns: repeat(12, 80px);
+}
+
+.wrapper-flex {
+    box-sizing: border-box;
+    margin-top: 5%;
+    padding: 3em 2em 4em 2em;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow--main);
+    background: var(--primary-color);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    & .title {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--font-primary);
+
+        h1 {
+            margin: 1em 0;
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--main-accent-color);
+        }
+    }
+}
+
+.form {
+    padding: 2em 1em 1em 1em;
+
+    & .forgot-password {    
+        text-decoration: underline;
+        text-decoration-skip-ink: none;
+        &:hover {
+            color: var(--underline-text-hover);
+            cursor: pointer;
+        }
+    }
+
+    & .input-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+.form-control {
+    transition: all .6s ease;
+}
+
+.success {
+    color: var(--success-text-color);
+}
+
+.error {
+    color: var(--error-text-color);
+}
+
+.control-name {
+    display: inline-block;
+    padding: 4px 2px;
+}
+
+input[type=email] {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+input[type=submit] {
+    margin-top: 1.5rem;
+    width: 100%;
+    background-color: var(--main-accent-color);
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: large;
+    color: var(--font-primary);
+    font-family: var(--main-font-family);
+    font-weight: 700;
+    &:hover {
+        background-color: var(--main-accent-color-hover);
+    }
+
+    &:disabled {
+        background-color: var(--disabled-color);
+        cursor: default;
+    }
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    align-items: center;
+
+    &-button {
+        text-decoration: underline;
+        text-decoration-skip-ink: none;
+        &:hover {
+            color: var(--underline-text-hover);
+            cursor: pointer;
+        }
+    }
+}
+
+input {
+    height: 3em;
+    border-style: solid;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    &:focus {
+        outline: none;
+        border-color: var(--main-accent-color);
+    }  
+}
+

@@ -20,6 +20,8 @@ import { SharedModule } from './shared/shared.module';
 import { NgxMaskModule } from 'ngx-mask';
 import { ConfirmEmailModalComponent } from './auth/components/confirm-email-modal/confirm-email-modal.component';
 import { ConfirmEmailComponent } from './auth/components/confirm-email/confirm-email.component';
+import { RecoveryPasswordComponent } from './auth/components/recovery-password/recovery-password.component';
+import { RecoveryRequestComponent } from './auth/components/recovery-request/recovery-request.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { ConfirmEmailComponent } from './auth/components/confirm-email/confirm-e
     ErrorsComponent,
     ConfirmEmailModalComponent,
     ConfirmEmailComponent,
+    RecoveryPasswordComponent,
+    RecoveryRequestComponent,
   ],
   imports: [
     BrowserModule,
