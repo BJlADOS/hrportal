@@ -14,7 +14,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class AuthComponent implements OnInit {
 
   public passwordPlaceholder: string = 'Пароль';
-  public emailPlaceholder: string = 'Электронная почта'
+  public emailPlaceholder: string = 'Электронная почта';
   public signInForm: FormGroup = this._formGenerator.getSignInForm();
   public errors: IAuthError = { email: null, password: null };
 
@@ -38,7 +38,8 @@ export class AuthComponent implements OnInit {
     this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password, this._returnUrl);
   }
 
-  public forgotPassword(): void { //not implemented
+  public forgotPassword(): void {
+    this.router.navigate(['forgot-password']);
   }
 
   public emailChange(): void {

@@ -23,9 +23,7 @@ export class AuthService {
     private _router: Router,
     private _user: UserService,
     private _modal: ModalService,
-    ) { 
-      console.log('auth service');
-    }
+    ) {}
 
   public signUp(fullname: string, email: string, password: string): void {
     const passwordHash: string = SHA256(password).toString();
@@ -48,6 +46,15 @@ export class AuthService {
     }, error: (error) => {
       console.log(error);
     }});
+  }
+
+  public requestPasswordReset(email: string): Observable<any> {
+    return this.http.post(`${this._apiURL}/recovery-request/`, { email }) as Observable<any>;
+  }
+
+  public resetPassword(password: string, token: string | undefined): Observable<any> {
+    const passwordHash: string = SHA256(password).toString();
+    return this.http.post(`${this._apiURL}/recovery/`, { password: passwordHash, token }) as Observable<any>;
   }
 
   public checkEmail(email: string): Observable<Object> {

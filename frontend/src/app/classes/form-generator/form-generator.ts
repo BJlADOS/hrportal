@@ -155,4 +155,34 @@ export class FormGenerator {
             }
         )
     }
+
+    public getRecoveryRequestForm(): FormGroup {
+        return this._fb.group(
+            {
+                email: new FormControl(null, Validators.compose([
+                    Validators.required,
+                    this._customValidators.patternValidator(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, { email: true }),
+                ])),
+            }
+        );
+    }
+
+    public getRecoveryPasswordForm(): FormGroup {
+        return this._fb.group(
+            {
+                password: new FormControl('', Validators.compose([
+                    Validators.required,
+                    this._customValidators.patternValidator(/^([A-Za-z\d]+)$/, { pattern: true }),
+                    Validators.minLength(6),
+                    Validators.maxLength(20),
+                ])),
+                confirmPassword: new FormControl('', Validators.compose([
+                    Validators.required,
+                ])),
+            },
+            {
+                validators: this._customValidators.passwordMatchValidator
+            }
+        );
+    }
 }

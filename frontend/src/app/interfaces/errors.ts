@@ -61,3 +61,12 @@ export interface IDepartmentFormError {
 export interface ISubmitError {
     message: string;
 }
+
+export interface IRecoveryRequestError {
+    email?: IInputError | null;
+}
+
+export interface IResetPasswordError {
+    password?: IInputError | null;
+    confirmPassword?: IInputError | null;
+}
