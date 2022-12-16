@@ -262,3 +262,7 @@
 input[type="file"] {
     display: none;
 }
+
+.error {
+    color: var(--error-text-color);
+}

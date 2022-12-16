@@ -22,6 +22,7 @@ export class EditDepartmentModalComponent extends Modal implements OnInit {
   public departmentForm!: FormGroup;
   public department!: IDepartment;
   public users: ISelectOption[] = [];
+  public submitError: string | undefined;
 
   public isSubmitted: boolean = false;
   public errors: IDepartmentFormError = { name: null, manager: null };

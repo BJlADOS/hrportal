@@ -36,6 +36,7 @@
                 </div>
                 <label (click)="cancel()" class="transparent-button">Отмена</label>
             </div>
+            <label class="error" *ngIf="submitError">{{ submitError }}</label>
         </form>
     </div>
     <ng-template #submitted>

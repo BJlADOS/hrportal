@@ -21,6 +21,7 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
   public departmentForm: FormGroup = this._form.getDepartmentForm(null);
   public departmentName: string = '';
   public users: ISelectOption[] = [];
+  public submitError: string | undefined;
 
   public isSubmitted: boolean = false;
   public errors: IDepartmentFormError = { name: null, manager: null };
@@ -55,7 +56,10 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
       this.departmentName = department.name;
       this._department.getDepartments();
       this.isSubmitted = true;
-    }});
+    }, error: (error: any) => {
+      this.submitError = 'Ошибка создания департамента'
+    }
+    });
   }
 
   public departmentNameChange(): void {
