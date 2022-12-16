@@ -1,15 +1,12 @@
 import os
 
-import jwt
-from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core import validators
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.text import slugify
 from transliterate import translit
-
-from django.db.models.signals import post_save
 
 SCHEDULE_CHOICES = [
     ('DISTANT', 'Удаленная работа'),
@@ -68,15 +65,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    @property
-    def token(self):
-        return self._generate_jwt_token()
-
-    def _generate_jwt_token(self):
-        payload = {"fullname": self.fullname, "email": self.email}
-
-        return jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-
     existing_skills = models.ManyToManyField('Skill', blank=True)
 
     contact = models.CharField(max_length=255, blank=True)
@@ -93,6 +81,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     current_department = models.ForeignKey(to='Department', on_delete=models.SET_NULL, null=True, blank=True)
 
     photo = models.ImageField(upload_to=get_upload_path, blank=True)
+
+    email_verified = models.BooleanField(default=False)
 
     @property
     def filled(self):

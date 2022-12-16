@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '')
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['backend/hr_api/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -154,10 +154,13 @@ CSRF_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SAMESITE = 'None'
 
 EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_PORT = '2525'
 DEFAULT_FROM_EMAIL = 'server@hrportal.com'
 
 MAX_EMAIL_TEXT_SIZE = 1048576
 MAX_EMAIL_ATTACHMENT_SIZE = 4194304
+
+VERIFICATION_URL = os.environ['VERIFICATION_URL']
+RECOVERY_URL = os.environ['RECOVERY_URL']

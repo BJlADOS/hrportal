@@ -4,10 +4,13 @@ from .views import *
 
 urlpatterns = [
     path('reg/', registration_view, name='reg'),
+    path('verification/', verification_view, name='verification'),
     path('unique-email/', unique_email_view, name='unique-email'),
     path('login/', login_view, name='login'),
     path('authorized/', authorized_view, name='authorized'),
     path('logout/', logout_view, name='logout'),
+    path('recovery-request/', password_recovery_request_view, name='recovery-request'),
+    path('recovery/', password_recovery_view, name='recovery'),
     path('user/', AuthorizedUserView.as_view(), name='auth-user'),
     path('users/', UserList.as_view(), name='user-list'),
     path('users/<int:pk>/', UserDetail.as_view(), name='user-detail'),
@@ -22,4 +25,5 @@ urlpatterns = [
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),
     path('skills/', SkillList.as_view(), name='skill-list'),
     path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail'),
+    path('plug/', plug_view, name='plug'),
 ]
