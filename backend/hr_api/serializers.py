@@ -232,6 +232,34 @@ class PostVacancySerializer(serializers.ModelSerializer):
         ]
 
 
+class PatchVacancySerializer(serializers.ModelSerializer):
+    position = serializers.CharField(required=False)
+    salary = serializers.IntegerField(required=False)
+    employment = serializers.ChoiceField(choices=EMPLOYMENT_CHOICES, required=False)
+    schedule = serializers.ChoiceField(choices=SCHEDULE_CHOICES, required=False)
+    description = serializers.CharField(required=False)
+    requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
+                                                           many=True, required=False)
+    isActive = serializers.BooleanField(source='is_active', required=False)
+
+    class Meta:
+        model = Vacancy
+        fields = [
+            'position',
+            'salary',
+            'employment',
+            'schedule',
+            'description',
+            'requiredSkillsIds',
+            'isActive'
+        ]
+
+    def update(self, instance, validated_data):
+        if 'requiredSkillsIds' not in self.initial_data and 'required_skills' in validated_data:
+            del validated_data['existing_skills']
+        return super(PatchVacancySerializer, self).update(instance, validated_data)
+
+
 class VacancyResponseSerializer(serializers.Serializer):
     resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])

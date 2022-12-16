@@ -244,7 +244,14 @@ class VacancyList(generics.ListCreateAPIView):
 
 class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Vacancy.objects.all()
-    serializer_class = GetVacancySerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetVacancySerializer
+        elif self.request.method == 'PATCH':
+            return PatchVacancySerializer
+        else:
+            return None
 
     def get_permissions(self):
         if self.request.method == 'GET':

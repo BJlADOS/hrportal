@@ -163,7 +163,8 @@ class VacancyTests(TestCase):
         vacancy = User.objects.get(email=self.manager_data.email).department.vacancy_set.first()
         vacancy_before = GetVacancySerializer(vacancy).data
 
-        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/', {'isActive': False},
+        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/',
+                                     {'requiredSkillsIds': [1, 2]},
                                      content_type="application/json")
 
         self.assertEqual(response.status_code, 200)
@@ -172,7 +173,7 @@ class VacancyTests(TestCase):
         self.assertNotEqual(vacancy_before, vacancy_after)
         vacancy_before['modifiedAt'] = vacancy_after['modifiedAt']
         self.assertNotEqual(vacancy_before, vacancy_after)
-        vacancy_before['isActive'] = vacancy_after['isActive']
+        vacancy_before['requiredSkills'] = vacancy_after['requiredSkills']
         self.assertEqual(vacancy_before, vacancy_after)
 
     def test_DeleteVacancyByPk_ShouldRaise403_OnUnauthorizedClient(self):
