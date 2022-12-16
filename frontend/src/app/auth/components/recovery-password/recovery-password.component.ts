@@ -28,7 +28,6 @@ export class RecoveryPasswordComponent implements OnInit {
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _auth: AuthService,
-    private _router: Router,
     private _form: FormGenerator,
   ) { }
 
@@ -60,9 +59,11 @@ export class RecoveryPasswordComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.isLoading = false;
+          this.errorMessage = undefined;
           this.successMessage = 'Пароль успешно изменен, вы можете закрыть эту страницу';
         }, error: (err: any) => {
           this.isLoading = false;
+          this.successMessage = undefined;
           this.errorMessage = 'Произошла ошибка, попробуйте еще раз';
         }
       });

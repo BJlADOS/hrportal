@@ -10,10 +10,10 @@
         </div>
     </div>
     <div class="modal__body" *ngIf="!isSubmitted else !isDeleting ? submitted : taggedForDeleting">
-        <h1 class="modal__title">Создание департамента</h1>
+        <h1 class="modal__title">Изменение департамента</h1>
         <form class="modal__form" [formGroup]="departmentForm" (ngSubmit)="editDepartment()">
             <div class="modal__form-group">
-                <label>Введите название желаемого департамента</label>
+                <label>Название департамента</label>
                 <div class="input-block">
                     <input class="long-input" type="position" formControlName="departmentName"
                         placeholder="Департамент" (input)="departmentNameChange()">
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="modal__form-group">
-                <label>Введите из списка руководителя</label>
+                <label>Руководитель</label>
                 <div class="input-block">
                         <app-search-select-form formControlName="managerId" [options]="users" *ngIf="users.length" [title]="'Руководитель'"></app-search-select-form>
                     <app-error [@contentExpansion]="errors.manager ? 'expanded' : 'collapsed'"
@@ -37,7 +37,7 @@
             <div class="modal__form-submit">
                 <div class="button-block">
                     <input type='submit' [disabled]="departmentForm.invalid || !checkChanges()"
-                        [value]="'Добавить департамент'">
+                        [value]="'Изменить департамент'">
                 </div>
                 <label (click)="cancel()" class="transparent-button">Отмена</label>
             </div>

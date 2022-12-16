@@ -40,7 +40,8 @@ export class EditDepartmentModalComponent extends Modal implements OnInit {
 
   public ngOnInit(): void {
     this._user.getUsers().subscribe((users: IUser[]) => {
-      this.users = users.map((user: IUser) => {
+      const usersFiltered = users.filter((user: IUser) => !(user.isManager || user.isAdmin) || user.id === this.department.managerId);
+      this.users = usersFiltered.map((user: IUser) => {
         return { id: user.id.toString(), name: user.fullname };
       });
     });
@@ -99,7 +100,7 @@ export class EditDepartmentModalComponent extends Modal implements OnInit {
     const form = this.departmentForm.value;
     const update: IDepartmentUpdate = {};
     if (this.isUserEdited.name) {
-      update.departmentName = form.departmentName;
+      update.name = form.departmentName;
     }
     if (this.isUserEdited.manager) {
       update.managerId = form.managerId;

@@ -38,7 +38,9 @@
 
 .form {
     padding: 2em 1em 1em 1em;
-
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     & .forgot-password {    
         text-decoration: underline;
         text-decoration-skip-ink: none;
@@ -61,10 +63,12 @@
 
 .success {
     color: var(--success-text-color);
+    font-weight: 500;
 }
 
 .error {
     color: var(--error-text-color);
+    font-weight: 500;
 }
 
 .control-name {
@@ -82,7 +86,6 @@ input[type=email] {
 }
 
 input[type=submit] {
-    margin-top: 1.5rem;
     width: 100%;
     background-color: var(--main-accent-color);
     padding: 14px 20px;

@@ -37,7 +37,8 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
 
   public ngOnInit(): void {
     this._user.getUsers().subscribe((users: IUser[]) => {
-      this.users = users.map((user: IUser) => {
+      const usersFiltered = users.filter((user: IUser) => !(user.isManager || user.isAdmin));
+      this.users = usersFiltered.map((user: IUser) => {
         return { id: user.id.toString(), name: user.fullname };
       });
     });
@@ -52,6 +53,7 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
 
     this._department.createDepartment(department).subscribe({ next: (department: IDepartment) => {
       this.departmentName = department.name;
+      this._department.getDepartments();
       this.isSubmitted = true;
     }});
   }
@@ -67,7 +69,7 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
   private createUpdateObject(): IDepartmentUpdate {
     const form = this.departmentForm.value;
     return {
-      departmentName: form.name,
+      name: form.departmentName,
       managerId: form.managerId,
     }
   }

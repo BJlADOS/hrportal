@@ -20,7 +20,7 @@ export class RecoveryRequestComponent {
   public emailPlaceholder: string = 'Электронная почта';
   public successMessage: string | undefined = undefined;
   public errorMessage: string | undefined = undefined;
-  
+
 
   private _FormManager: FormManager = FormManager.getInstance();
 
@@ -50,8 +50,14 @@ export class RecoveryRequestComponent {
     this._auth.requestPasswordReset(this.recoveryRequestForm.value.email)
       .subscribe({
         next:
-          () => this.successMessage = 'На вашу электронную почту отправлено письмо с инструкциями по восстановлению пароля.',
-        error: (error) => this.errorMessage = "Произошла ошибка. Попробуйте еще раз."
+          () => {
+            this.successMessage = 'На вашу электронную почту отправлено письмо с инструкциями по восстановлению пароля.'
+            this.errorMessage = undefined;
+          },
+        error: (error) => {
+          this.successMessage = undefined;
+          this.errorMessage = "Произошла ошибка. Попробуйте еще раз."
+        }
       }
       );
   }
