@@ -32,7 +32,7 @@ export interface IDepartment {
 }
 
 export interface IDepartmentUpdate {
-    departmentName?: string,
+    name?: string,
     managerId?: number
 }
 

@@ -54,7 +54,7 @@ export class AuthService {
 
   public resetPassword(password: string, token: string | undefined): Observable<any> {
     const passwordHash: string = SHA256(password).toString();
-    return this.http.post(`${this._apiURL}/recovery/`, { password: passwordHash, token }) as Observable<any>;
+    return this.http.post(`${this._apiURL}/recovery/`, { password: passwordHash, code: token }) as Observable<any>;
   }
 
   public checkEmail(email: string): Observable<Object> {
