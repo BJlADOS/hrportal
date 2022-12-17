@@ -297,7 +297,7 @@ class VacancyTests(TestCase):
         self.login_user(self.client, self.employee_data)
         vacancy_id = self.get_existing_vacancy_id()
         vacancy = Vacancy.objects.get(id=vacancy_id)
-        manager_id = User.objects.get(department__id=vacancy.department.id)
+        manager = User.objects.get(department__id=vacancy.department.id)
         employee_id = User.objects.get(email=self.employee_data.email).id
 
         response = self.client.post(f'/vacancies/{vacancy_id}/response/',
@@ -305,13 +305,13 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, f'Response from Employee(ID={employee_id}) to Manager(ID={manager_id}) successful')
+        self.assertEqual(detail, f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) successful')
 
     def test_VacancyResponse_ShouldSendResponse_WithUserResume(self):
         self.login_user(self.client, self.employee_data)
         vacancy_id = self.get_existing_vacancy_id()
         vacancy = Vacancy.objects.get(id=vacancy_id)
-        manager_id = User.objects.get(department__id=vacancy.department.id)
+        manager = User.objects.get(department__id=vacancy.department.id)
         employee = User.objects.get(email=self.employee_data.email)
         resume = create_resume_for(employee, resume_data)
 
@@ -319,7 +319,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, f'Response from Employee(ID={employee.id}) to Manager(ID={manager_id}) successful')
+        self.assertEqual(f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) successful', detail)
         resume.delete()
 
     def create_vacancy_for(self, department):

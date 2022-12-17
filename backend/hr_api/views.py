@@ -2,15 +2,14 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.template import loader
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.template import loader
 
 from .authentication import JWTAuthentication
 from .filters import *
@@ -187,7 +186,7 @@ class DepartmentList(generics.ListCreateAPIView):
             return [IsAdminUser()]
 
 
-class DepartmentDetail(generics.RetrieveDestroyAPIView):
+class DepartmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsAdminUser]
@@ -339,7 +338,6 @@ def vacancy_response(request, pk):
     serializer = VacancyResponseSerializer(data={'resume': resume})
     serializer.is_valid(raise_exception=True)
     result = send_vacancy_response(request.user, manager, vacancy, resume)
-
     return response_with_detail(result, status.HTTP_200_OK)
 
 

@@ -71,7 +71,8 @@ class DepartmentTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
-        self.assertEqual(errors['managerId'][0], '')
+        self.assertEqual(errors['managerId'][0],
+                         f'User with id={manager.id} is already manager of department id={manager.department.id}')
 
     def test_PostDepartments_ShouldRaiseValidationError_OnNonExistentUser(self):
         non_existent_id = User.objects.all().last().id + 1
@@ -83,7 +84,7 @@ class DepartmentTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
-        self.assertEqual(errors['managerId'][0], '')
+        self.assertEqual(errors['managerId'][0], f'Invalid pk "{non_existent_id}" - object does not exist.')
 
     def test_PostDepartments_ShouldCreateDepartment_WithoutManager(self):
         self.login_user(self.client, self.admin_data)
@@ -181,6 +182,69 @@ class DepartmentTests(TestCase):
         except Department.DoesNotExist:
             department = None
         self.assertIsNone(department)
+
+    def test_PatchDepartmentByPk_ShouldNominateManagerToEmptyDepartment(self):
+        department = Department.objects.get(name='department')
+        self.assertIsNone(department.manager)
+        user = User.objects.get(email=self.employee_data.email)
+        self.login_user(self.client, self.admin_data)
+
+        response = self.client.patch(f'/departments/{department.id}/',
+                                     {'managerId': user.id},
+                                     content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+        department.refresh_from_db()
+        self.assertEqual(department.manager.id, user.id)
+        department.manager = None
+        department.save()
+
+    def test_PatchDepartmentByPk_ShouldChangeDepartmentName(self):
+        department = Department.objects.get(name='department')
+        self.login_user(self.client, self.admin_data)
+
+        response = self.client.patch(f'/departments/{department.id}/',
+                                     {'name': 'test_PatchDepartmentByPk_ShouldChangeDepartmentName'},
+                                     content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+        department.refresh_from_db()
+        self.assertEqual(department.name, 'test_PatchDepartmentByPk_ShouldChangeDepartmentName')
+        department.name = 'department'
+        department.save()
+
+    def test_PatchDepartmentByPk_ShouldRaiseValidationError_OnUserWhoIsAlreadyManager(self):
+        department = Department.objects.get(name='department')
+        self.assertIsNone(department.manager)
+        user = User.objects.get(email=self.manager_data.email)
+        self.login_user(self.client, self.admin_data)
+
+        response = self.client.patch(f'/departments/{department.id}/',
+                                     {'managerId': user.id},
+                                     content_type='application/json')
+
+        self.assertEqual(response.status_code, 400)
+        errors = json.loads(*response)
+        self.assertEqual(errors['managerId'][0],
+                         f'User with id={user.id} is already manager of department id={user.department.id}')
+
+    def test_PatchDepartmentByPk_ShouldNominateNewManager_OnDepartmentWithManager(self):
+        department = Department.objects.get(name='department_with_manager')
+        user = User.objects.get(email=self.employee_data.email)
+        manager = User.objects.get(email=self.manager_data.email)
+        self.assertIsNotNone(department.manager)
+        self.assertEqual(department.manager.id, manager.id)
+        self.login_user(self.client, self.admin_data)
+
+        response = self.client.patch(f'/departments/{department.id}/',
+                                     {'managerId': user.id},
+                                     content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+        department.refresh_from_db()
+        self.assertEqual(department.manager.id, user.id)
+        department.manager = manager
+        department.save()
 
     @staticmethod
     def get_existing_department_id():
