@@ -318,7 +318,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         if self.request.method == 'GET':
             return [IsAuthenticated()]
         else:
-            return [IsManagerUser()]
+            return [(IsManagerUser | IsAdminUser)()]
 
 
 @api_view(['POST'])
