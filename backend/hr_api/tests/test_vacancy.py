@@ -12,6 +12,7 @@ class VacancyTests(TestCase):
     employee_data = UserData('employee', 'employee@hrportal.com', 'password')
     manager_data = UserData('manager', 'manager@hrportal.com', 'password')
     other_manager_data = UserData('manager', 'other-manager@hrportal.com', 'password')
+    admin_data = UserData('admin', 'admin@hrportal.com', 'password')
     vacancy_data = {
         'position': 'position',
         'salary': 0,
@@ -41,6 +42,7 @@ class VacancyTests(TestCase):
             vacancy.required_skills.add(skill)
         other_manager = User.objects.create_user(**cls.other_manager_data.__dict__)
         Department.objects.create(name="department", manager=other_manager).save()
+        User.objects.create_superuser(**cls.admin_data.__dict__)
 
     def setUp(self):
         self.client = Client()
@@ -176,6 +178,24 @@ class VacancyTests(TestCase):
         vacancy_before['requiredSkills'] = vacancy_after['requiredSkills']
         self.assertEqual(vacancy_before, vacancy_after)
 
+    def test_PatchVacancyByPk_ShouldChangeVacancy_OnAdmin(self):
+        self.login_user(self.client, self.admin_data)
+        vacancy = User.objects.get(email=self.manager_data.email).department.vacancy_set.first()
+        vacancy_before = GetVacancySerializer(vacancy).data
+
+        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/',
+                                     {'requiredSkillsIds': [1]},
+                                     content_type="application/json")
+
+        self.assertEqual(response.status_code, 200)
+        vacancy = User.objects.get(email=self.manager_data.email).department.vacancy_set.first()
+        vacancy_after = GetVacancySerializer(vacancy).data
+        self.assertNotEqual(vacancy_before, vacancy_after)
+        vacancy_before['modifiedAt'] = vacancy_after['modifiedAt']
+        self.assertNotEqual(vacancy_before, vacancy_after)
+        vacancy_before['requiredSkills'] = vacancy_after['requiredSkills']
+        self.assertEqual(vacancy_before, vacancy_after)
+
     def test_DeleteVacancyByPk_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.delete(f'/vacancies/{self.get_existing_vacancy_id()}/')
 
@@ -215,6 +235,18 @@ class VacancyTests(TestCase):
         vacancy = self.create_vacancy_for(department)
         count_before = department.vacancy_set.count()
         self.login_user(self.client, self.other_manager_data)
+
+        response = self.client.delete(f'/vacancies/{vacancy.id}/')
+
+        self.assertEqual(response.status_code, 204)
+        self.assertNotEqual(count_before, 0)
+        self.assertEqual(department.vacancy_set.count(), 0)
+
+    def test_DeleteVacancyByPk_ShouldDeleteVacancy_OnAdmin(self):
+        department = User.objects.get(email=self.other_manager_data.email).department
+        vacancy = self.create_vacancy_for(department)
+        count_before = department.vacancy_set.count()
+        self.login_user(self.client, self.admin_data)
 
         response = self.client.delete(f'/vacancies/{vacancy.id}/')
 
