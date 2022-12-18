@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DragAndDropDirective } from '../shared/directives/drag-and-drop/drag-and-drop.directive';
 import { NgxMaskModule } from 'ngx-mask';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { CreateVacancyComponent } from './create-vacancy/create-vacancy.component';
 
 
 
@@ -21,6 +22,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     VacanciesMainComponent,
     VacancyDetailComponent,
     UploadModalComponent,
+    CreateVacancyComponent,
   ],
   imports: [
     CommonModule,

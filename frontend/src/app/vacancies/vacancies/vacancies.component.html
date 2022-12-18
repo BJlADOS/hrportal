@@ -2,7 +2,7 @@
     <div class="wrapper-grid">
         <div class="wrapper-flex column-1-13" *ngIf="user | async as user">
             <div class="additional-buttons" *ngIf="user.isManager || user.isAdmin">
-                <button class="manager-button">Добавить вакансию</button>
+                <button class="manager-button" (click)="createVacancy()">Добавить вакансию</button>
                 <!-- empty for now -->
             </div>
             <div class="content">

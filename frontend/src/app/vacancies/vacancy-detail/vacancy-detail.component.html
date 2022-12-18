@@ -5,8 +5,7 @@
             <div class="title">
                 <div class="title__position">
                     <h1>{{vacancyForm.controls['position'].value}}</h1>
-                    <app-select-small formControlName="department" [options]="(departments$ | async)!"
-                        [title]="'Департамент'"></app-select-small>
+                    <span class="department">{{ vacancy.department.name }}</span>
                 </div>
                 <p class="title__date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
             </div>
@@ -60,6 +59,18 @@
                         placeholder="Заработная плата" (input)="salaryChange()">
                     <app-error [@contentExpansion]="errors.salary ? 'expanded' : 'collapsed'" [error]="errors.salary!">
                     </app-error>
+                </div>
+            </div>
+            <div class="success" [@contentExpansion]="isSubmitted ? 'expanded' : 'collapsed'">
+                <div class="success__icon">
+                    <svg width="18" height="24" viewBox="0 0 18 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 13.4338L9 21.4338L17 1" stroke="#FDC04E" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="success__text">
+                    <span>Изменения сохранены</span>
                 </div>
             </div>
             <div class="description">

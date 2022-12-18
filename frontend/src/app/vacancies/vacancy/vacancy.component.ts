@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IVacancy } from 'src/app/interfaces/vacancy';
+import { ModalService } from 'src/app/services/modal/modal.service';
+import { UploadModalComponent } from '../upload-modal/upload-modal.component';
 
 @Component({
   selector: 'app-vacancy',
@@ -15,6 +17,7 @@ export class VacancyComponent implements OnInit {
 
   constructor(
     public router: Router,
+    private _modal: ModalService,
   ) { }
 
   public ngOnInit(): void {
@@ -36,7 +39,7 @@ export class VacancyComponent implements OnInit {
   }
 
   public responseVacancy(): void {
-    console.log('Response vacancy');
+    this._modal.open(UploadModalComponent, { vacancyId: this.vacancy.id, vacancyName: this.vacancy.position })
   }
 
 }

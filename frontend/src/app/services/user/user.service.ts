@@ -80,14 +80,13 @@ export class UserService {
     this.currentUserSubject$.next(null);
   }
 
-  public parseToFormData(data: any): FormData {
+  public parseToFormData(data: any): FormData { //move to utils
     const formData = new FormData();
     Object.keys(data).forEach((key, i) => {
       if (Object.values(data)[i]) {
         Array.isArray(Object.values(data)[i]) ? (Object.values(data)[i] as Array<any>).forEach((element: any) => {
           formData.append(key, element);
         }) : formData.append(key, Object.values(data)[i] as string | Blob);
-        console.log(formData.get(key));
       }
     });
     return formData;
