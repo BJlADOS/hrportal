@@ -27,4 +27,8 @@ export class SkillsService {
     return this.http.get<ISkill[]>(`${this._apiUrl}/skills`) as Observable<ISkill[]>;
   }
 
+  public getSkillsById(ids: number[]): ISkill[] {
+    return this.skillsSubject$.value.filter((skill: ISkill) => ids.includes(skill.id));
+  }
+
 }

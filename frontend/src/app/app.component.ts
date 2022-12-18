@@ -11,12 +11,9 @@ export class AppComponent implements OnInit {
   title = 'frontend';
 
   constructor(
-    public auth: AuthService,
-    public user: UserService,
   ) { }
 
   public ngOnInit(): void {
-    this.auth.init();
   }
 
 }

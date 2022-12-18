@@ -13,7 +13,7 @@ import { MainComponent } from './main/main.component';
 
 
 const routes: Routes = [
-  { path: '', component: MainComponent },
+  { path: '', redirectTo: 'auth', pathMatch: 'full' },
   { path: 'auth', component: AuthComponent, canActivate: [LoggedInGuard] },
   { path: 'register', component: RegistrationComponent, canActivate: [LoggedInGuard] },
   { path: 'confirm-email', component: ConfirmEmailComponent },

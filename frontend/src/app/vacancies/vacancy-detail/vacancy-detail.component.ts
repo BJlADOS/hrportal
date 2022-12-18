@@ -45,7 +45,7 @@ export class VacancyDetailComponent implements OnInit {
   public isAddingSkill: boolean = false;
   public isUserEdited: IVacancyEditing = { position: false, department: false, salary: false, employment: false, schedule: false, description: false, skills: false };
   public errors: IVacancyFormError = { position: null, salary: null, department: null, employment: null, schedule: null, description: null, requiredSkills: null };
-  public submitError: ISubmitError | null = null; 
+  public submitError: ISubmitError | null = null;
   public isSubmitted: boolean = false;
 
 
@@ -113,56 +113,59 @@ export class VacancyDetailComponent implements OnInit {
 
   public submitFormChanges(): void {
     const vacancyUpdate = this.createVacancyUpdateObject();
-    this._vacancy.editVacancy(this.vacancy!.id.toString(), vacancyUpdate).pipe(takeUntil(this._destroy$)).subscribe({ next: (vacancy: IVacancy) => {
-      this.vacancy = vacancy;
-      this.cancelEditing();
-      this.isSubmitted = true;
-    }
-  });
-}
+    this._vacancy.editVacancy(this.vacancy!.id.toString(), vacancyUpdate).pipe(takeUntil(this._destroy$)).subscribe({
+      next: (vacancy: IVacancyResponseModel) => {
+        //create vacancy responce resolver
+        this.vacancy = this._vacancy.updateVacancyObjectAfterEdit(this.vacancy!, vacancy);
+        this.cancelEditing();
+        this.isSubmitted = true;
+        this.isEditing = false;
+      }
+    });
+  }
 
   public checkFormChanges(): boolean {
     const form = this.vacancyForm.value;
     const vacancy = this.vacancy;
     if (vacancy && form) {
       this.isUserEdited.description = form.description !== vacancy?.description;
-    this.isUserEdited.salary = form.salary !== vacancy?.salary;
-    this.isUserEdited.position = form.position !== vacancy?.position;
-    this.isUserEdited.department = (form.department.id?? form.department) !== vacancy?.department.id;
-    this.isUserEdited.employment = form.employment !== vacancy?.employment;
-    this.isUserEdited.schedule = form.schedule !== vacancy?.schedule;
+      this.isUserEdited.salary = form.salary !== vacancy?.salary;
+      this.isUserEdited.position = form.position !== vacancy?.position;
+      this.isUserEdited.employment = form.employment !== vacancy?.employment;
+      this.isUserEdited.schedule = form.schedule !== vacancy?.schedule;
 
-    form.requiredSkills.forEach((skill: ISkill) => {
-      if (!vacancy.requiredSkills.some((s: ISkill) =>s.id === skill.id)) {
-        // Если в форме есть скилл, которого нет в юзере
-        //console.log('check passed added new');
-        this.isUserEdited.skills = true;
-        return;
-      }
-    });
-    let sameSkillCounter: number = 0;
-    vacancy.requiredSkills.forEach((skill: ISkill) => {
-      if (!form.requiredSkills.some((s: ISkill) =>s.id === skill.id)) {
-        // Если в форме нет скилла, который есть в юзере
-        //console.log('check passed deleted existing');
-        this.isUserEdited.skills = true;
-        return;
-      } else {
-        sameSkillCounter++;
-      }
-    });
+      form.requiredSkills.forEach((skill: ISkill) => {
+        if (!vacancy.requiredSkills.some((s: ISkill) => s.id === skill.id)) {
+          // Если в форме есть скилл, которого нет в юзере
+          //console.log('check passed added new');
+          this.isUserEdited.skills = true;
+          return;
+        }
+      });
+      let sameSkillCounter: number = 0;
+      vacancy.requiredSkills.forEach((skill: ISkill) => {
+        if (!form.requiredSkills.some((s: ISkill) => s.id === skill.id)) {
+          // Если в форме нет скилла, который есть в юзере
+          //console.log('check passed deleted existing');
+          this.isUserEdited.skills = true;
+          return;
+        } else {
+          sameSkillCounter++;
+        }
+      });
       // Если в форме и в юзере разное количество скиллов
       //console.log('check passed different length');
       this.isUserEdited.skills = vacancy.requiredSkills.length !== form.requiredSkills.length;
-    
+
       // если нету добавленных и удаленных скиллов и количество скиллов в форме и в юзере одинаковое
       //console.log('check passed same length');
       this.isUserEdited.skills = !((sameSkillCounter === form.requiredSkills.length) && (sameSkillCounter === vacancy.requiredSkills.length));
     }
 
-    // console.log(form);
-    // console.log(vacancy);
-    
+    // console.log(form.description);
+    // console.log(vacancy?.description);
+    // console.log(this.isUserEdited);
+
     return this.isUserEdited.description || this.isUserEdited.salary || this.isUserEdited.position || this.isUserEdited.department || this.isUserEdited.employment || this.isUserEdited.schedule || this.isUserEdited.skills;
   }
 
@@ -178,7 +181,7 @@ export class VacancyDetailComponent implements OnInit {
     this.vacancyForm.disable();
   }
 
-  private createVacancyUpdateObject(): IVacancyResponseModel  {
+  private createVacancyUpdateObject(): IVacancyResponseModel {
     const form = this.vacancyForm.value;
     const vacancyUpdate: IVacancyResponseModel = {}
     if (this.isUserEdited.position) {

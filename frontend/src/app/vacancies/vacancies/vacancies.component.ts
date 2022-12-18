@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IUser } from 'src/app/interfaces/User';
 import { Employment, Experience, IVacancy, Schedule } from 'src/app/interfaces/vacancy';
@@ -19,6 +20,7 @@ export class VacanciesComponent implements OnInit {
   constructor(
     private _vacancy: VacancyService,
     private _user: UserService,
+    private _router: Router,
   ) { }
 
   public ngOnInit(): void {
@@ -27,6 +29,10 @@ export class VacanciesComponent implements OnInit {
     }, error: (err) => {
       this.loadingError = err;
     }});
+  }
+
+  public createVacancy(): void {
+    this._router.navigate(['vacancies/create']);
   }
 
 }

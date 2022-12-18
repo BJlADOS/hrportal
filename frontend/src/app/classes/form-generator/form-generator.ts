@@ -118,13 +118,10 @@ export class FormGenerator {
     public getVacancyForm(vacancy: IVacancy | null): FormGroup {
         return this._fb.group(
             {
-                position: new FormControl(vacancy ? vacancy.position : null, Validators.compose([
+                position: new FormControl(vacancy ? vacancy.position : '', Validators.compose([
                     Validators.required,
                 ])),
-                department: new FormControl(vacancy ? vacancy.department : null, Validators.compose([
-                    Validators.required,
-                ])),
-                salary: new FormControl(vacancy ? vacancy.salary : null, Validators.compose([
+                salary: new FormControl(vacancy ? vacancy.salary : '', Validators.compose([
                     Validators.required,
                 ])),
                 employment: new FormControl(vacancy ? vacancy.employment : null, Validators.compose([
@@ -133,12 +130,10 @@ export class FormGenerator {
                 schedule: new FormControl(vacancy ? vacancy.schedule : null, Validators.compose([
                     Validators.required,
                 ])),
-                description: new FormControl(vacancy ? vacancy.description : null, Validators.compose([
+                description: new FormControl(vacancy ? vacancy.description : '', Validators.compose([
                     Validators.required,
                 ])),
-                requiredSkills: new FormControl(vacancy ? vacancy.requiredSkills.slice() : null, Validators.compose([
-                    Validators.required,
-                ])),
+                requiredSkills: new FormControl(vacancy ? vacancy.requiredSkills.slice() : []),
             }
         )
     }
