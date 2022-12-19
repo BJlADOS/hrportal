@@ -20,7 +20,7 @@ export class ConfirmEmailComponent implements OnInit {
 
   public ngOnInit(): void {
     this._activatedRoute.queryParams.subscribe(params => {
-      this.confirmEmail(params['token']);
+      this.confirmEmail(params['code']);
     });
   }
 

@@ -15,7 +15,7 @@
                 <label class="forgot-password" (click)="forgotPassword()">Забыли пароль?</label>
                 <app-errors [errors]="errors"></app-errors>
                 <input type="submit" value="ВХОД" [disabled]="signInForm.invalid">
-                <app-error [error]="submitError" [@contentExpansion]="submitError ? 'expanded' : 'collapsed'"></app-error>
+                <p class="error" [@contentExpansion]="submitError ? 'expanded' : 'collapsed'">{{ submitError?.message }}</p>
             </form>
             <div class="navigation">
                 <label>Нет аккаунта?</label>

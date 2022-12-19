@@ -73,6 +73,10 @@ export class HeaderComponent implements OnInit {
     this._user.profileFilledStatusSubject$.next(true);
   }
 
+  public toProfile(): void {
+    this._router.navigate(['profile']);
+  }
+
   private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {
     const children: ActivatedRoute[] = route.children;
     if (children.length === 0) {
