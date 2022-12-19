@@ -1,8 +1,6 @@
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail, EmailMessage
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from django.template import loader
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -77,14 +75,6 @@ def password_recovery_view(request):
     user.save()
 
     return Response(status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def plug_view(request):
-    template = loader.get_template('plug.html')
-    return HttpResponse(template.render())
 
 
 @api_view(['POST'])

@@ -30,7 +30,7 @@ DEBUG = os.environ['DEBUG'] == 'True'
 
 ALLOWED_HOSTS = os.environ['ALLOWED_HOSTS'].split(';')
 
-CSRF_TRUSTED_ORIGINS = [os.environ['API_URL']]
+CSRF_TRUSTED_ORIGINS = [os.environ['DJANGO_URL']]
 
 # Application definition
 

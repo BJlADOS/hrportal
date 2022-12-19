@@ -24,6 +24,5 @@ urlpatterns = [
     path('departments/', DepartmentList.as_view(), name='department-list'),
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),
     path('skills/', SkillList.as_view(), name='skill-list'),
-    path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail'),
-    path('plug/', plug_view, name='plug'),
+    path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail')
 ]
