@@ -20,17 +20,23 @@ services:
       - 8000
     depends_on:
       - postgres
-  nginx:
-    container_name: nginx
-    build: nginx
-    ports:
-      - "4200:4200"
-      - "8000:8000"
+    volumes:
+      - media:/media
+      - static:/static
   angular:
     container_name: angular
     build: frontend
     expose:
       - 4200
+  nginx:
+    container_name: nginx
+    build: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - media:/media
+      - static:/static
 volumes:
   postgres-data:
-    external: false
+  media:
+  static:
