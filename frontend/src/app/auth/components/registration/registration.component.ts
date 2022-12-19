@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs';
+import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { IAuthError, ISubmitError } from 'src/app/interfaces/errors';
@@ -13,7 +14,8 @@ import { ConfirmEmailModalComponent } from '../confirm-email-modal/confirm-email
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  styleUrls: ['./registration.component.scss'],
+  animations: [contentExpansion],
 })
 export class RegistrationComponent implements OnInit {
 

@@ -33,7 +33,7 @@ export class RecoveryPasswordComponent implements OnInit {
 
   public ngOnInit(): void {
     this._activatedRoute.queryParams.subscribe((params: any) => {
-      this._token = params['token'];
+      this._token = params['code'];
     });
   }
 

@@ -19,7 +19,7 @@
                 <app-errors [errors]="errors"></app-errors>
                 <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid || signUpForm.pending">
             </form>
-            <app-error [error]="submitError" [@contentExpansion]="submitError ? 'expanded' : 'collapsed'"></app-error>
+            <p class="error" [@contentExpansion]="submitError ? 'expanded' : 'collapsed'">{{ submitError?.message }}</p>
             <div class="navigation">
                 <label>Есть аккаунт?</label>
                 <label class="navigation-button" (click)="toSignIn()">Войти</label>
