@@ -24,12 +24,13 @@ services:
     container_name: nginx
     build: nginx
     ports:
-      - "8000:80"
+      - "4200:4200"
+      - "8000:8000"
   angular:
     container_name: angular
     build: frontend
-    ports:
-      - "4200:80"
+    expose:
+      - 4200
 volumes:
   postgres-data:
     external: false

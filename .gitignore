@@ -222,3 +222,4 @@ fabric.properties
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Python,Django,PyCharm
 /.idea/
+/server/
