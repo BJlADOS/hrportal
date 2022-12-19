@@ -233,9 +233,7 @@ export class ProfileComponent implements OnInit {
     if (this.isUserEdited.department) {
       userUpdate.currentDepartmentId = form.department ? form.department.id : null;
     }
-    if (this.isUserEdited.skills) {
-      userUpdate.existingSkillsIds = (form.skills as ISkill[]).map((skill: ISkill) => skill.id);
-    }
+    userUpdate.existingSkillsIds = (form.skills as ISkill[]).map((skill: ISkill) => skill.id);
 
     return userUpdate;
   }

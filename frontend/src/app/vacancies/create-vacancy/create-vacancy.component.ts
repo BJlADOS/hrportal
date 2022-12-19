@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -93,6 +94,9 @@ export class CreateVacancyComponent implements OnInit {
         this.submitError = null;
 
         this._router.navigate([`/vacancies/${vacancy.id}`]);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.submitError = { message: 'Ошибка создания вакансии' };
       }
     });
   }

@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit {
   public routes: IRoute[] = [];
 
   public isCreatingResume: boolean = false;
+  public profileFilled$: Observable<boolean> = this._user.profileFilledStatus$;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -66,6 +67,10 @@ export class HeaderComponent implements OnInit {
 
   public logout(): void {
     this._auth.logOut();
+  }
+
+  public closeNotification(): void {
+    this._user.profileFilledStatusSubject$.next(true);
   }
 
   private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {
