@@ -24,9 +24,12 @@ services:
     container_name: nginx
     build: nginx
     ports:
-      - "1337:80"
-    depends_on:
-      - django
+      - "8000:80"
+  angular:
+    container_name: angular
+    build: frontend
+    ports:
+      - "4200:80"
 volumes:
   postgres-data:
     external: false
