@@ -25,27 +25,14 @@ export class AuthService {
     private _modal: ModalService,
     ) {}
 
-  public signUp(fullname: string, email: string, password: string): void {
+  public signUp(fullname: string, email: string, password: string): Observable<any> {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  }).subscribe({ next: () => {
-      this._router.navigate(['/auth']);
-      this._modal.open(ConfirmEmailModalComponent, { email: email });
-    }, error: (error) => {
-      console.log(error);
-    }});
+    return this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  });
   }
 
-  public signIn(email: string, password: string, returnUrl: string | undefined): void {
+  public signIn(email: string, password: string, returnUrl: string | undefined): Observable<any> {
     const passwordHash: string = SHA256(password).toString();
-    this.http.post(`${this._apiURL}/login/`, { email: email, password: passwordHash }).subscribe({ next: () => {
-      if (returnUrl) {
-        this._router.navigate([returnUrl]);
-      } else {
-        this._router.navigate(['/vacancies']);
-      }
-    }, error: (error) => {
-      console.log(error);
-    }});
+    return this.http.post(`${this._apiURL}/login/`, { email: email, password: passwordHash });
   }
 
   public requestPasswordReset(email: string): Observable<any> {

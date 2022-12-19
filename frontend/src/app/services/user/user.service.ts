@@ -14,6 +14,8 @@ export class UserService {
 
   public currentUserSubject$: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
   public currentUser$: Observable<IUser | null> = this.currentUserSubject$.asObservable();
+  public profileFilledStatusSubject$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public profileFilledStatus$: Observable<boolean> = this.profileFilledStatusSubject$.asObservable();
 
   private _apiURL: string = environment.apiURL;
 
@@ -34,6 +36,9 @@ export class UserService {
   public getUserInfo(): void {
     this.http.get(`${this._apiURL}/user`).subscribe({ next: (data) => {
       const user = data as IUser;
+      if (!this.currentUserValue) {
+        this.profileFilledStatusSubject$.next(user.filled);
+      }
       this.currentUserSubject$.next(this.fixPhotoUrl(user));
       this._department.getDepartments();
       this._skills.getSkills();
@@ -42,6 +47,7 @@ export class UserService {
 
   public updateUserInfo(user: IUserUpdate): Observable<IUser> {
     const data = this.parseToFormData(user);
+    this.profileFilledStatusSubject$.next(true);
     
     return this.http.patch(`${this._apiURL}/user/`, data) as Observable<IUser>;
   }

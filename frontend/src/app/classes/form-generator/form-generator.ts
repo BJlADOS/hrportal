@@ -81,9 +81,7 @@ export class FormGenerator {
                     Validators.required,
                     this._customValidators.patternValidator(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, { email: true }),
                 ])),
-                contact: new FormControl(user.contact, Validators.compose([
-                    Validators.required,
-                ])),
+                contact: new FormControl(user.contact),
                 experience: new FormControl(experience.find((item: ISelectOption) => user.experience === item.id), Validators.compose([
                     Validators.required,
                 ])),

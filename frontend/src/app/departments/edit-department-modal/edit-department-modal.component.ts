@@ -60,6 +60,9 @@ export class EditDepartmentModalComponent extends Modal implements OnInit {
       next: (department: IDepartment) => {
         this.department = department;
         this.isSubmitted = true;
+      },
+      error: (error: any) => {
+        this.submitError = 'Ошибка изменения департамента';
       }
     });
   }

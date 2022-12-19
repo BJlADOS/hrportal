@@ -19,6 +19,7 @@ import { SkillsService } from 'src/app/services/skills/skills.service';
 import { ISubmitError, IVacancyFormError } from 'src/app/interfaces/errors';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
 import { ThisReceiver } from '@angular/compiler';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-vacancy-detail',
@@ -120,6 +121,9 @@ export class VacancyDetailComponent implements OnInit {
         this.cancelEditing();
         this.isSubmitted = true;
         this.isEditing = false;
+      },
+      error: (error: HttpErrorResponse) => {
+        this.submitError = { message: 'Ошибка изменения вакансии' };
       }
     });
   }
@@ -199,9 +203,7 @@ export class VacancyDetailComponent implements OnInit {
     if (this.isUserEdited.employment) {
       vacancyUpdate.employment = form.employment;
     }
-    if (this.isUserEdited.skills) {
-      vacancyUpdate.requiredSkillsIds = (form.requiredSkills as ISkill[]).map((skill: ISkill) => skill.id);
-    }
+    vacancyUpdate.requiredSkillsIds = (form.requiredSkills as ISkill[]).map((skill: ISkill) => skill.id);
 
     return vacancyUpdate;
   }

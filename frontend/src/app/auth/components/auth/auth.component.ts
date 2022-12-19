@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { FormManager } from 'src/app/classes/form-manager/form-manager';
-import { IAuthError, IInputError, ISubmitError } from 'src/app/interfaces/errors';
+import { IAuthError, ISubmitError } from 'src/app/interfaces/errors';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  styleUrls: ['./auth.component.scss'],
+  animations: [contentExpansion],
 })
 export class AuthComponent implements OnInit {
 
@@ -17,6 +19,7 @@ export class AuthComponent implements OnInit {
   public emailPlaceholder: string = 'Электронная почта';
   public signInForm: FormGroup = this._formGenerator.getSignInForm();
   public errors: IAuthError = { email: null, password: null };
+  public submitError: ISubmitError | null = null;
 
   private _returnUrl: string | undefined;
   private _FormManager: FormManager = FormManager.getInstance();
@@ -35,7 +38,15 @@ export class AuthComponent implements OnInit {
   }
 
   public signIn(): void {
-    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password, this._returnUrl);
+    this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password, this._returnUrl).subscribe({ next: () => {
+      if (this._returnUrl) {
+        this.router.navigate([this._returnUrl]);
+      } else {
+        this.router.navigate(['/vacancies']);
+      }
+    }, error: (error) => {
+      this.submitError = { message: 'Неверная почта или пароль' };
+    }});
   }
 
   public forgotPassword(): void {
