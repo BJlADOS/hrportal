@@ -147,11 +147,6 @@ class PatchUserSerializer(serializers.ModelSerializer):
             'existingSkillsIds'
         ]
 
-    def update(self, instance, validated_data):
-        if 'existingSkillsIds' not in self.initial_data and 'existing_skills' in validated_data:
-            del validated_data['existing_skills']
-        return super(PatchUserSerializer, self).update(instance, validated_data)
-
 
 class TimestampField(serializers.Field):
     def to_internal_value(self, timestamp):
@@ -208,11 +203,6 @@ class PatchResumeSerializer(serializers.ModelSerializer):
                                    validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     isActive = serializers.BooleanField(source='is_active', required=False, allow_null=True)
-
-    def update(self, instance, validated_data):
-        if 'isActive' not in self.initial_data and 'is_active' in validated_data:
-            del validated_data['is_active']
-        return super(PatchResumeSerializer, self).update(instance, validated_data)
 
     class Meta:
         model = Resume
@@ -290,11 +280,6 @@ class PatchVacancySerializer(serializers.ModelSerializer):
             'requiredSkillsIds',
             'isActive'
         ]
-
-    def update(self, instance, validated_data):
-        if 'requiredSkillsIds' not in self.initial_data and 'required_skills' in validated_data:
-            del validated_data['existing_skills']
-        return super(PatchVacancySerializer, self).update(instance, validated_data)
 
 
 class VacancyResponseSerializer(serializers.Serializer):
