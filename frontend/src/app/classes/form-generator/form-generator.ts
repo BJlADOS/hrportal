@@ -128,9 +128,7 @@ export class FormGenerator {
                 schedule: new FormControl(vacancy ? vacancy.schedule : null, Validators.compose([
                     Validators.required,
                 ])),
-                description: new FormControl(vacancy ? vacancy.description : '', Validators.compose([
-                    Validators.required,
-                ])),
+                description: new FormControl(vacancy ? vacancy.description : ''),
                 requiredSkills: new FormControl(vacancy ? vacancy.requiredSkills.slice() : []),
             }
         )
