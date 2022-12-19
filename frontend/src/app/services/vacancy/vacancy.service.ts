@@ -40,14 +40,14 @@ export class VacancyService {
   public responseToVacancy(vacancyId: string, resume: File): void { 
     const formData = new FormData();
     formData.append('resume', resume);
-    this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response`, formData).subscribe({ next: (data) => {
+    this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response/`, formData).subscribe({ next: (data) => {
       console.log(data);
     }
     });
   }
 
   public responseToVacancyWithReadyResume(vacancyId: string, resumeId: number): void {
-    this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response`, {}, { params: { resumeId } }).subscribe({ next: (data) => {
+    this.http.post(`${this._apiUrl}/vacancies/${vacancyId}/response/`, {}, { params: { resumeId } }).subscribe({ next: (data) => {
       console.log(data);
     } });
   }
