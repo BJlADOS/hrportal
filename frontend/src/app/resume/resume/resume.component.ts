@@ -2,7 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IResume } from 'src/app/interfaces/resume';
 import { ISkill, IUser } from 'src/app/interfaces/User';
+import { ModalService } from 'src/app/services/modal/modal.service';
+import { ResumeService } from 'src/app/services/resume/resume.service';
 import { UserService } from 'src/app/services/user/user.service';
+import { ResumeResponseModalComponent } from '../resume-response-modal/resume-response-modal.component';
 
 @Component({
   selector: 'app-resume',
@@ -18,6 +21,8 @@ export class ResumeComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _router: Router,
+    private _resume: ResumeService,
+    private _modal: ModalService,
   ) { }
 
   public ngOnInit(): void {
@@ -25,8 +30,7 @@ export class ResumeComponent implements OnInit {
       next: (user) => {
         this.user = user;
       }
-    }
-    );
+    });
   }
 
   public skillsToString(skills: ISkill[]): string {
@@ -38,12 +42,12 @@ export class ResumeComponent implements OnInit {
   }
 
   public responseResume(): void {
-    console.log('Response resume');
+    this._modal.open(ResumeResponseModalComponent, {
+      resume: this.resume,
+      employeeName: this.user?.fullname,
+      employeeEmail: this.user?.email,
+    });
+    this._resume.responseToResume(this.resume!.id);
   }
-
-  // public getUserName(fullname: string): string {
-  //   const name: string[] = fullname.split(' ');
-  //   return `${name[0]} ${name[1]}.`;
-  // }
 
 }

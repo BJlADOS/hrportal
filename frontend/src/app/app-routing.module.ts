@@ -2,6 +2,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/components/auth/auth.component';
 import { ConfirmEmailComponent } from './auth/components/confirm-email/confirm-email.component';
+import { NotFoundComponent } from './auth/components/not-found/not-found.component';
 import { RecoveryPasswordComponent } from './auth/components/recovery-password/recovery-password.component';
 import { RecoveryRequestComponent } from './auth/components/recovery-request/recovery-request.component';
 import { RegistrationComponent } from './auth/components/registration/registration.component';
@@ -14,6 +15,7 @@ import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  { path: 'not-found', component: NotFoundComponent },
   { path: 'auth', component: AuthComponent, canActivate: [LoggedInGuard] },
   { path: 'register', component: RegistrationComponent, canActivate: [LoggedInGuard] },
   { path: 'confirm-email', component: ConfirmEmailComponent },
@@ -23,6 +25,7 @@ const routes: Routes = [
   { path: 'vacancies', loadChildren: () => import('./vacancies/vacancies.module').then(m => m.VacanciesModule), canActivate: [AuthGuard] },
   { path: 'resumes', loadChildren: () => import('./resume/resume.module').then(m => m.ResumeModule), canActivate: [AuthGuard, ManagerGuard] },
   { path: 'departments', loadChildren: () => import('./departments/departments.module').then(m => m.DepartmentsModule), canActivate: [AuthGuard, AdminGuard] },
+  { path: '**', redirectTo: 'not-found' },
 ];
 
 export const appRouting: ModuleWithProviders<RouterModule> = RouterModule.forRoot(routes);

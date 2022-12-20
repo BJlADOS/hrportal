@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Observable, Subscription, takeUntil } from 'rxjs';
 import { ModalRef } from 'src/app/classes/modal/modalRef';
 import { IDepartment, ISkill, IUser } from 'src/app/interfaces/User';
@@ -66,19 +66,22 @@ export class VacancyDetailComponent implements OnInit {
     private _form: FormGenerator,
     private _department: DepartmentService,
     private _skills: SkillsService,
+    private _router: Router,
   ) { }
 
   public ngOnInit(): void {
-    this._activatedRoute.paramMap.pipe(takeUntil(this._destroy$)).subscribe((paramMap: ParamMap) => {
-      const vacancyIdFromRoute: string = paramMap.get('id') as string;
-      this._vacancy.getVacancyById(vacancyIdFromRoute).pipe(takeUntil(this._destroy$)).subscribe((vacancy: IVacancy) => {
-        this.vacancy = vacancy;
-        this.vacancyForm = this._form.getVacancyForm(this.vacancy);
-        this.vacancyForm.disable();
+    this._activatedRoute.paramMap.pipe(takeUntil(this._destroy$)).subscribe({
+      next: (paramMap: ParamMap) => {
+        const vacancyIdFromRoute: string = paramMap.get('id') as string;
+        this._vacancy.getVacancyById(vacancyIdFromRoute).pipe(takeUntil(this._destroy$)).subscribe({
+          next: (vacancy: IVacancy) => {
+            this.vacancy = vacancy;
+            this.vacancyForm = this._form.getVacancyForm(this.vacancy);
+            this.vacancyForm.disable();
+          },
+        });
       }
-      );
     });
-
   }
 
   public salaryChange(): void {
@@ -116,7 +119,6 @@ export class VacancyDetailComponent implements OnInit {
     const vacancyUpdate = this.createVacancyUpdateObject();
     this._vacancy.editVacancy(this.vacancy!.id.toString(), vacancyUpdate).pipe(takeUntil(this._destroy$)).subscribe({
       next: (vacancy: IVacancyResponseModel) => {
-        //create vacancy responce resolver
         this.vacancy = this._vacancy.updateVacancyObjectAfterEdit(this.vacancy!, vacancy);
         this.cancelEditing();
         this.isSubmitted = true;

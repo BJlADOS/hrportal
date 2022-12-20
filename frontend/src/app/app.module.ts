@@ -22,6 +22,7 @@ import { ConfirmEmailModalComponent } from './auth/components/confirm-email-moda
 import { ConfirmEmailComponent } from './auth/components/confirm-email/confirm-email.component';
 import { RecoveryPasswordComponent } from './auth/components/recovery-password/recovery-password.component';
 import { RecoveryRequestComponent } from './auth/components/recovery-request/recovery-request.component';
+import { NotFoundComponent } from './auth/components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { RecoveryRequestComponent } from './auth/components/recovery-request/rec
     ConfirmEmailComponent,
     RecoveryPasswordComponent,
     RecoveryRequestComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
