@@ -18,6 +18,7 @@ export class UserService {
   public profileFilledStatus$: Observable<boolean> = this.profileFilledStatusSubject$.asObservable();
 
   private _apiURL: string = environment.apiURL;
+  private _mediaURL: string = environment.mediaURL;
 
   constructor(
     public http: HttpClient,
@@ -101,7 +102,7 @@ export class UserService {
 
   private fixPhotoUrl(user: IUser): IUser {
     if (user.photo) {
-      user.photo = `${this._apiURL}${user.photo}`;
+      user.photo = `${this._mediaURL}${user.photo}`;
     }
     return user;
   }
