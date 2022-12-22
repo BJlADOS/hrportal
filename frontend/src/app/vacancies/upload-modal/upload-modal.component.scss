@@ -1,6 +1,6 @@
 .modal {
     z-index: 1200;
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     left: 50%;
@@ -75,6 +75,7 @@
 
         & .filename {
             color: var(--main-accent-color);
+            word-break: break-all;
 
             &:hover {
                 cursor: pointer;
