@@ -12,6 +12,7 @@ import { DragAndDropDirective } from '../shared/directives/drag-and-drop/drag-an
 import { NgxMaskModule } from 'ngx-mask';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CreateVacancyComponent } from './create-vacancy/create-vacancy.component';
+import { SearchComponent } from './search/search.component';
 
 
 
@@ -23,6 +24,7 @@ import { CreateVacancyComponent } from './create-vacancy/create-vacancy.componen
     VacancyDetailComponent,
     UploadModalComponent,
     CreateVacancyComponent,
+    SearchComponent,
   ],
   imports: [
     CommonModule,

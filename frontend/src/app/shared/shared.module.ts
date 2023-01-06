@@ -16,6 +16,8 @@ import { CreateResumeComponent } from './components/create-resume/create-resume.
 import { NgxMaskModule } from 'ngx-mask';
 import { CUSTOM_SMALL_SELECT_VALUE_ACCESSOR, SelectSmallComponent } from './components/select-small/select-small.component';
 import { SearchSelectFormComponent } from './components/search-select-form/search-select-form.component';
+import { SelectWithRadioComponent } from './components/select-with-radio/select-with-radio.component';
+import { SelectWithRadioMultipleComponent } from './components/select-with-radio-multiple/select-with-radio-multiple.component';
 
 
 
@@ -33,6 +35,8 @@ import { SearchSelectFormComponent } from './components/search-select-form/searc
     CreateResumeComponent,
     SelectSmallComponent,
     SearchSelectFormComponent,
+    SelectWithRadioComponent,
+    SelectWithRadioMultipleComponent,
   ],
   imports: [
     CommonModule,
