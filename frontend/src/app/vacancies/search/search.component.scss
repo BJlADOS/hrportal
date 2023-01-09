@@ -1,0 +1,49 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
+
+    & .counter {
+        span {
+            font-weight: 600;
+        }
+    }
+
+    & .forms {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+
+    }
+
+    &__input {
+        border: 1px solid var(--border-color);
+        background-color: var(--input-background-color);
+        border-radius: 10px;
+        padding: 0.35rem 0.7rem;
+
+        input {
+            transition: .3s ease;
+            border: none;
+            background-color: transparent;
+            font-size: var(--font-size--main);
+            font-family: var(--main-font-family);
+            color: var(--font-primary);
+
+
+            &:focus {
+                outline: none;
+            }
+
+            &::placeholder {
+                color: var(--input-placeholder-color);
+            }
+        }
+    }
+
+}
+
+.form {}

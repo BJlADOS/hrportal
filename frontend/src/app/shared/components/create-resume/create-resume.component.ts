@@ -54,9 +54,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
     }});
   }
 
-  public onInjectInputs(inputs: any): void {
-
-  }
+  public onInjectInputs(inputs: any): void {}
 
   public positionChange(): void {
     this.errors.desiredPosition = this._formManager.checkPosition(this.resumeForm);

@@ -56,6 +56,8 @@ import { SelectWithRadioMultipleComponent } from './components/select-with-radio
     DragAndDropDirective,
     SelectSmallComponent,
     SearchSelectFormComponent,
+    SelectWithRadioComponent,
+    SelectWithRadioMultipleComponent,
   ]
 })
 export class SharedModule { }

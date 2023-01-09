@@ -1,11 +1,12 @@
 import { Component, ElementRef, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Observable, of } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
-import { SelectComponent } from '../select/select.component';
+import { rotate180 } from 'src/app/animations/rotate/rotate180';
 
 export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
-  useExisting: forwardRef(() => SelectComponent),
+  useExisting: forwardRef(() => SelectWithRadioComponent),
   multi: true
 };
 
@@ -13,7 +14,7 @@ export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
   selector: 'app-select-with-radio',
   templateUrl: './select-with-radio.component.html',
   styleUrls: ['./select-with-radio.component.scss'],
-  animations: [contentExpansion],
+  animations: [contentExpansion, rotate180],
   providers: [CUSTOM_SELECT_VALUE_ACCESSOR]
 })
 export class SelectWithRadioComponent implements OnInit, ControlValueAccessor {
@@ -21,11 +22,14 @@ export class SelectWithRadioComponent implements OnInit, ControlValueAccessor {
   @Input() options: any[] =[];
   @Input() title: string = 'Select';
   @Input() required: boolean = false;
+  @Input() reset$: Observable<null> = of(null);
 
   public currentValue: any;
   public dropdownOpen: boolean = false;
   public disabled: boolean = false;
   public onChange: any;
+
+  public edited: boolean = false;
 
   constructor(
       private elem: ElementRef
@@ -47,6 +51,9 @@ export class SelectWithRadioComponent implements OnInit, ControlValueAccessor {
   }
 
   public ngOnInit(): void {
+    this.reset$.subscribe(() => {
+      this.edited = false;
+    });
   }
 
   public get dropdownElement(): Element {return this.elem.nativeElement.querySelector('.dropdown-list')}
@@ -63,6 +70,7 @@ export class SelectWithRadioComponent implements OnInit, ControlValueAccessor {
 
   public select(value: any): void {
       this.currentValue = value;
+      this.edited = true;
       this.closeDropdown();
       this.onChange(value);
   }

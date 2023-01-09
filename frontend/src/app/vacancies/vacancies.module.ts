@@ -13,6 +13,7 @@ import { NgxMaskModule } from 'ngx-mask';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CreateVacancyComponent } from './create-vacancy/create-vacancy.component';
 import { SearchComponent } from './search/search.component';
+import { FiltersComponent } from './filters/filters.component';
 
 
 
@@ -25,6 +26,7 @@ import { SearchComponent } from './search/search.component';
     UploadModalComponent,
     CreateVacancyComponent,
     SearchComponent,
+    FiltersComponent,
   ],
   imports: [
     CommonModule,

@@ -1,1 +1,17 @@
-<p>search works!</p>
+<div class="search">
+    <div class="counter">
+        <span>{{ (vacancies$ | async )?.count }} Вакансий</span>
+    </div>
+    <div class="forms">
+        <form class="form" [formGroup]="searchForm" (submit)="search()">
+            <div class="search__input">
+                <input type="text" id="search" formControlName="search" placeholder="Поиск">
+            </div>
+
+        </form>
+        <!-- Тут будет кнопка фильтров -->
+        <form class="form" [formGroup]="orderingForm">
+            <app-select-with-radio [options]="ordering" formControlName="ordering"></app-select-with-radio>
+        </form>
+    </div>
+</div>
