@@ -10,9 +10,17 @@
                     <app-search (madeSearch)="resetSearch()"></app-search>
                 </div>
                 <div class="error" *ngIf="loadingError">{{loadingError}}</div>
-                <div class="vacancies" *ngIf="vacancies.length else noVacancies">
-                    <app-vacancy class="width" *ngFor="let vacancy of vacancies" [vacancy]="vacancy"></app-vacancy>
-                </div>    
+                <div class="content__main">
+                    <div class="filters" [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'" stickySidebar containerSelector=".content__main" innerWrapperSelector=".inner" topSpacing="24" bottomSpacing="24" [minWidth]="400" [updateSticky]="update$">
+                        <div class="inner">
+                            <app-filters (madeSearch)="resetSearch()"></app-filters>
+                        </div>
+                        
+                    </div>   
+                    <div class="vacancies" *ngIf="vacancies.length else noVacancies">
+                        <app-vacancy class="width" *ngFor="let vacancy of vacancies" [vacancy]="vacancy"></app-vacancy>
+                    </div>  
+                </div>
             </div>          
         </div>      
     </div>  

@@ -20,19 +20,23 @@
     }
 
     &__input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .1rem;
         border: 1px solid var(--border-color);
-        background-color: var(--input-background-color);
+        background-color: var(--white);
         border-radius: 10px;
         padding: 0.35rem 0.7rem;
 
         input {
+            width: 100%;
             transition: .3s ease;
             border: none;
             background-color: transparent;
             font-size: var(--font-size--main);
             font-family: var(--main-font-family);
             color: var(--font-primary);
-
 
             &:focus {
                 outline: none;
@@ -42,8 +46,39 @@
                 color: var(--input-placeholder-color);
             }
         }
+
+        & .tools {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            justify-content: center;
+
+            & .clear {
+                box-sizing: border-box;
+                transition: .3s ease;
+                cursor: pointer;
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+
+            & .magnifier {
+                box-sizing: border-box;
+                transition: .3s ease;
+                cursor: pointer;
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+        }
+
+        &:hover {
+            border-color: var(--main-accent-color);
+        }
+
+        &:has(input:focus) {
+            border-color: var(--main-accent-color);
+        }
     }
 
 }
-
-.form {}

@@ -8,12 +8,12 @@ import { SharedModule } from '../shared/shared.module';
 import { VacancyDetailComponent } from './vacancy-detail/vacancy-detail.component';
 import { UploadModalComponent } from './upload-modal/upload-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DragAndDropDirective } from '../shared/directives/drag-and-drop/drag-and-drop.directive';
 import { NgxMaskModule } from 'ngx-mask';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { CreateVacancyComponent } from './create-vacancy/create-vacancy.component';
 import { SearchComponent } from './search/search.component';
 import { FiltersComponent } from './filters/filters.component';
+import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 
 
 
@@ -35,6 +35,9 @@ import { FiltersComponent } from './filters/filters.component';
     ReactiveFormsModule,
     NgxMaskModule.forChild(),
     EditorModule,
+    NgxStickySidebarModule.withConfig({
+      minWidth: '280px',
+    }),
   ]
 })
 export class VacanciesModule { }

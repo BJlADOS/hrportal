@@ -183,8 +183,9 @@ export class FormGenerator {
             {
                 salary_min: new FormControl(filters?.salary_min?? ''),
                 salary_max: new FormControl(filters?.salary_max?? ''),
-                employment: new FormControl(filters?.employment?? null),
-                schedule: new FormControl(filters?.schedule?? null),
+                departments: new FormControl(filters?.departments?? []),
+                employment: new FormControl(filters?.employment?? []),
+                schedule: new FormControl(filters?.schedule?? []),
                 skills: new FormControl(filters?.skills?? []),
             }
         );

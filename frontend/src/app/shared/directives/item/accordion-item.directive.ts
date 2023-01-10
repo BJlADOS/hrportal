@@ -2,7 +2,7 @@ import { ContentChild, Directive, Input } from '@angular/core';
 import { AccordionContentDirective } from '../content/accordion-content.directive';
 
 @Directive({
-    selector: 'appAccountAccordionItem'
+    selector: 'appAccordionItem'
 })
 export class AccordionItemDirective {
     

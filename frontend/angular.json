@@ -33,7 +33,9 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/css-element-queries/src/ResizeSensor.js"
+            ]
           },
           "configurations": {
             "production": {

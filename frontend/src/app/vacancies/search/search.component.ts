@@ -20,9 +20,6 @@ export class SearchComponent implements OnInit {
   public orderingForm: FormGroup = this._form.getOrderingForm();
   public ordering: ISelectOption[] = getOrderingRussianAsArray();
 
-  public formResetSubject$ = new BehaviorSubject<null>(null);
-  public formReset$: Observable<null> = this.formResetSubject$.asObservable();
-
   @Output() madeSearch = new EventEmitter<null>();
 
   constructor(
@@ -41,6 +38,10 @@ export class SearchComponent implements OnInit {
   public search(): void {
     this.madeSearch.emit();
     this._vacancySearch.search(this.searchForm.value.search);
+  }
+
+  public reset(): void {
+    this.searchForm = this._form.getSeachForm();
   }
 
   // public sort(): void {

@@ -10,7 +10,7 @@ import { AccordionItemDirective } from '../../directives/item/accordion-item.dir
         contentExpansion,
     ]
 })
-export class AccountAccordionComponent {
+export class AccordionComponent {
 
     public expanded: Set<number> = new Set<number>();
 

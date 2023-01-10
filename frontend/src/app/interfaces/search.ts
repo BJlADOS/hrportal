@@ -1,4 +1,5 @@
 import { ISelectOption } from "./select";
+import { IDepartment } from "./User";
 import { Employment, Schedule } from "./vacancy";
 
 export enum Ordering {
@@ -18,8 +19,9 @@ export enum OrderingRussian {
 export interface IFilterRequest {
     salary_min?: number;
     salary_max?: number;
-    employment?: Employment;
-    schedule?: Schedule;
+    departments?: number[];
+    employment?: Employment[];
+    schedule?: Schedule[];
     skills?: number[];
     ordering?: Ordering;
     limit?: number;
@@ -30,8 +32,9 @@ export interface IFilterRequest {
 export interface IFilter {
     salary_min?: number;
     salary_max?: number;
-    employment?: Employment;
-    schedule?: Schedule;
+    employment?: Employment[];
+    departments?: IDepartment[];
+    schedule?: Schedule[];
     skills?: number[];
 }
 

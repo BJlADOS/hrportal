@@ -17,8 +17,9 @@ export class VacanciesSearchService {
   private _filterRequest: IFilterRequest = {
     salary_min: undefined,
     salary_max: undefined,
-    employment: undefined,
-    schedule: undefined,
+    departments: [],
+    employment: [],
+    schedule: [],
     skills: undefined,
     ordering: Ordering['-time'],
     limit: 4,
@@ -32,6 +33,11 @@ export class VacanciesSearchService {
   ) { }
 
   public setFilters(filter: IFilter): void {
+    if (filter.salary_min && filter.salary_max) {
+      filter.salary_min = filter.salary_min > filter.salary_max ? filter.salary_max : filter.salary_min;
+      filter.salary_max = filter.salary_max < filter.salary_min ? filter.salary_min : filter.salary_max;
+    }  
+    
     Object.assign(this._filterRequest, filter);
     this._filterRequest.offset = 0;
     this.makeSearch();
@@ -63,9 +69,10 @@ export class VacanciesSearchService {
   }
 
   public resetFilters(): void {
-    this._filterRequest.employment = undefined;
-    this._filterRequest.schedule = undefined;
-    this._filterRequest.skills = undefined;
+    this._filterRequest.employment = [];
+    this._filterRequest.schedule = [];
+    this._filterRequest.skills = [];
+    this._filterRequest.departments = [];
     this._filterRequest.salary_min = undefined;
     this._filterRequest.salary_max = undefined;
     this.makeSearch();
@@ -75,8 +82,9 @@ export class VacanciesSearchService {
     this._filterRequest = {
       salary_min: undefined,
       salary_max: undefined,
-      employment: undefined,
-      schedule: undefined,
+      departments: [],
+      employment: [],
+      schedule: [],
       skills: undefined,
       ordering: Ordering['-time'],
       limit: 4,
@@ -97,7 +105,15 @@ export class VacanciesSearchService {
 
     Object.keys(this._filterRequest).forEach((key, i) => {
       if (Object.values(this._filterRequest)[i]) {
-        request[key] = Object.values(this._filterRequest)[i];
+        if (Array.isArray(Object.values(this._filterRequest)[i])) {
+          if (Object.values(this._filterRequest)[i].length === 0) {
+            return;
+          }
+          request[key] = Object.values(this._filterRequest)[i].map((item: any) => item.id);
+        } else {
+          request[key] = Object.values(this._filterRequest)[i];
+        }
+        
       }
     });
 
