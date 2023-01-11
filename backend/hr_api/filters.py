@@ -33,6 +33,9 @@ class VacancyFilter(django_filters.FilterSet):
     skills = django_filters.ModelMultipleChoiceFilter(field_name='required_skills',
                                                       queryset=Skill.objects.all(),
                                                       conjoined=True)
+    department = django_filters.ModelMultipleChoiceFilter(field_name='department',
+                                                          queryset=Department.objects.all(),
+                                                          conjoined=False)
 
     class Meta:
         model = Vacancy

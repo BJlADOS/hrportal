@@ -59,16 +59,22 @@ class ListsTests(TestCase):
         manager = User.objects.create_user(**cls.manager_data.__dict__)
         admin = User.objects.create_superuser(**cls.admin_data.__dict__)
 
-        department = Department.objects.create(name='department', manager=manager)
-        department.save()
+        department1 = Department.objects.create(name='department1', manager=manager)
+        department1.save()
+        department2 = Department.objects.create(name='department2')
+        department2.save()
+        department3 = Department.objects.create(name='department3')
+        department3.save()
+        department4 = Department.objects.create(name='department4')
+        department4.save()
 
         skills = [cls.create_skill(), cls.create_skill(), cls.create_skill()]
 
-        cls.create_vacancy(department, 'Pos', 10000, 'PART', 'FLEX', skills[:1])
+        cls.create_vacancy(department2, 'Pos', 10000, 'PART', 'FLEX', skills[:1])
         time.sleep(0.1)
-        cls.create_vacancy(department, 'Posit', 15000, 'FULL', 'SHIFT', skills[:2])
+        cls.create_vacancy(department3, 'Posit', 15000, 'FULL', 'SHIFT', skills[:2])
         time.sleep(0.1)
-        cls.create_vacancy(department, 'Position', 20000, 'FULL', 'FULL', skills)
+        cls.create_vacancy(department4, 'Position', 20000, 'FULL', 'FULL', skills)
 
         cls.create_resume(employee, 'Pos', 10000, 'PART', 'FLEX')
         cls.create_resume(manager, 'Posit', 15000, 'FULL', 'SHIFT')
@@ -100,9 +106,18 @@ class ListsTests(TestCase):
         'skills=1&skills=2&skills=3': [3]
     }
 
+    vacancies_filter_test_cases = {
+        'department=1': [],
+        'department=1&department=2': [1],
+        'department=1&department=2&department=3': [1, 2],
+        'department=1&department=2&department=3&department=4': [1, 2, 3],
+        'department=2&department=4': [1, 3]
+    }
+
     def test_GetVacanciesWithFilters_ShouldReturnFilteredVacancies(self):
-        for path, expected in self.filter_test_cases.items():
-            result = to_id_list(self.client.get(f'/vacancies/?{path}'))
+        for path, expected in (self.filter_test_cases | self.vacancies_filter_test_cases).items():
+            response = self.client.get(f'/vacancies/?{path}')
+            result = to_id_list(response)
             assert sorted(result) == sorted(expected)
 
     def test_GetResumesWithFilters_ShouldReturnFilteredResumes(self):
