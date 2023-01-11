@@ -279,7 +279,7 @@ class VacancyList(generics.ListCreateAPIView):
         if self.request.method == 'GET':
             return GetVacancySerializer
         else:
-            return None
+            return PostVacancySerializer
 
     def get_permissions(self):
         if self.request.method == 'GET':
