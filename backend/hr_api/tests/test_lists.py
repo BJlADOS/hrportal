@@ -88,7 +88,7 @@ class ListsTests(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.client.post('/login/', {'email': self.admin_data.email, 'password': self.admin_data.password})
+        self.client.post('/api/login/', {'email': self.admin_data.email, 'password': self.admin_data.password})
 
     filter_test_cases = {
         '': [1, 2, 3],
@@ -116,13 +116,13 @@ class ListsTests(TestCase):
 
     def test_GetVacanciesWithFilters_ShouldReturnFilteredVacancies(self):
         for path, expected in (self.filter_test_cases | self.vacancies_filter_test_cases).items():
-            response = self.client.get(f'/vacancies/?{path}')
+            response = self.client.get(f'/api/vacancies/?{path}')
             result = to_id_list(response)
             assert sorted(result) == sorted(expected)
 
     def test_GetResumesWithFilters_ShouldReturnFilteredResumes(self):
         for path, expected in self.filter_test_cases.items():
-            result = to_id_list(self.client.get(f'/resumes/?{path}'))
+            result = to_id_list(self.client.get(f'/api/resumes/?{path}'))
             assert sorted(result) == sorted(expected)
 
     sorting_test_cases = {
@@ -135,25 +135,25 @@ class ListsTests(TestCase):
 
     def test_GetVacanciesWithSorting_ShouldReturnSortedVacancies(self):
         for path, expected in self.sorting_test_cases.items():
-            result = to_id_list(self.client.get(f'/vacancies/?ordering={path}'))
+            result = to_id_list(self.client.get(f'/api/vacancies/?ordering={path}'))
             assert result == expected
 
     def test_GetResumesWithSorting_ShouldReturnSortedResumes(self):
         for path, expected in self.sorting_test_cases.items():
-            result = to_id_list(self.client.get(f'/resumes/?ordering={path}'))
+            result = to_id_list(self.client.get(f'/api/resumes/?ordering={path}'))
             assert result == expected
 
     def test_GetVacanciesWithPagination_ShouldReturnCorrectPage(self):
         cases = [case for case in itertools.product(range(4), repeat=2) if case[0] != 0]
         for limit, offset in cases:
-            response = self.client.get(f'/vacancies/?limit={limit}&offset={offset}')
+            response = self.client.get(f'/api/vacancies/?limit={limit}&offset={offset}')
             page = PaginationPage(response)
             assert [1, 2, 3][offset:offset + limit] == page.results
 
     def test_GetResumesWithPagination_ShouldReturnCorrectPage(self):
         cases = [case for case in itertools.product(range(4), repeat=2) if case[0] != 0]
         for limit, offset in cases:
-            response = self.client.get(f'/vacancies/?limit={limit}&offset={offset}')
+            response = self.client.get(f'/api/vacancies/?limit={limit}&offset={offset}')
             page = PaginationPage(response)
             assert [1, 2, 3][offset:offset + limit] == page.results
 
@@ -172,10 +172,10 @@ class ListsTests(TestCase):
 
     def test_GetVacanciesWithSearching_ShouldReturnMatchedVacancies(self):
         for path, expected in self.searching_test_cases.items():
-            result = to_id_list(self.client.get(f'/vacancies/?search={path}'))
+            result = to_id_list(self.client.get(f'/api/vacancies/?search={path}'))
             assert sorted(result) == sorted(expected)
 
     def test_GetResumesWithSearching_ShouldReturnMatchedResumes(self):
         for path, expected in self.searching_test_cases.items():
-            result = to_id_list(self.client.get(f'/resumes/?search={path}'))
+            result = to_id_list(self.client.get(f'/api/resumes/?search={path}'))
             assert sorted(result) == sorted(expected)

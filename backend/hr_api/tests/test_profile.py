@@ -20,7 +20,7 @@ class ProfileTests(TestCase):
         self.client = Client()
 
     def test_GetUser_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get('/user/')
+        response = self.client.get('/api/user/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -29,14 +29,14 @@ class ProfileTests(TestCase):
     def test_GetUser_ShouldGetUserInfo(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get('/user/')
+        response = self.client.get('/api/user/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_GetUser_IsManagerFieldIsFalse_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get('/user/')
+        response = self.client.get('/api/user/')
 
         self.assertEqual(response.status_code, 200)
         is_manager = json.loads(*response)['isManager']
@@ -45,14 +45,14 @@ class ProfileTests(TestCase):
     def test_GetUser_IsManagerFieldIsTrue_OnManager(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get('/user/')
+        response = self.client.get('/api/user/')
 
         self.assertEqual(response.status_code, 200)
         is_manager = json.loads(*response)['isManager']
         self.assertTrue(is_manager)
 
     def test_PatchUser_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.patch('/user/', {})
+        response = self.client.patch('/api/user/', {})
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -62,7 +62,7 @@ class ProfileTests(TestCase):
         self.login_user(self.client, self.employee_data)
         user_before = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
 
-        response = self.client.patch('/user/')
+        response = self.client.patch('/api/user/')
 
         self.assertEqual(response.status_code, 200)
         user_after = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
@@ -72,7 +72,7 @@ class ProfileTests(TestCase):
         self.login_user(self.client, self.employee_data)
         user_before = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
 
-        response = self.client.patch('/user/', {'contact': 'contact'}, content_type='application/json')
+        response = self.client.patch('/api/user/', {'contact': 'contact'}, content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
         user_after = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
@@ -81,7 +81,7 @@ class ProfileTests(TestCase):
         self.assertEqual(user_before, user_after)
 
     def test_GetUsers_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.patch('/users/', {})
+        response = self.client.patch('/api/users/', {})
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -90,7 +90,7 @@ class ProfileTests(TestCase):
     def test_GetUsers_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.patch('/users/', {})
+        response = self.client.patch('/api/users/', {})
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -99,12 +99,12 @@ class ProfileTests(TestCase):
     def test_GetUsers_ShouldGetUsersInfo(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get('/users/')
+        response = self.client.get('/api/users/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_GetUserByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(f'/users/{self.get_existing_user_id()}/')
+        response = self.client.get(f'/api/users/{self.get_existing_user_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -113,7 +113,7 @@ class ProfileTests(TestCase):
     def test_GetUserByPk_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get(f'/users/{self.get_existing_user_id()}/')
+        response = self.client.get(f'/api/users/{self.get_existing_user_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -122,14 +122,14 @@ class ProfileTests(TestCase):
     def test_GetUserByPk_ShouldRaise404_OnNonExistentUserId(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get(f'/users/{self.get_nonexistent_user_id()}/')
+        response = self.client.get(f'/api/users/{self.get_nonexistent_user_id()}/')
 
         self.assertEqual(response.status_code, 404)
 
     def test_GetUserByPk_ShouldReturnUserInfo(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get(f'/users/{self.get_existing_user_id()}/')
+        response = self.client.get(f'/api/users/{self.get_existing_user_id()}/')
 
         self.assertEqual(response.status_code, 200)
 
@@ -144,4 +144,4 @@ class ProfileTests(TestCase):
     @staticmethod
     def login_user(client, user_data):
         login_data = {'email': user_data.email, 'password': user_data.password}
-        client.post('/login/', login_data)
+        client.post('/api/login/', login_data)

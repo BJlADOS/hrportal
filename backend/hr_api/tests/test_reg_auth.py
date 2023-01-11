@@ -31,7 +31,7 @@ class RegAndAuthTests(TestCase):
         email_subject = 'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"'
         emails_count_before = len(mail.outbox)
 
-        response = self.client.post('/reg/', reg_data)
+        response = self.client.post('/api/reg/', reg_data)
 
         self.assertEqual(response.status_code, 201)
         detail = json.loads(*response)['detail']
@@ -45,14 +45,14 @@ class RegAndAuthTests(TestCase):
     def test_RegistrationView_ShouldRaiseValidationError_OnNonUniqueEmail(self):
         reg_data = {'fullname': 'newuser', 'email': self.user_data.email, 'password': 'password'}
 
-        response = self.client.post('/reg/', reg_data)
+        response = self.client.post('/api/reg/', reg_data)
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
         self.assertEqual(errors['email'][0], 'user with this email already exists.')
 
     def test_RegistrationView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/reg/', {})
+        response = self.client.post('/api/reg/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -63,7 +63,7 @@ class RegAndAuthTests(TestCase):
     def test_RegistrationView_ShouldRaiseValidationError_OnInvalidEmail(self):
         reg_data = {'email': 'no email'}
 
-        response = self.client.post('/reg/', reg_data)
+        response = self.client.post('/api/reg/', reg_data)
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -72,7 +72,7 @@ class RegAndAuthTests(TestCase):
     def test_UniqueEmailView_ShouldReturnTrue_OnUniqueEmail(self):
         request_data = {'email': 'unique@hrportal.com'}
 
-        response = self.client.post('/unique-email/', request_data)
+        response = self.client.post('/api/unique-email/', request_data)
 
         self.assertEqual(response.status_code, 200)
         authorized = json.loads(*response)['unique']
@@ -81,7 +81,7 @@ class RegAndAuthTests(TestCase):
     def test_UniqueEmailView_ShouldReturnFalse_OnNonUniqueEmail(self):
         request_data = {'email': self.user_data.email}
 
-        response = self.client.post('/unique-email/', request_data)
+        response = self.client.post('/api/unique-email/', request_data)
 
         self.assertEqual(response.status_code, 200)
         authorized = json.loads(*response)['unique']
@@ -90,7 +90,7 @@ class RegAndAuthTests(TestCase):
     def test_UniqueEmailView_ShouldRaiseValidationError_OnIncompleteData(self):
         request_data = {'email': 'not email'}
 
-        response = self.client.post('/unique-email/', request_data)
+        response = self.client.post('/api/unique-email/', request_data)
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -99,7 +99,7 @@ class RegAndAuthTests(TestCase):
     def test_UniqueEmailView_ShouldRaiseValidationError_OnInvalidEmail(self):
         request_data = {}
 
-        response = self.client.post('/unique-email/', request_data)
+        response = self.client.post('/api/unique-email/', request_data)
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -115,7 +115,7 @@ class RegAndAuthTests(TestCase):
     def test_LoginView_ShouldRaise401_OnWrongPassword(self):
         login_data = {'email': self.user_data.email, 'password': self.user_data.password + 'error'}
 
-        response = self.client.post('/login/', login_data)
+        response = self.client.post('/api/login/', login_data)
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
@@ -124,7 +124,7 @@ class RegAndAuthTests(TestCase):
     def test_LoginView_ShouldRaise401_OnWrongEmail(self):
         login_data = {'email': 'error' + self.user_data.email, 'password': self.user_data.password}
 
-        response = self.client.post('/login/', login_data)
+        response = self.client.post('/api/login/', login_data)
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
@@ -133,7 +133,7 @@ class RegAndAuthTests(TestCase):
     def test_LoginView_ShouldRaiseValidationError_OnIncompleteData(self):
         login_data = {}
 
-        response = self.client.post('/login/', login_data)
+        response = self.client.post('/api/login/', login_data)
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -143,7 +143,7 @@ class RegAndAuthTests(TestCase):
     def test_LogoutView_ShouldLogoutUser(self):
         self.login_user()
 
-        response = self.client.get('/logout/')
+        response = self.client.get('/api/logout/')
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(self.client_is_login())
@@ -151,7 +151,7 @@ class RegAndAuthTests(TestCase):
     def test_LogoutView_DontRaiseException_OnUnauthorizedClient(self):
         self.client.session.delete()
 
-        response = self.client.get('/logout/')
+        response = self.client.get('/api/logout/')
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(self.client_is_login())
@@ -159,28 +159,28 @@ class RegAndAuthTests(TestCase):
     def test_AuthorizedView_ShouldReturnTrue_OnAuthorizedClient(self):
         self.login_user()
 
-        response = self.client.get('/authorized/')
+        response = self.client.get('/api/authorized/')
 
         self.assertEqual(response.status_code, 200)
         authorized = json.loads(*response)['authorized']
         self.assertTrue(authorized)
 
     def test_AuthorizedView_ShouldReturnFalse_OnUnauthorizedClient(self):
-        response = self.client.get('/authorized/')
+        response = self.client.get('/api/authorized/')
 
         self.assertEqual(response.status_code, 200)
         authorized = json.loads(*response)['authorized']
         self.assertFalse(authorized)
 
     def test_VerificationView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/verification/', {})
+        response = self.client.post('/api/verification/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
         self.assertEqual(errors['code'][0], 'This field is required.')
 
     def test_VerificationView_ShouldRaise401_OnInvalidCode(self):
-        response = self.client.post('/verification/', {'code': 'code'})
+        response = self.client.post('/api/verification/', {'code': 'code'})
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
@@ -190,21 +190,21 @@ class RegAndAuthTests(TestCase):
         user = User.objects.first()
         self.assertFalse(user.email_verified)
 
-        response = self.client.post('/verification/', {'code': create_user_token(user)})
+        response = self.client.post('/api/verification/', {'code': create_user_token(user)})
 
         self.assertEqual(response.status_code, 200)
         user.refresh_from_db()
         self.assertTrue(user.email_verified)
 
     def test_RecoveryRequestView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/recovery-request/', {})
+        response = self.client.post('/api/recovery-request/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
         self.assertEqual(errors['email'][0], 'This field is required.')
 
     def test_RecoveryRequestView_ShouldRaiseValidationError_OnInvalidEmail(self):
-        response = self.client.post('/recovery-request/', {'email': 'no email'})
+        response = self.client.post('/api/recovery-request/', {'email': 'no email'})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -213,7 +213,7 @@ class RegAndAuthTests(TestCase):
     def test_RecoveryRequestView_ShouldDontSendRecoveryEmail_OnNonExistentEmail(self):
         emails_count_before = len(mail.outbox)
 
-        response = self.client.post('/recovery-request/', {'email': 'error' + self.user_data.email})
+        response = self.client.post('/api/recovery-request/', {'email': 'error' + self.user_data.email})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(emails_count_before, len(mail.outbox))
@@ -223,7 +223,7 @@ class RegAndAuthTests(TestCase):
         emails_count_before = len(mail.outbox)
         user = User.objects.get(email=self.user_data.email)
 
-        response = self.client.post('/recovery-request/', {'email': user.email})
+        response = self.client.post('/api/recovery-request/', {'email': user.email})
 
         emails = [m for m in mail.outbox if m.subject == email_subject]
         self.assertEqual(emails_count_before, len(mail.outbox) - 1)
@@ -232,7 +232,7 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_RecoveryView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/recovery/', {})
+        response = self.client.post('/api/recovery/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -242,7 +242,7 @@ class RegAndAuthTests(TestCase):
     def test_RecoveryView_ShouldRaise401_OnInvalidCode(self):
         data = {'code': 'code', 'password': 'password'}
 
-        response = self.client.post('/recovery/', data)
+        response = self.client.post('/api/recovery/', data)
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
@@ -255,7 +255,7 @@ class RegAndAuthTests(TestCase):
         password_before = user.password
         data = {'code': create_user_token(user), 'password': new_password}
 
-        response = self.client.post('/recovery/', data)
+        response = self.client.post('/api/recovery/', data)
 
         self.assertEqual(response.status_code, 200)
         user.refresh_from_db()
@@ -267,4 +267,4 @@ class RegAndAuthTests(TestCase):
 
     def login_user(self):
         login_data = {'email': self.user_data.email, 'password': self.user_data.password}
-        return self.client.post('/login/', login_data)
+        return self.client.post('/api/login/', login_data)

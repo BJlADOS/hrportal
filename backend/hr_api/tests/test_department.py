@@ -23,7 +23,7 @@ class DepartmentTests(TestCase):
         self.client = Client()
 
     def test_GetDepartments_ShouldRaise403_onUnauthorizedClient(self):
-        response = self.client.get('/departments/')
+        response = self.client.get('/api/departments/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -32,12 +32,12 @@ class DepartmentTests(TestCase):
     def test_GetDepartments_ShouldGetDepartmentsInfo(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get('/departments/')
+        response = self.client.get('/api/departments/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_PostDepartments_ShouldRaise403_onUnauthorizedClient(self):
-        response = self.client.post('/departments/')
+        response = self.client.post('/api/departments/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -46,7 +46,7 @@ class DepartmentTests(TestCase):
     def test_PostDepartments_ShouldRaise403_onManager(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.post('/departments/')
+        response = self.client.post('/api/departments/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -55,7 +55,7 @@ class DepartmentTests(TestCase):
     def test_PostDepartments_ShouldRaiseValidationError_onBlankData(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/departments/')
+        response = self.client.post('/api/departments/')
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -65,7 +65,7 @@ class DepartmentTests(TestCase):
         manager = User.objects.get(email=self.manager_data.email)
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/departments/', {
+        response = self.client.post('/api/departments/', {
             'name': 'test_PostDepartments_ShouldRaiseValidationError_WithUserWhoIsAlreadyManager',
             'managerId': manager.id})
 
@@ -78,7 +78,7 @@ class DepartmentTests(TestCase):
         non_existent_id = User.objects.all().last().id + 1
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/departments/', {
+        response = self.client.post('/api/departments/', {
             'name': 'test_PostDepartments_ShouldRaiseValidationError_WithUserWhoIsAlreadyManager',
             'managerId': non_existent_id})
 
@@ -89,7 +89,7 @@ class DepartmentTests(TestCase):
     def test_PostDepartments_ShouldCreateDepartment_WithoutManager(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/departments/',
+        response = self.client.post('/api/departments/',
                                     {'name': 'test_PostDepartments_ShouldCreateDepartment_WithoutManager'})
 
         self.assertEqual(response.status_code, 201)
@@ -102,7 +102,7 @@ class DepartmentTests(TestCase):
         employee = User.objects.get(email=self.employee_data.email)
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/departments/',
+        response = self.client.post('/api/departments/',
                                     {'name': 'test_PostDepartments_ShouldCreateDepartment_WithUserWhoIsNotManager',
                                      'managerId': employee.id})
 
@@ -113,7 +113,7 @@ class DepartmentTests(TestCase):
         employee.department.delete()
 
     def test_GetDepartmentByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(f'/departments/{self.get_existing_department_id()}/')
+        response = self.client.get(f'/api/departments/{self.get_existing_department_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -122,7 +122,7 @@ class DepartmentTests(TestCase):
     def test_GetDepartmentByPk_ShouldRaise403_onManager(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.post('/departments/')
+        response = self.client.post('/api/departments/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -131,7 +131,7 @@ class DepartmentTests(TestCase):
     def test_GetDepartmentByPk_ShouldRaise404_onNonExistentDepartment(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.get(f'/departments/{self.get_nonexistent_department_id()}/')
+        response = self.client.get(f'/api/departments/{self.get_nonexistent_department_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -140,12 +140,12 @@ class DepartmentTests(TestCase):
     def test_GetDepartmentByPk_ShouldGetDepartmentInfo(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.get(f'/departments/{self.get_existing_department_id()}/')
+        response = self.client.get(f'/api/departments/{self.get_existing_department_id()}/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_DeleteDepartmentByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.delete(f'/departments/{self.get_existing_department_id()}/')
+        response = self.client.delete(f'/api/departments/{self.get_existing_department_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -154,7 +154,7 @@ class DepartmentTests(TestCase):
     def test_DeleteDepartmentByPk_ShouldRaise403_onManager(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.delete(f'/departments/{self.get_existing_department_id()}/')
+        response = self.client.delete(f'/api/departments/{self.get_existing_department_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -163,7 +163,7 @@ class DepartmentTests(TestCase):
     def test_DeleteDepartmentByPk_ShouldRaise404_onNonExistentDepartment(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.delete(f'/departments/{self.get_nonexistent_department_id()}/')
+        response = self.client.delete(f'/api/departments/{self.get_nonexistent_department_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -174,7 +174,7 @@ class DepartmentTests(TestCase):
         department.save()
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.delete(f'/departments/{department.id}/')
+        response = self.client.delete(f'/api/departments/{department.id}/')
 
         self.assertEqual(response.status_code, 204)
         try:
@@ -189,7 +189,7 @@ class DepartmentTests(TestCase):
         user = User.objects.get(email=self.employee_data.email)
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.patch(f'/departments/{department.id}/',
+        response = self.client.patch(f'/api/departments/{department.id}/',
                                      {'managerId': user.id},
                                      content_type='application/json')
 
@@ -203,7 +203,7 @@ class DepartmentTests(TestCase):
         department = Department.objects.get(name='department')
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.patch(f'/departments/{department.id}/',
+        response = self.client.patch(f'/api/departments/{department.id}/',
                                      {'name': 'test_PatchDepartmentByPk_ShouldChangeDepartmentName'},
                                      content_type='application/json')
 
@@ -219,7 +219,7 @@ class DepartmentTests(TestCase):
         user = User.objects.get(email=self.manager_data.email)
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.patch(f'/departments/{department.id}/',
+        response = self.client.patch(f'/api/departments/{department.id}/',
                                      {'managerId': user.id},
                                      content_type='application/json')
 
@@ -236,7 +236,7 @@ class DepartmentTests(TestCase):
         self.assertEqual(department.manager.id, manager.id)
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.patch(f'/departments/{department.id}/',
+        response = self.client.patch(f'/api/departments/{department.id}/',
                                      {'managerId': user.id},
                                      content_type='application/json')
 
@@ -257,4 +257,4 @@ class DepartmentTests(TestCase):
     @staticmethod
     def login_user(client, user_data):
         login_data = {'email': user_data.email, 'password': user_data.password}
-        client.post('/login/', login_data)
+        client.post('/api/login/', login_data)

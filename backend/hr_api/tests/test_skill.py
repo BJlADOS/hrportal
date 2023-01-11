@@ -20,7 +20,7 @@ class SkillTests(TestCase):
         self.client = Client()
 
     def test_GetSkills_ShouldRaise403_onUnauthorizedClient(self):
-        response = self.client.get('/skills/')
+        response = self.client.get('/api/skills/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -29,12 +29,12 @@ class SkillTests(TestCase):
     def test_GetSkills_ShouldGetSkillsInfo(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get('/skills/')
+        response = self.client.get('/api/skills/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_PostSkills_ShouldRaise403_onUnauthorizedClient(self):
-        response = self.client.post('/skills/')
+        response = self.client.post('/api/skills/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -43,7 +43,7 @@ class SkillTests(TestCase):
     def test_PostSkills_ShouldRaise403_onEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post('/skills/')
+        response = self.client.post('/api/skills/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -52,7 +52,7 @@ class SkillTests(TestCase):
     def test_PostSkills_ShouldRaise403_onBlankData(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/skills/')
+        response = self.client.post('/api/skills/')
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -61,7 +61,7 @@ class SkillTests(TestCase):
     def test_PostSkills_ShouldCreateSkill(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.post('/skills/', {'name': 'test_PostSkills_ShouldCreateSkill'})
+        response = self.client.post('/api/skills/', {'name': 'test_PostSkills_ShouldCreateSkill'})
 
         self.assertEqual(response.status_code, 201)
         skill = Skill.objects.last()
@@ -69,7 +69,7 @@ class SkillTests(TestCase):
         skill.delete()
 
     def test_GetSkillByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(f'/skills/{self.get_existing_skill_id()}/')
+        response = self.client.get(f'/api/skills/{self.get_existing_skill_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -78,7 +78,7 @@ class SkillTests(TestCase):
     def test_GetSkillByPk_ShouldRaise403_onEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post('/skills/')
+        response = self.client.post('/api/skills/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -87,7 +87,7 @@ class SkillTests(TestCase):
     def test_GetSkillByPk_ShouldRaise404_onNonExistentSkill(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.get(f'/skills/{self.get_nonexistent_skill_id()}/')
+        response = self.client.get(f'/api/skills/{self.get_nonexistent_skill_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -96,12 +96,12 @@ class SkillTests(TestCase):
     def test_GetSkillByPk_ShouldGetSkillInfo(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.get(f'/skills/{self.get_existing_skill_id()}/')
+        response = self.client.get(f'/api/skills/{self.get_existing_skill_id()}/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_DeleteSkillByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.delete(f'/skills/{self.get_existing_skill_id()}/')
+        response = self.client.delete(f'/api/skills/{self.get_existing_skill_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -110,7 +110,7 @@ class SkillTests(TestCase):
     def test_DeleteSkillByPk_ShouldRaise403_onEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.delete(f'/skills/{self.get_existing_skill_id()}/')
+        response = self.client.delete(f'/api/skills/{self.get_existing_skill_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -119,7 +119,7 @@ class SkillTests(TestCase):
     def test_DeleteSkillByPk_ShouldRaise404_onNonExistentSkill(self):
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.delete(f'/skills/{self.get_nonexistent_skill_id()}/')
+        response = self.client.delete(f'/api/skills/{self.get_nonexistent_skill_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -130,7 +130,7 @@ class SkillTests(TestCase):
         skill.save()
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.delete(f'/skills/{skill.id}/')
+        response = self.client.delete(f'/api/skills/{skill.id}/')
 
         self.assertEqual(response.status_code, 204)
         try:
@@ -150,4 +150,4 @@ class SkillTests(TestCase):
     @staticmethod
     def login_user(client, user_data):
         login_data = {'email': user_data.email, 'password': user_data.password}
-        client.post('/login/', login_data)
+        client.post('/api/login/', login_data)

@@ -42,7 +42,7 @@ class ResumeTests(TestCase):
         self.client = Client()
 
     def test_GetResumes_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get('/resumes/', {})
+        response = self.client.get('/api/resumes/', {})
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -51,7 +51,7 @@ class ResumeTests(TestCase):
     def test_GetResumes_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get('/resumes/', {})
+        response = self.client.get('/api/resumes/', {})
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -60,12 +60,12 @@ class ResumeTests(TestCase):
     def test_GetResumes_ShouldGetResumesInfo(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get('/resumes/')
+        response = self.client.get('/api/resumes/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_GetResumeByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(f'/resumes/{self.get_existing_resume_id()}/')
+        response = self.client.get(f'/api/resumes/{self.get_existing_resume_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -74,7 +74,7 @@ class ResumeTests(TestCase):
     def test_GetResumeByPk_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get(f'/resumes/{self.get_existing_resume_id()}/')
+        response = self.client.get(f'/api/resumes/{self.get_existing_resume_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -83,7 +83,7 @@ class ResumeTests(TestCase):
     def test_GetResumeByPk_ShouldRaise404_OnNonExistentResume(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get(f'/resumes/{self.get_nonexistent_resume_id()}/')
+        response = self.client.get(f'/api/resumes/{self.get_nonexistent_resume_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -92,12 +92,12 @@ class ResumeTests(TestCase):
     def test_GetResumeByPk_ShouldReturnResumeInfo(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get(f'/resumes/{self.get_existing_resume_id()}/')
+        response = self.client.get(f'/api/resumes/{self.get_existing_resume_id()}/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_GetUserResume_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(f'/user/resume/')
+        response = self.client.get(f'/api/user/resume/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -106,7 +106,7 @@ class ResumeTests(TestCase):
     def test_GetUserResume_ShouldRaise404_OnUserWithoutResume(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.get(f'/user/resume/')
+        response = self.client.get(f'/api/user/resume/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -115,12 +115,12 @@ class ResumeTests(TestCase):
     def test_GetUserResume_ShouldGetResumeInfo(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get(f'/user/resume/')
+        response = self.client.get(f'/api/user/resume/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_PostUserResume_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post(f'/user/resume/')
+        response = self.client.post(f'/api/user/resume/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -129,7 +129,7 @@ class ResumeTests(TestCase):
     def test_PostUserResume_ShouldRaise409_OnUserWithResume(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post(f'/user/resume/')
+        response = self.client.post(f'/api/user/resume/')
 
         self.assertEqual(response.status_code, 409)
         detail = json.loads(*response)['detail']
@@ -138,7 +138,7 @@ class ResumeTests(TestCase):
     def test_PostUserResume_ShouldRaiseValidationError_OnBlankData(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.post(f'/user/resume/')
+        response = self.client.post(f'/api/user/resume/')
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -154,13 +154,13 @@ class ResumeTests(TestCase):
 
         data = dict(resume_data)
         data['resume'] = SimpleUploadedFile("test.pdf", b"resume")
-        response = self.client.post(f'/user/resume/', data)
+        response = self.client.post(f'/api/user/resume/', data)
 
         self.assertEqual(response.status_code, 200)
         User.objects.get(email=self.manager_data.email).resume.delete()
 
     def test_PatchUserResume_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.patch('/user/resume/')
+        response = self.client.patch('/api/user/resume/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -169,7 +169,7 @@ class ResumeTests(TestCase):
     def test_PatchUserResume_ShouldRaise404_OnUserWithoutResume(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.patch('/user/resume/')
+        response = self.client.patch('/api/user/resume/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -179,7 +179,7 @@ class ResumeTests(TestCase):
         self.login_user(self.client, self.employee_data)
         resume_before = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
 
-        response = self.client.patch('/user/resume/')
+        response = self.client.patch('/api/user/resume/')
 
         self.assertEqual(response.status_code, 200)
         resume_after = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
@@ -191,7 +191,7 @@ class ResumeTests(TestCase):
         self.login_user(self.client, self.employee_data)
         resume_before = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
 
-        response = self.client.patch('/user/resume/', {'isActive': False}, content_type='application/json')
+        response = self.client.patch('/api/user/resume/', {'isActive': False}, content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
         resume_after = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
@@ -202,7 +202,7 @@ class ResumeTests(TestCase):
         self.assertEqual(resume_before, resume_after)
 
     def test_DeleteUserResume_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.delete('/user/resume/')
+        response = self.client.delete('/api/user/resume/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -211,7 +211,7 @@ class ResumeTests(TestCase):
     def test_DeleteUserResume_ShouldRaise404_OnUserWithoutResume(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.delete('/user/resume/')
+        response = self.client.delete('/api/user/resume/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -222,13 +222,13 @@ class ResumeTests(TestCase):
         create_resume_for(manager, resume_data)
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.delete('/user/resume/')
+        response = self.client.delete('/api/user/resume/')
 
         self.assertEqual(response.status_code, 204)
         self.assertEqual(self.client.get('/user/resume/').status_code, 404)
 
     def test_ResumeResponse_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post(f'/resumes/{self.get_existing_resume_id()}/response/')
+        response = self.client.post(f'/api/resumes/{self.get_existing_resume_id()}/response/')
 
         print(json.loads(*response))
 
@@ -239,7 +239,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post(f'/resumes/{self.get_existing_resume_id()}/response/')
+        response = self.client.post(f'/api/resumes/{self.get_existing_resume_id()}/response/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -248,7 +248,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldRaise404_OnNonExistentResume(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.post(f'/resumes/{self.get_nonexistent_resume_id()}/response/')
+        response = self.client.post(f'/api/resumes/{self.get_nonexistent_resume_id()}/response/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -260,7 +260,7 @@ class ResumeTests(TestCase):
         employee_id = User.objects.get(resume__id=resume_id).id
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.post(f'/resumes/{resume_id}/response/')
+        response = self.client.post(f'/api/resumes/{resume_id}/response/')
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
@@ -277,4 +277,4 @@ class ResumeTests(TestCase):
     @staticmethod
     def login_user(client, user_data):
         login_data = {'email': user_data.email, 'password': user_data.password}
-        client.post('/login/', login_data)
+        client.post('/api/login/', login_data)

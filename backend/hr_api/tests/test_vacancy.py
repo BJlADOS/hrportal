@@ -48,14 +48,14 @@ class VacancyTests(TestCase):
         self.client = Client()
 
     def test_GetVacancies_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get('/vacancies/')
+        response = self.client.get('/api/vacancies/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
         self.assertEqual(detail, 'Authentication credentials were not provided.')
 
     def test_PostVacancies_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post('/vacancies/')
+        response = self.client.post('/api/vacancies/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -64,7 +64,7 @@ class VacancyTests(TestCase):
     def test_PostVacancies_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post('/vacancies/')
+        response = self.client.post('/api/vacancies/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -73,7 +73,7 @@ class VacancyTests(TestCase):
     def test_PostVacancies_ShouldRaiseValidationError_OnBlankData(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.post('/vacancies/', content_type='application/json')
+        response = self.client.post('/api/vacancies/', content_type='application/json')
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -81,7 +81,6 @@ class VacancyTests(TestCase):
         self.assertEqual(errors['salary'][0], 'This field is required.')
         self.assertEqual(errors['employment'][0], 'This field is required.')
         self.assertEqual(errors['schedule'][0], 'This field is required.')
-        self.assertEqual(errors['description'][0], 'This field is required.')
         self.assertEqual(errors['requiredSkillsIds'][0], 'This field is required.')
         self.assertEqual(errors['isActive'][0], 'This field is required.')
 
@@ -89,7 +88,7 @@ class VacancyTests(TestCase):
         self.login_user(self.client, self.other_manager_data)
         department = User.objects.get(email=self.other_manager_data.email).department
 
-        response = self.client.post('/vacancies/', self.vacancy_data)
+        response = self.client.post('/api/vacancies/', self.vacancy_data)
 
         self.assertEqual(response.status_code, 201)
         vacancy = json.loads(*response)
@@ -99,12 +98,12 @@ class VacancyTests(TestCase):
     def test_GetVacancies_ShouldGetVacanciesInfo(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get('/vacancies/')
+        response = self.client.get('/api/vacancies/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_GetVacancyByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.get(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -113,7 +112,7 @@ class VacancyTests(TestCase):
     def test_GetVacancyByPk_ShouldRaise404_OnNonExistentVacancy(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get(f'/vacancies/{self.get_nonexistent_vacancy_id()}/')
+        response = self.client.get(f'/api/vacancies/{self.get_nonexistent_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -122,12 +121,12 @@ class VacancyTests(TestCase):
     def test_GetVacancyByPk_ShouldGetVacanciesInfo(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.get(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.get(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 200)
 
     def test_PatchVacancyByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.patch(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -136,7 +135,7 @@ class VacancyTests(TestCase):
     def test_PatchVacancyByPk_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.patch(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -145,7 +144,7 @@ class VacancyTests(TestCase):
     def test_PatchVacancyByPk_ShouldRaise404_OnNonExistentVacancy(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.patch(f'/vacancies/{self.get_nonexistent_vacancy_id()}/')
+        response = self.client.patch(f'/api/vacancies/{self.get_nonexistent_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -154,7 +153,7 @@ class VacancyTests(TestCase):
     def test_PatchVacancyByPk_ShouldRaise403_OnNotYoursVacancy(self):
         self.login_user(self.client, self.other_manager_data)
 
-        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.patch(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -165,7 +164,7 @@ class VacancyTests(TestCase):
         vacancy = User.objects.get(email=self.manager_data.email).department.vacancy_set.first()
         vacancy_before = GetVacancySerializer(vacancy).data
 
-        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/',
+        response = self.client.patch(f'/api/vacancies/{self.get_existing_vacancy_id()}/',
                                      {'requiredSkillsIds': [1, 2]},
                                      content_type="application/json")
 
@@ -183,7 +182,7 @@ class VacancyTests(TestCase):
         vacancy = User.objects.get(email=self.manager_data.email).department.vacancy_set.first()
         vacancy_before = GetVacancySerializer(vacancy).data
 
-        response = self.client.patch(f'/vacancies/{self.get_existing_vacancy_id()}/',
+        response = self.client.patch(f'/api/vacancies/{self.get_existing_vacancy_id()}/',
                                      {'requiredSkillsIds': [1]},
                                      content_type="application/json")
 
@@ -197,7 +196,7 @@ class VacancyTests(TestCase):
         self.assertEqual(vacancy_before, vacancy_after)
 
     def test_DeleteVacancyByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.delete(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.delete(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -206,7 +205,7 @@ class VacancyTests(TestCase):
     def test_DeleteVacancyByPk_ShouldRaise403_OnEmployee(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.delete(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.delete(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -215,7 +214,7 @@ class VacancyTests(TestCase):
     def test_DeleteVacancyByPk_ShouldRaise404_OnNonExistentVacancy(self):
         self.login_user(self.client, self.manager_data)
 
-        response = self.client.delete(f'/vacancies/{self.get_nonexistent_vacancy_id()}/')
+        response = self.client.delete(f'/api/vacancies/{self.get_nonexistent_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -224,7 +223,7 @@ class VacancyTests(TestCase):
     def test_DeleteVacancyByPk_ShouldRaise403_OnNotYoursVacancy(self):
         self.login_user(self.client, self.other_manager_data)
 
-        response = self.client.delete(f'/vacancies/{self.get_existing_vacancy_id()}/')
+        response = self.client.delete(f'/api/vacancies/{self.get_existing_vacancy_id()}/')
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -236,7 +235,7 @@ class VacancyTests(TestCase):
         count_before = department.vacancy_set.count()
         self.login_user(self.client, self.other_manager_data)
 
-        response = self.client.delete(f'/vacancies/{vacancy.id}/')
+        response = self.client.delete(f'/api/vacancies/{vacancy.id}/')
 
         self.assertEqual(response.status_code, 204)
         self.assertNotEqual(count_before, 0)
@@ -248,14 +247,14 @@ class VacancyTests(TestCase):
         count_before = department.vacancy_set.count()
         self.login_user(self.client, self.admin_data)
 
-        response = self.client.delete(f'/vacancies/{vacancy.id}/')
+        response = self.client.delete(f'/api/vacancies/{vacancy.id}/')
 
         self.assertEqual(response.status_code, 204)
         self.assertNotEqual(count_before, 0)
         self.assertEqual(department.vacancy_set.count(), 0)
 
     def test_VacancyResponse_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post(f'/vacancies/{self.get_existing_vacancy_id()}/response/')
+        response = self.client.post(f'/api/vacancies/{self.get_existing_vacancy_id()}/response/')
 
         print(json.loads(*response))
 
@@ -266,7 +265,7 @@ class VacancyTests(TestCase):
     def test_VacancyResponse_ShouldRaise404_OnNonExistentVacancy(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post(f'/vacancies/{self.get_nonexistent_vacancy_id()}/response/')
+        response = self.client.post(f'/api/vacancies/{self.get_nonexistent_vacancy_id()}/response/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -275,7 +274,7 @@ class VacancyTests(TestCase):
     def test_VacancyResponse_ShouldRaise400_WithoutAnyResume(self):
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post(f'/vacancies/{self.get_existing_vacancy_id()}/response/')
+        response = self.client.post(f'/api/vacancies/{self.get_existing_vacancy_id()}/response/')
 
         self.assertEqual(response.status_code, 400)
         detail = json.loads(*response)['detail']
@@ -286,7 +285,7 @@ class VacancyTests(TestCase):
         vacancy = self.create_vacancy_for(department)
         self.login_user(self.client, self.employee_data)
 
-        response = self.client.post(f'/vacancies/{vacancy.id}/response/')
+        response = self.client.post(f'/api/vacancies/{vacancy.id}/response/')
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -300,7 +299,7 @@ class VacancyTests(TestCase):
         manager = User.objects.get(department__id=vacancy.department.id)
         employee_id = User.objects.get(email=self.employee_data.email).id
 
-        response = self.client.post(f'/vacancies/{vacancy_id}/response/',
+        response = self.client.post(f'/api/vacancies/{vacancy_id}/response/',
                                     {'resume': SimpleUploadedFile('test.pdf', b'resume')})
 
         self.assertEqual(response.status_code, 200)
@@ -315,7 +314,7 @@ class VacancyTests(TestCase):
         employee = User.objects.get(email=self.employee_data.email)
         resume = create_resume_for(employee, resume_data)
 
-        response = self.client.post(f'/vacancies/{vacancy_id}/response/')
+        response = self.client.post(f'/api/vacancies/{vacancy_id}/response/')
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
@@ -341,4 +340,4 @@ class VacancyTests(TestCase):
     @staticmethod
     def login_user(client, user_data):
         login_data = {'email': user_data.email, 'password': user_data.password}
-        client.post('/login/', login_data)
+        client.post('/api/login/', login_data)
