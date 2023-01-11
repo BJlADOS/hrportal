@@ -7,7 +7,7 @@
             </div>
             <div class="content">
                 <div class="search">
-                    <app-search (madeSearch)="resetSearch()"></app-search>
+                    <app-search (madeSearch)="resetSearch()" (filterToggle)="toggleFilters()"></app-search>
                 </div>
                 <div class="error" *ngIf="loadingError">{{loadingError}}</div>
                 <div class="content__main">

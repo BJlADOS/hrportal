@@ -17,6 +17,21 @@
         gap: 1rem;
         align-items: center;
 
+        & .filter-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--main-accent-color);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            transition: .3s ease;
+            cursor: pointer;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
     }
 
     &__input {

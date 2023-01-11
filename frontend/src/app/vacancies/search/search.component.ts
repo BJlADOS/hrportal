@@ -21,6 +21,7 @@ export class SearchComponent implements OnInit {
   public ordering: ISelectOption[] = getOrderingRussianAsArray();
 
   @Output() madeSearch = new EventEmitter<null>();
+  @Output() filterToggle = new EventEmitter<null>();
 
   constructor(
     private _form: FormGenerator,
@@ -42,6 +43,10 @@ export class SearchComponent implements OnInit {
 
   public reset(): void {
     this.searchForm = this._form.getSeachForm();
+  }
+
+  public toggleFilters(): void {
+    this.filterToggle.emit();
   }
 
   // public sort(): void {

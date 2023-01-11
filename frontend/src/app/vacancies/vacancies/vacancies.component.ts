@@ -85,7 +85,7 @@ export class VacanciesComponent implements OnInit, OnDestroy {
     this.filtersExpanded = !this.filtersExpanded;
     setTimeout(() => {
       this.update$.next(true);
-    }, 300);
+    }, 700);
   }
 
   private async checkPosition(): Promise<void> {
