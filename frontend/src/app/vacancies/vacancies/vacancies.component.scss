@@ -23,7 +23,7 @@
         font-size: var(--font-size--main);
         background-color: var(--main-accent-color);
         color: var(--white);
-        padding: 0.8rem 1.6rem;
+        padding: .8rem 1.6rem;
         text-transform: uppercase;
 
         &:hover {
@@ -75,18 +75,19 @@
 
 .scroll-back {
     position: fixed;
+    display: flex;
+    gap: .5rem;
     bottom: 2rem;
     right: 2rem;
-    background-color: var(--white);
-    border: 1px solid var(--main-accent-color);
-    border-radius: 50%;
-    padding: 0.5rem;
-    width: 3rem;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background-color: var(--grey);
+    border-radius: 20px;
+    padding: .6rem 1rem;
     transition: .3s ease;
+
+    span {
+        text-transform: uppercase;
+        color: var(--white);
+    }
 
     &:hover {
         cursor: pointer;
