@@ -1,0 +1,28 @@
+.dropdown-list {
+    margin: 0;
+    padding: 0;
+    transition: .3s ease;
+    background: var(--white);
+    list-style: none;
+
+    li {
+        display: flex;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-weight: 500;
+        padding: 0.55rem 0;
+
+        svg {
+            min-height: 16px;
+            min-width: 15px;
+        }
+
+        &:hover {
+            background-color: rgba(var(--main-accent-color-rgb), 0.2);
+        }
+    }
+
+    &.dropdown-open {
+        display: block;
+    }
+}

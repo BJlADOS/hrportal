@@ -16,6 +16,13 @@ import { CreateResumeComponent } from './components/create-resume/create-resume.
 import { NgxMaskModule } from 'ngx-mask';
 import { CUSTOM_SMALL_SELECT_VALUE_ACCESSOR, SelectSmallComponent } from './components/select-small/select-small.component';
 import { SearchSelectFormComponent } from './components/search-select-form/search-select-form.component';
+import { SelectWithRadioComponent } from './components/select-with-radio/select-with-radio.component';
+import { SelectWithRadioMultipleComponent } from './components/select-with-radio-multiple/select-with-radio-multiple.component';
+import { AccordionComponent } from './components/accordion/accordion.component';
+import { AccordionContentDirective } from './directives/content/accordion-content.directive';
+import { AccordionItemDirective } from './directives/item/accordion-item.directive';
+import { SelectWithRadioMultipleSearchComponent } from './components/select-with-radio-multiple-search/select-with-radio-multiple-search.component';
+import { LimitInputDirective } from './directives/limit-input/limit-input.directive';
 
 
 
@@ -33,6 +40,13 @@ import { SearchSelectFormComponent } from './components/search-select-form/searc
     CreateResumeComponent,
     SelectSmallComponent,
     SearchSelectFormComponent,
+    SelectWithRadioComponent,
+    SelectWithRadioMultipleComponent,
+    AccordionComponent,
+    AccordionContentDirective,
+    AccordionItemDirective,
+    SelectWithRadioMultipleSearchComponent,
+    LimitInputDirective,
   ],
   imports: [
     CommonModule,
@@ -52,6 +66,13 @@ import { SearchSelectFormComponent } from './components/search-select-form/searc
     DragAndDropDirective,
     SelectSmallComponent,
     SearchSelectFormComponent,
+    SelectWithRadioComponent,
+    SelectWithRadioMultipleComponent,
+    AccordionComponent,
+    AccordionContentDirective,
+    AccordionItemDirective,
+    SelectWithRadioMultipleSearchComponent,
+    LimitInputDirective,
   ]
 })
 export class SharedModule { }

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IVacancyPage } from 'src/app/interfaces/pagination';
+import { IFilterRequest } from 'src/app/interfaces/search';
 import { IVacancy, IVacancyResponseModel } from 'src/app/interfaces/vacancy';
 import { environment } from 'src/environments/environment';
 import { SkillsService } from '../skills/skills.service';
@@ -19,7 +21,11 @@ export class VacancyService {
     private _skills: SkillsService,
   ) { }
 
-  public getVacancies(): Observable<IVacancy[]> {
+  public getVacancies(filters?: IFilterRequest): Observable<IVacancyPage> {
+    return this.http.get<IVacancyPage>(`${this._apiUrl}/vacancies`, { params: {...filters} });
+  }
+
+  public getAllVacancies(): Observable<IVacancy[]> {
     return this.http.get<IVacancy[]>(`${this._apiUrl}/vacancies`);
   }
 

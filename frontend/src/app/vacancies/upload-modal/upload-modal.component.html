@@ -43,9 +43,9 @@
         <div class="modal__form">
             <div class="modal__form-group">
                 <div class="button-block">
-                    <button class="modal__form-submit" [class.disabled]="!resume" (click)="sendReadyResume()"
-                        [disabled]="!resume">Отправить</button>
-                    <app-error class="error" *ngIf="!resume"
+                    <button class="modal__form-submit" [class.disabled]="!resumeId" (click)="sendReadyResume()"
+                        [disabled]="!resumeId">Отправить</button>
+                    <app-error class="error" *ngIf="!resumeId"
                         [error]="{ message : 'Для отправки готового резюме заполните его на сайте'}">
                     </app-error>
                     <label>или</label>

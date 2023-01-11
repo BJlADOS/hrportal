@@ -37,11 +37,61 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 2em;
+    gap: 2rem;
     margin-top: 2.5rem;
     flex-direction: column;
     align-items: center;
     margin-bottom: 3rem;
+
+    &__main {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        & .vacancies {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        & .filters {
+            width: calc(280px + 130px);
+            margin-right: 1rem;
+        }
+
+        & .no-vacancies {
+            width: 100%;
+        }
+
+    }
+
+    & .search {
+        width: 100%;
+    }
+
+
+}
+
+.scroll-back {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--white);
+    border: 1px solid var(--main-accent-color);
+    border-radius: 50%;
+    padding: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .3s ease;
+
+    &:hover {
+        cursor: pointer;
+        background-color: var(--main-accent-color);
+    }
 }
 
 .width {

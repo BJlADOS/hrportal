@@ -18,7 +18,7 @@ export class UploadModalComponent extends Modal {
   public file: File | null = null;
   public isSubmitted: boolean = false;
   public submitTypeSelected: boolean = false;
-  public resume!: IResume;
+  public resumeId: number | null = this._user.currentUserValue?.resumeId!;
 
   private _vacancyId: string = '';
   public uploadError: string | undefined;
@@ -31,10 +31,6 @@ export class UploadModalComponent extends Modal {
   }
 
   public ngOnInit(): void {
-    this._user.getResume().subscribe({ next: (resume: IResume) => {
-      this.resume = resume;
-    }, error: () => {
-    }});
   }
 
   public changeSubmitType(): void {
@@ -69,7 +65,7 @@ export class UploadModalComponent extends Modal {
 
   public sendReadyResume(): void {
     this.isSubmitted = true;
-    this._vacancy.responseToVacancyWithReadyResume(this._vacancyId, this.resume.id);
+    this._vacancy.responseToVacancyWithReadyResume(this._vacancyId, this.resumeId!);
   }
 
   public uploadFile(): void {

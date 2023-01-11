@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IResume } from 'src/app/interfaces/resume';
+import { IFilter, Ordering } from 'src/app/interfaces/search';
 import { ISelectOption } from 'src/app/interfaces/select';
 import { IDepartment, IUser } from 'src/app/interfaces/User';
 import { IVacancy } from 'src/app/interfaces/vacancy';
@@ -173,6 +174,35 @@ export class FormGenerator {
             },
             {
                 validators: this._customValidators.passwordMatchValidator
+            }
+        );
+    }
+
+    public getFilterForm(filters?: IFilter): FormGroup {
+        return this._fb.group(
+            {
+                salary_min: new FormControl(filters?.salary_min?? ''),
+                salary_max: new FormControl(filters?.salary_max?? ''),
+                departments: new FormControl(filters?.departments?? []),
+                employment: new FormControl(filters?.employment?? []),
+                schedule: new FormControl(filters?.schedule?? []),
+                skills: new FormControl(filters?.skills?? []),
+            }
+        );
+    }
+
+    public getSeachForm(search?: string): FormGroup {
+        return this._fb.group(
+            {
+                search: new FormControl(search?? ''),
+            }
+        );
+    }
+
+    public getOrderingForm(ordering?: Ordering): FormGroup {
+        return this._fb.group(
+            {
+                ordering: new FormControl(ordering?? Ordering['-time']),
             }
         );
     }

@@ -74,7 +74,6 @@ export class CreateVacancyComponent implements OnInit {
 
   public positionChange(): void {
     this.errors.position = this._formManager.checkPosition(this.vacancyForm);
-    console.log(this.vacancyForm);
   }
 
   public addedSkill(skill: ISkill): void {

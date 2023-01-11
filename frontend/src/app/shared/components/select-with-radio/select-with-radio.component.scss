@@ -1,0 +1,104 @@
+.dropdown-collection {
+    position: relative;
+    width: fit-content;
+
+    &.opened {
+        & .dropdown-list {
+            border-color: var(--main-accent-color);
+        }
+
+        & .dropdown-button {
+            border-color: var(--main-accent-color);
+            color: var(--main-accent-color);
+        }
+        
+
+        & .arrow-icon {      
+            fill: var(--main-accent-color);
+        }
+    }
+
+    &:hover {
+        & .dropdown-list {
+            border-color: var(--main-accent-color);
+        }
+
+        & .dropdown-button {
+            color: var(--main-accent-color);
+        }
+
+        & .arrow-icon {      
+            fill: var(--main-accent-color);
+        }
+    }
+
+}
+
+.dropdown-button {
+    display: flex;
+    box-sizing: border-box;
+    position: relative;
+    cursor: pointer;
+    align-items: center;
+
+    & .arrow-icon {
+        fill: var(--font-primary);
+    }
+
+    &.required {
+        border-color: var(--main-accent-color);
+
+        span {
+            font-weight: 500;
+            color: var(--main-accent-color);
+        }
+    }
+
+    span {
+        padding: 0.45rem 0;
+        font-weight: 600;
+    }
+
+}
+
+.dropdown-list {
+    width: fit-content;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: .3s ease;
+    display: none;
+    background: var(--white);
+    list-style: none;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    // left: 0;
+    padding: 0;
+    z-index: 10;
+    right: 0;
+    margin: 0;
+    transform: translateY(calc(100% + 10px));
+
+    li {
+        display: flex;
+        gap: 0.5rem;
+        white-space: nowrap;
+        cursor: pointer;
+        font-weight: 500;
+        padding: 0.55rem 0.7rem;
+
+        svg {
+            min-height: 16px;
+            min-width: 15px;
+        }
+
+        &:hover {
+            background-color: rgba(var(--main-accent-color-rgb), 0.2);
+        }
+    }
+
+    &.dropdown-open {
+        display: block;
+    }
+}

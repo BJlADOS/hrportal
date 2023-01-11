@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable, takeUntil } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
 import { contentExpansion } from 'src/app/animations/content-expansion/content-expansion';
 import { FormGenerator } from 'src/app/classes/form-generator/form-generator';
 import { IUserEditing } from 'src/app/interfaces/editing';
 import { ISubmitError, IUserFormError } from 'src/app/interfaces/errors';
+import { ISelectOption } from 'src/app/interfaces/select';
 import { IDepartment, ISkill, IUser, IUserUpdate } from 'src/app/interfaces/User';
 import { getExperienceRussianAsArray } from 'src/app/interfaces/vacancy';
 import { DepartmentService } from 'src/app/services/department/department.service';
@@ -19,11 +20,11 @@ import { FormManager } from '../../classes/form-manager/form-manager'
   styleUrls: ['./profile.component.scss'],
   animations: [contentExpansion],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   public user$: BehaviorSubject<IUser | null> = this._user.currentUserSubject$;
   public user: IUser | null = null;
-  public experience: { name: string, id: string }[] = getExperienceRussianAsArray();
+  public experience: ISelectOption[] = getExperienceRussianAsArray();
   public formManager: FormManager = FormManager.getInstance()
   public departments: Observable<IDepartment[]> = this._department.departments$;
   public skills$: Observable<ISkill[]> = this._skills.skills$;
@@ -39,11 +40,12 @@ export class ProfileComponent implements OnInit {
   public isUserEdited: IUserEditing = { name: false, photo: false, email: false, contact: false, experience: false, department: false, skills: false };
   public isSavedChanges: boolean = false;
 
+  private _destroy$ = new Subject<boolean>();
+
   constructor(
     private _department: DepartmentService,
     private _user: UserService,
     private _form: FormGenerator,
-    private _destroy$: DestroyService,
     private _skills: SkillsService,
   ) { }
 
@@ -60,6 +62,11 @@ export class ProfileComponent implements OnInit {
       
     } });
 
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next(true);
+    this._destroy$.complete();
   }
 
   public onPhotoChange(event: any): void {
