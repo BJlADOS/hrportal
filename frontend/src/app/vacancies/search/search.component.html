@@ -1,6 +1,6 @@
 <div class="search">
     <div class="counter">
-        <span>{{ (vacancies$ | async )?.count }} Вакансий</span>
+        <span>{{ (vacancies$ | async )?.count?? 0 | vacancyDeclination }}</span>
     </div>
     <div class="forms">
         <form class="form" [formGroup]="searchForm" (submit)="search()">

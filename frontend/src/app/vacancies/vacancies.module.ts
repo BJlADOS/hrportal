@@ -14,6 +14,7 @@ import { CreateVacancyComponent } from './create-vacancy/create-vacancy.componen
 import { SearchComponent } from './search/search.component';
 import { FiltersComponent } from './filters/filters.component';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
+import { VacancyDeclinationPipe } from './pipes/vacancy-declination/vacancy-declination.pipe';
 
 
 
@@ -27,6 +28,7 @@ import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
     CreateVacancyComponent,
     SearchComponent,
     FiltersComponent,
+    VacancyDeclinationPipe,
   ],
   imports: [
     CommonModule,
