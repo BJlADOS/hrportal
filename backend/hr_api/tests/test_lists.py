@@ -27,10 +27,10 @@ class ListsTests(TestCase):
     admin_data = UserData('admin', 'admin@hrportal.com', 'password')
 
     @staticmethod
-    def create_vacancy(department, salary, employment, schedule, skills):
+    def create_vacancy(department, position, salary, employment, schedule, skills):
         vacancy = Vacancy.objects.create(department=department,
+                                         position=position,
                                          salary=salary,
-                                         position='position',
                                          employment=employment,
                                          schedule=schedule,
                                          is_active=True)
@@ -38,10 +38,10 @@ class ListsTests(TestCase):
         vacancy.save()
 
     @staticmethod
-    def create_resume(user, salary, employment, schedule):
+    def create_resume(user, position, salary, employment, schedule):
         Resume.objects.create(employee=user,
+                              desired_position=position,
                               desired_salary=salary,
-                              desired_position='position',
                               desired_employment=employment,
                               desired_schedule=schedule,
                               resume=SimpleUploadedFile('test.pdf', b'resume'),
@@ -59,20 +59,26 @@ class ListsTests(TestCase):
         manager = User.objects.create_user(**cls.manager_data.__dict__)
         admin = User.objects.create_superuser(**cls.admin_data.__dict__)
 
-        department = Department.objects.create(name='department', manager=manager)
-        department.save()
+        department1 = Department.objects.create(name='department1', manager=manager)
+        department1.save()
+        department2 = Department.objects.create(name='department2')
+        department2.save()
+        department3 = Department.objects.create(name='department3')
+        department3.save()
+        department4 = Department.objects.create(name='department4')
+        department4.save()
 
         skills = [cls.create_skill(), cls.create_skill(), cls.create_skill()]
 
-        cls.create_vacancy(department, 10000, 'PART', 'FLEX', skills[:1])
+        cls.create_vacancy(department2, 'Pos', 10000, 'PART', 'FLEX', skills[:1])
         time.sleep(0.1)
-        cls.create_vacancy(department, 15000, 'FULL', 'SHIFT', skills[:2])
+        cls.create_vacancy(department3, 'Posit', 15000, 'FULL', 'SHIFT', skills[:2])
         time.sleep(0.1)
-        cls.create_vacancy(department, 20000, 'FULL', 'FULL', skills)
+        cls.create_vacancy(department4, 'Position', 20000, 'FULL', 'FULL', skills)
 
-        cls.create_resume(employee, 10000, 'PART', 'FLEX')
-        cls.create_resume(manager, 15000, 'FULL', 'SHIFT')
-        cls.create_resume(admin, 20000, 'FULL', 'FULL')
+        cls.create_resume(employee, 'Pos', 10000, 'PART', 'FLEX')
+        cls.create_resume(manager, 'Posit', 15000, 'FULL', 'SHIFT')
+        cls.create_resume(admin, 'Position', 20000, 'FULL', 'FULL')
 
         employee.existing_skills.add(*skills[:1])
         time.sleep(0.1)
@@ -100,15 +106,24 @@ class ListsTests(TestCase):
         'skills=1&skills=2&skills=3': [3]
     }
 
+    vacancies_filter_test_cases = {
+        'department=1': [],
+        'department=1&department=2': [1],
+        'department=1&department=2&department=3': [1, 2],
+        'department=1&department=2&department=3&department=4': [1, 2, 3],
+        'department=2&department=4': [1, 3]
+    }
+
     def test_GetVacanciesWithFilters_ShouldReturnFilteredVacancies(self):
-        for path, expected in self.filter_test_cases.items():
-            result = to_id_list(self.client.get(f'/vacancies/?{path}'))
-            assert result == expected
+        for path, expected in (self.filter_test_cases | self.vacancies_filter_test_cases).items():
+            response = self.client.get(f'/vacancies/?{path}')
+            result = to_id_list(response)
+            assert sorted(result) == sorted(expected)
 
     def test_GetResumesWithFilters_ShouldReturnFilteredResumes(self):
         for path, expected in self.filter_test_cases.items():
             result = to_id_list(self.client.get(f'/resumes/?{path}'))
-            assert result == expected
+            assert sorted(result) == sorted(expected)
 
     sorting_test_cases = {
         '': [1, 2, 3],
@@ -133,12 +148,34 @@ class ListsTests(TestCase):
         for limit, offset in cases:
             response = self.client.get(f'/vacancies/?limit={limit}&offset={offset}')
             page = PaginationPage(response)
-            assert [1, 2, 3][offset:offset+limit] == page.results
+            assert [1, 2, 3][offset:offset + limit] == page.results
 
     def test_GetResumesWithPagination_ShouldReturnCorrectPage(self):
         cases = [case for case in itertools.product(range(4), repeat=2) if case[0] != 0]
         for limit, offset in cases:
             response = self.client.get(f'/vacancies/?limit={limit}&offset={offset}')
             page = PaginationPage(response)
-            assert [1, 2, 3][offset:offset+limit] == page.results
+            assert [1, 2, 3][offset:offset + limit] == page.results
 
+    searching_test_cases = {
+        'Pos': [1, 2, 3],
+        'pos': [1, 2, 3],
+        'Posit': [2, 3],
+        'posit': [2, 3],
+        'Position': [3],
+        'position': [3],
+        'os': [1, 2, 3],
+        'sit': [2, 3],
+        'tion': [3],
+        'NotPosition': []
+    }
+
+    def test_GetVacanciesWithSearching_ShouldReturnMatchedVacancies(self):
+        for path, expected in self.searching_test_cases.items():
+            result = to_id_list(self.client.get(f'/vacancies/?search={path}'))
+            assert sorted(result) == sorted(expected)
+
+    def test_GetResumesWithSearching_ShouldReturnMatchedResumes(self):
+        for path, expected in self.searching_test_cases.items():
+            result = to_id_list(self.client.get(f'/resumes/?search={path}'))
+            assert sorted(result) == sorted(expected)

@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -203,7 +204,8 @@ class ResumeList(generics.ListAPIView):
     queryset = Resume.objects.all()
     serializer_class = GetResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['$desired_position']
     filterset_class = ResumeFilter
     pagination_class = LimitOffsetPagination
 
@@ -268,7 +270,8 @@ def resume_response(request, pk):
 
 class VacancyList(generics.ListCreateAPIView):
     queryset = Vacancy.objects.all()
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['$position']
     filterset_class = VacancyFilter
     pagination_class = LimitOffsetPagination
 
