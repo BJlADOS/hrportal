@@ -1,10 +1,9 @@
 import django_filters
-from django_filters import FilterSet
 
 from .models import *
 
 
-class ResumeFilter(FilterSet):
+class ResumeFilter(django_filters.FilterSet):
     salary = django_filters.RangeFilter(field_name='desired_salary')
     employment = django_filters.ChoiceFilter(field_name='desired_employment', choices=EMPLOYMENT_CHOICES)
     schedule = django_filters.ChoiceFilter(field_name='desired_schedule', choices=SCHEDULE_CHOICES)
@@ -25,7 +24,7 @@ class ResumeFilter(FilterSet):
         ]
 
 
-class VacancyFilter(FilterSet):
+class VacancyFilter(django_filters.FilterSet):
     salary = django_filters.RangeFilter()
     ordering = django_filters.OrderingFilter(fields=[
         ('salary', 'salary'),
