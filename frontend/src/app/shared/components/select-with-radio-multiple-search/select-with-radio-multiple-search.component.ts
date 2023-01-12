@@ -1,6 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs';
+import { contentExpansionHorizontal } from 'src/app/animations/content-expansion/content-expansion-horizontal';
 import { DestroyService } from 'src/app/services/destoy/destroy.service';
 
 export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
@@ -14,6 +15,7 @@ export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
   templateUrl: './select-with-radio-multiple-search.component.html',
   styleUrls: ['./select-with-radio-multiple-search.component.scss'],
   providers: [CUSTOM_SELECT_VALUE_ACCESSOR],
+  animations: [contentExpansionHorizontal],
 })
 export class SelectWithRadioMultipleSearchComponent implements OnInit, ControlValueAccessor {
 
