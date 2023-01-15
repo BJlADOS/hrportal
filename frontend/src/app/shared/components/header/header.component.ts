@@ -37,9 +37,9 @@ export class HeaderComponent implements OnInit {
 
   public ngOnInit(): void {
     this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-        this._router.events
-            .pipe(filter((event: RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll) => event instanceof NavigationEnd), takeUntil(this._destroy$))
-            .subscribe(() => this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root));
+    this._router.events
+      .pipe(filter((event: RouterEvent | RouteConfigLoadStart | RouteConfigLoadEnd | ChildActivationStart | ChildActivationEnd | ActivationStart | ActivationEnd | Scroll) => event instanceof NavigationEnd), takeUntil(this._destroy$))
+      .subscribe(() => this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root));
     this.user.pipe(takeUntil(this._destroy$)).subscribe((user: IUser | null) => {
       this.routes = user?.isAdmin ? adminButtons : user?.isManager ? managerButtons : userButtons;
     });
@@ -80,23 +80,23 @@ export class HeaderComponent implements OnInit {
   private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {
     const children: ActivatedRoute[] = route.children;
     if (children.length === 0) {
-        return breadcrumbs;
+      return breadcrumbs;
     }
 
     for (const child of children) {
-        const routeURL: string = child.snapshot.url.map((segment: UrlSegment) => segment.path).join('/');
-        if (routeURL !== '') {
-            url += `/${routeURL}`;
-        }
-        const label: string = child.snapshot.data['breadcrumb'];
-        if (label) {
-            breadcrumbs.push({ label, url });
-        }
+      const routeURL: string = child.snapshot.url.map((segment: UrlSegment) => segment.path).join('/');
+      if (routeURL !== '') {
+        url += `/${routeURL}`;
+      }
+      const label: string = child.snapshot.data['breadcrumb'];
+      if (label) {
+        breadcrumbs.push({ label, url });
+      }
 
-        return this.createBreadcrumbs(child, url, breadcrumbs);
+      return this.createBreadcrumbs(child, url, breadcrumbs);
     }
 
     return breadcrumbs;
-}
+  }
 
 }
