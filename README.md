@@ -79,6 +79,14 @@ docker compose -f docker-compose-prod.yaml up -d --build
 Также аргумент `--build` рекомендуется использовать в случае перехода с DEV на PROD версию Frontend, так как при сборке
 его контейнера используются переменные окружения.
 
+Доступ к консоли внутри контейнера Backend:
+
+```shell
+docker exec -it django bash
+# для создания суперюзеров
+python manage.py createsuperuser
+```
+
 ### Настройки отправки почты
 
 Для тестирования отправки почты зарегистрироваться на [mailtrap.io](https://mailtrap.io/) и вставить в .env (.env.docker)
