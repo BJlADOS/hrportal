@@ -1,0 +1,59 @@
+<div class="wrapper">
+    <form [formGroup]="filterForm" class="form" (submit)="applyFilters()">
+        <app-accordion class="accordion">
+            <appAccordionItem class="accordion__item" title="Навыки">
+                <ng-template appAccordionContent>
+                    <app-select-with-radio-multiple-search
+                        *ngIf="(skills$ | async)?.length"
+                        [options]="(skills$ | async)!" formControlName="skills"
+                        [title]="'Поиск по навыкам'">
+                    </app-select-with-radio-multiple-search>
+                </ng-template>
+            </appAccordionItem>
+            <appAccordionItem class="accordion__item" title="Зарплата">
+                <ng-template appAccordionContent>
+                    <div class="salary">
+                        <div class="salary__input">
+                            <input appLimitInput [max]="filterForm.controls['salary_max'].value?? 999999" [min]="0"
+                                   type="salary_min" formControlName="salary_min"
+                                   placeholder="От 5000₽" mask="09999999999999">
+                        </div>
+                        <div class="salary__input">
+                            <input appLimitInput [min]="filterForm.controls['salary_min'].value?? 0" type="salary_max"
+                                   formControlName="salary_max"
+                                   placeholder="до 300000₽" mask="099999999999">
+                        </div>
+                    </div>
+                </ng-template>
+            </appAccordionItem>
+            <appAccordionItem class="accordion__item" title="Департамент">
+                <ng-template appAccordionContent>
+                    <app-select-with-radio-multiple-search
+                        *ngIf="(departments$ | async)?.length"
+                        [options]="(departments$ | async)!"
+                        formControlName="departments"
+                        [title]="'Поиск по департаментам'">
+                    </app-select-with-radio-multiple-search>
+                </ng-template>
+            </appAccordionItem>
+            <appAccordionItem class="accordion__item" title="Занятость">
+                <ng-template appAccordionContent>
+                    <app-select-with-radio-multiple [options]="employment" formControlName="employment">
+                    </app-select-with-radio-multiple>
+                </ng-template>
+            </appAccordionItem>
+            <appAccordionItem class="accordion__item" title="График">
+                <ng-template appAccordionContent>
+                    <app-select-with-radio-multiple [options]="schedule" formControlName="schedule">
+                    </app-select-with-radio-multiple>
+                </ng-template>
+            </appAccordionItem>
+        </app-accordion>
+        <div class="button-block">
+            <input type="submit" value="Применить">
+            <div class="reset-filters" (click)="resetFilters()">
+                <span>Сбросить</span>
+            </div>
+        </div>
+    </form>
+</div>

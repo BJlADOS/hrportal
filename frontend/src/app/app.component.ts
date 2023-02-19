@@ -1,19 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services/auth/auth.service';
-import { UserService } from './services/user/user.service';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  title = 'frontend';
-
-  constructor(
-  ) { }
-
-  public ngOnInit(): void {
-  }
-
+export class AppComponent {
+    public title: string = 'frontend';
 }

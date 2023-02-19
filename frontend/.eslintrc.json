@@ -23,6 +23,7 @@
         "prefer-const": "error",
         "semi": "error",
         "unused-imports/no-unused-imports": "warn",
+        "@typescript-eslint/no-inferrable-types": "off",
         "padding-line-between-statements": [
           "error",
           {

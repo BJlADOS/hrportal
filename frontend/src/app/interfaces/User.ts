@@ -1,4 +1,4 @@
-import { Experience } from "./vacancy"
+import { Experience } from './vacancy';
 
 export interface IUser {
     id: number,

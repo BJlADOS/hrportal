@@ -1,22 +1,22 @@
 import { ComponentRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ModalContainerComponent } from 'src/app/shared/components/modal-container/modal-container.component';
 import { Modal } from './modal';
+import { ModalContainerComponent } from '../../lib/shared/components/modal-container/modal-container.component';
 
 export class ModalRef {
     private _result$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-    
+
     constructor(
         private _modalContainer: ComponentRef<ModalContainerComponent>,
         private _modal: ComponentRef<Modal>
     ) {
         this._modal.instance.modalInstanse = this;
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow = 'hidden';
     }
 
     public close(output: any): void {
         this._result$.next(output);
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = 'auto';
         this.destroy$();
     }
 

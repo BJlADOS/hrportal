@@ -1,0 +1,152 @@
+<div class="wrapper" *ngIf="user">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-6">
+            <form class="form" [formGroup]="userForm" [class.enabled]="isEditing" (submit)="saveUser()">
+                <div class="title">
+                    <div class="photo">
+                        <label class="photo__upload" for="photo-upload" *ngIf="isEditing">Изменить</label>
+                        <input id="photo-upload" type="file" hidden (change)="onPhotoChange($event)"
+                            accept=".jpg, .jpeg, .png, .gif">
+                        <img *ngIf="!user.photo && !uploadedPhotoUrl else profilePhoto"
+                            src="assets/img/profile-placeholder.png">
+                        <ng-template #profilePhoto>
+                          <img [src]="uploadedPhotoUrl || user.photo">
+                        </ng-template>
+                    </div>
+                    <div class="name">
+                        <div class="editable">
+                            <h1>
+                                {{ userForm.controls['fullname'].value }}
+                            </h1>
+                        </div>
+                        <h2 *ngIf="user.isManager">Руководитель <span class="department-link">{{user.currentDepartment ?
+                                user.currentDepartment.name : null}}</span></h2>
+                        <h2 *ngIf="user.isAdmin">Администратор</h2>
+                    </div>
+                </div>
+                <div class="data">
+                    <div class="success" [@contentExpansion]="isSavedChanges ? 'expanded' : 'collapsed'">
+                        <div class="success__icon">
+                            <svg width="18" height="24" viewBox="0 0 18 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 13.4338L9 21.4338L17 1" stroke="#FDC04E" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div class="success__text">
+                            <span>Изменения сохранены</span>
+                        </div>
+                    </div>
+                    <div class="personal-data">
+                        <label class="block-label">Персональная информация</label>
+                        <div class="input-label" *ngIf="isEditing">
+                            <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Фамилия Имя
+                                Отчество</label>
+                            <input id="fullname" type="fullname" formControlName="fullname" [readOnly]="!isEditing"
+                                placeholder="Иван Иванов Иванович" (input)="fullnameChange()">
+                            <app-error [@contentExpansion]="errors.fullname ? 'expanded' : 'collapsed'"
+                                [error]="errors.fullname!"></app-error>
+                        </div>
+                        <div class="input-label">
+                            <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Корпоративная
+                                почта</label>
+                            <input id="email" type="email" [placeholder]="isEditing? 'IVAN.IVANOV@GMAIL.COM' : 'Почта'"
+                                formControlName="email" [readOnly]="!isEditing"
+                                [class.required]="!userForm.controls['email'].value && !isEditing"
+                                (input)="emailChange()">
+                            <app-error [@contentExpansion]="errors.email ? 'expanded' : 'collapsed'"
+                                [error]="errors.email!"></app-error>
+                        </div>
+                        <div class="input-label">
+                            <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Контакт для связи</label>
+                            <input id="contacts" type="text" [placeholder]="isEditing ? 'TG: @IVANOV' : 'Контакт'"
+                                formControlName="contact" [readOnly]="!isEditing"
+                                [class.required]="!userForm.controls['contact'].value && !isEditing"
+                                (input)="contactChange()">
+                            <app-error [@contentExpansion]="errors.contact ? 'expanded' : 'collapsed'"
+                                [error]="errors.contact!"></app-error>
+                        </div>
+                    </div>
+                    <div class="career">
+                        <label class="block-label">Карьера</label>
+                        <div class="input-label" *ngIf="!user.isManager && !user.isAdmin">
+                            <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Ваш департамент:</label>
+                            <app-select [title]="'Департамент'" [options]="(departments | async)!"
+                                formControlName="department"
+                                [required]="!userForm.controls['department'].value && !isEditing"
+                                (ngModelChange)="departmentChange()"></app-select>
+                            <app-error [@contentExpansion]="errors.department ? 'expanded' : 'collapsed'"
+                                [error]="errors.department!"></app-error>
+                        </div>
+                        <div class="input-label">
+                            <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Ваш опыт работы:</label>
+                            <app-select [title]="'Опыт работы'" *ngIf="experience.length > 0" [options]="experience"
+                                formControlName="experience"
+                                [required]="!userForm.controls['experience'].value && !isEditing"
+                                (ngModelChange)="experienceChange()">
+                            </app-select>
+                            <app-error [@contentExpansion]="errors.experience ? 'expanded' : 'collapsed'"
+                                [error]="errors.experience!"></app-error>
+                        </div>
+                    </div>
+                    <div class="skills">
+                        <label class="block-label">Навыки</label>
+                        <div class="skills__box">
+                            <span class="no-skills" *ngIf="!userForm.controls['skills'].value.length">Нет навыков</span>
+                            <div class="skill" *ngFor="let skill of userForm.controls['skills'].value"
+                                (click)="deleteSkill(skill)">
+                                <span>{{skill.name}}</span>
+                                <svg *ngIf="isEditing" width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.67969 3.14685L7.27588 7.74304" stroke="#D9D9D9"
+                                        stroke-linecap="round" />
+                                    <path d="M2.67969 7.74304L7.27588 3.14685" stroke="#D9D9D9"
+                                        stroke-linecap="round" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="skills__add" *ngIf="!isAddingSkill"
+                            [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'" (click)="isAddingSkill = true">
+                            <svg class="add-icon" width="10" height="11" viewBox="0 0 10 11" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path class="stroke" d="M2.67969 3.14685L7.27588 7.74304" stroke="#D9D9D9"
+                                    stroke-linecap="round" />
+                                <path class="stroke" d="M2.67969 7.74304L7.27588 3.14685" stroke="#D9D9D9"
+                                    stroke-linecap="round" />
+                            </svg><span>Добавить</span>
+                        </div>
+                        <div class="skills__search" *ngIf="isAddingSkill">
+                            <app-select-with-search [options]="(skills$ | async)!"
+                                [alreadySelected]="userForm.controls['skills'].value" [isActive]="isAddingSkill"
+                                (closed)="isAddingSkill = $event" (currentValueChange)="addedSkill($event)">
+                            </app-select-with-search>
+                        </div>
+                    </div>
+                    <div class="submit" [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">
+                        <div class="buttons">
+                            <input type="submit" value="СОХРАНИТЬ ИЗМЕНЕНИЯ"
+                                [disabled]="!checkFormChanges() || !userForm.valid">
+                            <div (click)="cancelEditing()">ОТМЕНИТЬ ИЗМЕНЕНИЯ</div>
+                        </div>
+                        <app-error [error]="submitError"></app-error>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="wrapper-flex column-11-13">
+            <button *ngIf="!isEditing" class="edit-profile" (click)="editProfile()"><span>Редактировать</span><svg
+                    width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path class="stroke"
+                        d="M7.57358 2.94214H2.95229C2.19794 2.94214 0.8927 3.13084 1.00704 5.18899C1.12138 7.24713 1.05468 14.4316 1.00704 17.7665C0.975253 18.4494 1.41668 19.7961 3.43671 19.7199C5.45674 19.6436 13.3622 19.6881 17.0624 19.7199C17.6659 19.6722 19.0643 19.2298 19.1586 17.7665C19.2539 16.2896 19.1586 14.0028 19.1586 13.1452"
+                        stroke="#FFFFFF" />
+                    <path
+                        d="M16.3001 1.56822C16.6812 1.04415 17.9199 0.805946 18.3963 1.18708C18.8506 1.55052 19.5556 2.10816 19.8256 2.37813C20.0956 2.64811 20.1114 3.75976 19.4445 4.42675C19.2949 4.57635 18.8944 4.87468 18.3963 5.35608C16.5547 7.13624 12.9845 10.9273 11.0594 13.0024L6.58105 14.1458L8.01032 9.95325L15.3423 2.53695L15.6331 2.23521L16.3001 1.56822Z"
+                        fill="none" />
+                    <path class="stroke"
+                        d="M8.01032 9.95325L11.0594 13.0024M8.01032 9.95325L6.58105 14.1458L11.0594 13.0024M8.01032 9.95325L15.3423 2.53695M11.0594 13.0024C12.9845 10.9273 16.5547 7.13624 18.3963 5.35608M18.3963 5.35608C18.8944 4.87468 19.2949 4.57635 19.4445 4.42675C20.1114 3.75976 20.0956 2.64811 19.8256 2.37813C19.5556 2.10816 18.8506 1.55052 18.3963 1.18708C17.9199 0.805946 16.6812 1.04415 16.3001 1.56822L15.6331 2.23521L15.3423 2.53695M18.3963 5.35608L15.3423 2.53695"
+                        stroke="#FFFFFF" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>

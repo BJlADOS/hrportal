@@ -16,23 +16,10 @@ services:
     env_file:
       - .env.prod
     build: backend
-    expose:
-      - 8000
+    ports:
+      - "8000:8000"
     depends_on:
       - postgres
-    volumes:
-      - media:/media
-      - static:/static
-  angular:
-    container_name: angular
-    build: frontend
-    expose:
-      - 4200
-  nginx:
-    container_name: nginx
-    build: nginx
-    ports:
-      - "80:80"
     volumes:
       - media:/media
       - static:/static

@@ -1,0 +1,29 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-4-10">
+            <div class="title">
+                <img alt="логотип" src="assets/img/app-logo.svg">
+                <label>РЕГИСТРАЦИЯ</label>
+            </div>
+            <form class="form" [formGroup]="signUpForm" (submit)="signUp()">
+                <input id="fullname" formControlName="fullname" type="fullname" class="form-control" placeholder="ФИО"
+                    (input)="fullnameChange()">
+                <input id="email" formControlName="email" type="email" class="form-control"
+                    [placeholder]="emailPlaceholder" (blur)="emailBlur()" (focus)="emailFocus()"
+                    (input)="emailChange()">
+                <input id="password" formControlName="password" type="password" class="form-control"
+                    [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()"
+                    (input)="passwordChange()">
+                <input id="confirmPassword" formControlName="confirmPassword" type="password" class="form-control"
+                    placeholder="Подтвердите пароль" (input)="confirmPasswordChange()">
+                <app-errors [errors]="errors"></app-errors>
+                <input type="submit" value="Зарегистрироваться" [disabled]="signUpForm.invalid || signUpForm.pending">
+            </form>
+            <p class="error" [@contentExpansion]="submitError ? 'expanded' : 'collapsed'">{{ submitError?.message }}</p>
+            <div class="navigation">
+                <label>Есть аккаунт?</label>
+                <label class="navigation-button" (click)="toSignIn()">Войти</label>
+            </div>
+        </div>
+    </div>
+</div>

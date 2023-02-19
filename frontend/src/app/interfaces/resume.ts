@@ -1,4 +1,4 @@
-import { Employment, Schedule } from "./vacancy";
+import { Employment, Schedule } from './vacancy';
 
 export interface IResume {
     id: number;
