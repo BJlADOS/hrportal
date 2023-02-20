@@ -57,10 +57,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private _destroy$: Subject<boolean> = new Subject<boolean>();
 
     constructor(
-    private _department: DepartmentService,
-    private _user: UserService,
-    private _form: FormGenerator,
-    private _skills: SkillsService,
+        private _department: DepartmentService,
+        private _user: UserService,
+        private _form: FormGenerator,
+        private _skills: SkillsService,
     ) { }
 
     public ngOnInit(): void {

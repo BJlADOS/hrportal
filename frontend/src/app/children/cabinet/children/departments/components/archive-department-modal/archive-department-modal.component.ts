@@ -13,7 +13,7 @@ export class ArchiveDepartmentModalComponent extends Modal implements OnInit {
     public department!: IDepartment;
 
     constructor(
-    private _department: DepartmentService,
+        private _department: DepartmentService,
     ) {
         super();
     }

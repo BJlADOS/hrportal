@@ -29,9 +29,9 @@ export class CreateDepartmentModalComponent extends Modal implements OnInit {
     private _formManager: FormManager = FormManager.getInstance();
 
     constructor(
-    private _form: FormGenerator,
-    private _user: UserService,
-    private _department: DepartmentService,
+        private _form: FormGenerator,
+        private _user: UserService,
+        private _department: DepartmentService,
     ) {
         super();
     }

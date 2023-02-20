@@ -30,10 +30,10 @@ export class VacanciesComponent implements OnInit, OnDestroy {
     private callback = this.throttle(this.checkPosition.bind(this), 250);
 
     constructor(
-    private _vacancy: VacancyService,
-    private _vacancySearch: VacanciesSearchService,
-    private _user: UserService,
-    private _router: Router,
+        private _vacancy: VacancyService,
+        private _vacancySearch: VacanciesSearchService,
+        private _user: UserService,
+        private _router: Router,
     ) { }
 
     public ngOnInit(): void {

@@ -1,0 +1,110 @@
+.dropdown-collection {
+    position: relative;
+
+    &:hover {
+        & .dropdown-list {
+            border-color: var(--main-accent-color);
+        }
+
+        & .dropdown-button {
+            border-color: var(--main-accent-color);
+        }
+
+        & .arrow-icon {      
+            fill: var(--main-accent-color);
+        }
+    }
+
+    &.opened {
+        & .dropdown-list {
+            border-color: var(--main-accent-color);
+        }
+
+        & .dropdown-button {
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-color: var(--main-accent-color);
+        }
+        
+
+        & .arrow-icon {      
+            fill: var(--main-accent-color);
+        }
+    }
+
+}
+
+.dropdown-button {
+    display: flex;
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+    border-radius: 20px;
+    position: relative;
+    justify-content: space-between;
+    background-color: var(--white);
+    width: 100%;
+    cursor: pointer;
+    align-items: center;
+
+    & .arrow-icon {
+        margin-right: 0.5rem;
+        fill: var(--border-color);
+    }
+
+    &.required {
+        border-color: var(--main-accent-color);
+
+        span {
+            font-weight: 600;
+            color: var(--main-accent-color);
+        }
+    }
+
+    span {
+        padding: 0.45rem 0.7rem;
+    }
+
+}
+
+.dropdown-value {
+    font-weight: 300;
+}
+
+.dropdown-list {
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: .3s ease;
+    display: none;
+    background: var(--white);
+    list-style: none;
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 0 0 20px 20px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    z-index: 10;
+    right: 0;
+    margin: 0;
+    transform: translateY(100%);
+
+    li {
+        cursor: pointer;
+        font-weight: 300;
+        padding: 0.55rem 0.7rem;
+
+        &.selected {
+            background-color: rgba(var(--main-accent-color-rgb), 0.2);
+        }
+
+        &:hover {
+            background-color: rgba(var(--main-accent-color-rgb), 0.2);
+        }
+    }
+
+    &.dropdown-open {
+        display: block;
+    }
+}

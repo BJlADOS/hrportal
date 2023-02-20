@@ -58,6 +58,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
     ) {
         super();
     }
+
     public ngOnInit(): void {
         this.user.getResume()
             .subscribe({

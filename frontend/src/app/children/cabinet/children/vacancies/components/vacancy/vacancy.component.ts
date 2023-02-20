@@ -16,8 +16,8 @@ export class VacancyComponent implements OnInit {
     public description: string = '';
 
     constructor(
-    public router: Router,
-    private _modal: ModalService,
+        public router: Router,
+        private _modal: ModalService,
     ) { }
 
     public ngOnInit(): void {

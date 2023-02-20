@@ -12,30 +12,30 @@ import { ModalService } from '../../../../../../services/modal.service';
 })
 export class DepartmentComponent implements OnInit {
 
-  @Input() public department!: IDepartment;
+    @Input() public department!: IDepartment;
 
-  public managerName: string = '';
+    public managerName: string = '';
 
-  constructor(
-    private _user: UserService,
-    private _modal: ModalService,
-  ) { }
+    constructor(
+        private _user: UserService,
+        private _modal: ModalService,
+    ) { }
 
-  public ngOnInit(): void {
-      this._user.getUserById(this.department.managerId).subscribe({
-          next: (manager: IUser) => {
-              this.managerName = manager.fullname;
-          }, error: (err) => {
-              this.managerName = 'Error: ' + err;
-          }
-      });
-  }
+    public ngOnInit(): void {
+        this._user.getUserById(this.department.managerId).subscribe({
+            next: (manager: IUser) => {
+                this.managerName = manager.fullname;
+            }, error: (err) => {
+                this.managerName = 'Error: ' + err;
+            }
+        });
+    }
 
-  public editDepartment(): void {
-      this._modal.open(EditDepartmentModalComponent, { department: this.department });
-  }
+    public editDepartment(): void {
+        this._modal.open(EditDepartmentModalComponent, { department: this.department });
+    }
 
-  public archiveDepartment(): void {
-      this._modal.open(ArchiveDepartmentModalComponent, { department: this.department });
-  }
+    public archiveDepartment(): void {
+        this._modal.open(ArchiveDepartmentModalComponent, { department: this.department });
+    }
 }

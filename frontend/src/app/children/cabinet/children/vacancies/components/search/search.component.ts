@@ -23,8 +23,8 @@ export class SearchComponent implements OnInit {
     @Output() filterToggle = new EventEmitter<null>();
 
     constructor(
-    private _form: FormGenerator,
-    private _vacancySearch: VacanciesSearchService,
+        private _form: FormGenerator,
+        private _vacancySearch: VacanciesSearchService,
     ) { }
 
     public ngOnInit(): void {

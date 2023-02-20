@@ -20,9 +20,9 @@ export class DepartmentsComponent implements OnInit {
 
 
     constructor(
-    private _departments: DepartmentService,
-    private _modal: ModalService,
-    private _user: UserService,
+        private _departments: DepartmentService,
+        private _modal: ModalService,
+        private _user: UserService,
     ) { }
 
     public ngOnInit(): void {

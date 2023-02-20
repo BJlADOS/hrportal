@@ -1,0 +1,30 @@
+<div class="dropdown-collection" [class.opened]="dropdownOpen" [class.disabled]="disabled">
+    <div appClickOutside class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label"
+        (clickOutside)="dropdownOpen = false" [class.required]="required" (click)="toggleDropdown();$event.stopPropagation()">
+        <span class="dropdown-value" *ngIf="!dropdownOpen">{{currentValue? currentValue.name : title}}</span>
+        <div class="input-block" (click)="$event.stopPropagation()" *ngIf="dropdownOpen">
+            <input class="dropdown-input" placeholder="Поиск..." [formControl]="searchControl">
+        </div>
+        <svg *ngIf="!disabled" class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+            height="24">
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+        </svg>
+    </div>
+    <div class="dropdown-list" role="listbox" aria-expanded="true"
+        [@contentExpansion]="dropdownOpen ? 'expanded' : 'collapsed'">
+        <cdk-virtual-scroll-viewport class="dropdown-list__scroll" itemSize="10" [style.height.px]="34 * visibleOptions"
+            [class.no-scroll]="visibleOptions >= options.length">
+            <div class="dropdown-item selected" [class.no-scroll]="visibleOptions >= options.length"
+                *ngIf="currentValue">
+                {{ currentValue.name }}
+            </div>
+            <div class="dropdown-item" *ngIf="!options.length" [class.no-scroll]="visibleOptions >= options.length"
+                (click)="closeDropdown()">Нет результатов...</div>
+            <div class="dropdown-item" [class.no-scroll]="visibleOptions >= options.length"
+                *cdkVirtualFor="let option of options" (click)="select(option)">
+                {{ option.name }}
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </div>
+</div>
