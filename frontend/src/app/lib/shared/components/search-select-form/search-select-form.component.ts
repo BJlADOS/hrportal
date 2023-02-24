@@ -1,21 +1,19 @@
 import { Component, ElementRef, forwardRef, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs';
-import { contentExpansion } from '../../../animations';
-import { DestroyService } from '../../../services';
+import { contentExpansion, DestroyService } from '../../../utils';
 
-export const CUSTOM_SEARCH_SELECT_FORM_VALUE_ACCESSOR: any = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SearchSelectFormComponent),
-    multi: true
-};
 
 @Component({
     selector: 'app-search-select-form',
     templateUrl: './search-select-form.component.html',
     styleUrls: ['./search-select-form.component.scss'],
     animations: [contentExpansion],
-    providers: [CUSTOM_SEARCH_SELECT_FORM_VALUE_ACCESSOR],
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => SearchSelectFormComponent),
+        multi: true
+    }],
 })
 export class SearchSelectFormComponent implements OnInit, ControlValueAccessor {
 

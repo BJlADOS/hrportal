@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { resumeRouting } from './resume-routing.module';
 import { SharedModule } from '../../../../lib/shared/shared.module';
 import { ResumeComponent, ResumeDetailComponent, ResumeListComponent, ResumeResponseModalComponent } from './components';
-import { ResumeResolverService, ResumeService } from './services';
+import { ResumeResolverService, ResumeService } from '../../../../common';
+
 
 @NgModule({
     declarations: [

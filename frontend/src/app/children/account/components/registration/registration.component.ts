@@ -3,12 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, takeUntil } from 'rxjs';
 import { ConfirmEmailModalComponent } from '../confirm-email-modal/confirm-email-modal.component';
-import { IAuthError, ISubmitError } from '../../../../interfaces/errors';
-import { FormManager } from '../../../../classes/form-manager';
-import { AuthService } from '../../../../services/auth.service';
-import { ModalService } from '../../../../services/modal.service';
-import { contentExpansion, DestroyService } from '../../../../lib';
-import { FormGenerator } from '../../../../classes/form-generator';
+import { AuthorizationService, IAuthError, ISubmitError } from '../../../../common';
+import { contentExpansion, DestroyService, FormGenerator, FormManager, ModalService } from '../../../../lib';
 
 @Component({
     selector: 'app-registration',
@@ -27,7 +23,7 @@ export class RegistrationComponent implements OnInit {
     private _FormManager: FormManager = FormManager.getInstance();
 
     constructor(
-    public auth: AuthService,
+    public auth: AuthorizationService,
     public router: Router,
     public formGenerator: FormGenerator,
     private _destroy$: DestroyService,

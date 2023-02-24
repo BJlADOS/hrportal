@@ -1,7 +1,7 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { AuthorizationGuard } from './guards/authorization-guard.guard';
+import { AuthorizationGuard } from './common';
 
 
 const routes: Routes = [

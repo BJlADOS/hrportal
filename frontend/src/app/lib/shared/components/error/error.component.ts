@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IInputError } from 'src/app/interfaces/errors';
+import { IInputError } from '../../../../common';
 
 @Component({
     selector: 'app-error',
@@ -7,6 +7,6 @@ import { IInputError } from 'src/app/interfaces/errors';
     styleUrls: ['./error.component.scss']
 })
 export class ErrorComponent {
-
-  @Input() public error!: IInputError | null;
+    @Input()
+    public error!: IInputError | null;
 }

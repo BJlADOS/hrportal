@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
-import { IResume } from 'src/app/interfaces/resume';
-import { IUser } from 'src/app/interfaces/User';
 import { ResumeResponseModalComponent } from '../resume-response-modal/resume-response-modal.component';
-import { UserService } from '../../../../../../services/user.service';
-import { ResumeService } from '../../services';
-import { ModalService } from '../../../../../../services/modal.service';
-import { DestroyService } from '../../../../../../lib';
+import { DestroyService, ModalService } from '../../../../../../lib';
+import { IResume, IUser, ResumeService, UserService } from '../../../../../../common';
 
 @Component({
     selector: 'app-resume-detail',
@@ -26,7 +22,8 @@ export class ResumeDetailComponent implements OnInit {
         private _user: UserService,
         private _modal: ModalService,
         private _router: Router,
-    ) { }
+    ) {
+    }
 
     public ngOnInit(): void {
         this._activatedRoute.paramMap.pipe(takeUntil(this._destroy$)).subscribe((paramMap: ParamMap) => {
@@ -45,8 +42,7 @@ export class ResumeDetailComponent implements OnInit {
                             )
                             .subscribe((user: IUser) => {
                                 this.employee = user;
-                            }
-                            );
+                            });
                     },
                     error: () => {
                         this._router.navigate(['cabinet/resumes']);

@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IResetPasswordError } from '../../../../interfaces/errors';
-import { FormManager } from '../../../../classes/form-manager';
-import { AuthService } from '../../../../services/auth.service';
-import { contentExpansion } from '../../../../lib';
-import { FormGenerator } from '../../../../classes/form-generator';
+import {AuthorizationService, IResetPasswordError} from '../../../../common';
+import { contentExpansion, FormGenerator, FormManager } from '../../../../lib';
 
 @Component({
     selector: 'app-recovery-password',
@@ -26,9 +23,9 @@ export class RecoveryPasswordComponent implements OnInit {
     private _token: string | undefined;
 
     constructor(
-    private _activatedRoute: ActivatedRoute,
-    private _auth: AuthService,
-    private _form: FormGenerator,
+        private _activatedRoute: ActivatedRoute,
+        private _auth: AuthorizationService,
+        private _form: FormGenerator,
     ) { }
 
     public ngOnInit(): void {

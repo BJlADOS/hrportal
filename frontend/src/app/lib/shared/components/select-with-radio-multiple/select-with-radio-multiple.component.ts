@@ -1,20 +1,19 @@
 import { Component, ElementRef, forwardRef, Input, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { contentExpansion, rotate180 } from '../../../animations';
+import { contentExpansion, rotate180 } from '../../../utils';
 
-export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SelectWithRadioMultipleComponent),
-    multi: true
-};
 
 @Component({
     selector: 'app-select-with-radio-multiple',
     templateUrl: './select-with-radio-multiple.component.html',
     styleUrls: ['./select-with-radio-multiple.component.scss'],
     animations: [contentExpansion, rotate180],
-    providers: [CUSTOM_SELECT_VALUE_ACCESSOR]
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => SelectWithRadioMultipleComponent),
+        multi: true
+    }]
 })
 export class SelectWithRadioMultipleComponent implements OnInit, ControlValueAccessor {
 

@@ -20,7 +20,7 @@ const routes: Routes = [
             },
             {
                 path: 'vacancies',
-                loadChildren: () => import('./children/vacancies/vacancies.module').then(m => m.VacanciesModule),
+                loadChildren: () => import('./children/vacancy/vacancy.module').then(m => m.VacancyModule),
                 data: {
                     breadcrumb: 'Вакансии'
                 }
@@ -35,7 +35,7 @@ const routes: Routes = [
             },
             {
                 path: 'departments',
-                loadChildren: () => import('./children/departments/departments.module').then(m => m.DepartmentsModule),
+                loadChildren: () => import('./children/department/department.module').then(m => m.DepartmentModule),
                 canActivate: [AdminGuard]
             },
         ]

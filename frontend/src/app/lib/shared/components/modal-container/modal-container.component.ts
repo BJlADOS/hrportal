@@ -1,5 +1,5 @@
 import { Component, ComponentRef, Type, ViewChild, ViewContainerRef } from '@angular/core';
-import { Modal } from 'src/app/classes/modal/modal';
+import { Modal } from '../../../ui-modals';
 
 @Component({
     selector: 'app-modal-container',

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IResume } from 'src/app/interfaces/resume';
-import { ResumeService } from '../../services';
+import { IResume, ResumeService } from '../../../../../../common';
 
 @Component({
     selector: 'app-resume-list',

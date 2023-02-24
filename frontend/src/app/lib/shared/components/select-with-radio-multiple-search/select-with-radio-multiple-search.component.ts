@@ -1,20 +1,18 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs';
-import { contentExpansionHorizontal } from '../../../animations';
-import { DestroyService } from '../../../services';
+import { contentExpansionHorizontal, DestroyService } from '../../../utils';
 
-export const CUSTOM_SELECT_VALUE_ACCESSOR: any = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => SelectWithRadioMultipleSearchComponent),
-    multi: true
-};
 
 @Component({
     selector: 'app-select-with-radio-multiple-search',
     templateUrl: './select-with-radio-multiple-search.component.html',
     styleUrls: ['./select-with-radio-multiple-search.component.scss'],
-    providers: [CUSTOM_SELECT_VALUE_ACCESSOR],
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => SelectWithRadioMultipleSearchComponent),
+        multi: true
+    }],
     animations: [contentExpansionHorizontal],
 })
 export class SelectWithRadioMultipleSearchComponent implements OnInit, ControlValueAccessor {

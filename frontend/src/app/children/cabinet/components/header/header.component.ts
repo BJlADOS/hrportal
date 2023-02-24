@@ -1,13 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
 import { filter, map, Observable, takeUntil } from 'rxjs';
-import { IBreadcrumb } from 'src/app/interfaces/breadcrumb.interface';
-import { UserService } from '../../../../services/user.service';
-import { AuthService } from '../../../../services/auth.service';
-import { ModalService } from '../../../../services/modal.service';
-import { IRoute, IUser } from '../../../../interfaces/User';
-import { BUTTONS_DATA_TOKEN, DestroyService, UserType } from '../../../../lib';
-import { CreateResumeComponent } from '../../modules/resume-create';
+import { AuthorizationService, CreateResumeComponent, IUser, UserService } from '../../../../common';
+import { IBreadcrumb, IRoute } from '../../interfaces';
+import { BUTTONS_DATA_TOKEN, DestroyService, ModalService, UserType } from '../../../../lib';
 
 @Component({
     selector: 'app-header',
@@ -39,7 +35,7 @@ import { CreateResumeComponent } from '../../modules/resume-create';
                         name: 'Вакансии',
                     },
                     {
-                        path: 'cabinet/departments',
+                        path: 'cabinet/department',
                         name: 'Департаменты',
                     },
                     {
@@ -63,7 +59,7 @@ export class HeaderComponent implements OnInit {
     constructor(
         public activatedRoute: ActivatedRoute,
         private _user: UserService,
-        private _auth: AuthService,
+        private _auth: AuthorizationService,
         private _router: Router,
         private _modal: ModalService,
         private _destroy$: DestroyService,

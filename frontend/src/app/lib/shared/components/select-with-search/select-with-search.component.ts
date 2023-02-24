@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { debounceTime, takeUntil } from 'rxjs';
-import { DestroyService } from '../../../services';
+import {DestroyService} from "../../../utils";
 
 @Component({
     selector: 'app-select-with-search',

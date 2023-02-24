@@ -2,9 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { profileRouting } from './profile-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../../../lib/shared/shared.module';
 import { ProfileComponent, ResumeComponent } from './components';
-
+import { SharedModule } from '../../../../lib';
 
 
 @NgModule({

@@ -9,8 +9,6 @@ export class DragAndDropDirective {
 
   @HostBinding('class.fileover') public fileOver: boolean = false;
 
-  constructor() { }
-
   @HostListener('dragover', ['$event']) public onDragOver(event: DragEvent): void {
       event.preventDefault();
       event.stopPropagation();

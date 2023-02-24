@@ -10,9 +10,8 @@ import { RouterModule } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { CookieModule } from 'ngx-cookie';
-import { JwtInterceptorService } from './services/jwt-interceptor.service';
-import { SharedModule } from './lib/shared/shared.module';
-import { DestroyService } from './lib';
+import { DestroyService, SharedModule } from './lib';
+import { JwtInterceptorService } from './common';
 
 @NgModule({
     declarations: [

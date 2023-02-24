@@ -1,6 +1,6 @@
 import { Component, ContentChildren, QueryList } from '@angular/core';
-import { AccordionItemDirective } from '../../directives/accordion-item.directive';
-import { contentExpansion } from '../../../animations';
+import { AccordionItemDirective } from '../../directives';
+import { contentExpansion } from '../../../utils';
 
 @Component({
     selector: 'app-accordion',

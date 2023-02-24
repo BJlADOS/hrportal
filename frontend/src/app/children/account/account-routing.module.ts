@@ -1,12 +1,13 @@
-import { RegistrationComponent } from './components/registration/registration.component';
+import {
+    AuthorizationComponent,
+    ConfirmEmailComponent, RecoveryPasswordComponent,
+    RecoveryRequestComponent,
+    RegistrationComponent
+} from './components';
+import { LoggedInGuard } from '../../common';
 import { RouterModule, Routes } from '@angular/router';
-import { RecoveryRequestComponent } from './components/recovery-request/recovery-request.component';
-import { NgModule } from '@angular/core';
-import { RecoveryPasswordComponent } from './components/recovery-password/recovery-password.component';
-import { AuthorizationComponent } from './components/authorization/authorization.component';
-import { LoggedInGuard } from '../../guards';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
-import {ConfirmEmailComponent} from "./components";
+import { NgModule } from '@angular/core';
 
 
 const routes: Routes = [

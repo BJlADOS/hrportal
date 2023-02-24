@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { map, Observable } from 'rxjs';
-import { IUser } from 'src/app/interfaces/User';
-import { environment } from 'src/environments/environment';
-import { UserService } from '../../../services/user.service';
+import { IUser, UserService } from '../../../common';
+import { environment } from '../../../../environments/environment';
+
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +12,9 @@ import { UserService } from '../../../services/user.service';
 export class AdminGuard implements CanActivate {
 
     constructor(
-    public http: HttpClient,
-    private _router: Router,
-    private _user: UserService,
+        public http: HttpClient,
+        private _router: Router,
+        private _user: UserService,
     ) { }
 
     public canActivate(

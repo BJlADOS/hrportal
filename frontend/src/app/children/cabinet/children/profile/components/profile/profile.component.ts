@@ -1,17 +1,22 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { IDepartment, ISkill, IUser, IUserUpdate } from '../../../../../../interfaces/User';
-import { UserService } from '../../../../../../services/user.service';
-import { getExperienceRussianAsArray } from '../../../../../../interfaces/vacancy';
-import { FormGenerator } from '../../../../../../classes/form-generator';
-import { ISubmitError, IUserFormError } from '../../../../../../interfaces/errors';
-import { DepartmentService } from '../../../../../../services/department.service';
-import { FormManager } from '../../../../../../classes/form-manager';
-import { SkillsService } from '../../../../../../services/skills.service';
-import { ISelectOption } from '../../../../../../interfaces/select';
-import { contentExpansion } from '../../../../../../lib';
-import { IUserEditing } from '../../interfaces';
+import {
+    DepartmentService, IDepartment, ISkill,
+    ISubmitError, IUser,
+    IUserEditing,
+    IUserFormError,
+    IUserUpdate, SkillsService,
+    UserService
+} from '../../../../../../common';
+import {
+    contentExpansion,
+    FormGenerator,
+    FormManager,
+    getExperienceRussianAsArray,
+    ISelectOption
+} from '../../../../../../lib';
+
 
 @Component({
     selector: 'app-profile',

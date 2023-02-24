@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class NotFoundComponent {
 
     constructor(
-    private _router: Router,
+        private _router: Router,
     ) { }
 
     public backToMain(): void {

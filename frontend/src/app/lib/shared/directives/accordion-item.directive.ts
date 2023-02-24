@@ -5,9 +5,11 @@ import { AccordionContentDirective } from './accordion-content.directive';
     selector: 'appAccordionItem'
 })
 export class AccordionItemDirective {
+    @Input()
+    public title: string = '';
+    @Input()
+    public redirectPath: string = '';
 
-    @Input() public title: string = '';
-    @Input() public redirectPath: string = '';
-
-    @ContentChild(AccordionContentDirective) public content!: AccordionContentDirective;
+    @ContentChild(AccordionContentDirective)
+    public content!: AccordionContentDirective;
 }

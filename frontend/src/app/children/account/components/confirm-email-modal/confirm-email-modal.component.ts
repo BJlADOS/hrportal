@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Modal } from 'src/app/classes/modal/modal';
+import { Modal } from '../../../../lib';
 
 @Component({
     selector: 'app-confirm-email-modal',

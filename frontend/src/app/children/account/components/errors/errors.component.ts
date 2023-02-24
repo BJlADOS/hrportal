@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { IAuthError } from 'src/app/interfaces/errors';
 import { contentExpansion } from '../../../../lib';
+import { IAuthError } from '../../../../common';
 
 @Component({
     selector: 'app-errors',

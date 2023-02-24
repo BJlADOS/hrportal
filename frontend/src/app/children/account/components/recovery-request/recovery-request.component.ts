@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormManager } from '../../../../classes/form-manager';
-import { AuthService } from '../../../../services/auth.service';
-import { contentExpansion } from '../../../../lib';
-import { FormGenerator } from '../../../../classes/form-generator';
-import { IRecoveryRequestError } from '../../../../interfaces/errors';
+import { contentExpansion, FormGenerator, FormManager } from '../../../../lib';
+import {AuthorizationService, IRecoveryRequestError} from '../../../../common';
 
 @Component({
     selector: 'app-recovery-request',
@@ -22,16 +19,16 @@ export class RecoveryRequestComponent {
     public errorMessage: string | undefined = undefined;
 
 
-    private _FormManager: FormManager = FormManager.getInstance();
+    private _formManager: FormManager = FormManager.getInstance();
 
     constructor(
-    private _auth: AuthService,
-    private _form: FormGenerator,
-    private _router: Router,
+        private _auth: AuthorizationService,
+        private _form: FormGenerator,
+        private _router: Router,
     ) { }
 
     public emailChange(): void {
-        this.errors.email = this._FormManager.checkEmail(this.recoveryRequestForm);
+        this.errors.email = this._formManager.checkEmail(this.recoveryRequestForm);
     }
 
     public emailBlur(): void {

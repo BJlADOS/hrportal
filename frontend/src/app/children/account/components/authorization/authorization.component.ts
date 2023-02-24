@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IAuthError, ISubmitError } from '../../../../interfaces/errors';
-import { FormManager } from '../../../../classes/form-manager';
-import { AuthService } from '../../../../services/auth.service';
-import { contentExpansion } from '../../../../lib';
-import { FormGenerator } from '../../../../classes/form-generator';
+import { IAuthError, ISubmitError, AuthorizationService } from '../../../../common';
+import { contentExpansion, FormGenerator, FormManager } from '../../../../lib';
 
 @Component({
     selector: 'app-authorization',
@@ -25,10 +22,10 @@ export class AuthorizationComponent implements OnInit {
     private _FormManager: FormManager = FormManager.getInstance();
 
     constructor(
-    public auth: AuthService,
-    public router: Router,
-    public activeRoute: ActivatedRoute,
-    private _formGenerator: FormGenerator
+        public auth: AuthorizationService,
+        public router: Router,
+        public activeRoute: ActivatedRoute,
+        private _formGenerator: FormGenerator
     ) { }
 
     public ngOnInit(): void {
