@@ -23,6 +23,7 @@ import {
 import { SelectComponent } from './components/select/select.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmploymentPipe, SchedulePipe } from '../pipes';
+import { HoverListenerDirective } from './directives/hover-listener.directive';
 
 const exportingComponents: any[] = [
     SchedulePipe,
@@ -41,6 +42,7 @@ const exportingComponents: any[] = [
     AccordionItemDirective,
     SelectWithRadioMultipleSearchComponent,
     LimitInputDirective,
+    HoverListenerDirective,
 ];
 
 @NgModule({

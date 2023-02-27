@@ -1,0 +1,10 @@
+:host.hover {
+    svg {
+        &>.stroke {
+            stroke: var(--white);
+        }
+        &>.fill {
+            fill: var(--white);
+        }
+    }
+}
