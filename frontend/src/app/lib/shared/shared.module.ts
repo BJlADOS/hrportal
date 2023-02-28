@@ -20,6 +20,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgxMaskModule } from 'ngx-mask';
 import { EmploymentPipe, SchedulePipe } from '../utils';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HoverListenerDirective } from './directives/hover-listener.directive';
 
 const exportingComponents: any[] = [
     SchedulePipe,
@@ -38,6 +39,7 @@ const exportingComponents: any[] = [
     AccordionItemDirective,
     SelectWithRadioMultipleSearchComponent,
     LimitInputDirective,
+    HoverListenerDirective,
 ];
 
 @NgModule({

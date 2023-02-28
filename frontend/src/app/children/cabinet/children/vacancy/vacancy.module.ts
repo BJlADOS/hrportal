@@ -27,6 +27,10 @@ import { VacanciesSearchService, VacancyDeclinationPipe, VacancyResolverService 
         FiltersComponent,
         VacancyDeclinationPipe,
     ],
+    providers: [
+        VacanciesSearchService,
+        VacancyResolverService
+    ],
     imports: [
         CommonModule,
         vacancyRouting,
@@ -37,10 +41,6 @@ import { VacanciesSearchService, VacancyDeclinationPipe, VacancyResolverService 
         NgxStickySidebarModule.withConfig({
             minWidth: '280px',
         }),
-    ],
-    providers: [
-        VacanciesSearchService,
-        VacancyResolverService
     ]
 })
 export class VacancyModule { }

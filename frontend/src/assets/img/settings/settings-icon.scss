@@ -1,0 +1,8 @@
+:host.hover {
+    svg {
+        transform: scale(1.2);
+        &>* {
+            stroke: var(--main-accent-color);
+        }
+    }
+}
