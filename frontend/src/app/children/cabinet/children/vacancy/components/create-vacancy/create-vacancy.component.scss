@@ -51,28 +51,11 @@
 }
 
 form {
-    pointer-events: none;
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     gap: 0;
-
-    &.enabled {
-        pointer-events: all;
-
-        & .skills__box {
-
-            & .skill {
-                border-color: var(--border-color);
-            }
-
-            & .no-skills {
-                border-color: var(--border-color);
-                color: var(--font-primary);
-            }
-        }
-    }
 
     & .input-label {
         display: flex;
@@ -240,41 +223,31 @@ form {
         gap: 1rem;
         flex-wrap: wrap;
 
-        span {
+        & span {
             font-weight: 600;
         }
 
-        .no-skills {
+        &>.no-skills {
             text-transform: uppercase;
-            border: 1px solid var(--main-accent-color);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             padding: 0.3rem 0.8rem;
-            color: var(--main-accent-color);
+            color: var(--font-primary);
         }
 
-        .skill {
+        &>.skill {
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            border: 1px solid var(--main-accent-color);
+            border: 1px solid var(--border-color);
             border-radius: 1rem;
             padding: 0.3rem 0.8rem;
 
             &:hover {
                 cursor: pointer;
                 border-color: var(--main-accent-color);
-
-                svg {
-                    path {
-                        stroke: var(--main-accent-color);
-                    }
-                }
-            }
-
-            svg {
-                scale: 1.5;
             }
         }
     }
@@ -307,27 +280,6 @@ form {
             }
         }
     }
-}
-
-.description {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 0.5rem;
-    background-color: var(--white);
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    padding: 24px;
-    box-shadow: var(--box-shadow--main);
-    font-weight: 500;
-
-    p {
-        margin: 0;
-    }
-}
-
-.hidden {
-    display: none;
 }
 
 .schedule {

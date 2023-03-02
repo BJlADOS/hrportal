@@ -4,6 +4,7 @@ import { profileRouting } from './profile-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent, ResumeComponent } from './components';
 import { SharedModule } from '../../../../lib';
+import { SuccessIconComponent, CheckStaticIconComponent, PlusIconComponent, Cross2IconComponent, EditWhiteIconComponent } from '../../../../../assets/img';
 
 
 @NgModule({
@@ -16,6 +17,11 @@ import { SharedModule } from '../../../../lib';
         profileRouting,
         SharedModule,
         ReactiveFormsModule,
+        SuccessIconComponent,
+        CheckStaticIconComponent,
+        PlusIconComponent,
+        Cross2IconComponent,
+        EditWhiteIconComponent
     ]
 })
 export class ProfileModule { }

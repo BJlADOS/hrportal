@@ -2,7 +2,7 @@
     <div class="wrapper-grid">
         <div class="wrapper-flex column-1-13" *ngIf="user | async as user">
             <div class="additional-buttons" *ngIf="user.isManager || user.isAdmin">
-                <button class="manager-button" (click)="createVacancy()">Добавить вакансию</button>
+                <button class="manager-button" routerLink="create">Добавить вакансию</button>
             </div>
             <div class="content">
                 <div class="search">
@@ -10,25 +10,24 @@
                 </div>
                 <div class="error" *ngIf="loadingError">{{loadingError}}</div>
                 <div class="content__main">
-                    <div class="filters" [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'" stickySidebar containerSelector=".content__main" innerWrapperSelector=".inner" topSpacing="24" bottomSpacing="24" [minWidth]="400" [updateSticky]="update$">
+                    <div class="filters" [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'"
+                        stickySidebar containerSelector=".content__main" innerWrapperSelector=".inner" topSpacing="24"
+                        bottomSpacing="24" [minWidth]="400" [updateSticky]="update$">
                         <div class="inner">
                             <app-filters (madeSearch)="resetSearch()"></app-filters>
                         </div>
-                        
-                    </div>   
+                    </div>
                     <div class="vacancies" *ngIf="vacancies.length else noVacancies">
                         <app-vacancy class="width" *ngFor="let vacancy of vacancies" [vacancy]="vacancy"></app-vacancy>
-                    </div>  
+                    </div>
                 </div>
                 <div class="scroll-back" *ngIf="canScrollBack" (click)="scrollBack()">
-                    <svg width="13" height="18" viewBox="0 0 13 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6.57534 17.5V0.5M6.57534 0.5L1 7.03846M6.57534 0.5L12 7.03846" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg> 
-                    <span>Назад</span>       
+                    <up-arrow-icon></up-arrow-icon>
+                    <span>Назад</span>
                 </div>
-            </div>          
-        </div>      
-    </div>  
+            </div>
+        </div>
+    </div>
 </div>
 <ng-template #noVacancies>
     <div class="no-vacancies">
@@ -37,4 +36,3 @@
         </div>
     </div>
 </ng-template>
-

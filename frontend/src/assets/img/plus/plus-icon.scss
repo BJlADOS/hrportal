@@ -1,0 +1,8 @@
+svg {
+    scale: 1.5;
+    transform: rotate(45deg);
+
+    &>.stroke {
+        stroke: var(--main-accent-color);
+    }
+}

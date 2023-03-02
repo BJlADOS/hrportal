@@ -48,18 +48,6 @@
             border-radius: 0 20px 20px 20px;
             padding: 1rem;
         }
-
-        svg {
-            min-height: 12px;
-            min-width: 12px;
-            max-height: 12px;
-            max-width: 12px;
-            transition: .3s ease;
-            &:hover {
-                cursor: pointer;
-                transform: scale(1.2);
-            }
-        }
     }
 
     &-breadcrumb {
@@ -172,38 +160,6 @@
             &:hover {
                 color: var(--main-accent-color);
                 cursor: pointer;
-            }
-        }
-
-        & .logout-button {
-            max-height: 35px;
-            transition: .3s ease;
-
-            &:hover {
-                cursor: pointer;
-                transform: scale(1.2);
-                .outer {
-                    stroke: var(--main-accent-color);
-                }
-
-                .inner {
-                    fill: var(--main-accent-color);
-                }
-            }
-        }
-
-        & .settings-button {
-            max-height: 35px;
-            transition: .3s ease;
-
-            &:hover {
-                cursor: pointer;
-                transform: scale(1.2);
-                path {
-                    stroke: var(--main-accent-color);
-                }
-                
-
             }
         }
     }

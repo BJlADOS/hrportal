@@ -1,0 +1,9 @@
+:host.hover {
+    svg>path{
+        stroke: var(--main-accent-color);
+    }
+}
+
+svg {
+    scale: 1.5;
+}

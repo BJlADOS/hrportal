@@ -221,17 +221,8 @@
                         &:hover {
                             cursor: pointer;
                             border-color: var(--main-accent-color);
-        
-                            svg {
-                                path {
-                                    stroke: var(--main-accent-color);
-                                }
-                            }
                         }
-        
-                        svg {
-                            scale: 1.5;
-                        }
+    
                     }
                 }
         
@@ -254,14 +245,6 @@
                         background-color: rgba(var(--main-accent-color-rgb), 0.2);
                     }
 
-                    & .add-icon {
-                        scale: 1.5;
-                        transform: rotate(45deg);
-
-                        & .stroke {
-                            stroke: var(--main-accent-color);
-                        }
-                    }
                 }
             }   
             
@@ -335,10 +318,6 @@
         &:hover {
             cursor: pointer;
             color: var(--font-primary);
-
-            & .stroke {
-                stroke: var(--font-primary);
-            }
         }
     }
 }

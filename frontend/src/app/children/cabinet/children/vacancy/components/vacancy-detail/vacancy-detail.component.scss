@@ -60,16 +60,21 @@ form {
 
     &.enabled {
         pointer-events: all;
+        & .skills {
+            &__box {
+                & .skill {
+                    border-color: var(--border-color);
 
-        & .skills__box {
-
-            & .skill {
-                border-color: var(--border-color);
-            }
-
-            & .no-skills {
-                border-color: var(--border-color);
-                color: var(--font-primary);
+                    &:hover {
+                        cursor: pointer;
+                        border-color: var(--main-accent-color);
+                    }
+                }
+    
+                & .no-skills {
+                    border-color: var(--border-color);
+                    color: var(--font-primary);
+                }
             }
         }
     }
@@ -275,21 +280,6 @@ form {
             border: 1px solid var(--main-accent-color);
             border-radius: 1rem;
             padding: 0.3rem 0.8rem;
-
-            &:hover {
-                cursor: pointer;
-                border-color: var(--main-accent-color);
-
-                svg {
-                    path {
-                        stroke: var(--main-accent-color);
-                    }
-                }
-            }
-
-            svg {
-                scale: 1.5;
-            }
         }
     }
 
@@ -321,23 +311,6 @@ form {
             }
         }
     }
-}
-
-.description {
-    // display: flex;
-    // flex-direction: column;
-    // gap: 1.5rem;
-    // margin-top: 0.5rem;
-    // background-color: var(--white);
-    // border-radius: 16px;
-    // border: 1px solid var(--border-color);
-    // padding: 24px;
-    // box-shadow: var(--box-shadow--main);
-    // font-weight: 500;
-
-    // p {
-    //     margin: 0;
-    // }
 }
 
 .hidden {

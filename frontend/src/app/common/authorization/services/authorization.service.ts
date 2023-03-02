@@ -45,8 +45,8 @@ export class AuthorizationService {
         return this.http.post(`${this._apiURL}/recovery/`, { password: passwordHash, code: token }) as Observable<any>;
     }
 
-    public checkEmail(email: string): Observable<Object> {
-        return this.http.post(`${this._apiURL}/unique-email/`, { email: email });
+    public checkEmail(email: string): Observable<{ unique: boolean }> {
+        return this.http.post<{ unique: boolean }>(`${this._apiURL}/unique-email/`, { email: email });
     }
 
     public logOut(): void {
@@ -66,8 +66,8 @@ export class AuthorizationService {
     }
 
     private validateToken(): void { //placeholder request
-        this.http.get(`${this._apiURL}/authorized`).subscribe((data) => {
-            const valid = data as IValidToken;
+        this.http.get<IValidToken>(`${this._apiURL}/authorized`).subscribe((data: IValidToken) => {
+            const valid: IValidToken = data as IValidToken;
             console.log(data);
             if (valid.authorized) {
                 this._user.getUserInfo();

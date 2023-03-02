@@ -14,6 +14,7 @@ import { AccountLayoutComponent } from './components/account-layout/account-layo
 import { RouterOutlet } from '@angular/router';
 import { AccountRoutingModule } from './account-routing.module';
 import { SharedModule } from '../../lib';
+import { AppLogoIconComponent, CrossIconComponent, LetterIconComponent } from '../../../assets/img';
 
 
 @NgModule({
@@ -32,7 +33,10 @@ import { SharedModule } from '../../lib';
         ReactiveFormsModule,
         SharedModule,
         RouterOutlet,
-        AccountRoutingModule
+        AccountRoutingModule,
+        AppLogoIconComponent,
+        CrossIconComponent,
+        LetterIconComponent,
     ]
 })
 export class AccountModule {

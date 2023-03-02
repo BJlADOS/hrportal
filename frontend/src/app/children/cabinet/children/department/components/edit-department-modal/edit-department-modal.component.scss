@@ -13,15 +13,6 @@
         flex-direction: row;
         justify-content: flex-end;
         transform: translate(1.5rem, 100%);
-
-        & span {
-            cursor: pointer;
-            transition: .3s ease;
-
-            &:hover {
-                transform: scale(1.4);
-            }
-        }
     }
 
     &__title {

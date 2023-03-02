@@ -35,7 +35,7 @@ import { BUTTONS_DATA_TOKEN, DestroyService, ModalService, UserType } from '../.
                         name: 'Вакансии',
                     },
                     {
-                        path: 'cabinet/department',
+                        path: 'cabinet/departments',
                         name: 'Департаменты',
                     },
                     {

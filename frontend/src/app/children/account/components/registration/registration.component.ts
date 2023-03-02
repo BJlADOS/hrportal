@@ -20,7 +20,7 @@ export class RegistrationComponent implements OnInit {
     public errors: IAuthError = { fullname: null, email: null, password: null, confirmPassword: null };
     public submitError: ISubmitError | null = null;
 
-    private _FormManager: FormManager = FormManager.getInstance();
+    private _formManager: FormManager = FormManager.getInstance();
 
     constructor(
     public auth: AuthorizationService,
@@ -32,14 +32,14 @@ export class RegistrationComponent implements OnInit {
 
     public ngOnInit(): void {
         this.signUpForm.controls['email'].statusChanges.pipe(takeUntil(this._destroy$), map((data) => data === 'INVALID')).subscribe(() => {
-            this.errors.email = this._FormManager.checkEmail(this.signUpForm);
+            this.errors.email = this._formManager.checkEmail(this.signUpForm);
         });
     }
 
     public signUp(): void { //not implemented
         this.auth.checkEmail(this.signUpForm.value.email)
             .subscribe({
-                next: (data) => {
+                next: (data: { unique: boolean }) => {
                     const isEmailUnique: boolean = (data as { unique: boolean }).unique;
                     if (isEmailUnique) {
                         this.auth.signUp(this.signUpForm.value.fullname, this.signUpForm.value.email, this.signUpForm.value.password)
@@ -48,7 +48,7 @@ export class RegistrationComponent implements OnInit {
                                     this.router.navigate(['account/authorization']);
                                     this._modal.open(ConfirmEmailModalComponent, { email: this.signUpForm.value.email });
                                 },
-                                error: (error) => {
+                                error: () => {
                                     this.submitError = { message: 'Ошибка сервера' };
                                 }
                             });
@@ -57,7 +57,7 @@ export class RegistrationComponent implements OnInit {
                         this.errors.email = { message: 'Пользователь с такой почтой уже существует' };
                     }
                 },
-                error: (err) => {
+                error: () => {
                     this.submitError = { message: 'Ошибка сервера' };
                 }
             });
@@ -65,19 +65,19 @@ export class RegistrationComponent implements OnInit {
     }
 
     public fullnameChange(): void {
-        this.errors.fullname = this._FormManager.checkFullname(this.signUpForm);
+        this.errors.fullname = this._formManager.checkFullname(this.signUpForm);
     }
 
     public emailChange(): void {
-        this.errors.email = this._FormManager.checkEmail(this.signUpForm);
+        this.errors.email = this._formManager.checkEmail(this.signUpForm);
     }
 
     public passwordChange(): void {
-        this.errors.password = this._FormManager.checkPassword(this.signUpForm);
+        this.errors.password = this._formManager.checkPassword(this.signUpForm);
     }
 
     public confirmPasswordChange(): void {
-        this.errors.confirmPassword = this._FormManager.checkConfirmPassword(this.signUpForm);
+        this.errors.confirmPassword = this._formManager.checkConfirmPassword(this.signUpForm);
     }
 
     public toSignIn(): void {

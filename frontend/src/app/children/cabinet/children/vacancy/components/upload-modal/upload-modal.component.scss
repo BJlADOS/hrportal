@@ -44,17 +44,6 @@
             align-items: center;
             gap: 1rem;
         }
-
-        &.fileover {
-
-            .icon {
-                animation: teabag 2s linear infinite;
-            }
-
-            .icon__path {
-                stroke: var(--main-accent-color);
-            }
-        }
     }
 
     &__form {
@@ -171,16 +160,4 @@
 
 input[type="file"] {
     display: none;
-}
-
-@keyframes teabag {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(10px);
-    }
-    100% {
-        transform: translateY(0);
-    }
 }

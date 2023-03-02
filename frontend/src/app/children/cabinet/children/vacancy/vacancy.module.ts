@@ -14,6 +14,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '../../../../lib/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { VacanciesSearchService, VacancyDeclinationPipe, VacancyResolverService } from '../../../../common';
+import { PlusIconComponent, Cross2IconComponent, MagnifierIconComponent, Cross1IconComponent, FilterIconComponent, CrossIconComponent, UploadIconComponent, SuccessIconComponent, EditIconComponent, ArchiveIconComponent, UpArrowIconComponent } from '../../../../../assets/img';
 
 
 @NgModule({
@@ -41,6 +42,17 @@ import { VacanciesSearchService, VacancyDeclinationPipe, VacancyResolverService 
         NgxStickySidebarModule.withConfig({
             minWidth: '280px',
         }),
+        PlusIconComponent,
+        Cross2IconComponent,
+        MagnifierIconComponent,
+        Cross1IconComponent,
+        FilterIconComponent,
+        CrossIconComponent,
+        UploadIconComponent,
+        SuccessIconComponent,
+        EditIconComponent,
+        ArchiveIconComponent,
+        UpArrowIconComponent
     ]
 })
 export class VacancyModule { }

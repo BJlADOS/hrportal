@@ -6,6 +6,9 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../lib';
 import { CabinetRoutingModule } from './cabinet-routing.module';
 import { ResumeCreateModule } from '../../common';
+import { AppLogoIconComponent, LogoutIconComponent } from '../../../assets/img';
+import { SettingsIconComponent } from "../../../assets/img/settings/setting-icon";
+import { CrossIconComponent } from "../../../assets/img/cross/cross-icon";
 
 
 @NgModule({
@@ -20,6 +23,10 @@ import { ResumeCreateModule } from '../../common';
         SharedModule,
         CabinetRoutingModule,
         ResumeCreateModule,
+        AppLogoIconComponent,
+        LogoutIconComponent,
+        SettingsIconComponent,
+        CrossIconComponent
     ]
 })
 export class CabinetModule {

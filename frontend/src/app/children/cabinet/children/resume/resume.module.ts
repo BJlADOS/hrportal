@@ -4,6 +4,7 @@ import { resumeRouting } from './resume-routing.module';
 import { SharedModule } from '../../../../lib/shared/shared.module';
 import { ResumeComponent, ResumeDetailComponent, ResumeListComponent, ResumeResponseModalComponent } from './components';
 import { ResumeResolverService, ResumeService } from '../../../../common';
+import { CrossIconComponent, SuccessIconComponent } from '../../../../../assets/img';
 
 
 @NgModule({
@@ -13,14 +14,16 @@ import { ResumeResolverService, ResumeService } from '../../../../common';
         ResumeComponent,
         ResumeResponseModalComponent
     ],
+    providers: [
+        ResumeService,
+        ResumeResolverService
+    ],
     imports: [
         CommonModule,
         SharedModule,
         resumeRouting,
-    ],
-    providers: [
-        ResumeService,
-        ResumeResolverService
+        CrossIconComponent,
+        SuccessIconComponent
     ]
 })
 export class ResumeModule { }

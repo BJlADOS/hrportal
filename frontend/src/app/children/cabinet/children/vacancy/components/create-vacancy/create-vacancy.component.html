@@ -1,6 +1,6 @@
 <div class="wrapper">
     <div class="wrapper-grid" *ngIf="user$ | async as user">
-        <form class="form column-1-9 enabled" *ngIf="vacancyForm" [formGroup]="vacancyForm" (ngSubmit)="createVacancy()">
+        <form class="form column-1-9" *ngIf="vacancyForm" [formGroup]="vacancyForm" (ngSubmit)="createVacancy()">
             <div class="title">
                 <div class="title__position">
                     <h1>{{ vacancyForm.controls['position'].value === '' ? 'Название вакансии' : vacancyForm.controls['position'].value }}</h1>
@@ -12,25 +12,15 @@
                 <div class="skills__box">
                     <span class="no-skills" *ngIf="!vacancyForm.controls['requiredSkills'].value?.length">Нет
                         навыков</span>
-                    <div class="skill" *ngFor="let skill of vacancyForm.controls['requiredSkills'].value"
+                    <div appHoverListener class="skill" *ngFor="let skill of vacancyForm.controls['requiredSkills'].value"
                         (click)="deleteSkill(skill)">
                         <span>{{skill.name}}</span>
-                        <svg width="10" height="11" viewBox="0 0 10 11" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2.67969 3.14685L7.27588 7.74304" stroke="#D9D9D9" stroke-linecap="round" />
-                            <path d="M2.67969 7.74304L7.27588 3.14685" stroke="#D9D9D9" stroke-linecap="round" />
-                        </svg>
+                        <cross2-icon></cross2-icon>
                     </div>
                 </div>
                 <div class="skills__add" *ngIf="!isAddingSkill"
                      (click)="isAddingSkill = true">
-                    <svg class="add-icon" width="10" height="11" viewBox="0 0 10 11" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path class="stroke" d="M2.67969 3.14685L7.27588 7.74304" stroke="#D9D9D9"
-                            stroke-linecap="round" />
-                        <path class="stroke" d="M2.67969 7.74304L7.27588 3.14685" stroke="#D9D9D9"
-                            stroke-linecap="round" />
-                    </svg><span>Добавить</span>
+                    <plus-icon></plus-icon><span>Добавить</span>
                 </div>
                 <div class="skills__search" *ngIf="isAddingSkill">
                     <app-select-with-search [options]="(skills$ | async)!"

@@ -72,24 +72,6 @@
             align-items: center;
             gap: .5rem;
             justify-content: center;
-
-            & .clear {
-                box-sizing: border-box;
-                transition: .3s ease;
-                cursor: pointer;
-                &:hover {
-                    transform: scale(1.2);
-                }
-            }
-
-            & .magnifier {
-                box-sizing: border-box;
-                transition: .3s ease;
-                cursor: pointer;
-                &:hover {
-                    transform: scale(1.2);
-                }
-            }
         }
 
         &:hover {

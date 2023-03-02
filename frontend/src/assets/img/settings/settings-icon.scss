@@ -1,8 +1,13 @@
 :host.hover {
+    cursor: pointer;
     svg {
         transform: scale(1.2);
         &>* {
             stroke: var(--main-accent-color);
         }
     }
+}
+
+svg {
+    transition: .3s ease;
 }

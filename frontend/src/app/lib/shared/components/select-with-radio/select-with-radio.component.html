@@ -12,12 +12,7 @@
             tabindex="0"
             (click)="select(option)"
             role="option"
-            ><svg *ngIf="currentValue?.id !== option.id else selectedIcon" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="0.5" y="0.5" width="14" height="14" rx="7" stroke="#FDC04E"/>
-                </svg><span>{{option.name}}</span></li>
+            ><check-circle-empty-icon *ngIf="currentValue?.id !== option.id else selectedIcon"></check-circle-empty-icon><span>{{option.name}}</span></li>
     </ul>
 </div>
-<ng-template #selectedIcon><svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="7.5" cy="8" r="4.5" fill="#FDC04E"/>
-    <rect x="0.5" y="1" width="14" height="14" rx="7" stroke="#FDC04E"/>
-    </svg></ng-template>
+<ng-template #selectedIcon><check-circle-icon></check-circle-icon></ng-template>
