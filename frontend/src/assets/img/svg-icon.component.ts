@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, Optional } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, Optional } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { DestroyService } from 'src/app/lib';
 import { HoverListenerDirective } from 'src/app/lib/shared/directives/hover-listener.directive';
@@ -11,13 +11,20 @@ import { HoverListenerDirective } from 'src/app/lib/shared/directives/hover-list
     styles: [''],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export abstract class SVGIconComponent implements AfterViewInit {
+export abstract class SVGIconComponent implements AfterViewInit, OnChanges {
+    @Input() public forceHover: boolean = false;
+
     @HostBinding('class.hover') private _isHover: boolean = false;
 
     constructor(
         protected destroy$: DestroyService,
         @Optional() protected hover: HoverListenerDirective,
     ) { }
+
+    public ngOnChanges(): void {
+        this.setHover(false);
+    }
+
     public ngAfterViewInit(): void {
         if (!this.hover) {
             return;
@@ -29,9 +36,13 @@ export abstract class SVGIconComponent implements AfterViewInit {
             )
             .subscribe({
                 next: (isHover: boolean) => {
-                    this._isHover = isHover;
+                    this.setHover(isHover);
                 }
             }
             );
+    }
+
+    private setHover(state: boolean): void {
+        this._isHover = state || this.forceHover;
     }
 }

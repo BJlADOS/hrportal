@@ -11,11 +11,6 @@
             border-color: var(--main-accent-color);
             color: var(--main-accent-color);
         }
-        
-
-        & .arrow-icon {      
-            fill: var(--main-accent-color);
-        }
     }
 
     &:hover {
@@ -25,10 +20,6 @@
 
         & .dropdown-button {
             color: var(--main-accent-color);
-        }
-
-        & .arrow-icon {      
-            fill: var(--main-accent-color);
         }
     }
 
