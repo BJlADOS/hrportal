@@ -1,0 +1,10 @@
+:host {
+    width: 24px;
+    height: 24px;
+
+    &.hover {
+        svg {
+            fill: var(--main-accent-color);
+        }
+    }
+}

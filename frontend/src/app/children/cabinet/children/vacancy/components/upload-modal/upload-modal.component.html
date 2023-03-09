@@ -1,0 +1,50 @@
+<div class="modal">
+    <div class="modal__content">
+        <div class="modal__header">
+            <cross-icon appHoverListener (click)="close()"></cross-icon>
+        </div>
+    </div>
+    <div class="modal__body dropzone" appDragAndDrop (fileDropped)="submitTypeSelected ? onFileDropped($event): undefined"
+        *ngIf="!isSubmitted else submitted">
+        <h2 class="modal__title">Отправить резюме на вакакансию «{{vacancyName}}»</h2>
+        <div class="modal__form" *ngIf="submitTypeSelected else fileTypeNotSelected">
+            <div class="modal__form-group">
+                <input id="file" #fileDropRef type="file" class="modal__form-input" (change)="onFileChange($event)"
+                    accept=".pdf" />
+                <label appHoverListener for="file" class="icon"><upload-icon></upload-icon></label>
+                <label class="upload" *ngIf="!file else fileName" for="file">Загрузите файл</label>
+                <ng-template #fileName><label for="file" class="filename">{{file!.name}}</label></ng-template>
+            </div>
+            <div class="modal__form-group">
+                <div class="button-block">
+                    <button class="modal__form-submit" [class.disabled]="!file || uploadError" (click)="uploadFile()"
+                        [disabled]="!file || uploadError">Отправить</button>
+                    <app-error class="error" [@contentExpansion]="uploadError ? 'expanded' : 'collapsed'"
+                        [error]="{ message : uploadError?? ''}"></app-error>
+                    <button (click)="backToSelectType()" class="transparent-button">Назад</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #fileTypeNotSelected>
+        <div class="modal__form">
+            <div class="modal__form-group">
+                <div class="button-block">
+                    <button class="modal__form-submit" [class.disabled]="!resumeId" (click)="sendReadyResume()"
+                        [disabled]="!resumeId">Отправить</button>
+                    <app-error class="error" *ngIf="!resumeId"
+                        [error]="{ message : 'Для отправки готового резюме заполните его на сайте'}">
+                    </app-error>
+                    <label>или</label>
+                    <button (click)="changeSubmitType()" class="transparent-button">Загрузить другой файл</button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #submitted>
+        <div class="modal__body success">
+            <success-icon></success-icon>
+            <span class="success-text">{{getUsername()}}, Вы откликнулись на вакансию «<span>{{vacancyName}}</span>». На почту руководителя будет будет выслана ваша почта <span>{{getUserEmail()}}</span> для обратной связи.</span>
+        </div>
+    </ng-template>
+</div>

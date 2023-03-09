@@ -1,0 +1,26 @@
+<div class="dropdown-collection">
+    <div class="dropdown-button" #head>
+        <div class="dropdown-input">
+            <input [placeholder]="title" [formControl]="searchControl">
+            <div class="tools">
+                <cross1-icon appHoverListener (click)="reset()" [@contentExpansionHorizontal]="searchControl.value? 'expanded' : 'collapsed'"></cross1-icon>
+                <magnifier-icon appHoverListener></magnifier-icon>
+            </div>
+        </div>
+        
+    </div>
+    <div class="dropdown-list">
+        <cdk-virtual-scroll-viewport class="dropdown-list__scroll" itemSize="10" [style.height.px]="34 * visibleOptions"
+            [class.no-scroll]="visibleOptions >= options.length">
+            <div class="dropdown-item-no-results" *ngIf="!options.length" [class.no-scroll]="visibleOptions >= options.length">Нет
+                результатов...</div>
+
+            <div class="dropdown-item" [class.no-scroll]="visibleOptions >= options.length"
+                *cdkVirtualFor="let option of options" (click)="select(option)">
+                <check-square-empty-icon *ngIf="!checkSelected(option) else selectedIcon"></check-square-empty-icon>
+                <span>{{ option.name }}</span>
+            </div>
+        </cdk-virtual-scroll-viewport>
+    </div>
+</div>
+<ng-template #selectedIcon><check-square-icon></check-square-icon></ng-template>

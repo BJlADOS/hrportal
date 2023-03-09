@@ -1,0 +1,9 @@
+:host.hover {
+    transform: scale(1.2);
+}
+
+:host {
+    box-sizing: border-box;
+    transition: .3s ease;
+    cursor: pointer;
+}

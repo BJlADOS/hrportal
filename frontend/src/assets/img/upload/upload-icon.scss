@@ -1,0 +1,22 @@
+:host.hover>svg>path {
+    stroke: var(--main-accent-color);
+}
+
+:host.drag>svg>path {
+    stroke: var(--main-accent-color);
+}
+:host.drag>svg {
+    animation: teabag 2s linear infinite;
+}
+
+@keyframes teabag {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,10 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <div class="content">
+                <div class="error" *ngIf="loadingError">{{loadingError}}</div>
+                <app-resume class="width" *ngFor="let resume of resumes" [resume]="resume"></app-resume>
+            </div>          
+        </div>      
+    </div>  
+</div>

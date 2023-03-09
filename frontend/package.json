@@ -2,12 +2,13 @@
   "name": "hrportal-frontend",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
+    "npm i": "npm i",
+    "start": "ng serve --open",
     "build": "ng build",
     "build-dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -35,11 +36,20 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.5",
+    "@angular-eslint/builder": "15.0.0-alpha.5",
+    "@angular-eslint/eslint-plugin": "15.0.0-alpha.5",
+    "@angular-eslint/eslint-plugin-template": "15.0.0-alpha.5",
+    "@angular-eslint/schematics": "15.0.0-alpha.5",
+    "@angular-eslint/template-parser": "15.0.0-alpha.5",
     "@angular/cli": "^14.2.5",
     "@angular/compiler-cli": "^14.2.5",
     "@types/bcryptjs": "^2.4.2",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "5.43.0",
+    "@typescript-eslint/parser": "5.43.0",
+    "eslint": "^8.28.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

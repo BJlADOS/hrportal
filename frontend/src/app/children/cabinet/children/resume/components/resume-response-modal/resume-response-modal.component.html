@@ -1,0 +1,12 @@
+<div class="modal">
+    <div class="modal__content">
+        <div class="modal__header">
+            <cross-icon appHoverListener (click)="close()"></cross-icon>
+        </div>
+    </div>
+    <div class="modal__body success">
+        <success-icon></success-icon>
+        <span class="success-text">{{getUserName()}}, Вы откликнулись на резюме <span>«{{resume?.desiredPosition}}»</span>. На почту сотрудника будет будет выслана ваша почта <span>{{employeeEmail}}</span> для обратной связи.</span>
+    </div>
+
+</div>

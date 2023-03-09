@@ -1,0 +1,14 @@
+<div class="dropdown-collection" [class.opened]="dropdownOpen" [class.disabled]="disabled" [class.edited]="edited">
+    <div appHoverListener appClickOutside class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label" (click)="toggleDropdown()" (clickOutside)="dropdownOpen = false" [class.required]="required">
+        <span class="dropdown-default" id="dropdown-label" *ngIf="!currentValue">{{title}} </span><span class="dropdown-value" *ngIf="currentValue">{{currentValue.name}}</span>
+        <accordion-arrow-icon *ngIf="!disabled" class="arrow-icon" [@rotate180]="dropdownOpen? 'rotated' : 'still'" [forceHover]="dropdownOpen"></accordion-arrow-icon>
+    </div>
+    <ul class="dropdown-list" role="listbox" aria-expanded="false" [ngClass]="{'dropdown-open' : dropdownOpen}" [@contentExpansion]="dropdownOpen ? 'expanded' : 'collapsed'">
+        <li *ngFor="let option of options"
+            tabindex="0"
+            (click)="select(option)"
+            role="option"
+            ><check-circle-empty-icon *ngIf="currentValue?.id !== option.id else selectedIcon"></check-circle-empty-icon><span>{{option.name}}</span></li>
+    </ul>
+</div>
+<ng-template #selectedIcon><check-circle-icon></check-circle-icon></ng-template>

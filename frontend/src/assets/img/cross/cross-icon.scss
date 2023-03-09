@@ -1,0 +1,11 @@
+:host.hover {
+    cursor: pointer;
+    svg {
+        fill: var(--main-accent-color);
+        transform: scale(1.4);
+    }
+}
+
+svg {
+    transition: .3s ease;
+}

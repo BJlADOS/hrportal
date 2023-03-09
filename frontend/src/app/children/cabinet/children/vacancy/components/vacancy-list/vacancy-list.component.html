@@ -1,0 +1,38 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13" *ngIf="user | async as user">
+            <div class="additional-buttons" *ngIf="user.isManager || user.isAdmin">
+                <button class="manager-button" routerLink="create">Добавить вакансию</button>
+            </div>
+            <div class="content">
+                <div class="search">
+                    <app-search (madeSearch)="resetSearch()" (filterToggle)="toggleFilters()"></app-search>
+                </div>
+                <div class="error" *ngIf="loadingError">{{loadingError}}</div>
+                <div class="content__main">
+                    <div class="filters" [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'"
+                        stickySidebar containerSelector=".content__main" innerWrapperSelector=".inner" topSpacing="24"
+                        bottomSpacing="24" [minWidth]="400" [updateSticky]="update$">
+                        <div class="inner">
+                            <app-filters (madeSearch)="resetSearch()"></app-filters>
+                        </div>
+                    </div>
+                    <div class="vacancies" *ngIf="vacancies.length else noVacancies">
+                        <app-vacancy class="width" *ngFor="let vacancy of vacancies" [vacancy]="vacancy"></app-vacancy>
+                    </div>
+                </div>
+                <div class="scroll-back" *ngIf="canScrollBack" (click)="scrollBack()">
+                    <up-arrow-icon></up-arrow-icon>
+                    <span>Назад</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #noVacancies>
+    <div class="no-vacancies">
+        <div class="no-vacancies__text">
+            <span>Вакансий не найдено :(</span>
+        </div>
+    </div>
+</ng-template>

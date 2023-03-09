@@ -1,0 +1,45 @@
+.modal {
+    z-index: 1200;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+
+    &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        transform: translate(1.5rem, 100%);
+    }
+
+    &__body {
+        padding: 2rem 2.5rem;
+        border-radius: 20px;
+        box-shadow: var(--box-shadow-main);
+        border: 3px solid var(--main-accent-color);
+        background-color: var(--white);
+
+        &.success {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+    }
+}
+
+.success-text {
+    text-align: center;
+
+    & .bold {
+        font-weight: 700;
+    }
+
+    & .uppercase {
+        text-transform: uppercase;
+    }
+}

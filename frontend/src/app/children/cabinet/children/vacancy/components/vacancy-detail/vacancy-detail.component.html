@@ -1,0 +1,117 @@
+<div class="wrapper">
+    <div class="wrapper-grid" *ngIf="user$ | async as user">
+        <form class="form column-1-9" *ngIf="vacancy && vacancyForm" [formGroup]="vacancyForm"
+            [class.enabled]="isEditing" (ngSubmit)="submitFormChanges()">
+            <div class="title">
+                <div class="title__position">
+                    <h1>{{vacancyForm.controls['position'].value}}</h1>
+                    <span class="department">{{ vacancy.department.name }}</span>
+                </div>
+                <p class="title__date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
+            </div>
+            <div class="salary">от {{vacancyForm.controls['salary'].value}} рублей</div>
+            <div class="response" [@contentExpansion]="isEditing? 'collapsed' : 'expanded'" (click)="responseVacancy()">
+                Откликнуться</div>
+            <div class="skills">
+                <div class="skills__box">
+                    <span class="no-skills" *ngIf="!vacancyForm.controls['requiredSkills'].value.length">Нет
+                        навыков</span>
+                    <div appHoverListener class="skill" *ngFor="let skill of vacancyForm.controls['requiredSkills'].value"
+                        (click)="deleteSkill(skill)">
+                        <span>{{skill.name}}</span>
+                        <cross2-icon *ngIf="isEditing"></cross2-icon>
+                    </div>
+                </div>
+                <div class="skills__add" *ngIf="!isAddingSkill"
+                    [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'" (click)="isAddingSkill = true">
+                    <plus-icon></plus-icon><span>Добавить</span>
+                </div>
+                <div class="skills__search" *ngIf="isAddingSkill">
+                    <app-select-with-search [options]="(skills$ | async)!"
+                        [alreadySelected]="vacancyForm.controls['requiredSkills'].value" [isActive]="isAddingSkill"
+                        (closed)="isAddingSkill = $event" (currentValueChange)="addedSkill($event)">
+                    </app-select-with-search>
+                </div>
+            </div>
+            <div class="input-label" [@contentExpansion]="isEditing? 'expanded' : 'collapsed'">
+                <label>Введите название вакансии</label>
+                <div class="input-block">
+                    <input class="long-input" type="position" formControlName="position" placeholder="Должность"
+                        (input)="positionChange()">
+                    <app-error [@contentExpansion]="errors.position ? 'expanded' : 'collapsed'"
+                        [error]="errors.position!"></app-error>
+                </div>
+            </div>
+            <div class="input-label" [@contentExpansion]="isEditing? 'expanded' : 'collapsed'">
+                <label>Введите заработную плату</label>
+                <div class="input-block">
+                    <input class="input-60" type="salary" mask="09999999" suffix="₽" formControlName="salary"
+                        placeholder="Заработная плата" (input)="salaryChange()">
+                    <app-error [@contentExpansion]="errors.salary ? 'expanded' : 'collapsed'" [error]="errors.salary!">
+                    </app-error>
+                </div>
+            </div>
+            <div class="success" [@contentExpansion]="isSubmitted ? 'expanded' : 'collapsed'">
+                <div class="success__icon">
+                    <svg width="18" height="24" viewBox="0 0 18 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 13.4338L9 21.4338L17 1" stroke="#FDC04E" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="success__text">
+                    <span>Изменения сохранены</span>
+                </div>
+            </div>
+            <div class="description">
+                <editor apiKey="uhxdv14l2ehb88ytf6psbig8e346kiy941wcfvgbv713nmxe" [init]="{
+                    icons: 'material',
+                    skin: 'borderless',
+                    menubar: false,
+                    menu: {},
+                    toolbar: false,
+                    statusbar: false,
+                    plugins: 'autoresize',
+                    autoresize_bottom_margin: 0,
+                    autoresize_overflow_padding: 0,
+                    content_style:
+                    'body { font-size: 16px; font-family: Montserrat, sans-serif; }'
+                  }" formControlName="description" [class.hidden]="isEditing"></editor>
+                  <editor apiKey="uhxdv14l2ehb88ytf6psbig8e346kiy941wcfvgbv713nmxe" [init]="{
+                    icons: 'material',
+                    skin: 'borderless',
+                    menubar: false,
+                    menu: {},
+                    toolbar: true,
+                    statusbar: false,
+                    plugins: 'autoresize',
+                    content_style:
+                    'body { font-size: 16px; font-family: Montserrat, sans-serif; }'
+                  }" formControlName="description" [class.hidden]="!isEditing"></editor>
+            </div>
+            <div class="schedule">
+                <app-select-small formControlName="employment" [options]="employment" [title]="'Занятость'">
+                </app-select-small>
+                <app-select-small formControlName="schedule" [options]="schedule" [title]="'График'"></app-select-small>
+            </div>
+            <div class="submit" [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">
+                <div class="buttons">
+                    <input type="submit" value="СОХРАНИТЬ ИЗМЕНЕНИЯ"
+                        [disabled]="!checkFormChanges() || !vacancyForm.valid">
+                    <div (click)="cancelEditing()">ОТМЕНИТЬ ИЗМЕНЕНИЯ</div>
+                </div>
+                <app-error [error]="submitError"></app-error>
+            </div>
+        </form>
+        <div class="wrapper-flex column-11-13" *ngIf="(user.isAdmin || user.id === vacancy?.department?.managerId) && !isEditing">
+            <div appHoverListener class="manager-button" (click)="editVacancy()">
+                <span>Редактировать</span>
+                <edit-icon></edit-icon>
+            </div>
+            <div appHoverListener class="manager-button">
+                <span>Архивировать</span>
+                <archive-icon></archive-icon>
+            </div>
+        </div>
+    </div>
+</div>

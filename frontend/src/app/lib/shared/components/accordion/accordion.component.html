@@ -1,0 +1,16 @@
+<section class="accordion">
+    <div *ngFor="let item of items; index as i" class="accordion__item" [class.active]="expanded.has(i)">
+        <header class="accordion__header">
+            <div class="accordion__title" (click)="toggleState(i)">
+                <accordion-arrow-icon class="accordion__item__arrow"></accordion-arrow-icon>
+                <p class="title">{{item.title}}</p>
+            </div>
+        </header>
+        <div class="content">
+            <div class="accordion__content" [class.expanded]="expanded.has(i)"
+                [@contentExpansion]="expanded.has(i) ? 'expanded':'collapsed'">
+                <ng-container *ngTemplateOutlet="item.content.templateRef"></ng-container>
+            </div>
+        </div>
+    </div>
+</section>

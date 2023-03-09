@@ -1,0 +1,44 @@
+<div class="modal">
+    <div class="modal__content">
+        <div class="modal__header">
+            <cross-icon appHoverListener (click)="close()"></cross-icon>
+        </div>
+    </div>
+    <div class="modal__body" *ngIf="!isSubmitted else submitted">
+        <h1 class="modal__title">Создание департамента</h1>
+        <form class="modal__form" [formGroup]="departmentForm" (ngSubmit)="createDepartment()">
+            <div class="modal__form-group">
+                <label>Введите название желаемого департамента</label>
+                <div class="input-block">
+                    <input class="long-input" type="position" formControlName="departmentName"
+                        placeholder="Департамент" (input)="departmentNameChange()">
+                    <app-error [@contentExpansion]="errors.name ? 'expanded' : 'collapsed'"
+                        [error]="errors.name!"></app-error>
+                </div>
+            </div>
+            <div class="modal__form-group">
+                <label>Введите из списка руководителя</label>
+                <div class="input-block">
+                        <app-search-select-form formControlName="managerId" [options]="users" *ngIf="users.length" [title]="'Руководитель'"></app-search-select-form>
+                    <app-error [@contentExpansion]="errors.manager ? 'expanded' : 'collapsed'"
+                        [error]="errors.manager!"></app-error>
+                </div>
+            </div>
+            <div class="modal__form-submit">
+                <div class="button-block">
+                    <input type='submit' [disabled]="departmentForm.invalid"
+                        [value]="'Добавить департамент'">
+                </div>
+                <label (click)="cancel()" class="transparent-button">Отмена</label>
+            </div>
+            <label class="error" *ngIf="submitError">{{ submitError }}</label>
+        </form>
+    </div>
+    <ng-template #submitted>
+        <div class="modal__body success">
+            <success-icon></success-icon>
+            <span class="success-text">Создан новый департамент <span
+                class="bold">«{{this.departmentName}}»</span></span>
+        </div>
+    </ng-template>
+</div>

@@ -1,0 +1,13 @@
+<div class="wrapper">
+    <div class="title">
+        <div class="title__position">
+            <h1>{{department.name}}</h1>
+            <p>Руководитель: {{managerName}}</p>
+        </div>
+    </div>
+    <div class="manager-buttons">
+        <button class="manager-button" (click)="editDepartment()"><span>Редактировать</span><edit1-icon></edit1-icon>
+            </button>
+        <button class="manager-button" (click)="archiveDepartment()"><span>Архивировать</span><archive1-icon></archive1-icon></button>
+    </div>
+</div>

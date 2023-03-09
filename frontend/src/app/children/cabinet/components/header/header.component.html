@@ -1,0 +1,43 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <div class="logo">
+                <app-logo-icon></app-logo-icon>
+            </div>
+            <div class="content" *ngIf="user | async as user">
+                <div class="content-left">
+                    <p *ngFor="let route of routes" [class.active-route]="isActive('/' + route.path)"
+                        (click)="redirectTo(route.path)">{{route.name}}</p>
+                </div>
+                <div class="content-right">
+                    <button *ngIf="!user.isAdmin" [disabled]="!user.filled" [class.active]="isCreatingResume"
+                        (click)="createResume()">Моё резюме</button>
+                    <div class="profile" (click)="redirectTo('cabinet/profile')">
+                        <img [src]="user.photo || 'assets/img/profile-placeholder.png'">
+                        <p>{{getUserName(user.fullname)}}</p>
+                    </div>
+                    <logout-icon appHoverListener (click)="logout()"></logout-icon>
+                    <settings-icon appHoverListener *ngIf="user.isAdmin"></settings-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper-bottom" *ngIf="user | async as user">
+    <div class="wrapper-grid">
+        <div class="wrapper-breadcrumbs column-1-13">
+            <div class="breadcrumbs">
+                <app-breadcrumb [url]="''" [label]="'HR-портал'"></app-breadcrumb>
+                <div class="wrapper-breadcrumbs-breadcrumb" *ngFor="let breadcrumb of breadcrumbs">
+                    <p>></p>
+                    <app-breadcrumb [url]="breadcrumb.url" [label]="breadcrumb.label"></app-breadcrumb>
+                </div>
+            </div>
+            <div class="resume-notification" *ngIf="(profileFilled$ | async) === false">
+                <span class="text">Для того чтобы оформить резюме, заполните все
+                    необходимые данные в <span class="clickable bold" (click)="toProfile()">профиле</span>.</span>
+                <cross-icon appHoverListener (click)="closeNotification()"></cross-icon>
+            </div>
+        </div>
+    </div>
+</div>
