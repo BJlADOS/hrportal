@@ -20,6 +20,11 @@ EMPLOYMENT_CHOICES = [
     ('FULL', 'Полная занятость'),
 ]
 
+STATUS_CHOICES = [
+    ('PUBLIC', 'Публично'),
+    ('ARCHIVED', 'Архивировано'),
+    ('DELETED', 'Удалено')
+]
 
 def get_upload_path(instance, filename):
     date = timezone.now().strftime('%d.%m.%Y')
@@ -123,7 +128,7 @@ class Resume(models.Model):
 
     resume = models.FileField(upload_to=get_upload_path)
 
-    is_active = models.BooleanField()
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0])
 
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -148,7 +153,7 @@ class Vacancy(models.Model):
 
     description = models.TextField(blank=True)
 
-    is_active = models.BooleanField()
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0])
 
     modified_at = models.DateTimeField(auto_now=True)
 

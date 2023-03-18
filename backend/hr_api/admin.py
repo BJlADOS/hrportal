@@ -26,9 +26,9 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Resume)
 class ResumeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'desired_position', 'employee_fullname_view', 'is_active', 'modified_at',)
+    list_display = ('id', 'desired_position', 'employee_fullname_view', 'status', 'modified_at',)
     list_display_links = ('desired_position',)
-    list_filter = ('is_active', 'desired_employment', 'desired_schedule',)
+    list_filter = ('status', 'desired_employment', 'desired_schedule',)
     search_fields = ('desired_position',)
     ordering = ('id', 'modified_at',)
 
@@ -39,9 +39,9 @@ class ResumeAdmin(admin.ModelAdmin):
 
 @admin.register(Vacancy)
 class VacancyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'position', 'department_name_view', 'is_active', 'modified_at',)
+    list_display = ('id', 'position', 'department_name_view', 'status', 'modified_at',)
     list_display_links = ('position',)
-    list_filter = ('is_active', 'employment', 'schedule',)
+    list_filter = ('status', 'employment', 'schedule',)
     search_fields = ('position',)
     ordering = ('id', 'modified_at',)
 

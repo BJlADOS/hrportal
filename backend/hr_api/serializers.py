@@ -168,11 +168,11 @@ def validate_filesize(max_filesize):
 
 class GetResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
+    status = serializers.ChoiceField(source='status', choices=STATUS_CHOICES)
     desiredPosition = serializers.CharField(source='desired_position')
     desiredSalary = serializers.IntegerField(source='desired_salary')
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
-    isActive = serializers.BooleanField(source='is_active')
     resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     modifiedAt = TimestampField(source='modified_at', required=False)
@@ -188,7 +188,7 @@ class GetResumeSerializer(serializers.ModelSerializer):
             'desiredEmployment',
             'desiredSchedule',
             'resume',
-            'isActive',
+            'status',
             'modifiedAt',
             'createdAt'
         ]
@@ -202,7 +202,6 @@ class PatchResumeSerializer(serializers.ModelSerializer):
     resume = serializers.FileField(required=False, allow_null=True,
                                    validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
-    isActive = serializers.BooleanField(source='is_active', required=False, allow_null=True)
 
     class Meta:
         model = Resume
@@ -211,15 +210,14 @@ class PatchResumeSerializer(serializers.ModelSerializer):
             'desiredSalary',
             'desiredEmployment',
             'desiredSchedule',
-            'resume',
-            'isActive'
+            'resume'
         ]
 
 
 class GetVacancySerializer(serializers.ModelSerializer):
     department = DepartmentSerializer()
+    status = serializers.ChoiceField(source='status', choices=STATUS_CHOICES)
     requiredSkills = SkillSerializer(source='required_skills', many=True)
-    isActive = serializers.BooleanField(source='is_active')
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
 
@@ -234,16 +232,16 @@ class GetVacancySerializer(serializers.ModelSerializer):
             'schedule',
             'description',
             'requiredSkills',
-            'isActive',
+            'status',
             'modifiedAt',
             'createdAt'
         ]
 
 
 class PostVacancySerializer(serializers.ModelSerializer):
-    isActive = serializers.BooleanField(source='is_active')
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True)
+    status = serializers.ChoiceField(source='status', choices=STATUS_CHOICES)
     description = serializers.CharField(required=False)
 
     class Meta:
@@ -255,7 +253,7 @@ class PostVacancySerializer(serializers.ModelSerializer):
             'schedule',
             'description',
             'requiredSkillsIds',
-            'isActive'
+            'status'
         ]
 
 
@@ -267,7 +265,6 @@ class PatchVacancySerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=False)
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True, required=False)
-    isActive = serializers.BooleanField(source='is_active', required=False)
 
     class Meta:
         model = Vacancy
@@ -277,8 +274,7 @@ class PatchVacancySerializer(serializers.ModelSerializer):
             'employment',
             'schedule',
             'description',
-            'requiredSkillsIds',
-            'isActive'
+            'requiredSkillsIds'
         ]
 
 
