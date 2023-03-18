@@ -304,13 +304,21 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         elif self.request.method == 'PATCH':
             return PatchVacancySerializer
         else:
-            return None
+            return GetVacancySerializer
 
     def get_permissions(self):
         if self.request.method == 'GET':
             return [IsAuthenticated()]
         else:
             return [(IsManagerUser | IsAdminUser)()]
+
+    def patch(self, request, *args, **kwargs):
+        result = super(VacancyDetail, self).patch(request, args, kwargs)
+        if result.status_code == 200:
+            vacancy = Vacancy.objects.get(id=kwargs['pk'])
+            data = GetVacancySerializer(vacancy).data
+            return Response(data, status=status.HTTP_200_OK)
+        return result
 
 
 @api_view(['POST'])
