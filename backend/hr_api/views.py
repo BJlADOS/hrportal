@@ -202,7 +202,7 @@ class SkillDetail(generics.RetrieveDestroyAPIView):
 
 class ResumeList(generics.ListAPIView):
     queryset = Resume.objects.all()
-    serializer_class = GetResumeSerializer
+    serializer_class = GetPostResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['$desired_position']
@@ -212,7 +212,7 @@ class ResumeList(generics.ListAPIView):
 
 class ResumeDetail(generics.RetrieveAPIView):
     queryset = Resume.objects.all()
-    serializer_class = GetResumeSerializer
+    serializer_class = GetPostResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
 
@@ -221,7 +221,7 @@ class UserResumeView(APIView):
     def get(request):
         try:
             resume = request.user.resume
-            serializer = GetResumeSerializer(resume)
+            serializer = GetPostResumeSerializer(resume)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Resume.DoesNotExist:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
@@ -233,7 +233,7 @@ class UserResumeView(APIView):
         else:
             data = request.data.dict()
             data['employeeId'] = request.user.id
-            serializer = GetResumeSerializer(data=data)
+            serializer = GetPostResumeSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -245,7 +245,7 @@ class UserResumeView(APIView):
             patch_serializer = PatchResumeSerializer(resume, data=request.data)
             patch_serializer.is_valid(raise_exception=True)
             patch_serializer.save()
-            serializer = GetResumeSerializer(resume)
+            serializer = GetPostResumeSerializer(resume)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Resume.DoesNotExist:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
@@ -304,7 +304,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         elif self.request.method == 'PATCH':
             return PatchVacancySerializer
         else:
-            return GetVacancySerializer
+            return None
 
     def get_permissions(self):
         if self.request.method == 'GET':

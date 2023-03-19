@@ -166,9 +166,9 @@ def validate_filesize(max_filesize):
     return return_function
 
 
-class GetResumeSerializer(serializers.ModelSerializer):
+class GetPostResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
-    status = serializers.ChoiceField(source='status', choices=STATUS_CHOICES)
+    status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
     desiredPosition = serializers.CharField(source='desired_position')
     desiredSalary = serializers.IntegerField(source='desired_salary')
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
@@ -202,6 +202,7 @@ class PatchResumeSerializer(serializers.ModelSerializer):
     resume = serializers.FileField(required=False, allow_null=True,
                                    validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
+    status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
 
     class Meta:
         model = Resume
@@ -210,13 +211,14 @@ class PatchResumeSerializer(serializers.ModelSerializer):
             'desiredSalary',
             'desiredEmployment',
             'desiredSchedule',
-            'resume'
+            'resume',
+            'status'
         ]
 
 
 class GetVacancySerializer(serializers.ModelSerializer):
     department = DepartmentSerializer()
-    status = serializers.ChoiceField(source='status', choices=STATUS_CHOICES)
+    status = serializers.ChoiceField(choices=API_STATUS_CHOICES)
     requiredSkills = SkillSerializer(source='required_skills', many=True)
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
@@ -241,7 +243,7 @@ class GetVacancySerializer(serializers.ModelSerializer):
 class PostVacancySerializer(serializers.ModelSerializer):
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True)
-    status = serializers.ChoiceField(source='status', choices=STATUS_CHOICES)
+    status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
     description = serializers.CharField(required=False)
 
     class Meta:
@@ -263,6 +265,7 @@ class PatchVacancySerializer(serializers.ModelSerializer):
     employment = serializers.ChoiceField(choices=EMPLOYMENT_CHOICES, required=False)
     schedule = serializers.ChoiceField(choices=SCHEDULE_CHOICES, required=False)
     description = serializers.CharField(required=False)
+    status = serializers.ChoiceField(choices=API_STATUS_CHOICES)
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True, required=False)
 
@@ -274,7 +277,8 @@ class PatchVacancySerializer(serializers.ModelSerializer):
             'employment',
             'schedule',
             'description',
-            'requiredSkillsIds'
+            'requiredSkillsIds',
+            'status'
         ]
 
 

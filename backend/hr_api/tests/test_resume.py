@@ -177,24 +177,24 @@ class ResumeTests(TestCase):
 
     def test_PatchUserResume_ShouldDontRaiseException_OnBlankData(self):
         self.login_user(self.client, self.employee_data)
-        resume_before = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
+        resume_before = GetPostResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
 
         response = self.client.patch('/api/user/resume/')
 
         self.assertEqual(response.status_code, 200)
-        resume_after = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
+        resume_after = GetPostResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
         self.assertNotEqual(resume_before['modifiedAt'], resume_after['modifiedAt'])
         resume_after['modifiedAt'] = resume_before['modifiedAt']
         self.assertEqual(resume_before, resume_after)
 
     def test_PatchUserResume_ShouldChangeResume(self):
         self.login_user(self.client, self.employee_data)
-        resume_before = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
+        resume_before = GetPostResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
 
         response = self.client.patch('/api/user/resume/', {'isActive': False}, content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
-        resume_after = GetResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
+        resume_after = GetPostResumeSerializer(User.objects.get(email=self.employee_data.email).resume).data
         self.assertNotEqual(resume_before['modifiedAt'], resume_after['modifiedAt'])
         resume_after['modifiedAt'] = resume_before['modifiedAt']
         self.assertNotEqual(resume_before, resume_after)
