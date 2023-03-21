@@ -118,7 +118,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Resume(models.Model):
-    employee = models.OneToOneField(to='User', on_delete=models.CASCADE)
+    employee = models.ForeignKey(to='User', on_delete=models.SET_NULL, null=True)
 
     desired_position = models.CharField(max_length=255)
 

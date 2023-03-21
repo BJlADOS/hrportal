@@ -9,6 +9,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Q
 
 from .authentication import JWTAuthentication
 from .filters import *
@@ -219,16 +220,17 @@ class ResumeDetail(generics.RetrieveAPIView):
 class UserResumeView(APIView):
     @staticmethod
     def get(request):
-        try:
-            resume = request.user.resume
-            serializer = GetPostResumeSerializer(resume)
+        resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
+        if len(resumes) > 0:
+            serializer = GetPostResumeSerializer(resumes.first())
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Resume.DoesNotExist:
+        else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
     @staticmethod
     def post(request):
-        if hasattr(request.user, 'resume'):
+        resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
+        if len(resumes > 0):
             return response_with_detail('This employee already has a resume', status.HTTP_409_CONFLICT)
         else:
             data = request.data.dict()
@@ -240,23 +242,26 @@ class UserResumeView(APIView):
 
     @staticmethod
     def patch(request):
-        try:
-            resume = request.user.resume
+        resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
+        if len(resumes > 0):
+            resume = resumes.first()
             patch_serializer = PatchResumeSerializer(resume, data=request.data)
             patch_serializer.is_valid(raise_exception=True)
             patch_serializer.save()
             serializer = GetPostResumeSerializer(resume)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except Resume.DoesNotExist:
+        else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
     @staticmethod
     def delete(request):
-        try:
-            resume = request.user.resume
-            resume.delete()
+        resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
+        if len(resumes > 0):
+            resume = resumes.first()
+            resume.status = "DELETED"
+            resume.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except Resume.DoesNotExist:
+        else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
 
@@ -331,9 +336,10 @@ def vacancy_response(request, pk):
 
     resume = request.data.get('resume', None)
     if resume is None:
-        try:
-            resume = request.user.resume.resume
-        except Resume.DoesNotExist:
+        resumes = Resume.objects.filter(employee=request.user).exclude(status='DELETED')
+        if len(resumes) > 1:
+            resume = resumes.first()
+        else:
             return response_with_detail('Employee does not have resume', status.HTTP_400_BAD_REQUEST)
 
     serializer = VacancyResponseSerializer(data={'resume': resume})
