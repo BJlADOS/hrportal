@@ -230,7 +230,7 @@ class UserResumeView(APIView):
     @staticmethod
     def post(request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
-        if len(resumes > 0):
+        if len(resumes) > 0:
             return response_with_detail('This employee already has a resume', status.HTTP_409_CONFLICT)
         else:
             data = request.data.dict()
@@ -243,7 +243,7 @@ class UserResumeView(APIView):
     @staticmethod
     def patch(request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
-        if len(resumes > 0):
+        if len(resumes) > 0:
             resume = resumes.first()
             patch_serializer = PatchResumeSerializer(resume, data=request.data)
             patch_serializer.is_valid(raise_exception=True)
@@ -256,7 +256,7 @@ class UserResumeView(APIView):
     @staticmethod
     def delete(request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
-        if len(resumes > 0):
+        if len(resumes) > 0:
             resume = resumes.first()
             resume.status = "DELETED"
             resume.save()
