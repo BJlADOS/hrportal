@@ -41,7 +41,7 @@ default_resume_data = {
 def get_resume_serialized_dict(resume: Resume) -> dict:
     return {
         'id': resume.id,
-        'employeeId': resume.employee.id,
+        'employeeId': None if resume.employee is None else resume.employee.id,
         'desiredPosition': resume.desired_position,
         'desiredSalary': resume.desired_salary,
         'desiredEmployment': resume.desired_employment,
@@ -85,7 +85,7 @@ default_vacancy_data = {
 def get_vacancy_serialized_dict(vacancy: Vacancy) -> dict:
     return {
         'id': vacancy.id,
-        'department': {
+        'department': None if vacancy.department is None else {
             'id': vacancy.department.id,
             'name': vacancy.department.name,
             'managerId': vacancy.department.manager.id

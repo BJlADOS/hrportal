@@ -141,7 +141,7 @@ class Resume(models.Model):
 
 
 class Vacancy(models.Model):
-    department = models.ForeignKey(to='Department', on_delete=models.CASCADE)
+    department = models.ForeignKey(to='Department', on_delete=models.SET_NULL, null=True)
 
     required_skills = models.ManyToManyField(to='Skill', blank=True)
 
