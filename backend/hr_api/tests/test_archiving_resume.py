@@ -7,13 +7,17 @@ from .shared_test_logic import *
 from ..models import User
 
 
-class UserResumeArchivingTests(TestCase):
+class ResumeArchivingTests(TestCase):
     employee_data = UserData('employee', 'employee@hrportal.com', 'password')
+    manager_data = UserData('manager', 'manager@hrportal.com', 'password')
 
     @classmethod
     def setUpTestData(cls):
         employee = User.objects.create_user(**cls.employee_data.__dict__)
         cls.employee_resume = create_resume_for(employee, default_resume_data)
+
+        manager = User.objects.create_user(**cls.manager_data.__dict__)
+        Department.objects.create(name="department", manager=manager)
 
     def setUp(self):
         self.client = Client()
@@ -105,4 +109,15 @@ class UserResumeArchivingTests(TestCase):
         self.assertEqual(response.status_code, 404, msg=f"response body - {result}")
         self.assertEqual(result['detail'], "This employee doesn't have a resume")
         self.employee_resume.save()
+
+    def test_Employee_GetOnlyPublicResumes(self):
+        self.employee_resume.status = 'ARCHIVED'
+        self.employee_resume.save()
+        login_user(self.client, self.manager_data)
+
+        response = self.client.get(reverse('resume-list'))
+        result = json.loads(*response)
+
+        self.assertEqual(response.status_code, 200, msg=f"response body - {result}")
+        self.assertEqual(len(result), 0)
 

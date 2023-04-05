@@ -201,9 +201,17 @@ class SkillDetail(generics.RetrieveDestroyAPIView):
 
 
 class ResumeList(generics.ListAPIView):
-    queryset = Resume.objects.all()
-    serializer_class = GetPostResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
+
+    def get_queryset(self):
+        if self.request.user.is_admin:
+            return Resume.objects.all()
+        elif self.request.user.is_manager:
+            return Resume.objects.filter(status='PUBLIC')
+        else:
+            return Resume.objects.none()
+
+    serializer_class = GetPostResumeSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['$desired_position']
     filterset_class = ResumeFilter
@@ -211,9 +219,17 @@ class ResumeList(generics.ListAPIView):
 
 
 class ResumeDetail(generics.RetrieveAPIView):
-    queryset = Resume.objects.all()
-    serializer_class = GetPostResumeSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
+
+    def get_queryset(self):
+        if self.request.user.is_admin:
+            return Resume.objects.all()
+        elif self.request.user.is_manager:
+            return Resume.objects.filter(status='PUBLIC')
+        else:
+            return Resume.objects.none()
+
+    serializer_class = GetPostResumeSerializer
 
 
 class UserResumeView(APIView):
