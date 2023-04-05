@@ -9,7 +9,6 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db.models import Q
 
 from .authentication import JWTAuthentication
 from .filters import *
@@ -274,23 +273,32 @@ def resume_response(request, pk):
 
 
 class VacancyList(generics.ListCreateAPIView):
-    queryset = Vacancy.objects.all()
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['$position']
     filterset_class = VacancyFilter
     pagination_class = LimitOffsetPagination
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return GetVacancySerializer
-        else:
-            return PostVacancySerializer
 
     def get_permissions(self):
         if self.request.method == 'GET':
             return [IsAuthenticated()]
         else:
             return [IsManagerUser()]
+
+    def get_queryset(self):
+        user = self.request.user
+        base = Vacancy.objects
+        if user.is_admin:
+            return base.all()
+        elif user.is_manager:
+            return base.filter(status='PUBLIC') | base.filter(department=user.department, status='ARCHIVED')
+        else:
+            return base.filter(status='PUBLIC')
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return GetVacancySerializer
+        else:
+            return PostVacancySerializer
 
     def post(self, request, *args, **kwargs):
         post_serializer = PostVacancySerializer(data=request.data)
@@ -301,7 +309,21 @@ class VacancyList(generics.ListCreateAPIView):
 
 
 class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Vacancy.objects.all()
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [IsAuthenticated()]
+        else:
+            return [(IsManagerUser | IsAdminUser)()]
+
+    def get_queryset(self):
+        user = self.request.user
+        base = Vacancy.objects
+        if user.is_admin:
+            return base.all()
+        elif user.is_manager:
+            return base.filter(status='PUBLIC') | base.filter(department=user.department, status='ARCHIVED')
+        else:
+            return base.filter(status='PUBLIC')
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -311,12 +333,6 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         else:
             return None
 
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [IsAuthenticated()]
-        else:
-            return [(IsManagerUser | IsAdminUser)()]
-
     def patch(self, request, *args, **kwargs):
         result = super(VacancyDetail, self).patch(request, args, kwargs)
         if result.status_code == 200:
@@ -324,6 +340,13 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
             data = GetVacancySerializer(vacancy).data
             return Response(data, status=status.HTTP_200_OK)
         return result
+
+    def delete(self, request, *args, **kwargs):
+        vacancy = Vacancy.objects.get(id=kwargs['pk'])
+        vacancy.status = 'DELETED'
+        vacancy.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 @api_view(['POST'])
@@ -384,7 +407,7 @@ def send_password_recovery_email(user):
     return result_message
 
 
-def send_resume_response(resume, manager):
+def send_resume_response(resume: Resume, manager: User):
     subject = 'Отклик на ваше резюме на HR-портале "Очень Интересно"'
     message = f'Уважаемый {resume.employee.fullname}!\n\n' \
               f'На ваше резюме на должность "{resume.desired_position}" ' \
@@ -399,7 +422,7 @@ def send_resume_response(resume, manager):
     return result_message
 
 
-def send_vacancy_response(employee, manager, vacancy, pdf_resume):
+def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_resume):
     subject = 'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"'
     message = f'Уважаемый {manager.fullname}!\n\n' \
               f'На ваше вакансию на должность "{vacancy.position}" получен отклик\n\n' \
