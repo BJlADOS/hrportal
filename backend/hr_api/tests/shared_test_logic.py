@@ -1,3 +1,4 @@
+from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 
@@ -28,14 +29,25 @@ def create_resume_for(user: User, data: dict) -> Resume:
     return resume
 
 
-default_resume_data = {
-    'desiredPosition': 'position',
-    'desiredSalary': 0,
-    'desiredEmployment': 'PART',
-    'desiredSchedule': 'DISTANT',
-    'resume': SimpleUploadedFile('test.pdf', b'resume'),
-    'status': 'PUBLIC'
-}
+def create_resume_data(
+        desired_position: str = 'position',
+        desired_salary: int = 0,
+        desired_employment: str = 'PART',
+        desired_schedule: str = 'DISTANT',
+        resume: File = SimpleUploadedFile('test.pdf', b'resume'),
+        status: str = 'PUBLIC'
+) -> dict:
+    return {
+        'desiredPosition': desired_position,
+        'desiredSalary': desired_salary,
+        'desiredEmployment': desired_employment,
+        'desiredSchedule': desired_schedule,
+        'resume': resume,
+        'status': status
+    }
+
+
+default_resume_data = create_resume_data()
 
 
 def get_resume_serialized_dict(resume: Resume) -> dict:
@@ -53,7 +65,10 @@ def get_resume_serialized_dict(resume: Resume) -> dict:
     }
 
 
-def create_vacancy_for(department: Department, data: dict) -> Vacancy:
+def create_vacancy_for(department: Department, data: dict, add_skills_ids=None) -> Vacancy:
+    if add_skills_ids is None:
+        add_skills_ids = list()
+
     vacancy = Vacancy.objects.create(
         department=department,
         position=data['position'],
@@ -67,19 +82,35 @@ def create_vacancy_for(department: Department, data: dict) -> Vacancy:
     for skill_id in data['requiredSkillsIds']:
         vacancy.required_skills.add(Skill.objects.get(id=skill_id))
 
+    for skill_id in add_skills_ids:
+        vacancy.required_skills.add(Skill.objects.get(id=skill_id))
+
     vacancy.save()
     return vacancy
 
 
-default_vacancy_data = {
-    'position': 'position',
-    'salary': 0,
-    'employment': 'PART',
-    'schedule': 'DISTANT',
-    'description': 'description',
-    'requiredSkillsIds': [1, 2, 3],
-    'status': 'PUBLIC'
-}
+def create_vacancy_data(
+        position: str = 'position',
+        salary: int = 0,
+        employment: str = 'PART',
+        schedule: str = 'DISTANT',
+        description: str = 'description',
+        required_skills_ids: list[int] = None,
+        status: str = 'PUBLIC') -> dict:
+    if required_skills_ids is None:
+        required_skills_ids = list()
+    return {
+        'position': position,
+        'salary': salary,
+        'employment': employment,
+        'schedule': schedule,
+        'description': description,
+        'requiredSkillsIds': required_skills_ids,
+        'status': status
+    }
+
+
+default_vacancy_data = create_vacancy_data()
 
 
 def get_vacancy_serialized_dict(vacancy: Vacancy) -> dict:
@@ -100,3 +131,14 @@ def get_vacancy_serialized_dict(vacancy: Vacancy) -> dict:
         'createdAt': int(vacancy.created_at.timestamp()) * 1000,
         'modifiedAt': int(vacancy.modified_at.timestamp()) * 1000
     }
+
+
+def create_skill() -> Skill:
+    skill = Skill.objects.create(name='name')
+    skill.save()
+    return skill
+
+def create_department(manager: User = None) -> Department:
+    dep = Department.objects.create(name="department", manager=manager)
+    dep.save()
+    return dep

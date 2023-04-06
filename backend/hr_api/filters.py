@@ -10,6 +10,7 @@ class ResumeFilter(django_filters.FilterSet):
     skills = django_filters.ModelMultipleChoiceFilter(field_name='employee__existing_skills',
                                                       queryset=Skill.objects.all(),
                                                       conjoined=True)
+    status = django_filters.ChoiceFilter(field_name='status', choices=STATUS_CHOICES)
 
     ordering = django_filters.OrderingFilter(fields=[
         ('desired_salary', 'salary'),
@@ -22,7 +23,8 @@ class ResumeFilter(django_filters.FilterSet):
             'salary',
             'employment',
             'schedule',
-            'skills'
+            'skills',
+            'status'
         ]
 
 

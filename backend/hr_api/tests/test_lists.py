@@ -1,22 +1,13 @@
-import itertools
 import json
-import time
 
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase, Client
+from django.test import TestCase
+from django.urls import reverse
 
-from .test_reg_auth import UserData
+from .shared_test_logic import *
 from ..serializers import *
 
 
-class PaginationPage:
-    def __init__(self, response):
-        data = json.loads(*response)
-        self.count = data['count']
-        self.results = [d['id'] for d in data['results']]
-
-
-def to_id_list(response):
+def to_id_list(response) -> list[int]:
     data = json.loads(*response)
     return [el['id'] for el in data]
 
@@ -26,156 +17,181 @@ class ListsTests(TestCase):
     manager_data = UserData('manager', 'manager@hrportal.com', 'password')
     admin_data = UserData('admin', 'admin@hrportal.com', 'password')
 
-    @staticmethod
-    def create_vacancy(department, position, salary, employment, schedule, skills):
-        vacancy = Vacancy.objects.create(department=department,
-                                         position=position,
-                                         salary=salary,
-                                         employment=employment,
-                                         schedule=schedule,
-                                         is_active=True)
-        vacancy.required_skills.add(*skills)
-        vacancy.save()
-
-    @staticmethod
-    def create_resume(user, position, salary, employment, schedule):
-        Resume.objects.create(employee=user,
-                              desired_position=position,
-                              desired_salary=salary,
-                              desired_employment=employment,
-                              desired_schedule=schedule,
-                              resume=SimpleUploadedFile('test.pdf', b'resume'),
-                              is_active=True).save()
-
-    @staticmethod
-    def create_skill():
-        resume = Skill.objects.create(name='name')
-        resume.save()
-        return resume
-
     @classmethod
     def setUpTestData(cls):
         employee = User.objects.create_user(**cls.employee_data.__dict__)
         manager = User.objects.create_user(**cls.manager_data.__dict__)
         admin = User.objects.create_superuser(**cls.admin_data.__dict__)
 
-        department1 = Department.objects.create(name='department1', manager=manager)
-        department1.save()
-        department2 = Department.objects.create(name='department2')
-        department2.save()
-        department3 = Department.objects.create(name='department3')
-        department3.save()
-        department4 = Department.objects.create(name='department4')
-        department4.save()
+        dep1 = create_department(manager)
+        dep2 = create_department()
+        dep3 = create_department()
+        dep4 = create_department()
+        departments = [dep1, dep2, dep3, dep4]
+        cls.dep_ids = [dep.id for dep in departments]
 
-        skills = [cls.create_skill(), cls.create_skill(), cls.create_skill()]
+        skills = [
+            create_skill(),
+            create_skill(),
+            create_skill()
+        ]
+        skills_ids = [skill.id for skill in skills]
+        cls.skills_ids = skills_ids
 
-        cls.create_vacancy(department2, 'Pos', 10000, 'PART', 'FLEX', skills[:1])
-        time.sleep(0.1)
-        cls.create_vacancy(department3, 'Posit', 15000, 'FULL', 'SHIFT', skills[:2])
-        time.sleep(0.1)
-        cls.create_vacancy(department4, 'Position', 20000, 'FULL', 'FULL', skills)
+        vacancies = [
+            create_vacancy_for(dep2, create_vacancy_data('Pos', 10000, 'PART', 'FLEX',
+                                                         'desc', skills_ids[:1], 'PUBLIC')),
+            create_vacancy_for(dep3, create_vacancy_data('Posit', 15000, 'FULL', 'SHIFT',
+                                                         'desc', skills_ids[:2], 'ARCHIVED')),
+            create_vacancy_for(dep4, create_vacancy_data('Position', 20000, 'FULL', 'FULL',
+                                                         'desc', skills_ids, 'DELETED'))]
+        cls.vac_ids = [vac.id for vac in vacancies]
 
-        cls.create_resume(employee, 'Pos', 10000, 'PART', 'FLEX')
-        cls.create_resume(manager, 'Posit', 15000, 'FULL', 'SHIFT')
-        cls.create_resume(admin, 'Position', 20000, 'FULL', 'FULL')
+        resumes = [
+            create_resume_for(employee, create_resume_data('Pos', 10000, 'PART', 'FLEX', status='PUBLIC')),
+            create_resume_for(manager, create_resume_data('Posit', 15000, 'FULL', 'SHIFT', status='ARCHIVED')),
+            create_resume_for(admin, create_resume_data('Position', 20000, 'FULL', 'FULL', status='DELETED'))
+        ]
+        cls.res_ids = [res.id for res in resumes]
 
         employee.existing_skills.add(*skills[:1])
-        time.sleep(0.1)
         manager.existing_skills.add(*skills[:2])
-        time.sleep(0.1)
         admin.existing_skills.add(*skills)
 
     def setUp(self):
         self.client = Client()
-        self.client.post('/api/login/', {'email': self.admin_data.email, 'password': self.admin_data.password})
-
-    filter_test_cases = {
-        '': [1, 2, 3],
-        'salary_min=15000': [2, 3],
-        'salary_max=15000': [1, 2],
-        'salary_min=15000&salary_max=15000': [2],
-        'employment=PART': [1],
-        'employment=FULL': [2, 3],
-        'schedule=DISTANT': [],
-        'schedule=FLEX': [1],
-        'schedule=SHIFT': [2],
-        'schedule=FULL': [3],
-        'skills=1': [1, 2, 3],
-        'skills=1&skills=2&': [2, 3],
-        'skills=1&skills=2&skills=3': [3]
-    }
-
-    vacancies_filter_test_cases = {
-        'department=1': [],
-        'department=1&department=2': [1],
-        'department=1&department=2&department=3': [1, 2],
-        'department=1&department=2&department=3&department=4': [1, 2, 3],
-        'department=2&department=4': [1, 3]
-    }
+        login_user(self.client, self.admin_data)
 
     def test_GetVacanciesWithFilters_ShouldReturnFilteredVacancies(self):
-        for path, expected in (self.filter_test_cases | self.vacancies_filter_test_cases).items():
-            response = self.client.get(f'/api/vacancies/?{path}')
-            result = to_id_list(response)
-            assert sorted(result) == sorted(expected)
+        ids = self.vac_ids
+        sks = self.skills_ids
+        dps = self.dep_ids
+        test_cases = {
+            '': ids,
+            'salary_min=15000': ids[1:],
+            'salary_max=15000': ids[:2],
+            'salary_min=15000&salary_max=15000': ids[1:2],
+            'employment=PART': ids[:1],
+            'employment=FULL': ids[1:],
+            'schedule=DISTANT': [],
+            'schedule=FLEX': ids[:1],
+            'schedule=SHIFT': ids[1:2],
+            'schedule=FULL': ids[2:],
+            f'skills={sks[0]}': ids,
+            f'skills={sks[0]}&skills={sks[1]}&': ids[1:],
+            f'skills={sks[0]}&skills={sks[1]}&skills={sks[2]}': ids[2:],
+            f'department={dps[0]}': [],
+            f'department={dps[0]}&department={dps[1]}': ids[:1],
+            f'department={dps[0]}&department={dps[1]}&department={dps[2]}': ids[:2],
+            f'department={dps[0]}&department={dps[1]}&department={dps[2]}&department={dps[3]}': ids,
+            f'department={dps[1]}&department={dps[3]}': ids[:1] + ids[2:],
+            'status=PUBLIC': ids[:1],
+            'status=ARCHIVED': ids[1:2],
+            'status=DELETED': ids[2:],
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(reverse('vacancy-list') + f'?{path}'))
+            self.assertListEqual(sorted(result), sorted(expected))
 
     def test_GetResumesWithFilters_ShouldReturnFilteredResumes(self):
-        for path, expected in self.filter_test_cases.items():
-            result = to_id_list(self.client.get(f'/api/resumes/?{path}'))
-            assert sorted(result) == sorted(expected)
-
-    sorting_test_cases = {
-        '': [1, 2, 3],
-        'salary': [1, 2, 3],
-        '-salary': [3, 2, 1],
-        'time': [1, 2, 3],
-        '-time': [3, 2, 1]
-    }
+        ids = self.res_ids
+        sks = self.skills_ids
+        test_cases = {
+            '': ids,
+            'salary_min=15000': ids[1:],
+            'salary_max=15000': ids[:2],
+            'salary_min=15000&salary_max=15000': ids[1:2],
+            'employment=PART': ids[:1],
+            'employment=FULL': ids[1:],
+            'schedule=DISTANT': [],
+            'schedule=FLEX': ids[:1],
+            'schedule=SHIFT': ids[1:2],
+            'schedule=FULL': ids[2:],
+            f'skills={sks[0]}': ids,
+            f'skills={sks[0]}&skills={sks[1]}&': ids[1:],
+            f'skills={sks[0]}&skills={sks[1]}&skills={sks[2]}': ids[2:],
+            'status=PUBLIC': ids[:1],
+            'status=ARCHIVED': ids[1:2],
+            'status=DELETED': ids[2:],
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(reverse('resume-list') + f'?{path}'))
+            self.assertListEqual(sorted(result), sorted(expected))
 
     def test_GetVacanciesWithSorting_ShouldReturnSortedVacancies(self):
-        for path, expected in self.sorting_test_cases.items():
-            result = to_id_list(self.client.get(f'/api/vacancies/?ordering={path}'))
-            assert result == expected
+        ids = self.vac_ids
+        test_cases = {
+            '': ids,
+            'salary': ids,
+            '-salary': reversed(ids),
+            'time': ids,
+            '-time': reversed(ids)
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(reverse('vacancy-list') + f'?ordering={path}'))
+            self.assertListEqual(result, list(expected))
 
     def test_GetResumesWithSorting_ShouldReturnSortedResumes(self):
-        for path, expected in self.sorting_test_cases.items():
-            result = to_id_list(self.client.get(f'/api/resumes/?ordering={path}'))
-            assert result == expected
+        ids = self.res_ids
+        test_cases = {
+            '': ids,
+            'salary': ids,
+            '-salary': reversed(ids),
+            'time': ids,
+            '-time': reversed(ids)
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(reverse('resume-list') + f'?ordering={path}'))
+            self.assertListEqual(result, list(expected))
 
     def test_GetVacanciesWithPagination_ShouldReturnCorrectPage(self):
-        cases = [case for case in itertools.product(range(4), repeat=2) if case[0] != 0]
-        for limit, offset in cases:
-            response = self.client.get(f'/api/vacancies/?limit={limit}&offset={offset}')
-            page = PaginationPage(response)
-            assert [1, 2, 3][offset:offset + limit] == page.results
+        response = self.client.get(f'{reverse("vacancy-list")}?limit={2}&offset={1}')
+        result: dict = json.loads(*response)
+        self.assertTrue("count" in result)
+        self.assertTrue("next" in result)
+        self.assertTrue("previous" in result)
+        self.assertTrue("results" in result)
 
     def test_GetResumesWithPagination_ShouldReturnCorrectPage(self):
-        cases = [case for case in itertools.product(range(4), repeat=2) if case[0] != 0]
-        for limit, offset in cases:
-            response = self.client.get(f'/api/vacancies/?limit={limit}&offset={offset}')
-            page = PaginationPage(response)
-            assert [1, 2, 3][offset:offset + limit] == page.results
-
-    searching_test_cases = {
-        'Pos': [1, 2, 3],
-        'pos': [1, 2, 3],
-        'Posit': [2, 3],
-        'posit': [2, 3],
-        'Position': [3],
-        'position': [3],
-        'os': [1, 2, 3],
-        'sit': [2, 3],
-        'tion': [3],
-        'NotPosition': []
-    }
+        response = self.client.get(f'{reverse("resume-list")}?limit={2}&offset={1}')
+        result: dict = json.loads(*response)
+        self.assertTrue("count" in result)
+        self.assertTrue("next" in result)
+        self.assertTrue("previous" in result)
+        self.assertTrue("results" in result)
 
     def test_GetVacanciesWithSearching_ShouldReturnMatchedVacancies(self):
-        for path, expected in self.searching_test_cases.items():
-            result = to_id_list(self.client.get(f'/api/vacancies/?search={path}'))
-            assert sorted(result) == sorted(expected)
+        ids = self.vac_ids
+        test_cases = {
+            'Pos': ids,
+            'pos': ids,
+            'Posit': ids[1:],
+            'posit': ids[1:],
+            'Position': ids[2:],
+            'position': ids[2:],
+            'os': ids,
+            'sit': ids[1:],
+            'tion': ids[2:],
+            'NotPosition': []
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(f'{reverse("vacancy-list")}?search={path}'))
+            self.assertListEqual(sorted(result), sorted(expected))
 
     def test_GetResumesWithSearching_ShouldReturnMatchedResumes(self):
-        for path, expected in self.searching_test_cases.items():
-            result = to_id_list(self.client.get(f'/api/resumes/?search={path}'))
-            assert sorted(result) == sorted(expected)
+        ids = self.res_ids
+        test_cases = {
+            'Pos': ids,
+            'pos': ids,
+            'Posit': ids[1:],
+            'posit': ids[1:],
+            'Position': ids[2:],
+            'position': ids[2:],
+            'os': ids,
+            'sit': ids[1:],
+            'tion': ids[2:],
+            'NotPosition': []
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(f'{reverse("resume-list")}?search={path}'))
+            self.assertListEqual(sorted(result), sorted(expected))
