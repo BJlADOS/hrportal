@@ -357,8 +357,9 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(data, status=status.HTTP_200_OK)
         return result
 
+
     def delete(self, request, *args, **kwargs):
-        vacancy = Vacancy.objects.get(id=kwargs['pk'])
+        vacancy = self.get_object()
         vacancy.status = 'DELETED'
         vacancy.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -376,8 +377,8 @@ def vacancy_response(request, pk):
     resume = request.data.get('resume', None)
     if resume is None:
         resumes = Resume.objects.filter(employee=request.user).exclude(status='DELETED')
-        if len(resumes) > 1:
-            resume = resumes.first()
+        if len(resumes) > 0:
+            resume = resumes.first().resume
         else:
             return response_with_detail('Employee does not have resume', status.HTTP_400_BAD_REQUEST)
 
