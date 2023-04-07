@@ -12,7 +12,7 @@ def to_id_list(response) -> list[int]:
     return [el['id'] for el in data]
 
 
-class ListsTests(TestCase):
+class FiltersOrderingsPaginationTests(TestCase):
     employee_data = UserData('employee', 'employee@hrportal.com', 'password')
     manager_data = UserData('manager', 'manager@hrportal.com', 'password')
     admin_data = UserData('admin', 'admin@hrportal.com', 'password')

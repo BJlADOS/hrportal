@@ -1,6 +1,7 @@
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
+from django.conf import settings
 
 from ..models import User, Resume, Vacancy, Department, Skill
 
@@ -58,7 +59,7 @@ def get_resume_serialized_dict(resume: Resume) -> dict:
         'desiredSalary': resume.desired_salary,
         'desiredEmployment': resume.desired_employment,
         'desiredSchedule': resume.desired_schedule,
-        'resume': resume.resume.url,
+        'resume': resume.resume.url[len(settings.MEDIA_URL):],
         'status': resume.status,
         'createdAt': int(resume.created_at.timestamp()) * 1000,
         'modifiedAt': int(resume.modified_at.timestamp()) * 1000

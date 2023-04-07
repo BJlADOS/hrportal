@@ -95,6 +95,7 @@ class GetUserSerializer(serializers.ModelSerializer):
     isAdmin = serializers.BooleanField(source='is_admin')
     emailVerified = serializers.BooleanField(source='email_verified')
     resumeId = serializers.PrimaryKeyRelatedField(source='resume', read_only=True)
+    photo = serializers.ImageField(use_url=False)
 
     class Meta:
         model = User
@@ -173,7 +174,7 @@ class GetPostResumeSerializer(serializers.ModelSerializer):
     desiredSalary = serializers.IntegerField(source='desired_salary')
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
-    resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
+    resume = serializers.FileField(use_url=False, validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)

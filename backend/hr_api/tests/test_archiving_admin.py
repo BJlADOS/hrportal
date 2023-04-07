@@ -50,8 +50,6 @@ class ArchivingAdminTests(TestCase):
         self.assertEqual(response.status_code, 200, msg=f"response body - {result}")
         self.assertEqual(len(result), len(self.resumes))
         for i in range(0, len(result)):
-            resume = Resume.objects.get(id=result[i]['id'])
-            result[i]['resume'] = resume.resume.url
             self.assertDictEqual(result[i], get_resume_serialized_dict(self.resumes[i]))
 
     def test_Admin_GetAllVacancies(self):
