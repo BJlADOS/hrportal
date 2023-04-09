@@ -8,61 +8,6 @@ from rest_framework.serializers import ValidationError
 from .models import *
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            'fullname',
-            'email',
-            'password'
-        ]
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
-
-
-class CodeSerializer(serializers.Serializer):
-    code = serializers.CharField()
-
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
-
-class RecoverySerializer(serializers.Serializer):
-    code = serializers.CharField()
-    password = serializers.CharField()
-
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
-
-class AuthSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
-
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
-
-class EmailSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
-
 def not_a_manager(user):
     if hasattr(user, 'department'):
         raise ValidationError(f'User with id={user.id} is already manager of department id={user.department.id}')
@@ -86,67 +31,6 @@ class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = '__all__'
-
-
-class GetUserSerializer(serializers.ModelSerializer):
-    currentDepartment = DepartmentSerializer(source='current_department')
-    existingSkills = SkillSerializer(source='existing_skills', many=True)
-    isManager = serializers.BooleanField(source='is_manager')
-    isAdmin = serializers.BooleanField(source='is_admin')
-    emailVerified = serializers.BooleanField(source='email_verified')
-    resumeId = serializers.PrimaryKeyRelatedField(source='resume', read_only=True)
-    photo = serializers.ImageField(use_url=False)
-
-    class Meta:
-        model = User
-        fields = [
-            'id',
-            'fullname',
-            'email',
-            'contact',
-            'experience',
-            'currentDepartment',
-            'photo',
-            'existingSkills',
-            'filled',
-            'resumeId',
-            'isManager',
-            'isAdmin',
-            'emailVerified'
-        ]
-
-
-class PatchUserSerializer(serializers.ModelSerializer):
-    fullname = serializers.CharField(required=False)
-    email = serializers.EmailField(required=False)
-    contact = serializers.CharField(required=False, allow_null=True)
-    experience = serializers.ChoiceField(required=False, choices=User.EXPERIENCE_CHOICES, allow_null=True)
-    photo = serializers.ImageField(required=False, allow_null=True)
-    currentDepartmentId = serializers.PrimaryKeyRelatedField(required=False, queryset=Department.objects.all(),
-                                                             source='current_department', allow_null=True)
-    existingSkillsIds = serializers.PrimaryKeyRelatedField(required=False, queryset=Skill.objects.all(), many=True,
-                                                           source='existing_skills')
-
-    def validate(self, attrs):
-        if self.instance.is_manager and \
-                'current_department' in attrs and \
-                self.instance.department != attrs['current_department']:
-            raise ValidationError(
-                {'currentDepartmentId': f'User is manager of department {self.instance.department}'
-                                        f' and therefore cannot be in another department'})
-        return super(PatchUserSerializer, self).validate(attrs)
-
-    class Meta:
-        model = User
-        fields = [
-            'fullname',
-            'email',
-            'contact',
-            'experience',
-            'photo',
-            'currentDepartmentId',
-            'existingSkillsIds'
-        ]
 
 
 class TimestampField(serializers.Field):

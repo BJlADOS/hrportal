@@ -4,6 +4,7 @@ from django.test import TestCase, Client
 
 from .test_reg_auth import UserData
 from ..serializers import *
+from ..views_user import UserSerializer
 
 
 class ProfileTests(TestCase):
@@ -60,22 +61,23 @@ class ProfileTests(TestCase):
 
     def test_PatchUser_ShouldDontRaiseException_OnBlankData(self):
         self.login_user(self.client, self.employee_data)
-        user_before = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
+        user_before = UserSerializer(User.objects.get(email=self.employee_data.email)).data
 
         response = self.client.patch('/api/user/')
 
         self.assertEqual(response.status_code, 200)
-        user_after = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
+        user_after = UserSerializer(User.objects.get(email=self.employee_data.email)).data
         self.assertEqual(user_before, user_after)
 
     def test_PatchUser_ShouldChangeUser(self):
         self.login_user(self.client, self.employee_data)
-        user_before = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
+        user_before = UserSerializer(User.objects.get(email=self.employee_data.email)).data
 
         response = self.client.patch('/api/user/', {'contact': 'contact'}, content_type='application/json')
+        result = json.loads(*response)
 
-        self.assertEqual(response.status_code, 200)
-        user_after = GetUserSerializer(User.objects.get(email=self.employee_data.email)).data
+        self.assertEqual(response.status_code, 200, msg=f'response body - {result}')
+        user_after = UserSerializer(User.objects.get(email=self.employee_data.email)).data
         self.assertNotEqual(user_before, user_after)
         user_before['contact'] = 'contact'
         self.assertEqual(user_before, user_after)

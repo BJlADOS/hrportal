@@ -1,186 +1,31 @@
-from django.contrib.auth import authenticate
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, exceptions, generics
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework import status, generics
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .authentication import JWTAuthentication
 from .filters import *
 from .permissions import IsManagerUser
 from .serializers import *
-from .tokens import *
 
+detail_schema = openapi.Schema(type='object', properties={
+    'detail': openapi.Schema(type='string')
+})
 
-@swagger_auto_schema(method='post', tags=['Регистрация'])
-@api_view(['POST'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def registration_view(request):
-    serializer = RegistrationSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user = serializer.save()
-    result = send_verification_email(user)
-
-    return response_with_detail(result, status.HTTP_201_CREATED)
-
-
-@swagger_auto_schema(method='post', tags=['Пользователь'])
-@api_view(['POST'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def verification_view(request):
-    serializer = CodeSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user = get_token_user(serializer.data['code'])
-
-    if user is None:
-        return response_with_detail('Invalid verification code.', status.HTTP_401_UNAUTHORIZED)
-
-    user.email_verified = True
-    user.save()
-
-    return Response(status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method='post', tags=['Пользователь'])
-@api_view(['POST'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def password_recovery_request_view(request):
-    serializer = EmailSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    try:
-        user = User.objects.get(email=serializer.data['email'])
-        send_password_recovery_email(user)
-    except User.DoesNotExist:
-        pass
-
-    return Response(status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method='post', tags=['Пользователь'])
-@api_view(['POST'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def password_recovery_view(request):
-    serializer = RecoverySerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user = get_token_user(serializer.data['code'])
-
-    if user is None:
-        return response_with_detail('Invalid verification code.', status.HTTP_401_UNAUTHORIZED)
-
-    user.set_password(serializer.data['password'])
-    user.save()
-
-    return Response(status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method='post', tags=['Аутентификация'])
-@api_view(['POST'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def login_view(request):
-    serializer = AuthSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-
-    user = authenticate(username=request.data['email'], password=request.data['password'])
-
-    if user is None:
-        return response_with_detail('A user with this email and password was not found.',
-                                    status.HTTP_401_UNAUTHORIZED)
-
-    if not user.is_active:
-        return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
-
-    add_auth(request, user)
-
-    return Response(status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method='get', tags=['Аутентификация'])
-@api_view(['GET'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def logout_view(request):
-    request.session.flush()
-    return Response(status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method='get', tags=['Аутентификация'])
-@api_view(['GET'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def authorized_view(request):
-    result = False
-    try:
-        auth_result = JWTAuthentication().authenticate(request)
-        if auth_result is not None:
-            result = True
-    except exceptions.AuthenticationFailed:
-        pass
-    return Response({'authorized': result}, status=status.HTTP_200_OK)
-
-
-@swagger_auto_schema(method='post', tags=['Регистрация'])
-@api_view(['POST'])
-@authentication_classes([])
-@permission_classes([AllowAny])
-def unique_email_view(request):
-    serializer = EmailSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    result = True
-    try:
-        User.objects.get(email=serializer.data['email'])
-        result = False
-    except User.DoesNotExist:
-        pass
-    return Response({'unique': result}, status=status.HTTP_200_OK)
-
-
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = GetUserSerializer
-    permission_classes = [IsManagerUser | IsAdminUser]
-
-    @swagger_auto_schema(tags=['Пользователь'])
-    def get(self, request, *args, **kwargs):
-        super(UserList, self).get(self, request, *args, **kwargs)
-
-
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = GetUserSerializer
-    permission_classes = [IsManagerUser | IsAdminUser]
-
-    @swagger_auto_schema(tags=['Пользователь'])
-    def get(self, request, *args, **kwargs):
-        super(UserDetail, self).get(self, request, *args, **kwargs)
-
-
-class AuthorizedUserView(APIView):
-    @swagger_auto_schema(tags=['Пользователь'])
-    def get(self, request):
-        serializer = GetUserSerializer(request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @swagger_auto_schema(tags=['Пользователь'])
-    def patch(self, request):
-        user = request.user
-        put_serializer = PatchUserSerializer(user, data=request.data)
-        put_serializer.is_valid(raise_exception=True)
-        put_serializer.save()
-
-        add_auth(request, user)
-        get_serializer = GetUserSerializer(user)
-        return Response(get_serializer.data, status=status.HTTP_200_OK)
+validation_error_response = openapi.Response(
+    'Данные не прошли валидацию (причины)',
+    openapi.Schema(type='object', properties={
+        'field': openapi.Schema(
+            type='array',
+            items=openapi.Schema(type='string'))
+    }))
 
 
 class DepartmentList(generics.ListCreateAPIView):
@@ -193,13 +38,9 @@ class DepartmentList(generics.ListCreateAPIView):
         else:
             return [IsAdminUser()]
 
-    @swagger_auto_schema(tags=['Отдел'])
-    def get(self, request, *args, **kwargs):
-        super(DepartmentList, self).get(self, request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['Отдел'])
-    def post(self, request, *args, **kwargs):
-        super(DepartmentList, self).post(self, request, *args, **kwargs)
+decorated_department_list = swagger_auto_schema(methods=['get', 'post'], tags=['Отдел']) \
+    (DepartmentList.as_view())
 
 
 class DepartmentDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -208,17 +49,9 @@ class DepartmentDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     http_method_names = ["get", "patch", "delete"]
 
-    @swagger_auto_schema(tags=['Отдел'])
-    def get(self, request, *args, **kwargs):
-        super(DepartmentDetail, self).get(self, request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['Отдел'])
-    def patch(self, request, *args, **kwargs):
-        super(DepartmentDetail, self).patch(self, request, *args, **kwargs)
-
-    @swagger_auto_schema(tags=['Отдел'])
-    def delete(self, request, *args, **kwargs):
-        super(DepartmentDetail, self).delete(self, request, *args, **kwargs)
+decorated_department_detail = swagger_auto_schema(methods=['get', 'patch', 'delete'], tags=['Отдел']) \
+    (DepartmentDetail.as_view())
 
 
 class SkillList(generics.ListCreateAPIView):
@@ -231,27 +64,17 @@ class SkillList(generics.ListCreateAPIView):
         else:
             return [IsAdminUser()]
 
-    @swagger_auto_schema(tags=['Навык'])
-    def get(self, request, *args, **kwargs):
-        super(SkillList, self).get(self, request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['Навык'])
-    def post(self, request, *args, **kwargs):
-        super(SkillList, self).post(self, request, *args, **kwargs)
-
+decorated_skill_list = swagger_auto_schema(methods=['get', 'post'], tags=['Навык'])(SkillList.as_view())
 
 class SkillDetail(generics.RetrieveDestroyAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
     permission_classes = [IsAdminUser]
 
-    @swagger_auto_schema(tags=['Навык'])
-    def get(self, request, *args, **kwargs):
-        super(SkillDetail, self).get(self, request, *args, **kwargs)
 
-    @swagger_auto_schema(tags=['Навык'])
-    def delete(self, request, *args, **kwargs):
-        super(SkillDetail, self).delete(self, request, *args, **kwargs)
+decorated_skill_detail = swagger_auto_schema(methods=['get', 'delete'], tags=['Навык'])(
+    SkillDetail.as_view())
 
 
 class ResumeList(generics.ListAPIView):
@@ -273,7 +96,7 @@ class ResumeList(generics.ListAPIView):
 
     @swagger_auto_schema(tags=['Резюме'])
     def get(self, request, *args, **kwargs):
-        super(ResumeList, self).get(self, request, *args, **kwargs)
+        return super(ResumeList, self).get(self, request, *args, **kwargs)
 
 
 class ResumeDetail(generics.RetrieveAPIView):
@@ -291,7 +114,7 @@ class ResumeDetail(generics.RetrieveAPIView):
 
     @swagger_auto_schema(tags=['Резюме'])
     def get(self, request, *args, **kwargs):
-        super(ResumeDetail, self).get(self, request, *args, **kwargs)
+        return super(ResumeDetail, self).get(self, request, *args, **kwargs)
 
 
 class UserResumeView(APIView):
@@ -382,7 +205,7 @@ class VacancyList(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['Вакансия'])
     def get(self, request, *args, **kwargs):
-        super(VacancyList, self).get(self, request, *args, **kwargs)
+        return super(VacancyList, self).get(self, request, *args, **kwargs)
 
     @swagger_auto_schema(tags=['Вакансия'])
     def post(self, request, *args, **kwargs):
@@ -421,7 +244,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
 
     @swagger_auto_schema(tags=['Вакансия'])
     def get(self, request, *args, **kwargs):
-        super(VacancyDetail, self).get(self, request, *args, **kwargs)
+        return super(VacancyDetail, self).get(self, request, *args, **kwargs)
 
     @swagger_auto_schema(tags=['Вакансия'])
     def patch(self, request, *args, **kwargs):
@@ -463,42 +286,6 @@ def vacancy_response(request, pk):
     return response_with_detail(result, status.HTTP_200_OK)
 
 
-def send_verification_email(user):
-    subject = 'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"'
-
-    def verification_message(url):
-        return f'Для подтверждения адреса электронной почты перейдите по {url}' \
-               f'Если вы не регистрировались на HR-портале "Очень Интересно" ' \
-               f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
-
-    verification_url = settings.VERIFICATION_URL + f'?code={create_user_token(user)}'
-    plain_url = f'ссылке: {verification_url}\n\n'
-    html_url = f'<a href="{verification_url}">ссылке.</a><br><br>'
-    result = send_mail(subject, verification_message(plain_url), None, [user.email],
-                       html_message=verification_message(html_url))
-    result_message = f'Email verification mail to User(ID={user.id}) sending '
-    result_message += 'successful' if bool(result) else 'failed'
-    return result_message
-
-
-def send_password_recovery_email(user):
-    subject = 'Восстановление пароля на HR-портале "Очень Интересно"'
-
-    def verification_message(url):
-        return f'Для восстановления пароля перейдите по {url}' \
-               f'Если вы не пытались восстановить пароль на HR-портале "Очень Интересно" ' \
-               f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
-
-    recovery_url = settings.RECOVERY_URL + f'?code={create_user_token(user)}'
-    plain_url = f'ссылке: {recovery_url}\n\n'
-    html_url = f'<a href="{recovery_url}">ссылке.</a><br><br>'
-    result = send_mail(subject, verification_message(plain_url), None, [user.email],
-                       html_message=verification_message(html_url))
-    result_message = f'Email verification mail to User(ID={user.id}) sending '
-    result_message += 'successful' if bool(result) else 'failed'
-    return result_message
-
-
 def send_resume_response(resume: Resume, manager: User):
     subject = 'Отклик на ваше резюме на HR-портале "Очень Интересно"'
     message = f'Уважаемый {resume.employee.fullname}!\n\n' \
@@ -529,10 +316,6 @@ def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_r
     result_message = f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) '
     result_message += 'successful' if bool(result) else 'failed'
     return result_message
-
-
-def add_auth(request, user):
-    request.session['Authorization'] = f'Bearer {create_user_token(user)}'
 
 
 def response_with_detail(message, response_status):

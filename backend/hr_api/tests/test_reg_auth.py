@@ -6,7 +6,7 @@ from django.test import TestCase, Client
 
 from ..models import *
 
-from ..tokens import create_user_token
+from ..authentication import create_user_token
 
 
 class UserData:
