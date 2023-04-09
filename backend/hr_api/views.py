@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, exceptions, generics
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.filters import SearchFilter
@@ -17,6 +18,7 @@ from .serializers import *
 from .tokens import *
 
 
+@swagger_auto_schema(method='post', tags=['Регистрация'])
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -29,6 +31,7 @@ def registration_view(request):
     return response_with_detail(result, status.HTTP_201_CREATED)
 
 
+@swagger_auto_schema(method='post', tags=['Пользователь'])
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -46,6 +49,7 @@ def verification_view(request):
     return Response(status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method='post', tags=['Пользователь'])
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -61,6 +65,7 @@ def password_recovery_request_view(request):
     return Response(status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method='post', tags=['Пользователь'])
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -78,6 +83,7 @@ def password_recovery_view(request):
     return Response(status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method='post', tags=['Аутентификация'])
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -99,6 +105,7 @@ def login_view(request):
     return Response(status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method='get', tags=['Аутентификация'])
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -107,6 +114,7 @@ def logout_view(request):
     return Response(status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method='get', tags=['Аутентификация'])
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -121,6 +129,7 @@ def authorized_view(request):
     return Response({'authorized': result}, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(method='post', tags=['Регистрация'])
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -141,21 +150,29 @@ class UserList(generics.ListAPIView):
     serializer_class = GetUserSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
+    @swagger_auto_schema(tags=['Пользователь'])
+    def get(self, request, *args, **kwargs):
+        super(UserList, self).get(self, request, *args, **kwargs)
+
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = GetUserSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
 
+    @swagger_auto_schema(tags=['Пользователь'])
+    def get(self, request, *args, **kwargs):
+        super(UserDetail, self).get(self, request, *args, **kwargs)
+
 
 class AuthorizedUserView(APIView):
-    @staticmethod
-    def get(request):
+    @swagger_auto_schema(tags=['Пользователь'])
+    def get(self, request):
         serializer = GetUserSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
-    def patch(request):
+    @swagger_auto_schema(tags=['Пользователь'])
+    def patch(self, request):
         user = request.user
         put_serializer = PatchUserSerializer(user, data=request.data)
         put_serializer.is_valid(raise_exception=True)
@@ -176,11 +193,32 @@ class DepartmentList(generics.ListCreateAPIView):
         else:
             return [IsAdminUser()]
 
+    @swagger_auto_schema(tags=['Отдел'])
+    def get(self, request, *args, **kwargs):
+        super(DepartmentList, self).get(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Отдел'])
+    def post(self, request, *args, **kwargs):
+        super(DepartmentList, self).post(self, request, *args, **kwargs)
+
 
 class DepartmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [IsAdminUser]
+    http_method_names = ["get", "patch", "delete"]
+
+    @swagger_auto_schema(tags=['Отдел'])
+    def get(self, request, *args, **kwargs):
+        super(DepartmentDetail, self).get(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Отдел'])
+    def patch(self, request, *args, **kwargs):
+        super(DepartmentDetail, self).patch(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Отдел'])
+    def delete(self, request, *args, **kwargs):
+        super(DepartmentDetail, self).delete(self, request, *args, **kwargs)
 
 
 class SkillList(generics.ListCreateAPIView):
@@ -193,11 +231,27 @@ class SkillList(generics.ListCreateAPIView):
         else:
             return [IsAdminUser()]
 
+    @swagger_auto_schema(tags=['Навык'])
+    def get(self, request, *args, **kwargs):
+        super(SkillList, self).get(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Навык'])
+    def post(self, request, *args, **kwargs):
+        super(SkillList, self).post(self, request, *args, **kwargs)
+
 
 class SkillDetail(generics.RetrieveDestroyAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
     permission_classes = [IsAdminUser]
+
+    @swagger_auto_schema(tags=['Навык'])
+    def get(self, request, *args, **kwargs):
+        super(SkillDetail, self).get(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Навык'])
+    def delete(self, request, *args, **kwargs):
+        super(SkillDetail, self).delete(self, request, *args, **kwargs)
 
 
 class ResumeList(generics.ListAPIView):
@@ -217,6 +271,10 @@ class ResumeList(generics.ListAPIView):
     filterset_class = ResumeFilter
     pagination_class = LimitOffsetPagination
 
+    @swagger_auto_schema(tags=['Резюме'])
+    def get(self, request, *args, **kwargs):
+        super(ResumeList, self).get(self, request, *args, **kwargs)
+
 
 class ResumeDetail(generics.RetrieveAPIView):
     permission_classes = [IsManagerUser | IsAdminUser]
@@ -231,10 +289,14 @@ class ResumeDetail(generics.RetrieveAPIView):
 
     serializer_class = GetPostResumeSerializer
 
+    @swagger_auto_schema(tags=['Резюме'])
+    def get(self, request, *args, **kwargs):
+        super(ResumeDetail, self).get(self, request, *args, **kwargs)
+
 
 class UserResumeView(APIView):
-    @staticmethod
-    def get(request):
+    @swagger_auto_schema(tags=['Резюме'])
+    def get(self, request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
             serializer = GetPostResumeSerializer(resumes.first())
@@ -242,8 +304,8 @@ class UserResumeView(APIView):
         else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
-    @staticmethod
-    def post(request):
+    @swagger_auto_schema(tags=['Резюме'])
+    def post(self, request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
             return response_with_detail('This employee already has a resume', status.HTTP_409_CONFLICT)
@@ -255,8 +317,8 @@ class UserResumeView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @staticmethod
-    def patch(request):
+    @swagger_auto_schema(tags=['Резюме'])
+    def patch(self, request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
             resume = resumes.first()
@@ -268,8 +330,8 @@ class UserResumeView(APIView):
         else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
-    @staticmethod
-    def delete(request):
+    @swagger_auto_schema(tags=['Резюме'])
+    def delete(self, request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
             resume = resumes.first()
@@ -280,12 +342,14 @@ class UserResumeView(APIView):
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
 
 
+@swagger_auto_schema(method='post', tags=['Резюме'])
 @api_view(['POST'])
 @permission_classes([IsManagerUser])
 def resume_response(request, pk):
     resume = get_object_or_404(Resume, id=pk)
     result = send_resume_response(resume, request.user)
     return response_with_detail(result, status.HTTP_200_OK)
+
 
 
 class VacancyList(generics.ListCreateAPIView):
@@ -316,6 +380,11 @@ class VacancyList(generics.ListCreateAPIView):
         else:
             return PostVacancySerializer
 
+    @swagger_auto_schema(tags=['Вакансия'])
+    def get(self, request, *args, **kwargs):
+        super(VacancyList, self).get(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Вакансия'])
     def post(self, request, *args, **kwargs):
         post_serializer = PostVacancySerializer(data=request.data)
         post_serializer.is_valid(raise_exception=True)
@@ -325,6 +394,7 @@ class VacancyList(generics.ListCreateAPIView):
 
 
 class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
+    http_method_names = ["get", "patch", "delete"]
     def get_permissions(self):
         if self.request.method == 'GET':
             return [IsAuthenticated()]
@@ -349,6 +419,11 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         else:
             return None
 
+    @swagger_auto_schema(tags=['Вакансия'])
+    def get(self, request, *args, **kwargs):
+        super(VacancyDetail, self).get(self, request, *args, **kwargs)
+
+    @swagger_auto_schema(tags=['Вакансия'])
     def patch(self, request, *args, **kwargs):
         result = super(VacancyDetail, self).patch(request, args, kwargs)
         if result.status_code == 200:
@@ -357,7 +432,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
             return Response(data, status=status.HTTP_200_OK)
         return result
 
-
+    @swagger_auto_schema(tags=['Вакансия'])
     def delete(self, request, *args, **kwargs):
         vacancy = self.get_object()
         vacancy.status = 'DELETED'
@@ -365,7 +440,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
+@swagger_auto_schema(method='post', tags=['Вакансия'])
 @api_view(['POST'])
 def vacancy_response(request, pk):
     vacancy = get_object_or_404(Vacancy, id=pk)

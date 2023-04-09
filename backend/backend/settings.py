@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_cleanup.apps.CleanupConfig',
     'hr_api.apps.HrApiConfig',
-    'django_filters'
+    'django_filters',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [

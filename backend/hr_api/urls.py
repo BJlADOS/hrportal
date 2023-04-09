@@ -1,6 +1,20 @@
 from django.urls import path
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 
 from .views import *
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title='HR Portal API',
+        default_version='v1',
+        description='Backend API для HR-портала большой IT-компании "Очень интересно"'
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+    authentication_classes=[JWTAuthentication],
+)
 
 urlpatterns = [
     path('reg/', registration_view, name='reg'),
@@ -24,5 +38,6 @@ urlpatterns = [
     path('departments/', DepartmentList.as_view(), name='department-list'),
     path('departments/<int:pk>/', DepartmentDetail.as_view(), name='department-detail'),
     path('skills/', SkillList.as_view(), name='skill-list'),
-    path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail')
+    path('skills/<int:pk>/', SkillDetail.as_view(), name='skill-detail'),
+    path('swagger/', schema_view.with_ui('swagger'), name='swagger')
 ]
