@@ -246,7 +246,7 @@ class VacancyTests(TestCase):
         self.assertEqual(count_after, 0)
 
     def test_VacancyResponse_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post(reverse("vacancy_response", args=(self.get_existing_vacancy_id(),)))
+        response = self.client.post(reverse("vacancy-response", args=(self.get_existing_vacancy_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -255,7 +255,7 @@ class VacancyTests(TestCase):
     def test_VacancyResponse_ShouldRaise404_OnNonExistentVacancy(self):
         login_user(self.client, self.employee_data)
 
-        response = self.client.post(reverse("vacancy_response", args=(self.get_nonexistent_vacancy_id(),)))
+        response = self.client.post(reverse("vacancy-response", args=(self.get_nonexistent_vacancy_id(),)))
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -264,7 +264,7 @@ class VacancyTests(TestCase):
     def test_VacancyResponse_ShouldRaise400_WithoutAnyResume(self):
         login_user(self.client, self.employee_data)
 
-        response = self.client.post(reverse("vacancy_response", args=(self.get_existing_vacancy_id(),)))
+        response = self.client.post(reverse("vacancy-response", args=(self.get_existing_vacancy_id(),)))
 
         self.assertEqual(response.status_code, 400)
         detail = json.loads(*response)['detail']
@@ -275,7 +275,7 @@ class VacancyTests(TestCase):
         vacancy = create_vacancy_for(department, default_vacancy_data)
         login_user(self.client, self.employee_data)
 
-        response = self.client.post(reverse("vacancy_response", args=(vacancy.id,)))
+        response = self.client.post(reverse("vacancy-response", args=(vacancy.id,)))
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -289,7 +289,7 @@ class VacancyTests(TestCase):
         manager = User.objects.get(department__id=vacancy.department.id)
         employee_id = User.objects.get(email=self.employee_data.email).id
 
-        response = self.client.post(reverse("vacancy_response", args=(vacancy_id,)),
+        response = self.client.post(reverse("vacancy-response", args=(vacancy_id,)),
                                     {'resume': SimpleUploadedFile('test.pdf', b'resume')})
 
         self.assertEqual(response.status_code, 200)
@@ -304,7 +304,7 @@ class VacancyTests(TestCase):
         resume = create_resume_for(employee, default_resume_data)
         login_user(self.client, self.employee_data)
 
-        response = self.client.post(reverse("vacancy_response", args=(vacancy_id,)))
+        response = self.client.post(reverse("vacancy-response", args=(vacancy_id,)))
         result = json.loads(*response)
 
         self.assertEqual(response.status_code, 200, msg=f"result body - {result}")

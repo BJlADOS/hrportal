@@ -28,6 +28,7 @@ STATUS_CHOICES = [
 
 API_STATUS_CHOICES = [c for c in STATUS_CHOICES if c[0] != 'DELETED']
 
+
 def get_upload_path(instance, filename):
     date = timezone.now().strftime('%d.%m.%Y')
     filename, ext = os.path.splitext(filename)

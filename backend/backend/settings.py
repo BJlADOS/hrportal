@@ -126,7 +126,8 @@ REST_FRAMEWORK = {
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {},
     'LOGIN_URL': 'swagger',
-    'LOGOUT_URL': 'auth-logout'
+    'LOGOUT_URL': 'auth-logout',
+    "DEFAULT_MODEL_RENDERING": "example"
 }
 
 # Internationalization

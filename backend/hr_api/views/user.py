@@ -102,7 +102,11 @@ class UserView(viewsets.ReadOnlyModelViewSet):
 
 
 class AuthorizedUserView(APIView):
-    parser_classes = (MultiPartParser,)
+    def get_parsers(self):
+        if 'docs' in self.request.path and self.request.method == 'PATCH':
+            return [MultiPartParser]
+        else:
+            return super().get_parsers()
 
     @swagger_auto_schema(tags=['Пользователь'],
                          operation_summary='Информация о аутентифицированном пользователе',
