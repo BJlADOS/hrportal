@@ -21,15 +21,13 @@ router = DefaultRouter()
 router.register('', RegistrationView, basename='reg')
 router.register('', AuthenticationView, basename='auth')
 router.register('users', UserView, basename='user')
-router.register('departments', DepartmentView, basename='department')
-router.register('skills', SkillView, basename='skill')
 router.register('vacancies', VacancyView, basename='vacancy')
+router.register('resumes', ResumeView, basename='resume')
+router.register('skills', SkillView, basename='skill')
+router.register('departments', DepartmentView, basename='department')
 
 urlpatterns = router.urls + [
     path('user/', AuthorizedUserView.as_view(), name='auth-user'),
-    path('resumes/', ResumeList.as_view(), name='resume-list'),
-    path('resumes/<int:pk>/', ResumeDetail.as_view(), name='resume-detail'),
-    path('resumes/<int:pk>/response/', resume_response, name='resume_response'),
     path('user/resume/', UserResumeView.as_view(), name='user-resume'),
     path('docs/', schema_view.with_ui('swagger'), name='swagger')
 ]

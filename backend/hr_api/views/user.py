@@ -43,7 +43,7 @@ class AuthorizedUserView(APIView):
             return super().get_parsers()
 
     @swagger_auto_schema(tags=['Пользователь'],
-                         operation_summary='Информация о аутентифицированном пользователе',
+                         operation_summary='Информация о авторизованном пользователе',
                          responses={
                              200: UserSerializer(),
                              403: forbidden_response
@@ -53,7 +53,7 @@ class AuthorizedUserView(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
     @swagger_auto_schema(tags=['Пользователь'],
-                         operation_summary='Редактирует профиль аутентифицированного пользователя',
+                         operation_summary='Редактирует профиль авторизованного пользователя',
                          request_body=UserPatchDataSerializer,
                          responses={
                              200: UserSerializer(),

@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg.inspectors import CoreAPICompatInspector
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
@@ -18,59 +17,12 @@ from ..permissions import IsManagerUser
 from ..serializers.vacancy import *
 
 
-class VacancyInfoInspector(CoreAPICompatInspector):
-    def get_paginator_parameters(self, paginator):
-        result = super(VacancyInfoInspector, self).get_paginator_parameters(paginator)
-        for param in result:
-            match param.name:
-                case 'limit':
-                    param.description = 'Количество результатов, возвращаемых на страницу'
-                case 'offset':
-                    param.description = 'Индекс, начиная с которого возвращаются результаты'
-
-        return result
-
-    def get_filter_parameters(self, filter_backend):
-        result = super(VacancyInfoInspector, self).get_filter_parameters(filter_backend)
-        for param in result:
-            match param.name:
-                case 'employment':
-                    param.description = 'Занятость'
-                    param.enum = ['PART', 'FULL']
-                case 'schedule':
-                    param.description = 'График'
-                    param.enum = ['DISTANT', 'FLEX', 'SHIFT', 'FULL']
-                case 'ordering':
-                    param.description = 'Сортировка (по зарплате, по времени последнего изменения)'
-                    param.enum = ['salary', '-salary', 'time', '-time']
-                case 'status':
-                    param.description = 'Статус вакансии'
-                    param.enum = ['PUBLIC', 'ARCHIVED', 'DELETED']
-                case 'skills':
-                    param.description = 'Список ID требуемых навыков'
-                    param.type = openapi.TYPE_ARRAY
-                case 'department':
-                    param.description = 'Список ID отделов'
-                    param.type = openapi.TYPE_ARRAY
-                case 'search':
-                    param.description = 'Поиск по названию должности'
-
-        return [p for p in result if not 'salary' in p.name]
-
-
 @method_decorator(name='list', decorator=swagger_auto_schema(
     tags=['Вакансия'],
     operation_summary='Список вакансий (фильтрация, сортировка, пагинация)',
-    filter_inspectors=[VacancyInfoInspector],
-    paginator_inspectors=[VacancyInfoInspector],
-    manual_parameters=[
-        openapi.Parameter(name='salary_min', in_=openapi.IN_QUERY,
-                          description='Минимальная зарплата', required=False,
-                          type=openapi.TYPE_INTEGER),
-        openapi.Parameter(name='salary_max', in_=openapi.IN_QUERY,
-                          description='Максимальная зарплата', required=False,
-                          type=openapi.TYPE_INTEGER)
-    ],
+    filter_inspectors=[VacancyResumeFilterInspector],
+    paginator_inspectors=[VacancyResumeFilterInspector],
+    manual_parameters=VacancyResumeFilterInspector.min_max_salary_parameters,
     responses={
         403: forbidden_response
     }))

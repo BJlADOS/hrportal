@@ -83,7 +83,7 @@ class ResumeTests(TestCase):
         self.assertDictEqual(result, resume)
 
     def test_ResumeResponse_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post(reverse("resume_response", args=(self.get_existing_resume_id(),)))
+        response = self.client.post(reverse("resume-response", args=(self.get_existing_resume_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -92,7 +92,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldRaise403_OnEmployee(self):
         login_user(self.client, self.employee_data)
 
-        response = self.client.post(reverse("resume_response", args=(self.get_existing_resume_id(),)))
+        response = self.client.post(reverse("resume-response", args=(self.get_existing_resume_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -101,7 +101,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldRaise404_OnNonExistentResume(self):
         login_user(self.client, self.manager_data)
 
-        response = self.client.post(reverse("resume_response", args=(self.get_nonexistent_resume_id(),)))
+        response = self.client.post(reverse("resume-response", args=(self.get_nonexistent_resume_id(),)))
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -113,7 +113,7 @@ class ResumeTests(TestCase):
         employee_id = User.objects.get(resume__id=resume_id).id
         login_user(self.client, self.manager_data)
 
-        response = self.client.post(reverse("resume_response", args=(resume_id,)))
+        response = self.client.post(reverse("resume-response", args=(resume_id,)))
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
