@@ -1,80 +1,18 @@
 from django.core.mail import send_mail, EmailMessage
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .filters import *
 from .permissions import IsManagerUser
 from .serializers import *
-
-detail_schema = openapi.Schema(type='object', properties={
-    'detail': openapi.Schema(type='string')
-})
-
-validation_error_response = openapi.Response(
-    'Данные не прошли валидацию (причины)',
-    openapi.Schema(type='object', properties={
-        'field': openapi.Schema(
-            type='array',
-            items=openapi.Schema(type='string'))
-    }))
-
-
-class DepartmentList(generics.ListCreateAPIView):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [IsAuthenticated()]
-        else:
-            return [IsAdminUser()]
-
-
-decorated_department_list = swagger_auto_schema(methods=['get', 'post'], tags=['Отдел']) \
-    (DepartmentList.as_view())
-
-
-class DepartmentDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Department.objects.all()
-    serializer_class = DepartmentSerializer
-    permission_classes = [IsAdminUser]
-    http_method_names = ["get", "patch", "delete"]
-
-
-decorated_department_detail = swagger_auto_schema(methods=['get', 'patch', 'delete'], tags=['Отдел']) \
-    (DepartmentDetail.as_view())
-
-
-class SkillList(generics.ListCreateAPIView):
-    queryset = Skill.objects.all()
-    serializer_class = SkillSerializer
-
-    def get_permissions(self):
-        if self.request.method == 'GET':
-            return [IsAuthenticated()]
-        else:
-            return [IsAdminUser()]
-
-
-decorated_skill_list = swagger_auto_schema(methods=['get', 'post'], tags=['Навык'])(SkillList.as_view())
-
-class SkillDetail(generics.RetrieveDestroyAPIView):
-    queryset = Skill.objects.all()
-    serializer_class = SkillSerializer
-    permission_classes = [IsAdminUser]
-
-
-decorated_skill_detail = swagger_auto_schema(methods=['get', 'delete'], tags=['Навык'])(
-    SkillDetail.as_view())
+from .views_shared import *
 
 
 class ResumeList(generics.ListAPIView):
@@ -316,7 +254,3 @@ def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_r
     result_message = f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) '
     result_message += 'successful' if bool(result) else 'failed'
     return result_message
-
-
-def response_with_detail(message, response_status):
-    return Response({'detail': message}, status=response_status)

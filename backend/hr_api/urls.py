@@ -4,6 +4,7 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from .views import *
+from .views_dep_skill import *
 from .views_reg_auth import *
 from .views_user import *
 
@@ -22,6 +23,8 @@ router = DefaultRouter()
 router.register('', RegistrationView, basename='reg')
 router.register('', AuthenticationView, basename='auth')
 router.register('users', UserView, basename='user')
+router.register('departments', DepartmentView, basename='department')
+router.register('skills', SkillView, basename='skill')
 
 urlpatterns = router.urls + [
     path('user/', AuthorizedUserView.as_view(), name='auth-user'),
@@ -32,9 +35,5 @@ urlpatterns = router.urls + [
     path('vacancies/<int:pk>/', VacancyDetail.as_view(), name='vacancy-detail'),
     path('vacancies/<int:pk>/response/', vacancy_response, name='vacancy_response'),
     path('user/resume/', UserResumeView.as_view(), name='user-resume'),
-    path('departments/', decorated_department_list, name='department-list'),
-    path('departments/<int:pk>/', decorated_department_detail, name='department-detail'),
-    path('skills/', decorated_skill_list, name='skill-list'),
-    path('skills/<int:pk>/', decorated_skill_detail, name='skill-detail'),
     path('docs/', schema_view.with_ui('swagger'), name='swagger')
 ]

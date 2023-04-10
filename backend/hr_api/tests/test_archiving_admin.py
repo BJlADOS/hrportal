@@ -45,7 +45,6 @@ class ArchivingAdminTests(TestCase):
 
         response = self.client.get(reverse("resume-list"))
         result = json.loads(*response)
-        print(result)
 
         self.assertEqual(response.status_code, 200, msg=f"response body - {result}")
         self.assertEqual(len(result), len(self.resumes))

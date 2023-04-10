@@ -1,14 +1,13 @@
 from django.contrib.auth import authenticate
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import authentication_classes, permission_classes, action
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 
-from .email import *
-from .serializers import *
-from .views import response_with_detail, detail_schema, validation_error_response
+from .authentication import *
+from .email import send_verification_email, send_password_recovery_email
+from .models import User
+from .views_shared import *
 
 
 class RegDataSerializer(serializers.ModelSerializer):
@@ -57,8 +56,8 @@ class RegistrationView(viewsets.GenericViewSet):
                                  detail_schema),
                              400: validation_error_response
                          })
-    @action(methods=['post'], detail=False, url_path='reg', url_name='sign-in')
-    def sign_in(self, request):
+    @action(methods=['post'], detail=False, url_path='reg', url_name='register')
+    def register(self, request):
         serializer = RegDataSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -158,8 +157,8 @@ class AuthenticationView(viewsets.GenericViewSet):
                                  'Код не может быть расшифрован или не верен',
                                  detail_schema)
                          })
-    @action(methods=['post'], detail=False, url_path='verification', url_name='email-verification')
-    def verification(self, request):
+    @action(methods=['post'], detail=False, url_path='verification', url_name='verify_email')
+    def verify_email(self, request):
         serializer = CodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = get_token_user(serializer.data['code'])
@@ -179,8 +178,8 @@ class AuthenticationView(viewsets.GenericViewSet):
                              200: 'Ссылка для изменения пароля отправлена на email (если пользователь существует)',
                              400: validation_error_response
                          })
-    @action(methods=['post'], detail=False, url_path='recovery-request', url_name='password-recovery-request')
-    def password_recovery_request(self, request):
+    @action(methods=['post'], detail=False, url_path='recovery-request', url_name='password-recovery')
+    def password_recovery(self, request):
         serializer = EmailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
@@ -201,8 +200,8 @@ class AuthenticationView(viewsets.GenericViewSet):
                                  'Код не может быть расшифрован или не верен',
                                  detail_schema)
                          })
-    @action(methods=['POST'], detail=False, url_path='recovery', url_name='password-recovery')
-    def password_recovery(self, request):
+    @action(methods=['POST'], detail=False, url_path='recovery', url_name='set-password')
+    def set_password(self, request):
         serializer = PasswordRecoveryDataSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = get_token_user(serializer.data['code'])

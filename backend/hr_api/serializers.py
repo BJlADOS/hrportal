@@ -6,31 +6,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 from .models import *
-
-
-def not_a_manager(user):
-    if hasattr(user, 'department'):
-        raise ValidationError(f'User with id={user.id} is already manager of department id={user.department.id}')
-    else:
-        return user
-
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    managerId = serializers.PrimaryKeyRelatedField(source='manager',
-                                                   queryset=User.objects.all(),
-                                                   required=False,
-                                                   allow_null=True,
-                                                   validators=[not_a_manager])
-
-    class Meta:
-        model = Department
-        fields = ['id', 'name', 'managerId']
-
-
-class SkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Skill
-        fields = '__all__'
+from .views_dep_skill import DepartmentSerializer, SkillSerializer
 
 
 class TimestampField(serializers.Field):

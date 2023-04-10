@@ -1,16 +1,18 @@
 from django.utils.decorators import method_decorator
-from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers
 from rest_framework import status, viewsets
 from rest_framework.parsers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
+from .views_dep_skill import DepartmentSerializer, SkillSerializer
 from .authentication import add_auth
+from .models import User, Skill, Department
 from .permissions import IsManagerUser
-from .serializers import *
-from .views import detail_schema, validation_error_response
+from .views_shared import validation_error_response, forbidden_response, not_found_response
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -82,21 +84,15 @@ class PatchUserDataSerializer(serializers.ModelSerializer):
     tags=['Пользователь'],
     operation_summary='Все пользователи',
     responses={
-        403: openapi.Response(
-            'Доступ запрещен (пользователь не авторизован или не является менеджером или администратором)',
-            detail_schema)
+        403: forbidden_response
     }
 ))
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(
     tags=['Пользователь'],
     operation_summary='Пользователь по его ID',
     responses={
-        403: openapi.Response(
-            'Доступ запрещен (пользователь не авторизован или не является менеджером или администратором)',
-            detail_schema),
-        404: openapi.Response(
-            'Пользователь не найден',
-            detail_schema),
+        403: forbidden_response,
+        404: not_found_response,
     }
 ))
 class UserView(viewsets.ReadOnlyModelViewSet):
@@ -112,10 +108,7 @@ class AuthorizedUserView(APIView):
                          operation_summary='Информация о аутентифицированном пользователе',
                          responses={
                              200: UserSerializer(),
-                             403: openapi.Response(
-                                 'Доступ запрещен (пользователь не авторизован)',
-                                 detail_schema
-                             )
+                             403: forbidden_response
                          })
     def get(self, request):
         serializer = UserSerializer(request.user)
@@ -127,10 +120,7 @@ class AuthorizedUserView(APIView):
                          responses={
                              200: UserSerializer(),
                              400: validation_error_response,
-                             403: openapi.Response(
-                                 'Доступ запрещен (пользователь не авторизован)',
-                                 detail_schema
-                             )
+                             403: forbidden_response
                          })
     def patch(self, request):
         user = request.user
