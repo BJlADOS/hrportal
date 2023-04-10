@@ -1,52 +1,20 @@
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, viewsets, serializers
+from rest_framework import status
 from rest_framework.decorators import authentication_classes, permission_classes, action
 from rest_framework.permissions import AllowAny
+from rest_framework.viewsets import GenericViewSet
 
 from .shared import *
 from ..authentication import *
 from ..email import send_verification_email, send_password_recovery_email
-from ..models import User
-
-
-class RegDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = [
-            'fullname',
-            'email',
-            'password'
-        ]
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
-
-
-class AuthDataSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
-
-
-class EmailSerializer(serializers.Serializer):
-    email = serializers.EmailField(max_length=254)
-
-
-class CodeSerializer(serializers.Serializer):
-    code = serializers.CharField(
-        help_text='Уникальный код, прописанный в query-параметрах ссылки, отправленной на Email пользователя')
-
-
-class PasswordRecoveryDataSerializer(serializers.Serializer):
-    code = serializers.CharField(
-        help_text='Уникальный код, прописанный в query-параметрах ссылки, отправленной на Email пользователя')
-    password = serializers.CharField()
+from ..serializers.reg_and_auth import *
 
 
 @authentication_classes([])
 @permission_classes([AllowAny])
-class RegistrationView(viewsets.GenericViewSet):
+class RegistrationView(GenericViewSet):
     @swagger_auto_schema(tags=['Регистрация'],
                          operation_summary="Регистрирует пользователя",
                          operation_description="Также отправляет на Email письмо с ссылкой для подтверждения адреса электронной почты",
@@ -92,7 +60,7 @@ class RegistrationView(viewsets.GenericViewSet):
 
 @authentication_classes([])
 @permission_classes([AllowAny])
-class AuthenticationView(viewsets.GenericViewSet):
+class AuthenticationView(GenericViewSet):
     @swagger_auto_schema(tags=['Аутентификация'],
                          operation_summary='Аутентифицирует пользователя',
                          request_body=AuthDataSerializer,
