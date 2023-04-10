@@ -108,8 +108,8 @@ class AuthenticationView(GenericViewSet):
                                      'authorized': openapi.Schema(type='boolean')
                                  }))
                          })
-    @action(methods=['get'], detail=False, url_path='authorized', url_name='authorized')
-    def authorized(self, request):
+    @action(methods=['get'], detail=False, url_path='authenticated', url_name='authenticated')
+    def authenticated(self, request):
         result = False
         try:
             auth_result = JWTAuthentication().authenticate(request)
@@ -117,7 +117,7 @@ class AuthenticationView(GenericViewSet):
                 result = True
         except exceptions.AuthenticationFailed:
             pass
-        return Response({'authorized': result}, status=status.HTTP_200_OK)
+        return Response({'authenticated': result}, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(tags=['Пользователь'],
                          operation_summary='Верифицирует Email пользователя',
@@ -129,7 +129,7 @@ class AuthenticationView(GenericViewSet):
                                  'Код не может быть расшифрован или не верен',
                                  detail_schema)
                          })
-    @action(methods=['post'], detail=False, url_path='verification', url_name='verify_email')
+    @action(methods=['post'], detail=False, url_path='verify-email', url_name='verify-email')
     def verify_email(self, request):
         serializer = CodeSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -150,8 +150,8 @@ class AuthenticationView(GenericViewSet):
                              200: 'Ссылка для изменения пароля отправлена на email (если пользователь существует)',
                              400: validation_error_response
                          })
-    @action(methods=['post'], detail=False, url_path='recovery-request', url_name='password-recovery')
-    def password_recovery(self, request):
+    @action(methods=['post'], detail=False, url_path='change-password', url_name='change-password')
+    def change_password(self, request):
         serializer = EmailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
@@ -172,7 +172,7 @@ class AuthenticationView(GenericViewSet):
                                  'Код не может быть расшифрован или не верен',
                                  detail_schema)
                          })
-    @action(methods=['POST'], detail=False, url_path='recovery', url_name='set-password')
+    @action(methods=['POST'], detail=False, url_path='set-password', url_name='set-password')
     def set_password(self, request):
         serializer = PasswordRecoveryDataSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

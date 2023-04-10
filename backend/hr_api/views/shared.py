@@ -3,9 +3,8 @@ from drf_yasg.inspectors import CoreAPICompatInspector
 from rest_framework.response import Response
 
 
-# TODO message to [message]
 def response_with_detail(message, response_status):
-    return Response({'detail': message}, status=response_status)
+    return Response({'detail': [message]}, status=response_status)
 
 
 detail_schema = openapi.Schema(type='object', properties={

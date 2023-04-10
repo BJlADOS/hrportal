@@ -268,7 +268,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'Employee does not have resume')
+        self.assertEqual(detail[0], 'Employee does not have resume')
 
     def test_VacancyResponse_ShouldRaise400_OnVacancyDepartmentHasNotManager(self):
         department = Department.objects.create(name="department_without_manager")
@@ -279,7 +279,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'Vacancy department does not have manager')
+        self.assertEqual(detail[0], 'Vacancy department does not have manager')
         department.delete()
 
     def test_VacancyResponse_ShouldSendResponse_WithPdfResume(self):
@@ -294,7 +294,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) successful')
+        self.assertEqual(detail[0], f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) successful')
 
     def test_VacancyResponse_ShouldSendResponse_WithUserResume(self):
         vacancy_id = self.get_existing_vacancy_id()
@@ -309,7 +309,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200, msg=f"result body - {result}")
         detail = result['detail']
-        self.assertEqual(f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) successful', detail)
+        self.assertEqual(f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) successful', detail[0])
         resume.delete()
 
     @staticmethod

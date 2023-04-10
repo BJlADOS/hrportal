@@ -35,7 +35,7 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(response.status_code, 201)
         detail = json.loads(*response)['detail']
         user = User.objects.get(email=reg_data['email'])
-        self.assertEqual(detail, f'Email verification mail to User(ID={user.id}) sending successful')
+        self.assertEqual(detail[0], f'Email verification mail to User(ID={user.id}) sending successful')
         self.assertEqual(emails_count_before, len(mail.outbox) - 1)
         emails = [m for m in mail.outbox if m.subject == email_subject]
         self.assertEqual(len(emails), 1)
@@ -118,7 +118,7 @@ class RegAndAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'A user with this email and password was not found.')
+        self.assertEqual(detail, ['A user with this email and password was not found.'])
 
     def test_LoginView_ShouldRaise401_OnWrongEmail(self):
         login_data = {'email': 'error' + self.user_data.email, 'password': self.user_data.password}
@@ -127,7 +127,7 @@ class RegAndAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'A user with this email and password was not found.')
+        self.assertEqual(detail, ['A user with this email and password was not found.'])
 
     def test_LoginView_ShouldRaiseValidationError_OnIncompleteData(self):
         login_data = {}
@@ -158,52 +158,52 @@ class RegAndAuthTests(TestCase):
     def test_AuthorizedView_ShouldReturnTrue_OnAuthorizedClient(self):
         self.login_user()
 
-        response = self.client.get('/api/authorized/')
+        response = self.client.get('/api/authenticated/')
 
         self.assertEqual(response.status_code, 200)
-        authorized = json.loads(*response)['authorized']
+        authorized = json.loads(*response)['authenticated']
         self.assertTrue(authorized)
 
     def test_AuthorizedView_ShouldReturnFalse_OnUnauthorizedClient(self):
-        response = self.client.get('/api/authorized/')
+        response = self.client.get('/api/authenticated/')
 
         self.assertEqual(response.status_code, 200)
-        authorized = json.loads(*response)['authorized']
+        authorized = json.loads(*response)['authenticated']
         self.assertFalse(authorized)
 
     def test_VerificationView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/api/verification/', {})
+        response = self.client.post('/api/verify-email/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
         self.assertEqual(errors['code'][0], 'This field is required.')
 
     def test_VerificationView_ShouldRaise401_OnInvalidCode(self):
-        response = self.client.post('/api/verification/', {'code': 'code'})
+        response = self.client.post('/api/verify-email/', {'code': 'code'})
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'Invalid verification code.')
+        self.assertEqual(detail[0], 'Invalid verification code.')
 
     def test_VerificationView_ShouldConfirmUserEmail(self):
         user = User.objects.first()
         self.assertFalse(user.email_verified)
 
-        response = self.client.post('/api/verification/', {'code': create_user_token(user)})
+        response = self.client.post('/api/verify-email/', {'code': create_user_token(user)})
 
         self.assertEqual(response.status_code, 200)
         user.refresh_from_db()
         self.assertTrue(user.email_verified)
 
     def test_RecoveryRequestView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/api/recovery-request/', {})
+        response = self.client.post('/api/change-password/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
         self.assertEqual(errors['email'][0], 'This field is required.')
 
     def test_RecoveryRequestView_ShouldRaiseValidationError_OnInvalidEmail(self):
-        response = self.client.post('/api/recovery-request/', {'email': 'no email'})
+        response = self.client.post('/api/change-password/', {'email': 'no email'})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -212,7 +212,7 @@ class RegAndAuthTests(TestCase):
     def test_RecoveryRequestView_ShouldDontSendRecoveryEmail_OnNonExistentEmail(self):
         emails_count_before = len(mail.outbox)
 
-        response = self.client.post('/api/recovery-request/', {'email': 'error' + self.user_data.email})
+        response = self.client.post('/api/change-password/', {'email': 'error' + self.user_data.email})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(emails_count_before, len(mail.outbox))
@@ -222,7 +222,7 @@ class RegAndAuthTests(TestCase):
         emails_count_before = len(mail.outbox)
         user = User.objects.get(email=self.user_data.email)
 
-        response = self.client.post('/api/recovery-request/', {'email': user.email})
+        response = self.client.post('/api/change-password/', {'email': user.email})
 
         emails = [m for m in mail.outbox if m.subject == email_subject]
         self.assertEqual(emails_count_before, len(mail.outbox) - 1)
@@ -231,7 +231,7 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_RecoveryView_ShouldRaiseValidationError_OnBlankData(self):
-        response = self.client.post('/api/recovery/', {})
+        response = self.client.post('/api/set-password/', {})
 
         self.assertEqual(response.status_code, 400)
         errors = json.loads(*response)
@@ -241,11 +241,11 @@ class RegAndAuthTests(TestCase):
     def test_RecoveryView_ShouldRaise401_OnInvalidCode(self):
         data = {'code': 'code', 'password': 'password'}
 
-        response = self.client.post('/api/recovery/', data)
+        response = self.client.post('/api/set-password/', data)
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'Invalid verification code.')
+        self.assertEqual(detail[0], 'Invalid verification code.')
 
     def test_RecoveryView_ShouldChangePassword(self):
         user = User.objects.get(email=self.user_data.email)
@@ -254,7 +254,7 @@ class RegAndAuthTests(TestCase):
         password_before = user.password
         data = {'code': create_user_token(user), 'password': new_password}
 
-        response = self.client.post('/api/recovery/', data)
+        response = self.client.post('/api/set-password/', data)
 
         self.assertEqual(response.status_code, 200)
         user.refresh_from_db()

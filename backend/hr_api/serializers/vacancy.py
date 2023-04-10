@@ -10,7 +10,7 @@ from ..models import *
 
 class VacancySerializer(serializers.ModelSerializer):
     department = DepartmentSerializer()
-    status = serializers.ChoiceField(choices=API_STATUS_CHOICES)
+    status = serializers.ChoiceField(choices=STATUS_CHOICES)
     requiredSkills = SkillSerializer(source='required_skills', many=True)
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
@@ -35,7 +35,7 @@ class VacancySerializer(serializers.ModelSerializer):
 class VacancyPostDataSerializer(serializers.ModelSerializer):
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True)
-    status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
+    status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
     description = serializers.CharField(required=False)
 
     class Meta:
@@ -57,7 +57,7 @@ class VacancyPatchDataSerializer(serializers.ModelSerializer):
     employment = serializers.ChoiceField(choices=EMPLOYMENT_CHOICES, required=False)
     schedule = serializers.ChoiceField(choices=SCHEDULE_CHOICES, required=False)
     description = serializers.CharField(required=False)
-    status = serializers.ChoiceField(choices=API_STATUS_CHOICES)
+    status = serializers.ChoiceField(choices=STATUS_CHOICES)
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True, required=False)
 

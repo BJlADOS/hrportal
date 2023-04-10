@@ -35,7 +35,7 @@ class UserResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, "This employee doesn't have a resume")
+        self.assertEqual(detail[0], "This employee doesn't have a resume")
 
     def test_GetUserResume_ShouldGetResumeInfo(self):
         login_user(self.client, self.employee_data)
@@ -62,7 +62,7 @@ class UserResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 409)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, 'This employee already has a resume')
+        self.assertEqual(detail[0], 'This employee already has a resume')
 
     def test_PostUserResume_ShouldRaiseValidationError_OnBlankData(self):
         login_user(self.client, self.manager_data)
@@ -104,7 +104,7 @@ class UserResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, "This employee doesn't have a resume")
+        self.assertEqual(detail[0], "This employee doesn't have a resume")
 
     def test_PatchUserResume_ShouldDontRaiseException_OnBlankData(self):
         login_user(self.client, self.employee_data)
@@ -154,7 +154,7 @@ class UserResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, "This employee doesn't have a resume")
+        self.assertEqual(detail[0], "This employee doesn't have a resume")
 
     def test_DeleteUserResume_ShouldDeleteResume(self):
         manager = User.objects.get(email=self.manager_data.email)

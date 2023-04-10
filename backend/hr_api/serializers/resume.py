@@ -8,7 +8,7 @@ from ..models import *
 
 class ResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
-    status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
+    status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
     desiredPosition = serializers.CharField(source='desired_position')
     desiredSalary = serializers.IntegerField(source='desired_salary')
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
@@ -42,7 +42,7 @@ class ResumePatchDataSerializer(serializers.ModelSerializer):
     resume = serializers.FileField(required=False, allow_null=True,
                                    validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
-    status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
+    status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
 
     class Meta:
         model = Resume
