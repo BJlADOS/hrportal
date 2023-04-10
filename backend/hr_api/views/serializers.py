@@ -5,8 +5,8 @@ from django.core.validators import FileExtensionValidator
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
-from .models import *
-from .views_dep_skill import DepartmentSerializer, SkillSerializer
+from .dep_and_skill import DepartmentSerializer, SkillSerializer
+from ..models import *
 
 
 class TimestampField(serializers.Field):
@@ -27,7 +27,7 @@ def validate_filesize(max_filesize):
     return return_function
 
 
-class GetPostResumeSerializer(serializers.ModelSerializer):
+class ResumeSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
     status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
     desiredPosition = serializers.CharField(source='desired_position')
@@ -35,7 +35,7 @@ class GetPostResumeSerializer(serializers.ModelSerializer):
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
     resume = serializers.FileField(use_url=False, validators=[FileExtensionValidator(['pdf']),
-                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
+                                                              validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
 
@@ -55,7 +55,7 @@ class GetPostResumeSerializer(serializers.ModelSerializer):
         ]
 
 
-class PatchResumeSerializer(serializers.ModelSerializer):
+class ResumePatchDataSerializer(serializers.ModelSerializer):
     desiredPosition = serializers.CharField(source='desired_position', required=False)
     desiredSalary = serializers.IntegerField(source='desired_salary', required=False)
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES, required=False)
@@ -77,7 +77,7 @@ class PatchResumeSerializer(serializers.ModelSerializer):
         ]
 
 
-class GetVacancySerializer(serializers.ModelSerializer):
+class VacancySerializer(serializers.ModelSerializer):
     department = DepartmentSerializer()
     status = serializers.ChoiceField(choices=API_STATUS_CHOICES)
     requiredSkills = SkillSerializer(source='required_skills', many=True)
@@ -101,7 +101,7 @@ class GetVacancySerializer(serializers.ModelSerializer):
         ]
 
 
-class PostVacancySerializer(serializers.ModelSerializer):
+class VacancyPostDataSerializer(serializers.ModelSerializer):
     requiredSkillsIds = serializers.PrimaryKeyRelatedField(source='required_skills', queryset=Skill.objects.all(),
                                                            many=True)
     status = serializers.ChoiceField(choices=API_STATUS_CHOICES, required=False)
@@ -120,7 +120,7 @@ class PostVacancySerializer(serializers.ModelSerializer):
         ]
 
 
-class PatchVacancySerializer(serializers.ModelSerializer):
+class VacancyPatchDataSerializer(serializers.ModelSerializer):
     position = serializers.CharField(required=False)
     salary = serializers.IntegerField(required=False)
     employment = serializers.ChoiceField(choices=EMPLOYMENT_CHOICES, required=False)
@@ -143,7 +143,7 @@ class PatchVacancySerializer(serializers.ModelSerializer):
         ]
 
 
-class VacancyResponseSerializer(serializers.Serializer):
+class VacancyResponseDataSerializer(serializers.Serializer):
     resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
 

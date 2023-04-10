@@ -10,9 +10,9 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.views import APIView
 
 from .filters import *
-from .permissions import IsManagerUser
 from .serializers import *
-from .views_shared import *
+from .shared import *
+from ..permissions import IsManagerUser
 
 
 class ResumeList(generics.ListAPIView):
@@ -26,7 +26,7 @@ class ResumeList(generics.ListAPIView):
         else:
             return Resume.objects.none()
 
-    serializer_class = GetPostResumeSerializer
+    serializer_class = ResumeSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['$desired_position']
     filterset_class = ResumeFilter
@@ -48,7 +48,7 @@ class ResumeDetail(generics.RetrieveAPIView):
         else:
             return Resume.objects.none()
 
-    serializer_class = GetPostResumeSerializer
+    serializer_class = ResumeSerializer
 
     @swagger_auto_schema(tags=['Резюме'])
     def get(self, request, *args, **kwargs):
@@ -60,7 +60,7 @@ class UserResumeView(APIView):
     def get(self, request):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
-            serializer = GetPostResumeSerializer(resumes.first())
+            serializer = ResumeSerializer(resumes.first())
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
@@ -73,7 +73,7 @@ class UserResumeView(APIView):
         else:
             data = request.data.dict()
             data['employeeId'] = request.user.id
-            serializer = GetPostResumeSerializer(data=data)
+            serializer = ResumeSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -83,10 +83,10 @@ class UserResumeView(APIView):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
             resume = resumes.first()
-            patch_serializer = PatchResumeSerializer(resume, data=request.data)
+            patch_serializer = ResumePatchDataSerializer(resume, data=request.data)
             patch_serializer.is_valid(raise_exception=True)
             patch_serializer.save()
-            serializer = GetPostResumeSerializer(resume)
+            serializer = ResumeSerializer(resume)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)
@@ -110,7 +110,6 @@ def resume_response(request, pk):
     resume = get_object_or_404(Resume, id=pk)
     result = send_resume_response(resume, request.user)
     return response_with_detail(result, status.HTTP_200_OK)
-
 
 
 class VacancyList(generics.ListCreateAPIView):
@@ -137,9 +136,9 @@ class VacancyList(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return GetVacancySerializer
+            return VacancySerializer
         else:
-            return PostVacancySerializer
+            return VacancyPostDataSerializer
 
     @swagger_auto_schema(tags=['Вакансия'])
     def get(self, request, *args, **kwargs):
@@ -147,15 +146,16 @@ class VacancyList(generics.ListCreateAPIView):
 
     @swagger_auto_schema(tags=['Вакансия'])
     def post(self, request, *args, **kwargs):
-        post_serializer = PostVacancySerializer(data=request.data)
+        post_serializer = VacancyPostDataSerializer(data=request.data)
         post_serializer.is_valid(raise_exception=True)
         vacancy = post_serializer.save(department=request.user.department)
-        get_serializer = GetVacancySerializer(vacancy)
+        get_serializer = VacancySerializer(vacancy)
         return Response(get_serializer.data, status=status.HTTP_201_CREATED)
 
 
 class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
     http_method_names = ["get", "patch", "delete"]
+
     def get_permissions(self):
         if self.request.method == 'GET':
             return [IsAuthenticated()]
@@ -174,9 +174,9 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
-            return GetVacancySerializer
+            return VacancySerializer
         elif self.request.method == 'PATCH':
-            return PatchVacancySerializer
+            return VacancyPatchDataSerializer
         else:
             return None
 
@@ -189,7 +189,7 @@ class VacancyDetail(generics.RetrieveUpdateDestroyAPIView):
         result = super(VacancyDetail, self).patch(request, args, kwargs)
         if result.status_code == 200:
             vacancy = Vacancy.objects.get(id=kwargs['pk'])
-            data = GetVacancySerializer(vacancy).data
+            data = VacancySerializer(vacancy).data
             return Response(data, status=status.HTTP_200_OK)
         return result
 
@@ -218,7 +218,7 @@ def vacancy_response(request, pk):
         else:
             return response_with_detail('Employee does not have resume', status.HTTP_400_BAD_REQUEST)
 
-    serializer = VacancyResponseSerializer(data={'resume': resume})
+    serializer = VacancyResponseDataSerializer(data={'resume': resume})
     serializer.is_valid(raise_exception=True)
     result = send_vacancy_response(request.user, manager, vacancy, resume)
     return response_with_detail(result, status.HTTP_200_OK)

@@ -5,8 +5,8 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from .models import User, Department, Skill
-from .views_shared import *
+from .shared import *
+from ..models import User, Department, Skill
 
 
 def not_a_manager(user):

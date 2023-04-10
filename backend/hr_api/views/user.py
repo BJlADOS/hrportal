@@ -8,11 +8,11 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 from rest_framework.views import APIView
 
-from .views_dep_skill import DepartmentSerializer, SkillSerializer
-from .authentication import add_auth
-from .models import User, Skill, Department
-from .permissions import IsManagerUser
-from .views_shared import validation_error_response, forbidden_response, not_found_response
+from .dep_and_skill import DepartmentSerializer, SkillSerializer
+from .shared import validation_error_response, forbidden_response, not_found_response
+from ..authentication import add_auth
+from ..models import User, Skill, Department
+from ..permissions import IsManagerUser
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,7 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 
-class PatchUserDataSerializer(serializers.ModelSerializer):
+class UserPatchDataSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False, help_text='ФИО пользователя')
     email = serializers.EmailField(required=False, help_text='Email пользователя')
     contact = serializers.CharField(required=False, allow_null=True, help_text='Дополнительный контакт')
@@ -65,7 +65,7 @@ class PatchUserDataSerializer(serializers.ModelSerializer):
             raise ValidationError(
                 {'currentDepartmentId': f'User is manager of department {self.instance.department}'
                                         f' and therefore cannot be in another department'})
-        return super(PatchUserDataSerializer, self).validate(attrs)
+        return super(UserPatchDataSerializer, self).validate(attrs)
 
     class Meta:
         model = User
@@ -116,7 +116,7 @@ class AuthorizedUserView(APIView):
 
     @swagger_auto_schema(tags=['Пользователь'],
                          operation_summary='Редактирует профиль аутентифицированного пользователя',
-                         request_body=PatchUserDataSerializer,
+                         request_body=UserPatchDataSerializer,
                          responses={
                              200: UserSerializer(),
                              400: validation_error_response,
@@ -124,7 +124,7 @@ class AuthorizedUserView(APIView):
                          })
     def patch(self, request):
         user = request.user
-        put_serializer = PatchUserDataSerializer(user, data=request.data)
+        put_serializer = UserPatchDataSerializer(user, data=request.data)
         put_serializer.is_valid(raise_exception=True)
         put_serializer.save()
 

@@ -4,15 +4,13 @@ from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 
 from .views import *
-from .views_dep_skill import *
-from .views_reg_auth import *
-from .views_user import *
 
 schema_view = get_schema_view(
     openapi.Info(
         title='HR Portal API',
         default_version='v1',
-        description='Backend API для HR-портала большой IT-компании "Очень интересно"'
+        description='Backend API для HR-портала большой IT-компании "Очень интересно" \n'
+                    '(Для авторизации используйте запросы <strong>/login</strong> и <strong>/logout</strong>)'
     ),
     public=True,
     permission_classes=[permissions.AllowAny],

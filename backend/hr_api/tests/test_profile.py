@@ -3,8 +3,8 @@ import json
 from django.test import TestCase, Client
 
 from .test_reg_auth import UserData
-from ..serializers import *
-from ..views_user import UserSerializer
+from ..models import User, Department
+from ..views import UserSerializer
 
 
 class ProfileTests(TestCase):

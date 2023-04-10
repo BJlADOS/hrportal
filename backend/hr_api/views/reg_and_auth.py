@@ -1,13 +1,14 @@
 from django.contrib.auth import authenticate
+from django.shortcuts import redirect
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import authentication_classes, permission_classes, action
 from rest_framework.permissions import AllowAny
 
-from .authentication import *
-from .email import send_verification_email, send_password_recovery_email
-from .models import User
-from .views_shared import *
+from .shared import *
+from ..authentication import *
+from ..email import send_verification_email, send_password_recovery_email
+from ..models import User
 
 
 class RegDataSerializer(serializers.ModelSerializer):
@@ -125,6 +126,9 @@ class AuthenticationView(viewsets.GenericViewSet):
     @action(methods=["get"], detail=False, url_path='logout', url_name='logout')
     def logout(self, request):
         request.session.flush()
+        _next = request.GET.get('next', None)
+        if not _next is None:
+            return redirect(_next)
         return Response(status=status.HTTP_200_OK)
 
     @swagger_auto_schema(tags=['Аутентификация'],

@@ -123,6 +123,12 @@ REST_FRAMEWORK = {
     ),
 }
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {},
+    'LOGIN_URL': 'swagger',
+    'LOGOUT_URL': 'auth-logout'
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 

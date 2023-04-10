@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .shared_test_logic import *
-from ..serializers import *
+from ..views import *
 
 
 class ResumeTests(TestCase):
