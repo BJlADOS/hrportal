@@ -10,7 +10,7 @@ schema_view = get_schema_view(
         title='HR Portal API',
         default_version='v1',
         description='Backend API для HR-портала большой IT-компании "Очень интересно" \n'
-                    '(Для авторизации используйте запросы <strong>/login</strong> и <strong>/logout</strong>)'
+                    '(Для аутентификации используйте запрос <strong>/login</strong>)'
     ),
     public=True,
     permission_classes=[permissions.AllowAny],

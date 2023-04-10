@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
-from django.conf import settings
 
 from ..models import User, Resume, Vacancy, Department, Skill
 
@@ -138,6 +138,7 @@ def create_skill() -> Skill:
     skill = Skill.objects.create(name='name')
     skill.save()
     return skill
+
 
 def create_department(manager: User = None) -> Department:
     dep = Department.objects.create(name="department", manager=manager)

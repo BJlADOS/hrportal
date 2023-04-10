@@ -4,9 +4,8 @@ from django.conf import settings
 from django.core import mail
 from django.test import TestCase, Client
 
-from ..models import *
-
 from ..authentication import create_user_token
+from ..models import *
 
 
 class UserData:

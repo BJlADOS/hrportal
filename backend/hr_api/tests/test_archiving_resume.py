@@ -86,7 +86,6 @@ class ResumeArchivingTests(TestCase):
         self.employee_resume.refresh_from_db()
         self.assertDictEqual(result, get_resume_serialized_dict(self.employee_resume))
 
-
     def test_Employee_GetHisExistingDeletedResume(self):
         self.employee_resume.status = 'DELETED'
         self.employee_resume.save()
@@ -97,7 +96,6 @@ class ResumeArchivingTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(result['detail'], "This employee doesn't have a resume")
-
 
     def test_Employee_GetHisNonExistentResume(self):
         self.employee_resume.delete()
@@ -120,4 +118,3 @@ class ResumeArchivingTests(TestCase):
 
         self.assertEqual(response.status_code, 200, msg=f"response body - {result}")
         self.assertEqual(len(result), 0)
-
