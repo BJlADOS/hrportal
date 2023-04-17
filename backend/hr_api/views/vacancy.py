@@ -20,10 +20,12 @@ from ..serializers.vacancy import *
 @method_decorator(name='list', decorator=swagger_auto_schema(
     tags=['Вакансия'],
     operation_summary='Список вакансий (фильтрация, сортировка, пагинация)',
-    filter_inspectors=[VacancyResumeFilterInspector],
-    paginator_inspectors=[VacancyResumeFilterInspector],
-    manual_parameters=VacancyResumeFilterInspector.min_max_salary_parameters,
+    operation_description='Если не указывать параметры пагинации - будет возвращен не объект пагинации, а просто список объектов',
+    filter_inspectors=[FilterPaginatorInspector],
+    paginator_inspectors=[FilterPaginatorInspector],
+    manual_parameters=FilterPaginatorInspector.min_max_salary_parameters,
     responses={
+        400: validation_error_response,
         403: forbidden_response
     }))
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(

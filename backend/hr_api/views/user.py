@@ -1,14 +1,17 @@
 from django.utils.decorators import method_decorator
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.filters import SearchFilter
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from .shared import validation_error_response, forbidden_response, not_found_response
+from .shared import *
 from ..authentication import add_auth
+from ..filters import UserFilter
 from ..models import User
 from ..permissions import IsManagerUser
 from ..serializers import UserSerializer, UserPatchDataSerializer
@@ -16,8 +19,12 @@ from ..serializers import UserSerializer, UserPatchDataSerializer
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
     tags=['Пользователь'],
-    operation_summary='Все пользователи',
+    operation_summary='Все пользователи (фильтрация, пагинация)',
+    operation_description='Если не указывать параметры пагинации - будет возвращен не объект пагинации, а просто список объектов',
+    filter_inspectors=[FilterPaginatorInspector],
+    paginator_inspectors=[FilterPaginatorInspector],
     responses={
+        400: validation_error_response,
         403: forbidden_response
     }
 ))
@@ -33,6 +40,10 @@ class UserView(ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ['$fullname', '$email']
+    filterset_class = UserFilter
+    pagination_class = LimitOffsetPagination
 
 
 class AuthorizedUserView(APIView):

@@ -53,3 +53,23 @@ class VacancyFilter(django_filters.FilterSet):
             'department',
             'status'
         ]
+
+
+class UserFilter(django_filters.FilterSet):
+    department = django_filters.ModelMultipleChoiceFilter(field_name='current_department',
+                                                          queryset=Department.objects.all(),
+                                                          conjoined=False)
+    experience = django_filters.ChoiceFilter(field_name='experience', choices=User.EXPERIENCE_CHOICES)
+    active = django_filters.BooleanFilter(field_name='is_active')
+    skills = django_filters.ModelMultipleChoiceFilter(field_name='existing_skills',
+                                                      queryset=Skill.objects.all(),
+                                                      conjoined=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'department',
+            'experience',
+            'active',
+            'skills'
+        ]
