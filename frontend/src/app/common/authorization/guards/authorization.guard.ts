@@ -18,11 +18,11 @@ export class AuthorizationGuard implements CanActivate {
     ) { }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-        return this.http.get(`${environment.apiURL}/authorized`)
+        return this.http.get(`${environment.apiURL}/authenticated`)
             .pipe(
                 map((data) => {
                     const token: IValidToken = data as IValidToken;
-                    if (token.authorized) {
+                    if (token.authenticated) {
                         this._user.getUserInfo();
                     } else {
                         this._router.navigate(
@@ -35,7 +35,7 @@ export class AuthorizationGuard implements CanActivate {
                         );
                     }
 
-                    return token.authorized;
+                    return token.authenticated;
                 })
             );
     }

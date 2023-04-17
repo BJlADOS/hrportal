@@ -1,3 +1,3 @@
 export interface IValidToken {
-    authorized: boolean
+    authenticated: boolean
 }

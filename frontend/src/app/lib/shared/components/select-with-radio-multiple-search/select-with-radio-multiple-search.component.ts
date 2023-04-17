@@ -51,7 +51,6 @@ export class SelectWithRadioMultipleSearchComponent implements OnInit, ControlVa
 
   public ngOnInit(): void {
       this.optionsOriginal = [...this.options];
-      console.log(this.options);
       this.checkOptions();
       this.searchControl.valueChanges
           .pipe(

@@ -1,13 +1,13 @@
 import { Component, ElementRef, forwardRef, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { contentExpansion } from '../../../utils';
+import {contentExpansion, rotate180} from '../../../utils';
 
 
 @Component({
     selector: 'app-select',
     templateUrl: './select.component.html',
     styleUrls: ['./select.component.scss'],
-    animations: [contentExpansion],
+    animations: [contentExpansion, rotate180],
     providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => SelectComponent),

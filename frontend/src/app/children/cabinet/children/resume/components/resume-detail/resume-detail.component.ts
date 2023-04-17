@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs';
 import { ResumeResponseModalComponent } from '../resume-response-modal/resume-response-modal.component';
 import { DestroyService, ModalService } from '../../../../../../lib';
 import { IResume, IUser, ResumeService, UserService } from '../../../../../../common';
+import { environment } from '../../../../../../../environments/environment';
 
 @Component({
     selector: 'app-resume-detail',

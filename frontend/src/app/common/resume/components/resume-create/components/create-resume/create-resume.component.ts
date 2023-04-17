@@ -160,7 +160,6 @@ export class CreateResumeComponent extends Modal implements OnInit {
     }
 
     private createUpdateResumeObject(): IResumeUpdate {
-        console.log(this.file);
         const resume: IResumeUpdate = {
             desiredPosition: this.resumeForm.value.position as string,
             desiredSalary: parseInt(this.resumeForm.value.salary),

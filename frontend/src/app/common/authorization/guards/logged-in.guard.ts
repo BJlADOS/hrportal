@@ -19,15 +19,15 @@ export class LoggedInGuard implements CanActivate {
     public canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-        return this.http.get(`${environment.apiURL}/authorized`)
+        return this.http.get(`${environment.apiURL}/authenticated`)
             .pipe(
                 map((data: object) => {
                     const token: IValidToken = data as IValidToken;
-                    if (token.authorized) {
+                    if (token.authenticated) {
                         this._router.navigate(['cabinet/vacancies']);
                     }
 
-                    return !token.authorized;
+                    return !token.authenticated;
                 })
             );
     }

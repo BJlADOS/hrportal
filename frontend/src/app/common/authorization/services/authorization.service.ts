@@ -69,7 +69,7 @@ export class AuthorizationService {
         this.http.get<IValidToken>(`${this._apiURL}/authorized`).subscribe((data: IValidToken) => {
             const valid: IValidToken = data as IValidToken;
             console.log(data);
-            if (valid.authorized) {
+            if (valid.authenticated) {
                 this._user.getUserInfo();
             } else {
                 this._router.navigate(['account/authorization']);
