@@ -23,7 +23,7 @@
         font-size: var(--font-size--main);
         background-color: var(--main-accent-color);
         color: var(--white);
-        padding: 0.4rem 1.6rem;
+        padding: .8rem 1.6rem;
         text-transform: uppercase;
 
         &:hover {
@@ -38,9 +38,58 @@
     display: flex;
     justify-content: center;
     gap: 2rem;
-    margin-top: 2.5rem;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 3rem;
+
+    &__main {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+
+        &>.resumes {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        &>.filters {
+            width: calc(280px + 130px);
+            margin-right: 1rem;
+        }
+
+        &>.no-resumes {
+            width: 100%;
+        }
+    }
+
+    & .search {
+        width: 100%;
+    }
+}
+
+.scroll-back {
+    position: fixed;
+    display: flex;
+    gap: .5rem;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--grey);
+    border-radius: 20px;
+    padding: .6rem 1rem;
+    transition: .3s ease;
+
+    span {
+        text-transform: uppercase;
+        color: var(--white);
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: var(--main-accent-color);
+    }
 }
 
 .width {

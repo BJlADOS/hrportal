@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from './custom-validators';
-import { IDepartment, IFilter, IResume, IUser, IVacancy } from '../../common';
-import { ISelectOption } from './controls';
-import { Ordering } from '../utils';
+import {Injectable} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {CustomValidators} from './custom-validators';
+import {IDepartment, IFilter, IResume, IUser, IVacancy} from '../../common';
+import {ISelectOption} from './controls';
+import {Ordering} from '../utils';
+import {IResumeRequest} from "../../common/resume/interfaces/resume-request.interface";
+import {Status} from "../utils/enums/status.enum";
 
 @Injectable({
     providedIn: 'root'
@@ -185,6 +187,18 @@ export class FormGenerator {
                 employment: new FormControl(filters?.employment?? []),
                 schedule: new FormControl(filters?.schedule?? []),
                 skills: new FormControl(filters?.skills?? []),
+            }
+        );
+    }
+
+    public getResumesFiltersForm(filters?: IResumeRequest): FormGroup {
+        return this._fb.group(
+            {
+                employment: new FormControl(filters?.employment?? []),
+                schedule: new FormControl(filters?.schedule?? []),
+                skills: new FormControl(filters?.skills?? []),
+                salary_min: new FormControl(filters?.salary_min?? ''),
+                salary_max: new FormControl(filters?.salary_max?? ''),
             }
         );
     }
