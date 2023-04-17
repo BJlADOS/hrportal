@@ -37,13 +37,20 @@ from ..serializers import UserSerializer, UserPatchDataSerializer
     }
 ))
 class UserView(ReadOnlyModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsManagerUser | IsAdminUser]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['$fullname', '$email']
     filterset_class = UserFilter
     pagination_class = LimitOffsetPagination
+
+    def get_queryset(self):
+        if self.request.user.is_admin:
+            return User.objects.all()
+        elif self.request.user.is_manager:
+            return User.objects.filter(is_active=True)
+        else:
+            return User.objects.none()
 
 
 class AuthorizedUserView(APIView):
