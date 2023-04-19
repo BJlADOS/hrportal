@@ -14,14 +14,22 @@ def to_id_list(response) -> list[int]:
 
 class FiltersOrderingsPaginationTests(TestCase):
     employee_data = UserData('employee', 'employee@hrportal.com', 'password')
-    manager_data = UserData('manager', 'manager@hrportal.com', 'password')
+    manager_data = UserData('manager_not_admin', 'manager@hrportal.com', 'password')
     admin_data = UserData('admin', 'admin@hrportal.com', 'password')
 
     @classmethod
     def setUpTestData(cls):
         employee = User.objects.create_user(**cls.employee_data.__dict__)
+        employee.deactivate()
+        employee.experience = '<1'
+        employee.save()
         manager = User.objects.create_user(**cls.manager_data.__dict__)
+        manager.experience = '1-3'
+        manager.save()
         admin = User.objects.create_superuser(**cls.admin_data.__dict__)
+        admin.experience = '>6'
+        admin.save()
+        cls.user_ids = [u.id for u in [employee, manager, admin]]
 
         dep1 = create_department(manager)
         dep2 = create_department()
@@ -118,6 +126,28 @@ class FiltersOrderingsPaginationTests(TestCase):
             result = to_id_list(self.client.get(reverse('resume-list') + f'?{path}'))
             self.assertListEqual(sorted(result), sorted(expected))
 
+    def test_GetUsersWithFilters_ShouldReturnFilteredUsers(self):
+        ids = self.user_ids
+        test_cases = {
+            '': ids,
+            f'department={self.dep_ids[0]}': [ids[1]],
+            f'department={self.dep_ids[1]}': [],
+            f'department={self.dep_ids[0]}&department={self.dep_ids[1]}': [ids[1]],
+            'experience=<1': [ids[0]],
+            'experience=1-3': [ids[1]],
+            'experience=3-6': [],
+            'experience=>6': [ids[2]],
+            'active=false': [ids[0]],
+            'active=true': ids[1:],
+            f'skills={self.skills_ids[0]}': ids,
+            f'skills={self.skills_ids[1]}': ids[1:],
+            f'skills={self.skills_ids[2]}': [ids[2]],
+            f'skills={self.skills_ids[0]}&skills={self.skills_ids[1]}': ids[1:],
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(reverse('user-list') + f'?{path}'))
+            self.assertListEqual(sorted(result), sorted(expected), msg=f'path - {path}')
+
     def test_GetVacanciesWithSorting_ShouldReturnSortedVacancies(self):
         ids = self.vac_ids
         test_cases = {
@@ -145,7 +175,7 @@ class FiltersOrderingsPaginationTests(TestCase):
             self.assertListEqual(result, list(expected))
 
     def test_GetVacanciesWithPagination_ShouldReturnCorrectPage(self):
-        response = self.client.get(f'{reverse("vacancy-list")}?limit={2}&offset={1}')
+        response = self.client.get(f'{reverse("vacancy-list")}?limit=2&offset=1')
         result: dict = json.loads(*response)
         self.assertTrue("count" in result)
         self.assertTrue("next" in result)
@@ -153,7 +183,15 @@ class FiltersOrderingsPaginationTests(TestCase):
         self.assertTrue("results" in result)
 
     def test_GetResumesWithPagination_ShouldReturnCorrectPage(self):
-        response = self.client.get(f'{reverse("resume-list")}?limit={2}&offset={1}')
+        response = self.client.get(f'{reverse("resume-list")}?limit=2&offset=1')
+        result: dict = json.loads(*response)
+        self.assertTrue("count" in result)
+        self.assertTrue("next" in result)
+        self.assertTrue("previous" in result)
+        self.assertTrue("results" in result)
+
+    def test_GetUsersWithPagination_ShouldReturnCorrectPage(self):
+        response = self.client.get(f'{reverse("user-list")}?limit=2&offset=1')
         result: dict = json.loads(*response)
         self.assertTrue("count" in result)
         self.assertTrue("next" in result)
@@ -194,4 +232,18 @@ class FiltersOrderingsPaginationTests(TestCase):
         }
         for path, expected in test_cases.items():
             result = to_id_list(self.client.get(f'{reverse("resume-list")}?search={path}'))
+            self.assertListEqual(sorted(result), sorted(expected))
+
+    def test_GetUsersWithSearching_ShouldReturnMatchedUsers(self):
+        ids = self.user_ids
+        test_cases = {
+            '@hrportal.com': ids,
+            'admin': ids[1:],
+            'manager': [ids[1]],
+            'admin@hrp': [ids[2]],
+            'manager@hrp': [ids[1]],
+            'employee@hrp': [ids[0]]
+        }
+        for path, expected in test_cases.items():
+            result = to_id_list(self.client.get(f'{reverse("user-list")}?search={path}'))
             self.assertListEqual(sorted(result), sorted(expected))

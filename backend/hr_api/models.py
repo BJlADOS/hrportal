@@ -115,7 +115,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def deactivate(self):
         self.is_active = False
         self.save()
-        for resume in self.resume_set:
+        for resume in self.resume_set.all():
             resume.archive()
 
     def __str__(self):

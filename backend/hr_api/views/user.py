@@ -81,7 +81,7 @@ class UserView(ModelViewSet):
         }
     )
     @action(methods=['delete'], detail=True, url_path='final', url_name='final-delete')
-    def final_destroy(self):
+    def final_destroy(self, request, *args, **kwargs):
         user = self.get_object()
         user.deactivate()
         self.perform_destroy(user)

@@ -144,3 +144,25 @@ def create_department(manager: User = None) -> Department:
     dep = Department.objects.create(name="department", manager=manager)
     dep.save()
     return dep
+
+
+def get_user_serialized_dict(user: User) -> dict:
+    return {
+        "id": user.id,
+        "fullname": user.fullname,
+        "email": user.email,
+        "contact": user.contact,
+        "experience": user.experience,
+        "currentDepartment": None if user.current_department is None else {
+            "id": user.current_department.id,
+            "name": user.current_department.name,
+            "managerId": user.current_department.manager.id
+        },
+        "photo": None if not user.photo else user.photo.url[len(settings.MEDIA_URL):],
+        "existingSkills": [{"id": skill.id, "name": skill.name} for skill in user.existing_skills.all()],
+        "filled": user.filled,
+        "isManager": user.is_manager,
+        "isAdmin": user.is_admin,
+        "emailVerified": user.email_verified,
+        "isActive": user.is_active
+    }
