@@ -119,6 +119,26 @@ class ResumeTests(TestCase):
         detail = json.loads(*response)['detail']
         self.assertEqual(detail[0], f'Response from Manager(ID={manager_id}) to Employee(ID={employee_id}) successful')
 
+    # TODO Написать тесты
+
+    def test_SoftDeleteVacancyByPk_ShouldRaise403_OnManager(self):
+        pass
+
+    def test_SoftDeleteVacancyByPk_ShouldRaise404_OnManager_OnNonExistentVacancy(self):
+        pass
+
+    def test_SoftDeleteVacancyByPk_ShouldDeleteVacancy_OnAdmin(self):
+        pass
+
+    def test_FinalDeleteResumeByPk_ShouldRaise403_OnManager(self):
+        pass
+
+    def test_FinalDeleteResumeByPk_ShouldRaise404_OnManager_OnNonExistentResume(self):
+        pass
+
+    def test_FinalDeleteResumeByPk_ShouldDeleteVacancy_OnAdmin(self):
+        pass
+
     @staticmethod
     def get_existing_resume_id():
         return Resume.objects.all().first().id

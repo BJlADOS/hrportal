@@ -47,6 +47,8 @@ class VacancyView(ModelViewSet):
             return [IsAuthenticated()]
         elif self.action == 'create':
             return [IsManagerUser()]
+        elif self.action in ['final_destroy']:
+            return [IsAdminUser()]
         else:
             return [(IsManagerUser | IsAdminUser)()]
 
@@ -94,7 +96,8 @@ class VacancyView(ModelViewSet):
         responses={
             200: VacancySerializer,
             400: validation_error_response,
-            403: forbidden_response
+            403: forbidden_response,
+            404: not_found_response
         })
     def partial_update(self, request, *args, **kwargs):
         result = super(VacancyView, self).partial_update(request, args, kwargs)
@@ -106,13 +109,28 @@ class VacancyView(ModelViewSet):
 
     @swagger_auto_schema(
         tags=['Вакансия'],
-        operation_summary='Удаляет вакансию',
+        operation_summary='Мягкое удаление вакансии',
         responses={
-            403: forbidden_response
+            403: forbidden_response,
+            404: not_found_response
         })
     def destroy(self, request, *args, **kwargs):
         vacancy = self.get_object()
         vacancy.soft_delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(
+        tags=['Вакансия'],
+        operation_summary='Окончательное удаление вакансии',
+        responses={
+            403: forbidden_response,
+            404: not_found_response,
+        }
+    )
+    @action(methods=['delete'], detail=True, url_path='final', url_name='final-delete')
+    def final_destroy(self, request, *args, **kwargs):
+        vacancy = self.get_object()
+        self.perform_destroy(vacancy)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(

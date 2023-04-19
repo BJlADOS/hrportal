@@ -245,6 +245,17 @@ class VacancyTests(TestCase):
         count_after = department.vacancy_set.exclude(status='DELETED').count()
         self.assertEqual(count_after, 0)
 
+    # TODO Написать тесты
+
+    def test_FinalDeleteVacancyByPk_ShouldRaise403_OnManager(self):
+        pass
+
+    def test_FinalDeleteVacancyByPk_ShouldRaise404_OnManager_OnNonExistentVacancy(self):
+        pass
+
+    def test_FinalDeleteVacancyByPk_ShouldDeleteVacancy_OnAdmin(self):
+        pass
+
     def test_VacancyResponse_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.post(reverse("vacancy-response", args=(self.get_existing_vacancy_id(),)))
 
