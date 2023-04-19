@@ -150,8 +150,7 @@ class UserResumeView(APIView):
         resumes = Resume.objects.filter(employee=request.user).exclude(status="DELETED")
         if len(resumes) > 0:
             resume = resumes.first()
-            resume.status = "DELETED"
-            resume.save()
+            resume.soft_delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return response_with_detail("This employee doesn't have a resume", status.HTTP_404_NOT_FOUND)

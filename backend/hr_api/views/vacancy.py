@@ -112,8 +112,7 @@ class VacancyView(ModelViewSet):
         })
     def destroy(self, request, *args, **kwargs):
         vacancy = self.get_object()
-        vacancy.status = 'DELETED'
-        vacancy.save()
+        vacancy.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @swagger_auto_schema(

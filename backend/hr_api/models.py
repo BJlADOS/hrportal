@@ -112,6 +112,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.fullname
 
+    def deactivate(self):
+        self.is_active = False
+        self.save()
+        for resume in self.resume_set:
+            resume.archive()
+
     def __str__(self):
         return f"User({self.fullname}, {self.email})"
 
@@ -134,6 +140,14 @@ class Resume(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def archive(self):
+        self.status = 'ARCHIVED'
+        self.save()
+
+    def soft_delete(self):
+        self.status = 'DELETED'
+        self.save()
 
     def __str__(self):
         return f"Resume({self.desired_position}, {self.employee.fullname})"
@@ -162,6 +176,14 @@ class Vacancy(models.Model):
 
     class Meta:
         verbose_name_plural = "Vacancies"
+
+    def archive(self):
+        self.status = 'ARCHIVED'
+        self.save()
+
+    def soft_delete(self):
+        self.status = 'DELETED'
+        self.save()
 
     def __str__(self):
         return f"Vacancy({self.position}, {self.department.name})"

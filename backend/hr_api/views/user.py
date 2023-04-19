@@ -1,13 +1,15 @@
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import IsAdminUser
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from .shared import *
 from ..authentication import add_auth
@@ -36,13 +38,19 @@ from ..serializers import UserSerializer, UserPatchDataSerializer
         404: not_found_response,
     }
 ))
-class UserView(ReadOnlyModelViewSet):
+class UserView(ModelViewSet):
     serializer_class = UserSerializer
-    permission_classes = [IsManagerUser | IsAdminUser]
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ['$fullname', '$email']
     filterset_class = UserFilter
     pagination_class = LimitOffsetPagination
+    http_method_names = ['get', 'delete']
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [(IsManagerUser | IsAdminUser)()]
+        else:
+            return [IsAdminUser()]
 
     def get_queryset(self):
         if self.request.user.is_admin:
@@ -51,6 +59,33 @@ class UserView(ReadOnlyModelViewSet):
             return User.objects.filter(is_active=True)
         else:
             return User.objects.none()
+
+    @swagger_auto_schema(
+        tags=['Пользователь'],
+        operation_summary='Деактивация пользователя (мягкое удаление)',
+        responses={
+            403: forbidden_response,
+            404: not_found_response,
+        })
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.deactivate()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(
+        tags=['Пользователь'],
+        operation_summary='Окончательное удаление пользователя',
+        responses={
+            403: forbidden_response,
+            404: not_found_response,
+        }
+    )
+    @action(methods=['delete'], detail=True, url_path='final', url_name='final-delete')
+    def final_destroy(self):
+        user = self.get_object()
+        user.deactivate()
+        self.perform_destroy(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class AuthorizedUserView(APIView):
