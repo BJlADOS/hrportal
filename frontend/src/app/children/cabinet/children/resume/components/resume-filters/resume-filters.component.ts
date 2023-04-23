@@ -1,44 +1,44 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { DepartmentService, IDepartment, ISkill, SkillsService, VacanciesSearchService } from '../../../../../../common';
 import {
     FormGenerator,
     getEmploymentRussianAsArray,
     getScheduleRussianAsArray,
     ISelectOption
 } from '../../../../../../lib';
-import { Observable } from 'rxjs';
+import { ISkill, SkillsService } from '../../../../../../common';
+import { ResumeSearchService } from '../../../../../../common/resume/services/resume-search.service';
 import { FormGroup } from '@angular/forms';
-
+import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'app-filters',
-    templateUrl: './filters.component.html',
-    styleUrls: ['./filters.component.scss']
+    selector: 'app-resume-filters',
+
+    templateUrl: './resume-filters.component.html',
+    styleUrls: ['./resume-filters.component.scss']
 })
-export class FiltersComponent {
-    public filterForm: FormGroup = this._form.getFilterForm();
+export class ResumeFiltersComponent {
+
+    public filterForm: FormGroup = this._form.getResumesFiltersForm();
     @Output() public madeSearch: EventEmitter<null> = new EventEmitter<null>();
 
     public schedule: ISelectOption[] = getScheduleRussianAsArray();
     public employment: ISelectOption[] = getEmploymentRussianAsArray();
-    public departments$: Observable<IDepartment[]> = this._department.departments$;
     public skills$: Observable<ISkill[]> = this._skills.skills$;
 
     constructor(
         private _form: FormGenerator,
-        private _department: DepartmentService,
         private _skills: SkillsService,
-        private _vacancySearch: VacanciesSearchService,
+        private _resumeSearch: ResumeSearchService,
     ) { }
 
     public applyFilters(): void {
         this.madeSearch.emit();
-        this._vacancySearch.setFilters(this.filterForm.value);
+        this._resumeSearch.setFilters(this.filterForm.value);
     }
 
     public resetFilters(): void {
         this.filterForm = this._form.getFilterForm();
         this.madeSearch.emit();
-        this._vacancySearch.setFilters(this.filterForm.value);
+        this._resumeSearch.setFilters(this.filterForm.value);
     }
 }

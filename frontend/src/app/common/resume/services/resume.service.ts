@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IResume } from '../interfaces';
+import { IResumeRequest } from '../interfaces/resume-request.interface';
+import { IResumePage } from '../interfaces/resume-page.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -13,8 +15,8 @@ export class ResumeService {
         private _http: HttpClient,
     ) { }
 
-    public getResumes(): Observable<IResume[]> {
-        return this._http.get<IResume[]>(`${environment.apiURL}/resumes`);
+    public getResumes(filters: IResumeRequest): Observable<IResumePage> {
+        return this._http.get<IResumePage>(`${environment.apiURL}/resumes`, { params: { ...filters } });
     }
 
     public getResumeById(id: string): Observable<IResume> {

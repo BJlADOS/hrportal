@@ -1,0 +1,23 @@
+<div class="search">
+    <div class="counter">
+        <span>{{ (resumes$ | async )?.count?? 0 }} Резюме</span>
+    </div>
+    <div class="forms">
+        <form class="form" [formGroup]="searchForm" (submit)="search()">
+            <div class="search__input">
+                <input type="text" id="search" formControlName="search" placeholder="Поиск">
+                <div class="tools">
+                    <cross1-icon appHoverListener (click)="reset()" *ngIf="searchForm.controls['search'].value"></cross1-icon>
+                    <magnifier-icon appHoverListener (click)="search()"></magnifier-icon>
+                </div>
+            </div>
+
+        </form>
+        <div class="filter-button" (click)="toggleFilters()">
+            <filter-icon></filter-icon>
+        </div>
+        <form class="form" [formGroup]="orderingForm">
+            <app-select-with-radio [options]="ordering" formControlName="ordering"></app-select-with-radio>
+        </form>
+    </div>
+</div>
