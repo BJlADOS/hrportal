@@ -141,6 +141,10 @@ class Resume(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def publish(self):
+        self.status = 'PUBLIC'
+        self.save()
+
     def archive(self):
         self.status = 'ARCHIVED'
         self.save()
@@ -176,6 +180,10 @@ class Vacancy(models.Model):
 
     class Meta:
         verbose_name_plural = "Vacancies"
+
+    def publish(self):
+        self.status = 'PUBLIC'
+        self.save()
 
     def archive(self):
         self.status = 'ARCHIVED'

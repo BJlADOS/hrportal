@@ -66,6 +66,14 @@ def get_resume_serialized_dict(resume: Resume) -> dict:
     }
 
 
+def get_existing_resume_id() -> int:
+    return Resume.objects.all().first().id
+
+
+def get_nonexistent_resume_id() -> int:
+    return sum([user.id for user in User.objects.all()])
+
+
 def create_vacancy_for(department: Department, data: dict, add_skills_ids=None) -> Vacancy:
     if add_skills_ids is None:
         add_skills_ids = list()

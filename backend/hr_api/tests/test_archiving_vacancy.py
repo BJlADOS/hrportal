@@ -35,8 +35,7 @@ class VacancyArchivingTests(TestCase):
         self.client = Client()
 
     def test_Manager_PublishHisVacancy(self):
-        self.dep1_vacancy1.status = 'ARCHIVED'
-        self.dep1_vacancy1.save()
+        self.dep1_vacancy1.archive()
         login_user(self.client, self.manager1_data)
 
         response = self.client.patch(reverse("vacancy-detail", args=(self.dep1_vacancy1.id,)),
@@ -50,8 +49,7 @@ class VacancyArchivingTests(TestCase):
         self.assertDictEqual(result, get_vacancy_serialized_dict(self.dep1_vacancy1))
 
     def test_Manager_ArchiveHisVacancy(self):
-        self.dep1_vacancy1.status = 'PUBLIC'
-        self.dep1_vacancy1.save()
+        self.dep1_vacancy1.publish()
         login_user(self.client, self.manager1_data)
 
         response = self.client.patch(reverse("vacancy-detail", args=(self.dep1_vacancy1.id,)),
@@ -65,8 +63,7 @@ class VacancyArchivingTests(TestCase):
         self.assertDictEqual(result, get_vacancy_serialized_dict(self.dep1_vacancy1))
 
     def test_Manager_SoftDeleteHisVacancy(self):
-        self.dep1_vacancy1.status = 'PUBLIC'
-        self.dep1_vacancy1.save()
+        self.dep1_vacancy1.publish()
         login_user(self.client, self.manager1_data)
 
         response = self.client.delete(reverse("vacancy-detail", args=(self.dep1_vacancy1.id,)))
@@ -99,8 +96,7 @@ class VacancyArchivingTests(TestCase):
 
     def test_Manager_GetPublicVacancies_And_HisArchivedVacancies(self):
         self.vacancies_to_standard_state()
-        self.dep2_vacancy1.status = 'ARCHIVED'
-        self.dep2_vacancy1.save()
+        self.dep2_vacancy1.archive()
 
         login_user(self.client, self.manager1_data)
 
@@ -114,8 +110,7 @@ class VacancyArchivingTests(TestCase):
 
     def test_Manager_GetPublicVacancies(self):
         self.vacancies_to_standard_state()
-        self.dep2_vacancy1.status = 'ARCHIVED'
-        self.dep2_vacancy1.save()
+        self.dep2_vacancy1.archive()
 
         login_user(self.client, self.manager1_data)
 
@@ -139,9 +134,6 @@ class VacancyArchivingTests(TestCase):
         self.assertEqual(result[0], get_vacancy_serialized_dict(self.dep1_vacancy2))
 
     def vacancies_to_standard_state(self):
-        self.dep1_vacancy1.status = 'PUBLIC'
-        self.dep1_vacancy2.status = 'ARCHIVED'
-        self.dep2_vacancy1.status = 'DELETED'
-        self.dep1_vacancy1.save()
-        self.dep1_vacancy2.save()
-        self.dep2_vacancy1.save()
+        self.dep1_vacancy1.publish()
+        self.dep1_vacancy2.archive()
+        self.dep2_vacancy1.soft_delete()

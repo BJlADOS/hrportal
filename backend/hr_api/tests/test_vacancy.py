@@ -245,16 +245,34 @@ class VacancyTests(TestCase):
         count_after = department.vacancy_set.exclude(status='DELETED').count()
         self.assertEqual(count_after, 0)
 
-    # TODO Написать тесты
-
     def test_FinalDeleteVacancyByPk_ShouldRaise403_OnManager(self):
-        pass
+        login_user(self.client, self.manager_data)
+
+        response = self.client.delete(reverse("vacancy-final-delete", args=(self.get_existing_vacancy_id(),)))
+        result = json.loads(*response)
+
+        self.assertEqual(response.status_code, 403, msg=f"response body - {result}")
+        self.assertEqual(result['detail'], "You do not have permission to perform this action.")
 
     def test_FinalDeleteVacancyByPk_ShouldRaise404_OnManager_OnNonExistentVacancy(self):
-        pass
+        login_user(self.client, self.admin_data)
+
+        response = self.client.delete(reverse("vacancy-final-delete", args=(self.get_nonexistent_vacancy_id(),)))
+
+        self.assertEqual(response.status_code, 404)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Not found.')
 
     def test_FinalDeleteVacancyByPk_ShouldDeleteVacancy_OnAdmin(self):
-        pass
+        login_user(self.client, self.admin_data)
+        vacancy = Vacancy.objects.get(id=self.get_existing_vacancy_id())
+
+        response = self.client.delete(reverse("vacancy-final-delete", args=(vacancy.id,)))
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(Vacancy.objects.contains(vacancy))
+        vacancy.save()
+        self.assertTrue(Vacancy.objects.contains(vacancy))
 
     def test_VacancyResponse_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.post(reverse("vacancy-response", args=(self.get_existing_vacancy_id(),)))
