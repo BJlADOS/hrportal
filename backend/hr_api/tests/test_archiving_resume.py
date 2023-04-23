@@ -71,7 +71,7 @@ class ResumeArchivingTests(TestCase):
         result = json.loads(*response)
 
         self.assertEqual(response.status_code, 404, msg=f"response body - {result}")
-        self.assertEqual(result['detail'], ["This employee doesn't have a resume"])
+        self.assertEqual(result['detail'], "This employee doesn't have a resume")
         self.employee_resume.save()
 
     def test_Employee_GetHisExistingPublicResume(self):
@@ -94,7 +94,7 @@ class ResumeArchivingTests(TestCase):
         result = json.loads(*response)
 
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(result['detail'], ["This employee doesn't have a resume"])
+        self.assertEqual(result['detail'], "This employee doesn't have a resume")
 
     def test_Employee_GetHisNonExistentResume(self):
         self.employee_resume.delete()
@@ -104,7 +104,7 @@ class ResumeArchivingTests(TestCase):
         result = json.loads(*response)
 
         self.assertEqual(response.status_code, 404, msg=f"response body - {result}")
-        self.assertEqual(result['detail'], ["This employee doesn't have a resume"])
+        self.assertEqual(result['detail'], "This employee doesn't have a resume")
         self.employee_resume.save()
 
     def test_Employee_GetOnlyPublicResumes(self):

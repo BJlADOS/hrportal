@@ -1,17 +1,16 @@
 from drf_yasg import openapi
 from drf_yasg.inspectors import CoreAPICompatInspector
 from rest_framework.response import Response
+
 from ..models import User, STATUS_CHOICES, EMPLOYMENT_CHOICES, SCHEDULE_CHOICES
 
 
-def response_with_detail(message, response_status):
-    return Response({'detail': [message]}, status=response_status)
+def response_with_detail(message: str, response_status):
+    return Response({'detail': message}, status=response_status)
 
 
 detail_schema = openapi.Schema(type='object', properties={
-    'detail': openapi.Schema(
-        type='array',
-        items=openapi.Schema(type='string'))
+    'detail': openapi.Schema(type='string')
 })
 
 validation_error_response = openapi.Response(

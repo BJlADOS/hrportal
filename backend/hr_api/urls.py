@@ -8,21 +8,30 @@ from .views import *
 schema_view = get_schema_view(
     openapi.Info(
         title='HR Portal API',
-        default_version='v1.1',
+        default_version='v1.2',
         description='Backend API для HR-портала большой IT-компании "Очень интересно" \n'
-                    '(Для аутентификации используйте запрос <strong>/login</strong>)\n'
+                    '(Для аутентификации используйте запрос <b>/login</b>)\n'
                     '\n'
-                    'Изменения с версии <strong>v1</strong>:\n'
-                    '- Появилась эта <strong>автогенерируемая</strong> OpenAPI документация\n'
+                    'Изменения с версии <b>v1</b>:\n'
+                    '- Появилась эта <b>автогенерируемая</b> OpenAPI документация\n'
                     '- В моделях резюме и вакансии boolean поле <code>isActive</code>'
                     ' было заменено на string enum поле <code>status</code>\n'
                     '- Резюме и вакансии фильтрутся по статусу\n'
-                    '- Ответы вида <code>{"detail": "string"}</code>, там, где они были,'
-                    ' заменены на <code>{"detail": ["string"]}</code> для унификации\n'
-                    '- запрос <strong>/authorized</strong> переименован в <strong>/authenticated</strong>\n'
-                    '- запрос <strong>/recovery-password</strong> переименован в <strong>/change-password</strong>\n'
-                    '- запрос <strong>/recovery</strong> переименован в <strong>/set-password</strong>\n'
-                    '- запрос <strong>/verification</strong> переименован в <strong>/verify-email</strong>'
+                    '- <s>Ответы вида <code>{"detail": "string"}</code>, там, где они были,'
+                    ' заменены на <code>{"detail": ["string"]}</code> для унификации</s>\n'
+                    '- Запрос <b>/authorized</b> переименован в <b>/authenticated</b>\n'
+                    '- Запрос <b>/recovery-password</b> переименован в <b>/change-password</b>\n'
+                    '- Запрос <b>/recovery</b> переименован в <b>/set-password</b>\n'
+                    '- Запрос <b>/verification</b> переименован в <b>/verify-email</b>\n'
+                    '\nИзменения с версии <b>v1.1</b>:\n'
+                    '- Добавлены фильтры и пагинация в запрос GET <b>/users</b>\n'
+                    '- Добавлены запросы для деактивации и окончательного удаления пользователя\n'
+                    '- Добавлены запросы для окончательного удаления вакансии и резюме\n'
+                    '- В модель <b>User</b> добавлено поле <b>isActive</b>\n'
+                    '- Из модели <b>User</b> удалено поле <b>resume</b>\n'
+                    '- Ответы вида <code>{"detail": ["string"]}</code>, обратно'
+                    ' заменены на <code>{"detail": "string"}</code> для унификации'
+                    ' <i>(если это правило не соблюдено - это пропущенная ошибка)</i>\n'
     ),
     public=True,
     permission_classes=[permissions.AllowAny],

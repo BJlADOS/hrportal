@@ -35,7 +35,7 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(response.status_code, 201)
         detail = json.loads(*response)['detail']
         user = User.objects.get(email=reg_data['email'])
-        self.assertEqual(detail[0], f'Email verification mail to User(ID={user.id}) sending successful')
+        self.assertEqual(detail, f'Email verification mail to User(ID={user.id}) sending successful')
         self.assertEqual(emails_count_before, len(mail.outbox) - 1)
         emails = [m for m in mail.outbox if m.subject == email_subject]
         self.assertEqual(len(emails), 1)
@@ -118,7 +118,7 @@ class RegAndAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, ['A user with this email and password was not found.'])
+        self.assertEqual(detail, 'A user with this email and password was not found.')
 
     def test_LoginView_ShouldRaise401_OnWrongEmail(self):
         login_data = {'email': 'error' + self.user_data.email, 'password': self.user_data.password}
@@ -127,7 +127,7 @@ class RegAndAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, ['A user with this email and password was not found.'])
+        self.assertEqual(detail, 'A user with this email and password was not found.')
 
     def test_LoginView_ShouldRaiseValidationError_OnIncompleteData(self):
         login_data = {}
@@ -183,7 +183,7 @@ class RegAndAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], 'Invalid verification code.')
+        self.assertEqual(detail, 'Invalid verification code.')
 
     def test_VerificationView_ShouldConfirmUserEmail(self):
         user = User.objects.first()
@@ -245,7 +245,7 @@ class RegAndAuthTests(TestCase):
 
         self.assertEqual(response.status_code, 401)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], 'Invalid verification code.')
+        self.assertEqual(detail, 'Invalid verification code.')
 
     def test_RecoveryView_ShouldChangePassword(self):
         user = User.objects.get(email=self.user_data.email)

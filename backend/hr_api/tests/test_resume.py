@@ -117,4 +117,4 @@ class ResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], f'Response from Manager(ID={manager_id}) to Employee(ID={employee_id}) successful')
+        self.assertEqual(detail, f'Response from Manager(ID={manager_id}) to Employee(ID={employee_id}) successful')

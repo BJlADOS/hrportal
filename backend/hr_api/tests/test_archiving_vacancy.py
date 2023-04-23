@@ -81,7 +81,8 @@ class VacancyArchivingTests(TestCase):
         result = json.loads(*response)
 
         self.assertEqual(response.status_code, 403, msg=f"response body - {result}")
-        self.assertEqual(result['detail'], "You do not have permission to perform this action.")
+        detail = result['detail']
+        self.assertEqual(detail, "You do not have permission to perform this action.")
 
     def test_Employee_GetOnlyPublicVacancies(self):
         self.vacancies_to_standard_state()
