@@ -245,6 +245,35 @@ class VacancyTests(TestCase):
         count_after = department.vacancy_set.exclude(status='DELETED').count()
         self.assertEqual(count_after, 0)
 
+    def test_FinalDeleteVacancyByPk_ShouldRaise403_OnManager(self):
+        login_user(self.client, self.manager_data)
+
+        response = self.client.delete(reverse("vacancy-final-delete", args=(self.get_existing_vacancy_id(),)))
+        result = json.loads(*response)
+
+        self.assertEqual(response.status_code, 403, msg=f"response body - {result}")
+        self.assertEqual(result['detail'], "You do not have permission to perform this action.")
+
+    def test_FinalDeleteVacancyByPk_ShouldRaise404_OnManager_OnNonExistentVacancy(self):
+        login_user(self.client, self.admin_data)
+
+        response = self.client.delete(reverse("vacancy-final-delete", args=(self.get_nonexistent_vacancy_id(),)))
+
+        self.assertEqual(response.status_code, 404)
+        detail = json.loads(*response)['detail']
+        self.assertEqual(detail, 'Not found.')
+
+    def test_FinalDeleteVacancyByPk_ShouldDeleteVacancy_OnAdmin(self):
+        login_user(self.client, self.admin_data)
+        vacancy = Vacancy.objects.get(id=self.get_existing_vacancy_id())
+
+        response = self.client.delete(reverse("vacancy-final-delete", args=(vacancy.id,)))
+
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(Vacancy.objects.contains(vacancy))
+        vacancy.save()
+        self.assertTrue(Vacancy.objects.contains(vacancy))
+
     def test_VacancyResponse_ShouldRaise403_OnUnauthorizedClient(self):
         response = self.client.post(reverse("vacancy-response", args=(self.get_existing_vacancy_id(),)))
 
@@ -268,7 +297,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], 'Employee does not have resume')
+        self.assertEqual(detail, 'Employee does not have resume')
 
     def test_VacancyResponse_ShouldRaise400_OnVacancyDepartmentHasNotManager(self):
         department = Department.objects.create(name="department_without_manager")
@@ -279,7 +308,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], 'Vacancy department does not have manager')
+        self.assertEqual(detail, 'Vacancy department does not have manager')
         department.delete()
 
     def test_VacancyResponse_ShouldSendResponse_WithPdfResume(self):
@@ -294,7 +323,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) mail sending successful')
+        self.assertEqual(detail, f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) mail sending successful')
 
     def test_VacancyResponse_ShouldSendResponse_WithUserResume(self):
         vacancy_id = self.get_existing_vacancy_id()
@@ -309,7 +338,7 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200, msg=f"result body - {result}")
         detail = result['detail']
-        self.assertEqual(f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail sending successful', detail[0])
+        self.assertEqual(detail, f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail sending successful')
         resume.delete()
 
     @staticmethod

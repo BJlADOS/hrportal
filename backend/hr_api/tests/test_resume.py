@@ -48,7 +48,7 @@ class ResumeTests(TestCase):
         self.assertListEqual(sorted(result), sorted(resumes))
 
     def test_GetResumeByPk_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.get(reverse("resume-detail", args=(self.get_existing_resume_id(),)))
+        response = self.client.get(reverse("resume-detail", args=(get_existing_resume_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -57,7 +57,7 @@ class ResumeTests(TestCase):
     def test_GetResumeByPk_ShouldRaise403_OnEmployee(self):
         login_user(self.client, self.employee_data)
 
-        response = self.client.get(reverse("resume-detail", args=(self.get_existing_resume_id(),)))
+        response = self.client.get(reverse("resume-detail", args=(get_existing_resume_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -66,7 +66,7 @@ class ResumeTests(TestCase):
     def test_GetResumeByPk_ShouldRaise404_OnNonExistentResume(self):
         login_user(self.client, self.manager_data)
 
-        response = self.client.get(reverse("resume-detail", args=(self.get_nonexistent_resume_id(),)))
+        response = self.client.get(reverse("resume-detail", args=(get_nonexistent_resume_id(),)))
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -74,7 +74,7 @@ class ResumeTests(TestCase):
 
     def test_GetResumeByPk_ShouldReturnResumeInfo(self):
         login_user(self.client, self.manager_data)
-        _id = self.get_existing_resume_id()
+        _id = get_existing_resume_id()
         response = self.client.get(reverse("resume-detail", args=(_id,)))
 
         self.assertEqual(response.status_code, 200)
@@ -83,7 +83,7 @@ class ResumeTests(TestCase):
         self.assertDictEqual(result, resume)
 
     def test_ResumeResponse_ShouldRaise403_OnUnauthorizedClient(self):
-        response = self.client.post(reverse("resume-response", args=(self.get_existing_resume_id(),)))
+        response = self.client.post(reverse("resume-response", args=(get_existing_resume_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -92,7 +92,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldRaise403_OnEmployee(self):
         login_user(self.client, self.employee_data)
 
-        response = self.client.post(reverse("resume-response", args=(self.get_existing_resume_id(),)))
+        response = self.client.post(reverse("resume-response", args=(get_existing_resume_id(),)))
 
         self.assertEqual(response.status_code, 403)
         detail = json.loads(*response)['detail']
@@ -101,7 +101,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldRaise404_OnNonExistentResume(self):
         login_user(self.client, self.manager_data)
 
-        response = self.client.post(reverse("resume-response", args=(self.get_nonexistent_resume_id(),)))
+        response = self.client.post(reverse("resume-response", args=(get_nonexistent_resume_id(),)))
 
         self.assertEqual(response.status_code, 404)
         detail = json.loads(*response)['detail']
@@ -109,7 +109,7 @@ class ResumeTests(TestCase):
 
     def test_ResumeResponse_ShouldSendResponse(self):
         manager_id = User.objects.get(email=self.manager_data.email).id
-        resume_id = self.get_existing_resume_id()
+        resume_id = get_existing_resume_id()
         employee_id = User.objects.get(resume__id=resume_id).id
         login_user(self.client, self.manager_data)
 
@@ -117,12 +117,4 @@ class ResumeTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail[0], f'Response from Manager(ID={manager_id}) to Employee(ID={employee_id}) mail sending successful')
-
-    @staticmethod
-    def get_existing_resume_id():
-        return Resume.objects.all().first().id
-
-    @staticmethod
-    def get_nonexistent_resume_id():
-        return Resume.objects.all().last().id + 1
+        self.assertEqual(detail, f'Response from Manager(ID={manager_id}) to Employee(ID={employee_id}) mail sending successful')

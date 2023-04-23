@@ -11,8 +11,9 @@ class UserSerializer(serializers.ModelSerializer):
     isManager = serializers.BooleanField(source='is_manager')
     isAdmin = serializers.BooleanField(source='is_admin')
     emailVerified = serializers.BooleanField(source='email_verified')
-    resumeId = serializers.PrimaryKeyRelatedField(source='resume', read_only=True)
     photo = serializers.ImageField(use_url=False)
+    filled = serializers.BooleanField()
+    isActive = serializers.BooleanField(source='is_active')
 
     class Meta:
         model = User
@@ -26,10 +27,10 @@ class UserSerializer(serializers.ModelSerializer):
             'photo',
             'existingSkills',
             'filled',
-            'resumeId',
             'isManager',
             'isAdmin',
-            'emailVerified'
+            'emailVerified',
+            'isActive'
         ]
 
 

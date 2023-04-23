@@ -77,7 +77,7 @@ class AuthenticationView(GenericViewSet):
 
         if user is None:
             return response_with_detail('A user with this email and password was not found.',
-                                        status.HTTP_401_UNAUTHORIZED)
+                                         status.HTTP_401_UNAUTHORIZED)
 
         if not user.is_active:
             return response_with_detail('This user has been deactivated.', status.HTTP_401_UNAUTHORIZED)
