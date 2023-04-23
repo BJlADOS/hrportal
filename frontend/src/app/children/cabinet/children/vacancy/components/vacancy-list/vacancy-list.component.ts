@@ -27,7 +27,7 @@ export class VacancyListComponent implements OnInit, OnDestroy {
 
     public canScrollBack: boolean = false;
     public filtersExpanded: boolean = false;
-    public update$ = new Subject<boolean>();
+    public update$: Subject<boolean> = new Subject<boolean>();
 
     private vacanciesAmount: number = 0;
     private _destroy$ = new Subject<boolean>();
