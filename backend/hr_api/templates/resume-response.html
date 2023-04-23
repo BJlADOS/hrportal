@@ -1,0 +1,11 @@
+Уважаемый {{ resume.employee.fullname }}!<br>
+<br>
+На ваше резюме на должность "{{ resume.desired_position }}"
+получен отклик от руководителя отдела "{{ manager.department.name }}"<br>
+<br>
+Контакты для связи:<br>
+ФИО - {{ manager.fullname }}<br>
+Email - {{ manager.email }}
+{% if manager.contact %}
+    <br>Дополнительный контакт: {{ manager.contact }}
+{% endif %}

@@ -218,7 +218,7 @@ class RegAndAuthTests(TestCase):
         self.assertEqual(emails_count_before, len(mail.outbox))
 
     def test_RecoveryRequestView_ShouldSendRecoveryEmail(self):
-        email_subject = 'Восстановление пароля на HR-портале "Очень Интересно"'
+        email_subject = 'Смена (восстановление) пароля на HR-портале "Очень Интересно"'
         emails_count_before = len(mail.outbox)
         user = User.objects.get(email=self.user_data.email)
 
@@ -227,7 +227,7 @@ class RegAndAuthTests(TestCase):
         emails = [m for m in mail.outbox if m.subject == email_subject]
         self.assertEqual(emails_count_before, len(mail.outbox) - 1)
         self.assertEqual(len(emails), 1)
-        self.assertTrue(f'{settings.RECOVERY_URL}?code={create_user_token(user)}' in str(emails[0].message()))
+        self.assertTrue(f'{settings.SET_PASSWORD_URL}?code={create_user_token(user)}' in str(emails[0].message()))
         self.assertEqual(response.status_code, 200)
 
     def test_RecoveryView_ShouldRaiseValidationError_OnBlankData(self):

@@ -8,7 +8,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from .shared import *
 from ..authentication import *
-from ..email import send_verification_email, send_password_recovery_email
+from ..email import send_email_verification_mail, send_change_password_mail
 from ..serializers.reg_and_auth import *
 
 
@@ -30,7 +30,7 @@ class RegistrationView(GenericViewSet):
         serializer = RegDataSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        result = send_verification_email(user)
+        result = send_email_verification_mail(user)
 
         return response_with_detail(result, status.HTTP_201_CREATED)
 
@@ -156,7 +156,7 @@ class AuthenticationView(GenericViewSet):
         serializer.is_valid(raise_exception=True)
         try:
             user = User.objects.get(email=serializer.data['email'])
-            send_password_recovery_email(user)
+            send_change_password_mail(user)
         except User.DoesNotExist:
             pass
 

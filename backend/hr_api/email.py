@@ -1,72 +1,72 @@
-from django.core.mail import send_mail, EmailMessage
+from django.core.files import File
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from .authentication import *
 from .models import *
 
 
-def send_verification_email(user):
-    subject = 'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"'
+def send_mail_with(
+        subject: str,
+        plain_template,
+        html_template,
+        context: dict,
+        to: list[str],
+        mail_name: str,
+        attachments: list[(str, File)] = None
+) -> str:
+    plaintext = plain_template.render(context)
+    html = html_template.render(context)
+    mail = EmailMultiAlternatives(subject, plaintext, None, to)
+    mail.attach_alternative(html, "text/html")
+    if not attachments is None:
+        for attachment in attachments:
+            mail.attach(attachment[0], attachment[1].read())
+    result = mail.send()
 
-    def verification_message(url):
-        return f'Для подтверждения адреса электронной почты перейдите по {url}' \
-               f'Если вы не регистрировались на HR-портале "Очень Интересно" ' \
-               f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
-
-    verification_url = settings.VERIFICATION_URL + f'?code={create_user_token(user)}'
-    plain_url = f'ссылке: {verification_url}\n\n'
-    html_url = f'<a href="{verification_url}">ссылке.</a><br><br>'
-    result = send_mail(subject, verification_message(plain_url), None, [user.email],
-                       html_message=verification_message(html_url))
-    result_message = f'Email verification mail to User(ID={user.id}) sending '
-    result_message += 'successful' if bool(result) else 'failed'
-    return result_message
+    return mail_name + ' sending ' + 'successful' if bool(result) else 'failed'
 
 
-def send_password_recovery_email(user):
-    subject = 'Восстановление пароля на HR-портале "Очень Интересно"'
+def send_email_verification_mail(user: User):
+    return send_mail_with(
+        'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"',
+        get_template('verification.txt'),
+        get_template('verification.html'),
+        {'url': settings.VERIFICATION_URL + f'?code={create_user_token(user)}'},
+        [user.email],
+        f'Email verification mail to User(ID={user.id})'
+    )
 
-    def verification_message(url):
-        return f'Для восстановления пароля перейдите по {url}' \
-               f'Если вы не пытались восстановить пароль на HR-портале "Очень Интересно" ' \
-               f'- не переходите по ссылке, а свяжитесь сс службой поддержки портала.'
 
-    recovery_url = settings.RECOVERY_URL + f'?code={create_user_token(user)}'
-    plain_url = f'ссылке: {recovery_url}\n\n'
-    html_url = f'<a href="{recovery_url}">ссылке.</a><br><br>'
-    result = send_mail(subject, verification_message(plain_url), None, [user.email],
-                       html_message=verification_message(html_url))
-    result_message = f'Email verification mail to User(ID={user.id}) sending '
-    result_message += 'successful' if bool(result) else 'failed'
-    return result_message
+def send_change_password_mail(user: User):
+    return send_mail_with(
+        'Смена (восстановление) пароля на HR-портале "Очень Интересно"',
+        get_template('change-password.txt'),
+        get_template('change-password.html'),
+        {'url': settings.SET_PASSWORD_URL + f'?code={create_user_token(user)}'},
+        [user.email],
+        f'Change password mail to User(ID={user.id})'
+    )
 
 
 def send_resume_response(resume: Resume, manager: User):
-    subject = 'Отклик на ваше резюме на HR-портале "Очень Интересно"'
-    message = f'Уважаемый {resume.employee.fullname}!\n\n' \
-              f'На ваше резюме на должность "{resume.desired_position}" ' \
-              f'получен отклик от руководителя отдела "{manager.department.name}".\n\n' \
-              f'Контакты для связи:\n' \
-              f'ФИО - {manager.fullname}\n' \
-              f'Email - {manager.email}'
-    message += f'\nДополнительный контакт: {manager.contact}' if manager.contact else ''
-    result = send_mail(subject, message, None, [resume.employee.email])
-    result_message = f'Response from Manager(ID={manager.id}) to Employee(ID={resume.employee.id}) '
-    result_message += 'successful' if bool(result) else 'failed'
-    return result_message
+    return send_mail_with(
+        'Отклик на ваше резюме на HR-портале "Очень Интересно"',
+        get_template('resume-response.txt'),
+        get_template('resume-response.html'),
+        {'resume': resume, 'manager': manager},
+        [resume.employee.email],
+        f'Response from Manager(ID={manager.id}) to Employee(ID={resume.employee.id}) mail'
+    )
 
 
 def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_resume):
-    subject = 'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"'
-    message = f'Уважаемый {manager.fullname}!\n\n' \
-              f'На ваше вакансию на должность "{vacancy.position}" получен отклик\n\n' \
-              f'Контакты для связи:\n' \
-              f'ФИО - {employee.fullname}\n' \
-              f'Email - {employee.email}'
-    message += f'\nДополнительный контакт: {employee.contact}' if employee.contact else ''
-    message += f'\n\nРезюме сотрудника приложено к письму'
-    mail = EmailMessage(subject, message, None, [manager.email])
-    mail.attach("resume.pdf", pdf_resume.read())
-    result = mail.send()
-    result_message = f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) '
-    result_message += 'successful' if bool(result) else 'failed'
-    return result_message
+    return send_mail_with(
+        'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"',
+        get_template('vacancy-response.txt'),
+        get_template('vacancy-response.html'),
+        {'employee': employee, 'manager': manager, 'vacancy': vacancy},
+        [manager.email],
+        f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail',
+        [('resume.pdf', pdf_resume)]
+    )
