@@ -105,7 +105,7 @@ class AuthenticationView(GenericViewSet):
                              200: openapi.Response(
                                  'Заголовки и токен проверены (результаты)',
                                  openapi.Schema(type='object', properties={
-                                     'authorized': openapi.Schema(type='boolean')
+                                     'authenticated': openapi.Schema(type='boolean')
                                  }))
                          })
     @action(methods=['get'], detail=False, url_path='authenticated', url_name='authenticated')
