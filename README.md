@@ -1,3 +1,7 @@
+## Демонстрация
+
+Сервис развернут по адресу: http://hrportal.sergei-kiprin.ru
+
 ## Запуск Frontend
 
 Требуется:
