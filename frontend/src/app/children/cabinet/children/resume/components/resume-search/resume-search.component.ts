@@ -15,7 +15,7 @@ export class ResumeSearchComponent implements OnInit {
 
     public resumes$: Observable<IResumePage> = this._resumeSearch.resumes$;
 
-    public searchForm: FormGroup = this._form.getSeachForm();
+    public searchForm: FormGroup = this._form.getSearchForm();
     public orderingForm: FormGroup = this._form.getOrderingForm();
     public ordering: ISelectOption[] = getOrderingRussianAsArray();
 
@@ -41,7 +41,7 @@ export class ResumeSearchComponent implements OnInit {
     }
 
     public reset(): void {
-        this.searchForm = this._form.getSeachForm();
+        this.searchForm = this._form.getSearchForm();
     }
 
     public toggleFilters(): void {

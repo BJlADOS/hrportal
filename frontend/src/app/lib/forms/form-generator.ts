@@ -203,7 +203,7 @@ export class FormGenerator {
         );
     }
 
-    public getSeachForm(search?: string): FormGroup {
+    public getSearchForm(search?: string): FormGroup {
         return this._fb.group(
             {
                 search: new FormControl(search?? ''),

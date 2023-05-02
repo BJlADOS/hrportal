@@ -1,0 +1,22 @@
+<div class="content" *let="employeesModelList$ | async as employeeList">
+    <div class="error" *ngIf="loadingError">
+        {{loadingError}}
+    </div>
+    <div class="content__main">
+        <div class="resumes">
+            <employee-card class="width"
+                        *ngFor="let employee of employeeList"
+                        [employeeData]="employee">
+            </employee-card>
+        </div>
+    </div>
+
+    <div class="scroll-back"
+         *ngIf="canScrollBack"
+         (click)="scrollBack()">
+        <up-arrow-icon></up-arrow-icon>
+        <span>
+            Назад
+        </span>
+    </div>
+</div>

@@ -1,2 +1,2 @@
-export * from './route.interface';
+export * from './header-button.interface';
 export * from './breadcrumb.interface';

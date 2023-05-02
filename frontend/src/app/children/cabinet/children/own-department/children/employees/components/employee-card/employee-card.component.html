@@ -1,0 +1,20 @@
+<a class="link-wrapper" (click)="openEmployeeDetail()">
+    <div class="employee-card">
+        <div class="employee-card__name">
+            <span>{{viewModel.name}}</span>
+        </div>
+        <div class="employee-card__email">
+            {{viewModel.email}}
+        </div>
+        <div class="employee-card__department">
+            {{viewModel.departmentName}}
+        </div>
+        <div class="employee-card__work-experience" *ngIf="viewModel.workExperience">
+            Опыт работы: {{viewModel.workExperience}}
+        </div>
+        <div class="employee-card__skills">
+            {{viewModel.skillString}}
+        </div>
+        <button class="employee-card__resume-button" (click)="toResume()">Резюме</button>
+    </div>
+</a>

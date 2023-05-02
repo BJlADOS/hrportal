@@ -1,0 +1,32 @@
+<div class="wrapper" *ngIf="viewModel">
+    <form [formGroup]="viewModel.form"
+          class="form"
+          (submit)="applyFilters()">
+        <app-accordion class="accordion">
+            <appAccordionItem class="accordion__item" title="Навыки">
+                <ng-template appAccordionContent>
+                    <app-select-with-radio-multiple-search
+                        *ngIf="(skills$ | async)?.length"
+                        [options]="(skills$ | async)!" formControlName="skills"
+                        [title]="'Поиск по навыкам'">
+                    </app-select-with-radio-multiple-search>
+                </ng-template>
+            </appAccordionItem>
+
+            <appAccordionItem class="accordion__item" title="Опыт работы">
+                <ng-template appAccordionContent>
+                    <app-select-with-radio-multiple [options]="viewModel.experienceOptions" formControlName="experience">
+                    </app-select-with-radio-multiple>
+                </ng-template>
+            </appAccordionItem>
+        </app-accordion>
+
+        <div class="button-block">
+            <input type="submit" value="Применить">
+
+            <div class="reset-filters" (click)="resetFilters()">
+                <span>Сбросить</span>
+            </div>
+        </div>
+    </form>
+</div>

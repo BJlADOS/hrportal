@@ -38,7 +38,7 @@ export class SelectWithRadioMultipleSearchComponent implements OnInit, ControlVa
   ) { }
 
   public writeValue(obj: any[]): void {
-      this.selectedOptions = obj;
+      this.selectedOptions = obj ?? this.selectedOptions;
   }
   public registerOnChange(fn: any): void {
       this.onChange = fn;

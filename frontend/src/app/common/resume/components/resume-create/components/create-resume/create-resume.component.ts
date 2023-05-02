@@ -15,7 +15,7 @@ import {
 } from '../../../../../../lib';
 
 @Component({
-    selector: 'app-create-resume',
+    selector: 'app-create-employee-card',
     templateUrl: './create-resume.component.html',
     styleUrls: ['./create-resume.component.scss'],
     animations: [contentExpansion],

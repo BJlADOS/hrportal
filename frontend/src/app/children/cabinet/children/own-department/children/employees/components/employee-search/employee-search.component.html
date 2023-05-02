@@ -1,0 +1,13 @@
+<div class="search">
+    <div class="forms">
+        <form class="form" [formGroup]="searchForm" (submit)="search()">
+            <div class="search__input">
+                <input type="text" id="search" formControlName="search" placeholder="Поиск">
+                <div class="tools">
+                    <cross1-icon appHoverListener (click)="reset()" *ngIf="searchForm.controls['search'].value"></cross1-icon>
+                    <magnifier-icon appHoverListener (click)="search()"></magnifier-icon>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -33,7 +33,7 @@ export class SelectWithRadioMultipleComponent implements OnInit, ControlValueAcc
 
   public writeValue(obj: any): void {
       // Если у объекта есть свойство id, то берём сам объект, иначе ищем объект с таким id
-      this.currentValue = obj;
+      this.currentValue = obj ?? this.currentValue;
   }
   public registerOnChange(fn: any): void {
       this.onChange = fn;
@@ -66,7 +66,7 @@ export class SelectWithRadioMultipleComponent implements OnInit, ControlValueAcc
   }
 
   public checkSelected(value: any): boolean {
-      return this.currentValue.find((item) => item.id === value.id) ? true : false;
+      return !!this.currentValue.find((item) => item.id === value.id);
   }
 
 }

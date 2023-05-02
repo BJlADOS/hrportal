@@ -1,0 +1,55 @@
+.layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    &__top {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    &__top-left {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__top-right {
+        display: flex;
+        flex-direction: row;
+        align-self: end;
+    }
+
+    &__bottom {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__entities-count {
+        margin-bottom: 25px;
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    &__search {
+
+    }
+
+    &__filter-button {
+        font-weight: 500;
+        margin-right: 10px;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--font-primary)
+        }
+    }
+
+    &__filter-block {
+        margin-right: 20px;
+    }
+
+    &__employee-list {
+        width: 100%
+    }
+}

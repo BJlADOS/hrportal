@@ -1,0 +1,51 @@
+.employee-card {
+    border-radius: 20px;
+    border: solid 1px var(--grey);
+    background-color: var(--white);
+    padding: 28px 24px 30px 24px;
+
+    &__name {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    &__email {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    &__department {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    &__work-experience {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    &__skills {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    &__resume-button {
+        border: none;
+        width: fit-content;
+        color: var(--white);
+        border-radius: 20px;
+        font-size: 16px;
+        padding: 0.8em 1.6em;
+        font-weight: 500;
+        background-color: var(--main-accent-color);
+        text-transform: uppercase;
+
+        &:hover {
+            color: var(--font-primary-color);
+            cursor: pointer;
+        }
+    }
+}

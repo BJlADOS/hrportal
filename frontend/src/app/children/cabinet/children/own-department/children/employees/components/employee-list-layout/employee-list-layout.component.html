@@ -1,0 +1,40 @@
+<div class="layout">
+    <div class="layout__top">
+        <div class="layout__top-left">
+            <div class="layout__entities-count">
+                <span>{{ (employeeListBuffer.value$ | async)?.count ?? 0 }} сотрудников</span>
+            </div>
+            <div class="layout__search">
+                <employee-search></employee-search>
+            </div>
+        </div>
+        <div class="layout__top-right">
+<!--            <div class="filter-button" (click)="toggleFilters()">-->
+<!--                <filter-icon></filter-icon>-->
+<!--            </div>-->
+            <span class="layout__filter-button" (click)="toggleFilters()">Фильтры</span>
+            <div class="layout__ordering">
+                <employee-ordering></employee-ordering>
+            </div>
+        </div>
+    </div>
+    <div class="layout__bottom" *let="filtersOpened$ | async as filtersOpened">
+            <div class="layout__filter-block"
+                 [@contentExpansionHorizontal]="filtersOpened ? 'expanded' : 'collapsed'"
+                 stickySidebar
+                 containerSelector=".content__main"
+                 innerWrapperSelector=".inner"
+                 topSpacing="24"
+                 bottomSpacing="24"
+                 [minWidth]="400"
+                 [updateSticky]="filtersOpened$">
+                <div class="layout__filter-block">
+                    <employee-filters></employee-filters>
+                </div>
+            </div>
+        <div class="layout__employee-list">
+            <employee-list>
+            </employee-list>
+        </div>
+    </div>
+</div>
