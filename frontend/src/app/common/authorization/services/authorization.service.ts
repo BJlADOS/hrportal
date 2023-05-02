@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { SHA256 } from 'crypto-js';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IValidToken } from '../interfaces';
@@ -24,25 +23,20 @@ export class AuthorizationService {
     ) {}
 
     public signUp(fullname: string, email: string, password: string): Observable<any> {
-        const passwordHash: string = SHA256(password).toString();
-
-        return this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: passwordHash  });
+        return this.http.post(`${ this._apiURL }/reg/`, { fullname: fullname, email: email, password: password });
     }
 
     public signIn(email: string, password: string, returnUrl: string | undefined): Observable<any> {
-        const passwordHash: string = SHA256(password).toString();
-
-        return this.http.post(`${this._apiURL}/login/`, { email: email, password: passwordHash });
+        return this.http.post(`${this._apiURL}/login/`, { email: email, password: password });
     }
 
     public requestPasswordReset(email: string): Observable<any> {
-        return this.http.post(`${this._apiURL}/recovery-request/`, { email }) as Observable<any>;
+        return this.http.post(`${this._apiURL}/change-password/`, { email }) as Observable<any>;
     }
 
     public resetPassword(password: string, token: string | undefined): Observable<any> {
-        const passwordHash: string = SHA256(password).toString();
 
-        return this.http.post(`${this._apiURL}/recovery/`, { password: passwordHash, code: token }) as Observable<any>;
+        return this.http.post(`${this._apiURL}/set-password/`, { password: password, code: token }) as Observable<any>;
     }
 
     public checkEmail(email: string): Observable<{ unique: boolean }> {

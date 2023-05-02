@@ -12,7 +12,7 @@
                     </ng-container>
                 </div>
                 <div class="content-right">
-                    <button *ngIf="!user.isAdmin" [disabled]="!user.filled" [class.active]="isCreatingResume"
+                    <button [disabled]="!user.filled" [class.active]="isCreatingResume"
                         (click)="createResume()">Моё резюме</button>
                     <div class="profile" (click)="redirectTo('cabinet/profile')">
                         <img [src]="user.photo || 'assets/img/profile-placeholder.png'">

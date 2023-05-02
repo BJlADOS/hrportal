@@ -20,7 +20,7 @@ schema_view = get_schema_view(
                     '- <s>Ответы вида <code>{"detail": "string"}</code>, там, где они были,'
                     ' заменены на <code>{"detail": ["string"]}</code> для унификации</s>\n'
                     '- Запрос <b>/authorized</b> переименован в <b>/authenticated</b>\n'
-                    '- Запрос <b>/recovery-password</b> переименован в <b>/change-password</b>\n'
+                    '- Запрос <b>/recovery-request</b> переименован в <b>/change-password</b>\n'
                     '- Запрос <b>/recovery</b> переименован в <b>/set-password</b>\n'
                     '- Запрос <b>/verification</b> переименован в <b>/verify-email</b>\n'
                     '\nИзменения с версии <b>v1.1</b>:\n'

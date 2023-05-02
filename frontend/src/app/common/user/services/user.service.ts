@@ -55,7 +55,7 @@ export class UserService {
     }
 
     public confirmEmail(token: string): Observable<any> {
-        return this.http.post(`${this._apiURL}/verification/`, { code: token }) as Observable<any>;
+        return this.http.post(`${this._apiURL}/verify-email/`, { code: token }) as Observable<any>;
     }
 
     public getUserById(id: number): Observable<IUser> {
