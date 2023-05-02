@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-resume',
+    selector: 'app-employee-card',
     templateUrl: './resume.component.html',
     styleUrls: ['./resume.component.scss']
 })

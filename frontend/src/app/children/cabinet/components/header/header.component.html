@@ -6,8 +6,10 @@
             </div>
             <div class="content" *ngIf="user | async as user">
                 <div class="content-left">
-                    <p *ngFor="let route of routes" [class.active-route]="isActive('/' + route.path)"
-                        (click)="redirectTo(route.path)">{{route.name}}</p>
+                    <ng-container *ngFor="let button of buttons">
+                        <header-dropdown-selector [ngClass]="{'selected': isActive('/' + button.path)}" [model]="getSelectorModel(button)">
+                        </header-dropdown-selector>
+                    </ng-container>
                 </div>
                 <div class="content-right">
                     <button *ngIf="!user.isAdmin" [disabled]="!user.filled" [class.active]="isCreatingResume"

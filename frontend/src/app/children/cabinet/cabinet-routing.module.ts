@@ -34,6 +34,13 @@ const routes: Routes = [
                 },
             },
             {
+                path: 'own-department',
+                loadChildren: () => import('./children/own-department/own-department.module').then(m => m.OwnDepartmentModule),
+                data: {
+                    breadcrumb: 'Мой департамент'
+                },
+            },
+            {
                 path: 'departments',
                 loadChildren: () => import('./children/department/department.module').then(m => m.DepartmentModule),
                 canActivate: [AdminGuard]

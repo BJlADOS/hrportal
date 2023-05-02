@@ -6,9 +6,15 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../lib';
 import { CabinetRoutingModule } from './cabinet-routing.module';
 import { ResumeCreateModule } from '../../common';
-import { AppLogoIconComponent, LogoutIconComponent } from '../../../assets/img';
-import { SettingsIconComponent } from "../../../assets/img/settings/setting-icon";
-import { CrossIconComponent } from "../../../assets/img/cross/cross-icon";
+import {
+    AppLogoIconComponent,
+    CrossIconComponent,
+    LogoutIconComponent,
+    SettingsIconComponent
+} from '../../../assets/img';
+import {
+    HeaderDropdownSelectorComponent
+} from "./components/ui-hover-selector/components/header-dropdown-selector/header-dropdown-selector.component";
 
 
 @NgModule({
@@ -26,7 +32,8 @@ import { CrossIconComponent } from "../../../assets/img/cross/cross-icon";
         AppLogoIconComponent,
         LogoutIconComponent,
         SettingsIconComponent,
-        CrossIconComponent
+        CrossIconComponent,
+        HeaderDropdownSelectorComponent
     ]
 })
 export class CabinetModule {

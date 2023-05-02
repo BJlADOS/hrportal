@@ -15,6 +15,7 @@ html {
     --main-accent-color-rgb: #{hex-to-rgb(#FDC04E)};
     --main-accent-color-hover: #be913d;
     --main-accent-color-active: #8e6f2d;
+    --main-accent-color-selector-hover: #faeed7;
     --main-accent-grey: #323535;
     --additional-accent-color: #f9f9f9;
     --disabled-color: #949597;
@@ -56,7 +57,7 @@ body {
         background-color: transparent;
     }
     &::-webkit-scrollbar-thumb {
-        background: var(--main-accent-color); 
+        background: var(--main-accent-color);
         border-radius: 10px;
 
         &:hover {
@@ -92,7 +93,7 @@ body {
     grid-column: 11 / 13;
 }
 
-@media screen 
+@media screen
     and (min-width: 1280px)
 {
     .wrapper-grid {
