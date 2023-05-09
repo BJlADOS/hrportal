@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CabinetLayoutComponent } from './components/cabinet-layout/cabinet-layout.component';
-import { ManagerGuard } from './guards/manager.guard';
-import { AdminGuard } from './guards/admin.guard';
+import { CabinetLayoutComponent } from './components';
+import { AdminGuard, ManagerGuard } from './guards';
 
 const routes: Routes = [
     {
@@ -16,18 +15,18 @@ const routes: Routes = [
             },
             {
                 path: 'profile',
-                loadChildren: () => import('./children/profile/profile.module').then(m => m.ProfileModule)
+                loadChildren: () => import('./children/profile/profile.module').then((m: any) => m.ProfileModule)
             },
             {
                 path: 'vacancies',
-                loadChildren: () => import('./children/vacancy/vacancy.module').then(m => m.VacancyModule),
+                loadChildren: () => import('./children/vacancy/vacancy.module').then((m: any) => m.VacancyModule),
                 data: {
                     breadcrumb: 'Вакансии'
                 }
             },
             {
                 path: 'resumes',
-                loadChildren: () => import('./children/resume/resume.module').then(m => m.ResumeModule),
+                loadChildren: () => import('./children/resume/resume.module').then((m: any) => m.ResumeModule),
                 canActivate: [ManagerGuard],
                 data: {
                     breadcrumb: 'Резюме'
@@ -35,17 +34,20 @@ const routes: Routes = [
             },
             {
                 path: 'own-department',
-                loadChildren: () => import('./children/own-department/own-department.module').then(m => m.OwnDepartmentModule),
+                loadChildren: () => import('./children/own-department/own-department.module').then((m: any) => m.OwnDepartmentModule),
                 data: {
                     breadcrumb: 'Мой департамент'
                 },
             },
             {
                 path: 'departments',
-                loadChildren: () => import('./children/department/department.module').then(m => m.DepartmentModule),
+                loadChildren: () => import('./children/department/department.module').then((m: any) => m.DepartmentModule),
                 canActivate: [AdminGuard]
             },
-        ]
+        ],
+        data: {
+            breadcrumb: 'HR-портал'
+        }
     }
 ];
 

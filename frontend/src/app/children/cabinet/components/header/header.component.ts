@@ -1,16 +1,16 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router, UrlSegment} from '@angular/router';
-import {filter, map, Observable, takeUntil} from 'rxjs';
-import {AuthorizationService, CreateResumeComponent, IUser, UserService} from '../../../../common';
-import {IBreadcrumb, IHeaderButton} from '../../interfaces';
-import {DestroyService, ModalService, UserType} from '../../../../lib';
-import {BUTTONS_DATA_TOKEN, BUTTONS_MAPPER_TOKEN} from '../../tokens';
-import {HeaderButton} from '../../enums/header-button.enum';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { map, Observable, takeUntil } from 'rxjs';
+import { AuthorizationService, CreateResumeComponent, IUser, UserService } from '../../../../common';
+import { IHeaderButton } from '../../interfaces';
+import { DestroyService, ModalService, UserType } from '../../../../lib';
+import { BUTTONS_DATA_TOKEN, BUTTONS_MAPPER_TOKEN } from '../../tokens';
+import { HeaderButton } from '../../enums/header-button.enum';
 
 
-import {BUTTONS_DATA_PROVIDER} from '../../providers/buttons-data.provider';
-import {BUTTONS_DATA_MAPPER_PROVIDER} from '../../providers/buttons-data-mapper.provider';
-import {IHoverSelectItem} from '../ui-hover-selector/interfaces/hover-select-item.interface';
+import { BUTTONS_DATA_PROVIDER } from '../../providers/buttons-data.provider';
+import { BUTTONS_DATA_MAPPER_PROVIDER } from '../../providers/buttons-data-mapper.provider';
+import { IHoverSelectItem } from '../ui-hover-selector/interfaces/hover-select-item.interface';
 
 @Component({
     selector: 'app-header',
@@ -25,14 +25,12 @@ import {IHoverSelectItem} from '../ui-hover-selector/interfaces/hover-select-ite
 export class HeaderComponent implements OnInit {
 
     public user: Observable<IUser | null> = this._user.currentUser$;
-    public breadcrumbs: IBreadcrumb[] = [];
     public buttons: IHeaderButton[] = [];
 
     public isCreatingResume: boolean = false;
     public profileFilled$: Observable<boolean> = this._user.profileFilledStatus$;
 
     constructor(
-        public activatedRoute: ActivatedRoute,
         private _user: UserService,
         private _auth: AuthorizationService,
         private _router: Router,
@@ -43,15 +41,6 @@ export class HeaderComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
-        this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-
-        this._router.events
-            .pipe(
-                filter((event: any) => event instanceof NavigationEnd),
-                takeUntil(this._destroy$)
-            )
-            .subscribe(() => this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root));
-
         this.user
             .pipe(
                 takeUntil(this._destroy$)
@@ -120,28 +109,6 @@ export class HeaderComponent implements OnInit {
         }
 
         return hoverSelectItem;
-    }
-
-    private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadcrumb[] = []): IBreadcrumb[] {
-        const children: ActivatedRoute[] = route.children;
-        if (children.length === 0) {
-            return breadcrumbs;
-        }
-
-        for (const child of children) {
-            const routeURL: string = child.snapshot.url.map((segment: UrlSegment) => segment.path).join('/');
-            if (routeURL !== '') {
-                url += `/${routeURL}`;
-            }
-            const label: string = child.snapshot.data['breadcrumb'];
-            if (label) {
-                breadcrumbs.push({ label, url });
-            }
-
-            return this.createBreadcrumbs(child, url, breadcrumbs);
-        }
-
-        return breadcrumbs;
     }
 
     /**

@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.breadcrumb-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &:not(:first-child):before {
+        content: '>';
+        margin: 0 10px;
+    }
+
+    &__text {
+        text-decoration-skip-ink: none;
+
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}

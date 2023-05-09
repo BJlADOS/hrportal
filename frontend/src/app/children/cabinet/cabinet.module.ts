@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { CabinetLayoutComponent, HeaderComponent } from './components';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../lib';
@@ -14,14 +13,14 @@ import {
 } from '../../../assets/img';
 import {
     HeaderDropdownSelectorComponent
-} from "./components/ui-hover-selector/components/header-dropdown-selector/header-dropdown-selector.component";
+} from './components/ui-hover-selector/components/header-dropdown-selector/header-dropdown-selector.component';
+import { UiBreadcrumbsComponent } from '../../lib/ui-breadcrumbs';
 
 
 @NgModule({
     declarations: [
         CabinetLayoutComponent,
-        HeaderComponent,
-        BreadcrumbComponent
+        HeaderComponent
     ],
     imports: [
         CommonModule,
@@ -33,7 +32,8 @@ import {
         LogoutIconComponent,
         SettingsIconComponent,
         CrossIconComponent,
-        HeaderDropdownSelectorComponent
+        HeaderDropdownSelectorComponent,
+        UiBreadcrumbsComponent
     ]
 })
 export class CabinetModule {

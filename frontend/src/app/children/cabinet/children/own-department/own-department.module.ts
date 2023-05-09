@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ownDepartmentRoutes } from './own-department.routing-module';
 import { OwnDepartmentLayoutComponent } from './components/own-department-layout/own-department-layout.component';
-import {AsyncPipe, NgIf} from "@angular/common";
+import { AsyncPipe, NgIf } from '@angular/common';
 
 @NgModule({
     imports: [
