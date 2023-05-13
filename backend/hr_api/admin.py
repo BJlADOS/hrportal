@@ -2,7 +2,13 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(Notification)
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type', 'owner', 'read', 'notify_time')
+    list_display_links = ('type',)
+    list_filter = ('read', 'type')
+    ordering = ('id','notify_time')
 
 
 @admin.register(User)

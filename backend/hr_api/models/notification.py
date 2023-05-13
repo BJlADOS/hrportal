@@ -14,3 +14,6 @@ class Notification(models.Model):
     value = models.JSONField()
     read = models.BooleanField(default=False)
     notify_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Notification({self.type}, {self.owner})'
