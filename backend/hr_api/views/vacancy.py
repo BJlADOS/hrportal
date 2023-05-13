@@ -151,15 +151,16 @@ class VacancyView(ModelViewSet):
         if manager is None:
             return response_with_detail('Vacancy department does not have manager', status.HTTP_404_NOT_FOUND)
 
-        pdf_resume = request.data.get('resume', None)
-        if pdf_resume is None:
+        uploaded_file = request.data.get('resume', None)
+        if uploaded_file is not None:
+            pdf_resume = PDFResume(file=uploaded_file)
+        else:
             resumes = Resume.objects.filter(employee=request.user).exclude(status='DELETED')
             if len(resumes) > 0:
-                pdf_resume = resumes.first().resume
+                pdf_resume = resumes.first()
             else:
                 return response_with_detail('Employee does not have resume', status.HTTP_400_BAD_REQUEST)
 
-        # TODO сохранять резюме и передавать ссылку
         Notification.vacancy_response(vacancy, manager, request.user, pdf_resume)
         result = send_vacancy_response(request.user, manager, vacancy, pdf_resume)
         return response_with_detail(result, status.HTTP_200_OK)

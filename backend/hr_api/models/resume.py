@@ -3,7 +3,11 @@ from django.db import models
 from .shared import *
 
 
-class Resume(models.Model):
+class PDFResume(models.Model):
+    file = models.FileField(upload_to=get_upload_path)
+
+
+class Resume(PDFResume):
     employee = models.ForeignKey(to='User', on_delete=models.SET_NULL, null=True)
 
     desired_position = models.CharField(max_length=255)
@@ -13,8 +17,6 @@ class Resume(models.Model):
     desired_employment = models.CharField(max_length=4, choices=EMPLOYMENT_CHOICES)
 
     desired_schedule = models.CharField(max_length=7, choices=SCHEDULE_CHOICES)
-
-    resume = models.FileField(upload_to=get_upload_path)
 
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=STATUS_CHOICES[0][0])
 

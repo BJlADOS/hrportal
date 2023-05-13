@@ -75,13 +75,13 @@ class UserResumeTests(TestCase):
         self.assertEqual(errors['desiredSalary'][0], 'This field is required.')
         self.assertEqual(errors['desiredEmployment'][0], 'This field is required.')
         self.assertEqual(errors['desiredSchedule'][0], 'This field is required.')
-        self.assertEqual(errors['resume'][0], 'No file was submitted.')
+        self.assertEqual(errors['file'][0], 'No file was submitted.')
 
     def test_PostUserResume_ShouldCreateResume(self):
         login_user(self.client, self.manager_data)
 
         data = dict(default_resume_data)
-        data['resume'] = SimpleUploadedFile("test.pdf", b"resume")
+        data['file'] = SimpleUploadedFile("test.pdf", b"resume")
         response = self.client.post(reverse("user-resume"), data)
 
         self.assertEqual(response.status_code, 200)

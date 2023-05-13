@@ -13,7 +13,7 @@ class ResumeSerializer(serializers.ModelSerializer):
     desiredSalary = serializers.IntegerField(source='desired_salary')
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
-    resume = serializers.FileField(use_url=False, validators=[FileExtensionValidator(['pdf']),
+    file = serializers.FileField(use_url=False, validators=[FileExtensionValidator(['pdf']),
                                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
@@ -27,7 +27,7 @@ class ResumeSerializer(serializers.ModelSerializer):
             'desiredSalary',
             'desiredEmployment',
             'desiredSchedule',
-            'resume',
+            'file',
             'status',
             'modifiedAt',
             'createdAt'
@@ -39,7 +39,7 @@ class ResumePatchDataSerializer(serializers.ModelSerializer):
     desiredSalary = serializers.IntegerField(source='desired_salary', required=False)
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES, required=False)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES, required=False)
-    resume = serializers.FileField(required=False, allow_null=True,
+    file = serializers.FileField(required=False, allow_null=True,
                                    validators=[FileExtensionValidator(['pdf']),
                                                validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
@@ -51,6 +51,6 @@ class ResumePatchDataSerializer(serializers.ModelSerializer):
             'desiredSalary',
             'desiredEmployment',
             'desiredSchedule',
-            'resume',
+            'file',
             'status'
         ]

@@ -1,6 +1,7 @@
+from django.conf import settings
 from django.db import models
 
-from .resume import Resume
+from .resume import Resume, PDFResume
 from .user import User
 from .vacancy import Vacancy
 
@@ -33,7 +34,7 @@ class Notification(models.Model):
         ).save()
 
     @staticmethod
-    def vacancy_response(vacancy: Vacancy, manager: User, employee: User, pdf_resume):
+    def vacancy_response(vacancy: Vacancy, manager: User, employee: User, resume: PDFResume):
         Notification(
             owner=manager,
             type=NOTIFICATION_CHOICES[1][0],
@@ -41,6 +42,6 @@ class Notification(models.Model):
                 'employee': employee.id,
                 'department': vacancy.department.id,
                 'vacancy': vacancy.id,
-                'resume': 'url' # TODO получать url
+                'resume': resume.file.url[len(settings.MEDIA_URL):]
             }
         ).save()

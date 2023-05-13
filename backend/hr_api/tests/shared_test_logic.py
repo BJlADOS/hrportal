@@ -24,7 +24,7 @@ def create_resume_for(user: User, data: dict) -> Resume:
                                    desired_salary=data['desiredSalary'],
                                    desired_employment=data['desiredEmployment'],
                                    desired_schedule=data['desiredSchedule'],
-                                   resume=data['resume'],
+                                   file=data['file'],
                                    status=data['status'])
     resume.save()
     return resume
@@ -43,7 +43,7 @@ def create_resume_data(
         'desiredSalary': desired_salary,
         'desiredEmployment': desired_employment,
         'desiredSchedule': desired_schedule,
-        'resume': resume,
+        'file': resume,
         'status': status
     }
 
@@ -59,7 +59,7 @@ def get_resume_serialized_dict(resume: Resume) -> dict:
         'desiredSalary': resume.desired_salary,
         'desiredEmployment': resume.desired_employment,
         'desiredSchedule': resume.desired_schedule,
-        'resume': resume.resume.url[len(settings.MEDIA_URL):],
+        'file': resume.file.url[len(settings.MEDIA_URL):],
         'status': resume.status,
         'createdAt': int(resume.created_at.timestamp()) * 1000,
         'modifiedAt': int(resume.modified_at.timestamp()) * 1000
