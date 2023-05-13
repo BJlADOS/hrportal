@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
@@ -13,6 +12,7 @@ from rest_framework.viewsets import ModelViewSet
 from .shared import *
 from ..email import send_vacancy_response
 from ..filters import *
+from ..models import get_upload_path
 from ..permissions import IsManagerUser
 from ..serializers.vacancy import *
 
@@ -43,7 +43,7 @@ class VacancyView(ModelViewSet):
     pagination_class = LimitOffsetPagination
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'email_response']:
+        if self.action in ['list', 'retrieve', 'response']:
             return [IsAuthenticated()]
         elif self.action == 'create':
             return [IsManagerUser()]
@@ -63,7 +63,7 @@ class VacancyView(ModelViewSet):
             return base.filter(status='PUBLIC')
 
     def get_parsers(self):
-        if hasattr(self, 'action') and self.action == 'email_response':
+        if hasattr(self, 'action') and self.action == 'response':
             return [MultiPartParser]
         else:
             return super().get_parsers()
@@ -144,22 +144,22 @@ class VacancyView(ModelViewSet):
             404: not_found_response
         })
     @action(methods=['post'], detail=True, url_path='response', url_name='response')
-    def email_response(self, request, pk):
-        vacancy = get_object_or_404(Vacancy, id=pk)
+    def response(self, request, pk):
+        vacancy = self.get_object()
 
         manager = vacancy.department.manager
         if manager is None:
             return response_with_detail('Vacancy department does not have manager', status.HTTP_404_NOT_FOUND)
 
-        resume = request.data.get('resume', None)
-        if resume is None:
+        pdf_resume = request.data.get('resume', None)
+        if pdf_resume is None:
             resumes = Resume.objects.filter(employee=request.user).exclude(status='DELETED')
             if len(resumes) > 0:
-                resume = resumes.first().resume
+                pdf_resume = resumes.first().resume
             else:
                 return response_with_detail('Employee does not have resume', status.HTTP_400_BAD_REQUEST)
 
-        serializer = VacancyResponseDataSerializer(data={'resume': resume})
-        serializer.is_valid(raise_exception=True)
-        result = send_vacancy_response(request.user, manager, vacancy, resume)
+        # TODO сохранять резюме и передавать ссылку
+        Notification.vacancy_response(vacancy, manager, request.user, pdf_resume)
+        result = send_vacancy_response(request.user, manager, vacancy, pdf_resume)
         return response_with_detail(result, status.HTTP_200_OK)

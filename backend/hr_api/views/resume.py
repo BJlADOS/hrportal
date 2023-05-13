@@ -44,8 +44,10 @@ class ResumeView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
     serializer_class = ResumeSerializer
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'email_response']:
+        if self.action in ['list', 'retrieve']:
             return [(IsManagerUser | IsAdminUser)()]
+        elif self.action == 'response':
+            return [IsManagerUser()]
         else:
             return [IsAdminUser()]
 
@@ -93,8 +95,9 @@ class ResumeView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
             404: not_found_response
         })
     @action(methods=['post'], detail=True, url_path='response', url_name='response')
-    def email_response(self, request, pk):
+    def response(self, request, pk):
         resume = get_object_or_404(Resume, id=pk)
+        Notification.resume_response(resume, request.user)
         result = send_resume_response(resume, request.user)
         return response_with_detail(result, status.HTTP_200_OK)
 

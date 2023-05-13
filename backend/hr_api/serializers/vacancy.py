@@ -76,4 +76,5 @@ class VacancyPatchDataSerializer(serializers.ModelSerializer):
 
 class VacancyResponseDataSerializer(serializers.Serializer):
     resume = serializers.FileField(validators=[FileExtensionValidator(['pdf']),
-                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
+                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)],
+                                   required=False)
