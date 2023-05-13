@@ -1,5 +1,7 @@
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .shared import *
@@ -26,4 +28,23 @@ class NotificationView(ReadOnlyModelViewSet):
     def get_queryset(self):
         return Notification.objects.filter(owner=self.request.user)
 
-    serializer_class = NotificationSerializer
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return NotificationSerializer
+        else:
+            return None
+
+    @swagger_auto_schema(
+        tags=['Уведомления'],
+        operation_summary='Отмечает уведомление как прочитанное',
+        responses={
+            403: forbidden_response,
+            404: not_found_response,
+        }
+    )
+    @action(methods=['patch'], detail=True, url_path='read', url_name='read')
+    def read(self, request, pk):
+        notification = self.get_object()
+        notification.read = True
+        notification.save()
+        return Response(status=status.HTTP_200_OK)
