@@ -135,7 +135,7 @@ class VacancyView(ModelViewSet):
 
     @swagger_auto_schema(
         tags=['Вакансия'],
-        operation_summary='Удаляет вакансию',
+        operation_summary='Отправляет руководителю на email отклик на вакансию его департамента',
         request_body=VacancyResponseDataSerializer,
         responses={
             200: openapi.Response('Запрос выполнен', detail_schema),
