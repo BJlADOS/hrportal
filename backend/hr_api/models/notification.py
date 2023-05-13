@@ -3,8 +3,8 @@ from django.db import models
 from .user import User
 
 NOTIFICATION_CHOICES = [
-    ('resumeResponse', 'Отклик на резюме'),
-    ('vacancyResponse', 'Отклик на вакансию')
+    ('RESUME-RESPONSE', 'Отклик на резюме'),
+    ('VACANCY-RESPONSE', 'Отклик на вакансию')
 ]
 
 

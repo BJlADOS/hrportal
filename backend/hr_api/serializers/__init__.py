@@ -4,3 +4,4 @@ from .resume import *
 from .skill import *
 from .user import *
 from .vacancy import *
+from .notification import *
