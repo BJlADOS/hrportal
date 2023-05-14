@@ -75,6 +75,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_admin(self):
         return self.is_superuser
 
+    def get_existing_resume(self):
+        return self.resume_set.exclude(status='DELETED').first()
+
     def get_full_name(self):
         return self.fullname
 
@@ -84,7 +87,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def deactivate(self):
         self.is_active = False
         self.save()
-        for resume in self.pdfresume_set.all():
+        for resume in self.resume_set.all():
             resume.archive()
 
     def __str__(self):

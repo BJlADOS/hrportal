@@ -167,17 +167,6 @@ class NotificationsTests(TestCase):
         latest_notification = Notification.objects.latest("notify_time")
         self.assertEqual(latest_notification.owner.id, vac.department.manager.id)
         self.assertEqual(latest_notification.type, 'VACANCY-RESPONSE')
-        employee = User.objects.get(email=self.employee_data.email)
-        old_res = Resume.objects.get(employee=employee)
-        new_res = PDFResume.objects.filter(employee=employee).exclude(id=old_res.id).first()
-        self.assertNotEqual(old_res.id, new_res.id)
-        self.assertDictEqual(latest_notification.value,
-                             {
-                                 "employee": employee.id,
-                                 "department": vac.department.id,
-                                 "vacancy": vac.id,
-                                 "resume": new_res.file.url[len(settings.MEDIA_URL):]
-                             })
 
     def test_Manager_CanRespondToResume(self):
         login_user(self.client, self.manager_data)

@@ -172,7 +172,8 @@ def get_user_serialized_dict(user: User) -> dict:
         "isManager": user.is_manager,
         "isAdmin": user.is_admin,
         "emailVerified": user.email_verified,
-        "isActive": user.is_active
+        "isActive": user.is_active,
+        "resumeId": user.get_existing_resume()
     }
 
 

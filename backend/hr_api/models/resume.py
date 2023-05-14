@@ -4,12 +4,12 @@ from .shared import *
 
 
 class PDFResume(models.Model):
-    employee = models.ForeignKey(to='User', on_delete=models.SET_NULL, null=True)
-
     file = models.FileField(upload_to=get_upload_path)
 
 
 class Resume(PDFResume):
+    employee = models.ForeignKey(to='User', on_delete=models.SET_NULL, null=True)
+
     desired_position = models.CharField(max_length=255)
 
     desired_salary = models.IntegerField()

@@ -43,7 +43,7 @@ class NotificationView(ReadOnlyModelViewSet):
         }
     )
     @action(methods=['patch'], detail=True, url_path='read', url_name='read')
-    def read(self, request, pk):
+    def set_read(self, request, pk):
         notification = self.get_object()
         notification.read = True
         notification.save()
