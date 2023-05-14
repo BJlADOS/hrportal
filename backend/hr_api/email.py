@@ -60,7 +60,7 @@ def send_resume_response(resume: Resume, manager: User):
     )
 
 
-def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_resume):
+def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_resume: PDFResume):
     return send_mail_with(
         'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"',
         get_template('vacancy-response.txt'),
@@ -68,5 +68,5 @@ def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_r
         {'employee': employee, 'manager': manager, 'vacancy': vacancy},
         [manager.email],
         f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail',
-        [('resume.pdf', pdf_resume)]
+        [('resume.pdf', pdf_resume.file)]
     )

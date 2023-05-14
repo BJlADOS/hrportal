@@ -3,7 +3,7 @@ from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 
-from ..models import User, Resume, Vacancy, Department, Skill
+from ..models import User, Resume, Vacancy, Department, Skill, Notification
 
 
 class UserData:
@@ -24,7 +24,7 @@ def create_resume_for(user: User, data: dict) -> Resume:
                                    desired_salary=data['desiredSalary'],
                                    desired_employment=data['desiredEmployment'],
                                    desired_schedule=data['desiredSchedule'],
-                                   resume=data['resume'],
+                                   file=data['file'],
                                    status=data['status'])
     resume.save()
     return resume
@@ -43,7 +43,7 @@ def create_resume_data(
         'desiredSalary': desired_salary,
         'desiredEmployment': desired_employment,
         'desiredSchedule': desired_schedule,
-        'resume': resume,
+        'file': resume,
         'status': status
     }
 
@@ -59,7 +59,7 @@ def get_resume_serialized_dict(resume: Resume) -> dict:
         'desiredSalary': resume.desired_salary,
         'desiredEmployment': resume.desired_employment,
         'desiredSchedule': resume.desired_schedule,
-        'resume': resume.resume.url[len(settings.MEDIA_URL):],
+        'file': resume.file.url[len(settings.MEDIA_URL):],
         'status': resume.status,
         'createdAt': int(resume.created_at.timestamp()) * 1000,
         'modifiedAt': int(resume.modified_at.timestamp()) * 1000
@@ -172,5 +172,17 @@ def get_user_serialized_dict(user: User) -> dict:
         "isManager": user.is_manager,
         "isAdmin": user.is_admin,
         "emailVerified": user.email_verified,
-        "isActive": user.is_active
+        "isActive": user.is_active,
+        "resumeId": user.get_existing_resume()
+    }
+
+
+def get_notification_serialized_dict(notification: Notification) -> dict:
+    return {
+        'id': notification.id,
+        'owner': notification.owner.id,
+        'type': notification.type,
+        'value': notification.value,
+        'read': notification.read,
+        'notifyTime': int(notification.notify_time.timestamp()) * 1000
     }
