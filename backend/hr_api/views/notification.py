@@ -2,6 +2,7 @@ from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from .shared import *
@@ -12,6 +13,8 @@ from ..serializers import NotificationSerializer
 @method_decorator(name='list', decorator=swagger_auto_schema(
     tags=['Уведомления'],
     operation_summary='Все уведомления пользователя',
+    operation_description='Если не указывать параметры пагинации - будет возвращен не объект пагинации, а просто список объектов',
+    paginator_inspectors=[FilterPaginatorInspector],
     responses={
         403: forbidden_response
     }
@@ -25,6 +28,7 @@ from ..serializers import NotificationSerializer
     }
 ))
 class NotificationView(ReadOnlyModelViewSet):
+    pagination_class = LimitOffsetPagination
     def get_queryset(self):
         return Notification.objects.filter(owner=self.request.user)
 
