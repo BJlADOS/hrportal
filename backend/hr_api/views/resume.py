@@ -88,7 +88,7 @@ class ResumeView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
     @swagger_auto_schema(
         tags=['Резюме'],
         request_body=no_body,
-        operation_summary='Отправляет сотруднику на email отклик на его резюме',
+        operation_summary='Отправляет сотруднику отклик на его резюме',
         responses={
             200: openapi.Response('Запрос выполнен', detail_schema),
             403: forbidden_response,
