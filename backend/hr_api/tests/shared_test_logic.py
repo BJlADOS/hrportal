@@ -3,7 +3,7 @@ from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 
-from ..models import User, Resume, Vacancy, Department, Skill
+from ..models import User, Resume, Vacancy, Department, Skill, Notification
 
 
 class UserData:
@@ -173,4 +173,15 @@ def get_user_serialized_dict(user: User) -> dict:
         "isAdmin": user.is_admin,
         "emailVerified": user.email_verified,
         "isActive": user.is_active
+    }
+
+
+def get_notification_serialized_dict(notification: Notification) -> dict:
+    return {
+        'id': notification.id,
+        'owner': notification.owner.id,
+        'type': notification.type,
+        'value': notification.value,
+        'read': notification.read,
+        'notifyTime': int(notification.notify_time.timestamp()) * 1000
     }

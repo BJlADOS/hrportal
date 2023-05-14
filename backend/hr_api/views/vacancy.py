@@ -153,7 +153,8 @@ class VacancyView(ModelViewSet):
 
         uploaded_file = request.data.get('resume', None)
         if uploaded_file is not None:
-            pdf_resume = PDFResume(file=uploaded_file)
+            pdf_resume = PDFResume(employee=request.user, file=uploaded_file)
+            pdf_resume.save()
         else:
             resumes = Resume.objects.filter(employee=request.user).exclude(status='DELETED')
             if len(resumes) > 0:

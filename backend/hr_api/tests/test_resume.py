@@ -110,7 +110,7 @@ class ResumeTests(TestCase):
     def test_ResumeResponse_ShouldSendResponse(self):
         manager_id = User.objects.get(email=self.manager_data.email).id
         resume_id = get_existing_resume_id()
-        employee_id = User.objects.get(resume__id=resume_id).id
+        employee_id = User.objects.get(pdfresume__id=resume_id).id
         login_user(self.client, self.manager_data)
 
         response = self.client.post(reverse("resume-response", args=(resume_id,)))

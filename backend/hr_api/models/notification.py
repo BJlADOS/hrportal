@@ -23,7 +23,7 @@ class Notification(models.Model):
 
     @staticmethod
     def resume_response(resume: Resume, manager: User):
-        Notification(
+        notification = Notification(
             owner=resume.employee,
             type=NOTIFICATION_CHOICES[0][0],
             value={
@@ -31,11 +31,13 @@ class Notification(models.Model):
                 'department': manager.department.id,
                 'employee': resume.employee.id
             }
-        ).save()
+        )
+        notification.save()
+        return notification
 
     @staticmethod
     def vacancy_response(vacancy: Vacancy, manager: User, employee: User, resume: PDFResume):
-        Notification(
+        notification = Notification(
             owner=manager,
             type=NOTIFICATION_CHOICES[1][0],
             value={
@@ -43,5 +45,6 @@ class Notification(models.Model):
                 'department': vacancy.department.id,
                 'vacancy': vacancy.id,
                 'resume': resume.file.url[len(settings.MEDIA_URL):]
-            }
-        ).save()
+            })
+        notification.save()
+        return notification
