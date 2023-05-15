@@ -1,17 +1,19 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { IVacancyPage, VacanciesSearchService } from '../../../../../../common';
-import { FormGenerator, ISelectOption, Ordering } from '../../../../../../lib';
-import { getOrderingRussianAsArray } from '../../../../../../lib/utils/enum-mappers/ordering-russian-array-mapper';
+import { IVacancyPage, VacanciesSearchService } from '../../../../../common';
+import { FormGenerator, ISelectOption } from '../../../../forms';
+import { getOrderingRussianAsArray } from '../../../../utils/enum-mappers/ordering-russian-array-mapper';
+import { Ordering } from '../../../../utils';
+
 
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.scss']
+    selector: 'app-vacancy-search',
+    templateUrl: './vacancy-search.component.html',
+    styleUrls: ['./vacancy-search.component.scss']
 })
-export class SearchComponent implements OnInit {
+export class VacancySearchComponent implements OnInit {
 
     public vacancies$: Observable<IVacancyPage> = this._vacancySearch.vacancies$;
 
@@ -29,7 +31,6 @@ export class SearchComponent implements OnInit {
 
     public ngOnInit(): void {
         this.orderingForm.controls['ordering'].valueChanges.subscribe((value: ISelectOption) => {
-            console.log('ordering');
             this.madeSearch.emit();
             this._vacancySearch.sort(value.id as Ordering);
         });

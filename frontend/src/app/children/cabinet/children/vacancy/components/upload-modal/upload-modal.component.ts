@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserService, VacancyService } from '../../../../../../common';
-import { contentExpansion, Modal } from '../../../../../../lib';
+import { contentExpansion } from '../../../../../../lib';
+import { Modal } from '../../../../../../lib/ui-modals/classes/modal';
 
 
 @Component({

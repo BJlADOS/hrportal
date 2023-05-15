@@ -1,11 +1,10 @@
-import {Injectable} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {CustomValidators} from './custom-validators';
-import {IDepartment, IFilter, IResume, IUser, IVacancy} from '../../common';
-import {ISelectOption} from './controls';
-import {Ordering} from '../utils';
-import {IResumeRequest} from "../../common/resume/interfaces/resume-request.interface";
-import {Status} from "../utils/enums/status.enum";
+import { Injectable } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from './custom-validators';
+import { IDepartment, IFilter, IResume, IUser, IVacancy } from '../../common';
+import { ISelectOption } from './controls';
+import { Ordering } from '../utils';
+import { IResumeRequest } from '../../common/resume/interfaces/resume-request.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -87,7 +86,7 @@ export class FormGenerator {
                     Validators.required,
                 ])),
                 department: new FormControl(user.currentDepartment, Validators.compose([
-                    user.isAdmin || user.isManager? null : Validators.required,
+                    (user.isAdmin || user.isManager) ? null : Validators.required,
                 ])),
                 skills: new FormControl(user.existingSkills.slice()),
             }

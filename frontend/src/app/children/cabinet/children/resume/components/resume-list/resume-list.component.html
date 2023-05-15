@@ -1,48 +1,7 @@
 <div class="wrapper">
     <div class="wrapper-grid">
         <div class="wrapper-flex column-1-13">
-            <div class="content">
-                <div class="search">
-                    <app-resume-search (madeSearch)="resetSearch()"
-                                       (filterToggle)="toggleFilters()">
-                    </app-resume-search>
-                </div>
-                <div class="error"
-                     *ngIf="loadingError">
-                    {{loadingError}}
-                </div>
-                <div class="content__main">
-                    <div class="filters"
-                         [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'"
-                         stickySidebar
-                         containerSelector=".content__main"
-                         innerWrapperSelector=".inner"
-                         topSpacing="24"
-                         bottomSpacing="24"
-                         [minWidth]="400"
-                         [updateSticky]="update$">
-                        <div class="inner">
-                            <app-resume-filters (madeSearch)="resetSearch()">
-                            </app-resume-filters>
-                        </div>
-                    </div>
-                    <div class="resumes">
-                        <app-resume class="width"
-                                    *ngFor="let resume of resumes"
-                                    [resume]="resume">
-                        </app-resume>
-                    </div>
-                </div>
-
-                <div class="scroll-back"
-                     *ngIf="canScrollBack"
-                     (click)="scrollBack()">
-                    <up-arrow-icon></up-arrow-icon>
-                    <span>
-                        Назад
-                    </span>
-                </div>
-            </div>
+            <app-resume-list></app-resume-list>
         </div>
     </div>
 </div>

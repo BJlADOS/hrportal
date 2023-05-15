@@ -1,18 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import {
-    FormGenerator,
-    getEmploymentRussianAsArray,
-    getScheduleRussianAsArray,
-    ISelectOption
-} from '../../../../../../lib';
-import { ISkill, SkillsService } from '../../../../../../common';
-import { ResumeSearchService } from '../../../../../../common/resume/services/resume-search.service';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { getEmploymentRussianAsArray, getScheduleRussianAsArray } from '../../../../utils';
+import { FormGenerator, ISelectOption } from '../../../../forms';
+import { ISkill, SkillsService } from '../../../../../common';
+import { ResumeSearchService } from '../../../../../common/resume/services/resume-search.service';
 
 @Component({
     selector: 'app-resume-filters',
-
     templateUrl: './resume-filters.component.html',
     styleUrls: ['./resume-filters.component.scss']
 })

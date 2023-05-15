@@ -14,8 +14,13 @@
     <div class="description">
         {{description}}
     </div>
-    <div class="skills">
+    <div class="skills"
+         *ngIf="vacancy.requiredSkills.length">
         {{skillsToString(vacancy.requiredSkills)}}
     </div>
-    <button class="response" (click)="responseVacancy()">Откликнуться</button>
+    <button class="response"
+            *ngIf="!hideButtons"
+            (click)="responseVacancy()">
+        Откликнуться
+    </button>
 </div>
