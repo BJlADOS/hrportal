@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IVacancy } from '../../../../../common/vacancy/interfaces/vacancy.interface';
-import { ModalService } from '../../../../ui-modals/services/modal.service';
-import { UploadModalComponent } from '../../../../../children/cabinet/children/vacancy/components/upload-modal/upload-modal.component';
+import { IVacancy } from '../../../../../../../common';
+import { ModalService } from '../../../../../../../lib';
+import { UploadModalComponent } from '../../upload-modal/upload-modal.component';
+
 
 
 

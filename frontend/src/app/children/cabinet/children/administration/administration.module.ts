@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { administrationRouting } from './administration-routing.module';
+import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration/administration.component';
 import { DeletedVacanciesComponent } from './administration/children/deleted-vacancies/deleted-vacancies.component';
 import { DeletedResumesComponent } from './administration/children/deleted-resumes/deleted-resumes.component';
@@ -9,7 +9,8 @@ import { DeletedUsersComponent } from './administration/children/deleted-users/d
 import { SharedModule } from '../../../../lib';
 import { UpArrowIconComponent } from '../../../../../assets/img';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
-import { VacanciesSearchService } from '../../../../common';
+import { VacancyModule } from '../vacancy';
+import { ResumeModule } from '../resume/resume.module';
 
 @NgModule({
     declarations: [
@@ -18,12 +19,11 @@ import { VacanciesSearchService } from '../../../../common';
         DeletedResumesComponent,
         DeletedUsersComponent,
     ],
-    providers: [
-        VacanciesSearchService,
-    ],
     imports: [
         CommonModule,
-        administrationRouting,
+        AdministrationRoutingModule,
+        VacancyModule,
+        ResumeModule,
         SharedModule,
         UpArrowIconComponent,
         NgxStickySidebarModule.withConfig({

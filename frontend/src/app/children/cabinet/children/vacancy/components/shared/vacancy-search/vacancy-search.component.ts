@@ -1,10 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { IVacancyPage, VacanciesSearchService } from '../../../../../common';
-import { FormGenerator, ISelectOption } from '../../../../forms';
-import { getOrderingRussianAsArray } from '../../../../utils/enum-mappers/ordering-russian-array-mapper';
-import { Ordering } from '../../../../utils';
+import { IVacancyPage, VacanciesSearchService } from '../../../../../../../common';
+import { FormGenerator, ISelectOption, Ordering } from '../../../../../../../lib';
+import { getOrderingRussianAsArray } from '../../../../../../../lib/utils/enum-mappers/ordering-russian-array-mapper';
 
 
 

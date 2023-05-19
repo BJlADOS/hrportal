@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { resumeRouting } from './resume-routing.module';
 import { SharedModule } from '../../../../lib/shared/shared.module';
-import { ResumeDetailComponent, ResumeListComponent, ResumeResponseModalComponent } from './components';
+import { ResumeDetailComponent, ResumeListMainComponent, ResumeResponseModalComponent } from './components';
 import { ResumeResolverService, ResumeService } from '../../../../common';
 import {
     Cross1IconComponent,
@@ -13,13 +13,24 @@ import {
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
+import {
+    ResumeCardComponent,
+    ResumeFiltersComponent,
+    ResumeListComponent,
+    ResumeSearchComponent
+} from './components/shared';
+
 
 
 @NgModule({
     declarations: [
-        ResumeListComponent,
+        ResumeListMainComponent,
         ResumeDetailComponent,
         ResumeResponseModalComponent,
+        ResumeListComponent,
+        ResumeCardComponent,
+        ResumeFiltersComponent,
+        ResumeSearchComponent,
     ],
     providers: [
         ResumeService,
@@ -38,6 +49,12 @@ import { NgxMaskModule } from 'ngx-mask';
         FilterIconComponent,
         MagnifierIconComponent,
         UpArrowIconComponent
+    ],
+    exports: [
+        ResumeListComponent,
+        ResumeCardComponent,
+        ResumeFiltersComponent,
+        ResumeSearchComponent,
     ]
 })
 export class ResumeModule { }

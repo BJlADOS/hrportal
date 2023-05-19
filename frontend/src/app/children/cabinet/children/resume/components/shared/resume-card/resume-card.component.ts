@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IResume, ISkill, IUser, ResumeService, UserService } from '../../../../../common';
-import { ModalService } from '../../../../ui-modals';
-import { ResumeResponseModalComponent } from '../../../../../children/cabinet/children/resume/components';
+import { IResume, ISkill, IUser, ResumeService, UserService } from '../../../../../../../common';
+import { ModalService } from '../../../../../../../lib';
+import { ResumeResponseModalComponent } from '../../resume-response-modal/resume-response-modal.component';
+
 
 @Component({
     selector: 'app-resume-card',

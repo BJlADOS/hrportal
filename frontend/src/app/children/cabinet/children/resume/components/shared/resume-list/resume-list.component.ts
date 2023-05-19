@@ -1,10 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { contentExpansionHorizontal, DestroyService } from '../../../../utils';
+
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { IResumePage } from '../../../../../common/resume/interfaces/resume-page.interface';
-import { IResume, ResumeService } from '../../../../../common';
-import { ResumeSearchService } from '../../../../../common/resume/services/resume-search.service';
-import { Status } from '../../../../utils/enums/status.enum';
+import { Status } from '../../../../../../../lib/utils/enums/status.enum';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { contentExpansionHorizontal, DestroyService } from '../../../../../../../lib';
+import { IResumePage } from '../../../../../../../common/resume/interfaces/resume-page.interface';
+import { IResume, ResumeService } from '../../../../../../../common';
+import { ResumeSearchService } from '../../../../../../../common/resume/services/resume-search.service';
 
 
 @Component({

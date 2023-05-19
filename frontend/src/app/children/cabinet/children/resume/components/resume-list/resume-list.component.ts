@@ -8,6 +8,6 @@ import { contentExpansionHorizontal, DestroyService } from '../../../../../../li
     animations: [contentExpansionHorizontal],
     providers: [DestroyService],
 })
-export class ResumeListComponent {
+export class ResumeListMainComponent {
 
 }

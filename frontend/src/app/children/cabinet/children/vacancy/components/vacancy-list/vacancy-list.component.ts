@@ -13,7 +13,7 @@ import { contentExpansionHorizontal } from '../../../../../../lib';
     styleUrls: ['./vacancy-list.component.scss'],
     animations: [contentExpansionHorizontal],
 })
-export class VacancyListComponent {
+export class VacancyListMainComponent {
 
     public user: Observable<IUser | null> = this._user.currentUser$;
 

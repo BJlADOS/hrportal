@@ -2,9 +2,20 @@ import { Component, EventEmitter, Output } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { getEmploymentRussianAsArray, getScheduleRussianAsArray } from '../../../../utils';
-import { FormGenerator, ISelectOption } from '../../../../forms';
-import { DepartmentService, IDepartment, ISkill, SkillsService, VacanciesSearchService } from '../../../../../common';
+import {
+    FormGenerator,
+    getEmploymentRussianAsArray,
+    getScheduleRussianAsArray,
+    ISelectOption
+} from '../../../../../../../lib';
+import {
+    DepartmentService,
+    IDepartment,
+    ISkill,
+    SkillsService,
+    VacanciesSearchService
+} from '../../../../../../../common';
+
 
 
 @Component({

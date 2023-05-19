@@ -8,9 +8,10 @@ import {
     UserService,
     VacanciesSearchService,
     VacancyService
-} from '../../../../../common';
-import { contentExpansionHorizontal, DestroyService } from '../../../../utils';
-import { Status } from '../../../../utils/enums/status.enum';
+} from '../../../../../../../common';
+import { Status } from '../../../../../../../lib/utils/enums/status.enum';
+import { contentExpansionHorizontal, DestroyService } from '../../../../../../../lib';
+
 
 
 @Component({
