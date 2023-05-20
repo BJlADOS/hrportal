@@ -5,6 +5,7 @@ import { ISkill, SkillsService } from '../../../../../../../../common';
 import { EmployeeSearchService } from '../../services/employee-search.service';
 import { EmployeeFilterManagerService } from '../../services/employee-filter-manager.service';
 import { EmployeeFilterViewModel } from '../../view-models/employee-filter.view-model';
+import { ISelectOption } from '../../../../../../../../lib';
 
 @Component({
     selector: 'employee-filters',
@@ -33,10 +34,16 @@ export class EmployeeFiltersComponent {
     }
 
     public applyFilters(): void {
-        this._employeeSearchService.setFilters(this.viewModel?.form?.value);
+        const formValue: any = this.viewModel?.form?.value;
+
+        this._employeeSearchService.setFilters({
+            department: formValue.department,
+            experience: formValue.experience?.map((experience: ISelectOption) => experience.id),
+            skills: formValue.skills?.map((skill: ISelectOption) => skill.id)
+        });
     }
 
     public resetFilters(): void {
-        this._employeeSearchService.setFilters(this.viewModel?.form?.value);
+        this._employeeSearchService.setFilters({});
     }
 }

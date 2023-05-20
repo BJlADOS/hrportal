@@ -5,7 +5,6 @@ import { IEmployeeResponse } from '../response-interfaces/employee-response.inte
 import { EmployeeEndpoints } from '../endpoints/employee.endpoints';
 import { IEmployeeRequestParams } from '../param-interfaces/employee-request-params.interface';
 import { IPage } from '../../../../../../../../lib';
-import { IUser } from '../../../../../../../../common';
 
 @Injectable()
 export class EmployeeRequestService {
@@ -27,6 +26,12 @@ export class EmployeeRequestService {
             {
                 params: { ...params }
             }
+        );
+    }
+
+    public getEmployeeById(id: number): Observable<IEmployeeResponse> {
+        return this._httpClient.get<IEmployeeResponse>(
+            EmployeeEndpoints.employeeById(id)
         );
     }
 }

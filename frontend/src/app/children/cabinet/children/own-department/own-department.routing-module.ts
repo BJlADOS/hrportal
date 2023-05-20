@@ -14,14 +14,14 @@ const routes: Routes = [
             },
             {
                 path: 'vacancies',
-                loadChildren: () => import('./children/employees/own-department-employees.module').then((m) => m.OwnDepartmentEmployeesModule),
+                loadChildren: () => import('../vacancy/vacancy.module').then((m) => m.VacancyModule),
                 data: {
                     breadcrumb: 'Вакансии'
                 }
             },
             {
                 path: 'resumes',
-                loadChildren: () => import('./children/employees/own-department-employees.module').then((m) => m.OwnDepartmentEmployeesModule),
+                loadChildren: () => import('../resume/resume.module').then((m) => m.ResumeModule),
                 data: {
                     breadcrumb: 'Резюме'
                 }
@@ -32,14 +32,7 @@ const routes: Routes = [
                 data: {
                     breadcrumb: 'Сотрудники'
                 }
-            },
-            {
-                path: 'responses',
-                loadChildren: () => import('./children/employees/own-department-employees.module').then((m) => m.OwnDepartmentEmployeesModule),
-                data: {
-                    breadcrumb: 'Отклики'
-                }
-            },
+            }
         ]
     }
 ];

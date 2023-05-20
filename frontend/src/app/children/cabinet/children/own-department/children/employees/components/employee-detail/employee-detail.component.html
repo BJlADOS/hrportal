@@ -1,0 +1,47 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-6">
+            <div class="user-profile" *ngIf="viewModel$ | async as viewModel">
+                <div class="user-profile__header">
+                    <img [src]="viewModel.avatarUrl" class="user-profile__photo">
+                    <div class="user-profile__header-info">
+                        <div class="user-profile__name">
+                            {{viewModel.name}}
+                        </div>
+                        <div class="user-profile__role" *ngIf="viewModel.role">
+                            {{viewModel.role}}
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile__personal" *ngIf="viewModel.personalCanBeViewed">
+                    <h3>Персональная информация</h3>
+                    <div class="user-profile__email" *ngIf="viewModel.email">
+                        {{viewModel.email}}
+                    </div>
+                    <div class="user-profile__contact" *ngIf="viewModel.contact">
+                        {{viewModel.contact}}
+                    </div>
+                </div>
+                <div class="user-profile__career" *ngIf="viewModel.careerCanBeViewed">
+                    <h3>Карьера</h3>
+                    <div class="user-profile__experience" *ngIf="viewModel.workExperience">
+                        {{viewModel.workExperience}}
+                    </div>
+                </div>
+                <div class="user-profile__skills">
+                    <h3>Навыки</h3>
+                    <ng-container *ngIf="viewModel.skills.length else skillsMissing">
+                        <div class="skill" *ngFor="let skill of viewModel.skills">
+                            {{skill.name}}
+                        </div>
+                    </ng-container>
+                    <ng-template #skillsMissing>
+                        <span class="user-profile__no-skills">Навыков нет</span>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

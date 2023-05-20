@@ -1,0 +1,109 @@
+@mixin input-field-block {
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-size: var(--font-size--main);
+    font-family: var(--main-font-family);
+    color: var(--font-primary);
+    border: 1px solid var(--border-color);
+    background-color: var(--white);
+}
+
+.user-profile {
+    &__header {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 40px;
+    }
+
+    &__header-info {
+        margin-left: 40px;
+    }
+
+    &__name {
+        color: var(--main-accent-color);
+        font-size: 30px;
+        font-family: var(--main-font-family);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    &__photo {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    &__no-skills {
+        border-color: var(--border-color);
+        color: var(--font-primary);
+    }
+
+    &__email {
+        @include input-field-block;
+    }
+
+    &__contact {
+        @include input-field-block;
+        margin-top: 10px;
+    }
+
+    &__experience {
+        @include input-field-block;
+    }
+
+    &__personal {
+        margin-top: 40px;
+    }
+
+    &__career {
+        margin-top: 40px;
+    }
+
+    &__skills {
+        margin-top: 40px;
+    }
+}
+
+.skill {
+    border: 1px solid var(--main-accent-color);
+    border-radius: 1rem;
+    padding: 0.3rem 0.8rem;
+    max-width: max-content;
+
+    &:hover {
+        cursor: pointer;
+        border-color: var(--main-accent-color);
+    }
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+
+.wrapper-flex {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2rem;
+}
+
+@media screen and (max-width: 1280px) {
+    .column-1-6 {
+        grid-column: 1 / 9;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    .column-1-6 {
+        grid-column: 1 / 13;
+    }
+
+    .column-11-13 {
+        grid-column: auto
+    }
+}

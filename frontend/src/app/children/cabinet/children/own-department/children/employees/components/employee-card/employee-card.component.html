@@ -1,4 +1,4 @@
-<a class="link-wrapper" (click)="openEmployeeDetail()">
+<a class="link-wrapper" (click)="openEmployeeDetail($event)">
     <div class="employee-card">
         <div class="employee-card__name">
             <span>{{viewModel.name}}</span>
@@ -12,6 +12,8 @@
         <div class="employee-card__skills">
             {{viewModel.skillString}}
         </div>
-        <button class="employee-card__resume-button" (click)="toResume()">Резюме</button>
+        <ng-container *ngIf="viewModel.resumeExists">
+            <button class="employee-card__resume-button" (click)="toResume($event)">Резюме</button>
+        </ng-container>
     </div>
 </a>

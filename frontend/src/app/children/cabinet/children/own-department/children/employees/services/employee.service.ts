@@ -29,4 +29,13 @@ export class EmployeeService {
                 })
             );
     }
+
+    public getEmployeeById(id: number): Observable<IUser> {
+        return this._employeeRequestService.getEmployeeById(id)
+            .pipe(
+                map((data: IEmployeeResponse) => {
+                    return employeeMapper(data);
+                })
+            );
+    }
 }

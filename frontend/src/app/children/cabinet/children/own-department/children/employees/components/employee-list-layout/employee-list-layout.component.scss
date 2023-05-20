@@ -36,12 +36,23 @@
     }
 
     &__filter-button {
-        font-weight: 500;
-        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--main-accent-color);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        transition: .3s ease;
         cursor: pointer;
 
         &:hover {
-            color: var(--font-primary)
+            transform: scale(1.2);
+        }
+
+        svg {
+            width: 26px;
+            height: 26px;
         }
     }
 
@@ -52,4 +63,15 @@
     &__employee-list {
         width: 100%
     }
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.wrapper-grid {
+    width: auto;
+    grid-template-columns: repeat(12, 80px);
 }

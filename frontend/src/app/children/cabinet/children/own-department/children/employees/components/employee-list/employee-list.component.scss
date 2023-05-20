@@ -70,28 +70,6 @@
     }
 }
 
-.scroll-back {
-    position: fixed;
-    display: flex;
-    gap: .5rem;
-    bottom: 2rem;
-    right: 2rem;
-    background-color: var(--grey);
-    border-radius: 20px;
-    padding: .6rem 1rem;
-    transition: .3s ease;
-
-    span {
-        text-transform: uppercase;
-        color: var(--white);
-    }
-
-    &:hover {
-        cursor: pointer;
-        background-color: var(--main-accent-color);
-    }
-}
-
 .width {
     width: 100%;
 }

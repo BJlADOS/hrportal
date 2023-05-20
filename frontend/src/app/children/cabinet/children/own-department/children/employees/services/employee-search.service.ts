@@ -1,68 +1,70 @@
-import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, take } from 'rxjs';
-import { EmployeeService } from './employee.service';
-import { BufferSubject, clearFromNullable, IPage, Ordering } from '../../../../../../../lib';
-import { IUser } from '../../../../../../../common';
+import { Injectable } from '@angular/core';
+import { clearFromNullable } from '../../../../../../../lib';
 import { IEmployeeRequestParams } from '../data/param-interfaces/employee-request-params.interface';
-import { EMPLOYEE_LIST_TOKEN } from '../tokens/employee-list.token';
+import { EmployeePageLazyLoadingService } from './employee-page-lazy-loading.service';
+import { IEmployeeFilterParams } from '../interfaces/employee-filter-params.interface';
 
 @Injectable()
 export class EmployeeSearchService {
-
-    public resumesSubject$: BehaviorSubject<IPage<IUser>> = new BehaviorSubject<IPage<IUser>>( {
-        count: 0,
-        next: null,
-        previous: null,
-        results: []
-    });
-
-    public employees$ : Observable<IPage<IUser>> = this.resumesSubject$.asObservable();
-
-    private _filterRequest: IEmployeeRequestParams = {
-        limit: 3,
-        offset: 0,
-    };
+    private _searchString: string | undefined;
+    private _filterParams: IEmployeeFilterParams | undefined;
+    /** Когда запрос уже отправлен, невозможно отправить новый до получения ответа старого */
+    private _requestingLocked: boolean = false;
 
     constructor(
-        @Inject(EMPLOYEE_LIST_TOKEN) protected modelBuffer$: BufferSubject<IEmployeeRequestParams, IPage<IUser>>
+        private _pageDataService: EmployeePageLazyLoadingService
     ) { }
 
-    public setFilters(filter: IEmployeeRequestParams): void {
-        Object.assign(this._filterRequest, filter);
-        this._filterRequest.offset = 0;
-        this.makeSearch();
+    /**
+     * Сделать запрос с фильтрацией
+     * */
+    public setFilters(filter: IEmployeeFilterParams): void {
+        this._pageDataService.clearPageData();
+        this._filterParams = filter;
+        this._requestingLocked = true;
+        this.makeRequest();
     }
 
+    /**
+     * Сделать запрос с поиском по строке
+     * */
     public search(search?: string): void {
-        this._filterRequest.search = search;
-        this._filterRequest.offset = 0;
-        this.makeSearch();
+        this._pageDataService.clearPageData();
+        this._searchString = search;
+        this._requestingLocked = true;
+        this.makeRequest();
     }
 
-    public sort(ordering: Ordering): void {
-        // this._filterRequest.ordering = ordering;
-        this._filterRequest.offset = 0;
-        this.makeSearch();
-    }
-
+    /**
+     * Добавить список еще элементов
+     * */
     public loadMore(): void {
-        if ((this._filterRequest.offset! + this._filterRequest.limit!) >= this.resumesSubject$.value.count) {
+        if (this._pageDataService.itemsLoaded >= this._pageDataService.itemsCount) {
             return;
         }
-        this._filterRequest.offset! += this._filterRequest.limit!;
-        this.makeSearch();
+
+        this.makeRequest();
     }
 
-    public resetAll(): void {
-        this._filterRequest = {
-            limit: 5,
-            offset: 0,
-        };
-
-        this.resumesSubject$.next({ count: 0, next: null, previous: null, results: [] });
+    /**
+     * Отправить запрос для получения данных списка
+     * */
+    private makeRequest(): void {
+        this._pageDataService.addPage(this.getRequestData())
+            .subscribe(() => {
+                this._requestingLocked = false;
+            });
     }
 
-    private makeSearch(): void {
-        this.modelBuffer$.update(clearFromNullable(this._filterRequest));
+    /**
+     * Получить список текущих параметров поиска для запроса
+     * */
+    private getRequestData(): IEmployeeRequestParams {
+        return clearFromNullable({
+            ...this._filterParams,
+            search: this._searchString,
+            offset: this._pageDataService.itemsLoaded,
+            limit: 3
+        });
     }
 }

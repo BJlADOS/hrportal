@@ -35,12 +35,14 @@
         flex-direction: row;
         gap: 0.5rem;
         align-items: center;
+        min-width: max-content;
     }
 
     & .resume-notification {
         display: flex;
         align-items: flex-start;
         gap: 0.25rem;
+        margin-left: 40px;
 
         & .text {
             border: 1px solid var(--main-accent-color);
@@ -112,7 +114,7 @@
         justify-content: flex-end;
         flex-direction: row;
         align-items: center;
-        gap: 2rem;  
+        gap: 2rem;
 
         & button {
             transition: .3s ease;

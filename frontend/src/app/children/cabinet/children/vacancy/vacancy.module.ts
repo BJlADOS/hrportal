@@ -28,6 +28,9 @@ import { PlusIconComponent, Cross2IconComponent, MagnifierIconComponent, Cross1I
         FiltersComponent,
         VacancyDeclinationPipe,
     ],
+    exports: [
+        VacancyListComponent
+    ],
     providers: [
         VacanciesSearchService,
         VacancyResolverService

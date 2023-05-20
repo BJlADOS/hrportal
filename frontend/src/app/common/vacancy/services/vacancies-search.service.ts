@@ -3,17 +3,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { IFilter, IFilterRequest, IVacancyPage } from '../interfaces';
 import { DestroyService, Ordering } from '../../../lib';
 import { VacancyService } from './vacancy.service';
+import { IDepartment } from '../../department';
 
 @Injectable()
 export class VacanciesSearchService {
 
     public vacanciesSubject$: BehaviorSubject<IVacancyPage> = new BehaviorSubject<IVacancyPage>({ count: 0, next: null, previous: null, results: [] });
     public vacancies$: Observable<IVacancyPage> = this.vacanciesSubject$.asObservable();
+    private _concreteDepartment?: IDepartment;
 
     private _filterRequest: IFilterRequest = {
         salary_min: undefined,
         salary_max: undefined,
-        departments: [],
+        department: [],
         employment: [],
         schedule: [],
         skills: undefined,
@@ -24,9 +26,13 @@ export class VacanciesSearchService {
     };
 
     constructor(
-    private _vacancy: VacancyService,
-    private _destroy$: DestroyService,
+        private _vacancy: VacancyService,
+        private _destroy$: DestroyService
     ) { }
+
+    public setDepartment(department: IDepartment): void {
+        this._concreteDepartment = department;
+    }
 
     public setFilters(filter: IFilter): void {
         if (filter.salary_min && filter.salary_max) {
@@ -68,7 +74,7 @@ export class VacanciesSearchService {
         this._filterRequest.employment = [];
         this._filterRequest.schedule = [];
         this._filterRequest.skills = [];
-        this._filterRequest.departments = [];
+        this._filterRequest.department = [];
         this._filterRequest.salary_min = undefined;
         this._filterRequest.salary_max = undefined;
         this.makeSearch();
@@ -78,7 +84,7 @@ export class VacanciesSearchService {
         this._filterRequest = {
             salary_min: undefined,
             salary_max: undefined,
-            departments: [],
+            department: [],
             employment: [],
             schedule: [],
             skills: undefined,
@@ -91,6 +97,10 @@ export class VacanciesSearchService {
     }
 
     private makeSearch(): void {
+        if (this._concreteDepartment) {
+            this._filterRequest.department = [this._concreteDepartment as any];
+        }
+
         this._vacancy.getVacancies(this.buildRequestObject()).subscribe({ next: (data) => {
             this.vacanciesSubject$.next(data);
         } });

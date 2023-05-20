@@ -1,11 +1,7 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { BufferSubject, FormGenerator, IPage } from '../../../../../../../../lib';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormGenerator } from '../../../../../../../../lib';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { EmployeeSearchService } from '../../services/employee-search.service';
-import { IUser } from '../../../../../../../../common';
-import { EMPLOYEE_LIST_TOKEN } from '../../tokens/employee-list.token';
-import { IEmployeeRequestParams } from '../../data/param-interfaces/employee-request-params.interface';
 
 @Component({
     selector: 'employee-search',
@@ -15,14 +11,11 @@ import { IEmployeeRequestParams } from '../../data/param-interfaces/employee-req
 })
 export class EmployeeSearchComponent {
 
-    public employees$: Observable<IPage<IUser> | null> = this.modelBuffer$.value$;
-
     public searchForm: FormGroup = this._form.getSearchForm();
 
     constructor(
         private _form: FormGenerator,
-        private _employeeSearchService: EmployeeSearchService,
-        @Inject(EMPLOYEE_LIST_TOKEN) protected modelBuffer$: BufferSubject<IEmployeeRequestParams, IPage<IUser>>
+        private _employeeSearchService: EmployeeSearchService
     ) { }
 
 

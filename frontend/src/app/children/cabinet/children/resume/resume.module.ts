@@ -10,10 +10,10 @@ import {
     FilterIconComponent, MagnifierIconComponent,
     SuccessIconComponent, UpArrowIconComponent
 } from '../../../../../assets/img';
-import {NgxStickySidebarModule} from "@smip/ngx-sticky-sidebar";
+import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { ResumeFiltersComponent } from './components/resume-filters/resume-filters.component';
-import {ReactiveFormsModule} from "@angular/forms";
-import {NgxMaskModule} from "ngx-mask";
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskModule } from 'ngx-mask';
 import { ResumeSearchComponent } from './components/resume-search/resume-search.component';
 
 
@@ -43,6 +43,10 @@ import { ResumeSearchComponent } from './components/resume-search/resume-search.
         FilterIconComponent,
         MagnifierIconComponent,
         UpArrowIconComponent
+    ],
+    exports: [
+        ResumeListComponent,
+        ResumeDetailComponent,
     ]
 })
 export class ResumeModule { }

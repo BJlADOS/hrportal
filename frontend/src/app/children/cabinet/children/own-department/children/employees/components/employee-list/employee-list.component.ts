@@ -1,10 +1,15 @@
-import { Component, Inject, isDevMode, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, takeUntil } from 'rxjs';
-import { BufferSubject, contentExpansionHorizontal, DestroyService, IPage } from '../../../../../../../../lib';
+import { Component, Inject } from '@angular/core';
+import { BehaviorSubject, catchError, Observable, of, takeUntil } from 'rxjs';
+import { contentExpansionHorizontal, DestroyService } from '../../../../../../../../lib';
 import { IUser } from '../../../../../../../../common';
 import { EmployeeSearchService } from '../../services/employee-search.service';
-import { EMPLOYEE_LIST_TOKEN } from '../../tokens/employee-list.token';
-import { IEmployeeRequestParams } from '../../data/param-interfaces/employee-request-params.interface';
+import {
+    WINDOW_SCROLLED_TO_END_PROVIDER
+} from '../../../../../../../../lib/utils/window-scrolled-to-end/window-scrolled-to-end.provider';
+import {
+    WINDOW_SCROLLED_TO_END_TOKEN
+} from '../../../../../../../../lib/utils/window-scrolled-to-end/window-scrolled-to-end.token';
+import { EmployeePageLazyLoadingService } from '../../services/employee-page-lazy-loading.service';
 
 @Component({
     selector: 'employee-list',
@@ -12,107 +17,44 @@ import { IEmployeeRequestParams } from '../../data/param-interfaces/employee-req
     styleUrls: ['./employee-list.component.scss'],
     animations: [contentExpansionHorizontal],
     providers: [
-        DestroyService
+        DestroyService,
+        WINDOW_SCROLLED_TO_END_PROVIDER
     ],
 })
-export class EmployeeListComponent implements OnInit, OnDestroy {
-    public employeesData$: Observable<IPage<IUser> | null> = this.modelBuffer$.value$;
+export class EmployeeListComponent {
     public employeesModelList$: BehaviorSubject<IUser[] | null> = new BehaviorSubject<IUser[] | null>(null);
     public loadingError: string | undefined;
-
-    public canScrollBack: boolean = false;
-    public filtersExpanded: boolean = false;
-    public update$: Subject<boolean> = new Subject<boolean>();
-
-    private _resumesAmount: number = 0;
-    private _callback : EventListener = this.setTimeout(this.checkPosition.bind(this), 250);
 
     constructor(
         private _employeeSearchService: EmployeeSearchService,
         private _destroyService$: DestroyService,
-        @Inject(EMPLOYEE_LIST_TOKEN) protected modelBuffer$: BufferSubject<IEmployeeRequestParams, IPage<IUser>>
+        private _pageDataService: EmployeePageLazyLoadingService,
+        @Inject(WINDOW_SCROLLED_TO_END_TOKEN) protected windowScrolledToEnd$: Observable<void>
     ) {
-        this.modelBuffer$.update();
-    }
-
-    public ngOnInit(): void {
-        this.employeesData$
-            .pipe(takeUntil(this._destroyService$))
-            .subscribe({
-                next: (page: IPage<IUser> | null) => {
-                    if (page) {
-                        this.employeesModelList$.next(this.employeesModelList$.value?.concat(page.results) ?? page.results);
-                        this._resumesAmount = page.count;
-                        this.update$.next(true);
-                    }
-                },
-                error: (error: string) => {
-                    if (isDevMode()) {
-                        console.log(error);
-                    }
-
-                    this.loadingError = error;
-                }
+        this.windowScrolledToEnd$
+            .pipe(
+                takeUntil(this._destroyService$)
+            )
+            .subscribe(() => {
+                this.getMoreEmployees();
             });
 
-        window.addEventListener('scroll', this._callback);
-        window.addEventListener('resize', this._callback);
+        this.configureDataReceiving();
     }
 
-    public ngOnDestroy(): void {
-        this.update$.complete();
-        window.removeEventListener('scroll', this._callback);
-        window.removeEventListener('resize', this._callback);
-        this.resetSearch();
-        this._employeeSearchService.resetAll();
+    public getMoreEmployees(): void {
+        this._employeeSearchService.loadMore();
     }
 
-    public toggleFilters(): void {
-        this.filtersExpanded = !this.filtersExpanded;
-        setTimeout(() => {
-            this.update$.next(true);
-        }, 700);
-    }
+    private configureDataReceiving(): void {
+        this._pageDataService.list$
+            .pipe(
+                catchError((error: any) => {
+                    this.loadingError = error;
 
-    public resetSearch(): void {
-        this.employeesModelList$.next(null);
-        this._resumesAmount = 0;
-    }
-
-    public scrollBack(): void {
-        window.scroll({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        });
-    }
-
-    private async checkPosition(): Promise<void> {
-        const height: number = document.body.offsetHeight;
-        const screenHeight: number = window.innerHeight;
-        const scrolled: number = window.scrollY;
-        const threshold: number = height - screenHeight / 4;
-        const position: number = scrolled + screenHeight;
-        this.canScrollBack = scrolled > 0;
-
-        if (position >= threshold && this.employeesModelList$.value?.length !== this._resumesAmount) {
-            this._employeeSearchService.loadMore();
-        }
-    }
-
-    private setTimeout(callee: Function, timeout: number): EventListener {
-        let timer: NodeJS.Timeout | null = null;
-
-        return function perform() {
-            if (timer) {
-                return;
-            }
-
-            timer = setTimeout(() => {
-                callee();
-
-                timer = null;
-            }, timeout);
-        };
+                    return of([]);
+                })
+            )
+            .subscribe(this.employeesModelList$);
     }
 }

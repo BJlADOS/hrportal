@@ -8,6 +8,8 @@
         background-color: var(--white);
         padding: 8px 14px;
         align-self: start;
+        min-width: min-content;
+        max-width: max-content;
     }
 
     &__department-list {

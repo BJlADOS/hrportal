@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ownDepartmentRoutes } from './own-department-employees.routing-module';
+import { ownDepartmentEmployeeRoutes } from './own-department-employees.routing-module';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { EmployeeCardComponent } from './components/employee-card/employee-card.component';
 import {
-    Cross1IconComponent,
+    CheckStaticIconComponent,
+    Cross1IconComponent, Cross2IconComponent, EditWhiteIconComponent,
     FilterIconComponent,
-    MagnifierIconComponent,
+    MagnifierIconComponent, PlusIconComponent,
     UpArrowIconComponent
 } from '../../../../../../../assets/img';
 import { LetDirective } from '../../../../../../lib/directives/let.directive';
@@ -15,13 +16,18 @@ import { EmployeeSearchComponent } from './components/employee-search/employee-s
 import { SharedModule } from '../../../../../../lib';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EmployeeListLayoutComponent } from './components/employee-list-layout/employee-list-layout.component';
-import { EmployeeOrderingComponent } from './components/employee-ordering/employee-ordering.component';
 import { EmployeeFiltersComponent } from './components/employee-filters/employee-filters.component';
+import {
+    ScrollUpButtonComponent
+} from '../../../../../../common/scroll-up-button/components/scroll-up-button/scroll-up-button.component';
+import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
+import { EmployeeDeclinationPipe } from './pipes/employee-declination.pipe';
+import { EmployeeLayoutComponent } from './components/employee-layout/employee-layout.component';
 
 @NgModule({
     imports: [
         CommonModule,
-        ownDepartmentRoutes,
+        ownDepartmentEmployeeRoutes,
         NgxStickySidebarModule,
         UpArrowIconComponent,
         LetDirective,
@@ -31,14 +37,21 @@ import { EmployeeFiltersComponent } from './components/employee-filters/employee
         SharedModule,
         ReactiveFormsModule,
         NgxStickySidebarModule,
+        ScrollUpButtonComponent,
+        CheckStaticIconComponent,
+        Cross2IconComponent,
+        EditWhiteIconComponent,
+        PlusIconComponent
     ],
     declarations: [
         EmployeeListComponent,
         EmployeeSearchComponent,
         EmployeeCardComponent,
         EmployeeListLayoutComponent,
-        EmployeeOrderingComponent,
-        EmployeeFiltersComponent
+        EmployeeFiltersComponent,
+        EmployeeDetailComponent,
+        EmployeeDeclinationPipe,
+        EmployeeLayoutComponent
     ]
 })
 export class OwnDepartmentEmployeesModule {

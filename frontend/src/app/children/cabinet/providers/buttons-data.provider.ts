@@ -23,8 +23,7 @@ export const BUTTONS_DATA_PROVIDER: Provider = {
             children: [
                 HeaderButton.departmentVacancies,
                 HeaderButton.departmentResumes,
-                HeaderButton.departmentEmployees,
-                HeaderButton.departmentResponces
+                HeaderButton.departmentEmployees
             ]
         },
         [HeaderButton.departmentVacancies]: {
@@ -38,10 +37,6 @@ export const BUTTONS_DATA_PROVIDER: Provider = {
         [HeaderButton.departmentEmployees]: {
             name: 'Сотрудники',
             path: 'cabinet/own-department/employees',
-        },
-        [HeaderButton.departmentResponces]: {
-            name: 'Отклики',
-            path: 'cabinet/own-department/responses',
         },
         [HeaderButton.administration]: {
             name: 'Администрирование',

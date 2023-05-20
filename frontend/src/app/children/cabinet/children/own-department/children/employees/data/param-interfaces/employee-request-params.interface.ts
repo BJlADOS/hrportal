@@ -1,14 +1,6 @@
-import { Experience } from '../../../../../../../../lib';
+import { IEmployeeFilterParams } from '../../interfaces/employee-filter-params.interface';
 
-export interface IEmployeeRequestParams {
-    /** Список ID отделов */
-    department?: number[],
-    /** Опыт пользователя */
-    experience?: Experience[],
-    /** Статус пользователя - активен или не активен */
-    active?: boolean,
-    /** Список ID навыков */
-    skills?: number[],
+export interface IEmployeeRequestParams extends IEmployeeFilterParams {
     /** Поиск объекта (по названию должности, имени, email) */
     search?: string,
     /** Количество результатов, возвращаемых на страницу */

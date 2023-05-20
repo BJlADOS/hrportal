@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, isDevMode, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { ResumeResponseModalComponent } from '../resume-response-modal/resume-response-modal.component';
@@ -44,8 +44,11 @@ export class ResumeDetailComponent implements OnInit {
                                 this.employee = user;
                             });
                     },
-                    error: () => {
-                        this._router.navigate(['cabinet/resumes']);
+                    error: (error: any) => {
+                        if (isDevMode()) {
+                            console.log(error);
+                        }
+                        this._router.navigate([this._router.url]);
                     }
                 });
         });

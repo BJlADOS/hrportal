@@ -6,18 +6,18 @@ import { IDepartment } from '../../../../../../common';
 
 @Component({
     template: `
-        <div class="wrapper">
-            <div class="wrapper-grid">
-                <div class="wrapper-flex column-1-13">
-                    <div class="department-page">
+        <div class="department-page">
+            <div class="wrapper">
+                <div class="wrapper-grid">
+                    <div class="wrapper-flex column-1-6">
                         <div class="department-page__department-title" *ngIf="department$ | async as department">
                             {{department?.name}}
                         </div>
-                        <div class="department-page__department-list">
-                            <router-outlet></router-outlet>
-                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="department-page__department-list">
+                <router-outlet></router-outlet>
             </div>
         </div>
     `,

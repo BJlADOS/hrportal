@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DepartmentService, IDepartment, ISkill, SkillsService, VacanciesSearchService } from '../../../../../../common';
 import {
     FormGenerator,
@@ -18,6 +18,9 @@ import { FormGroup } from '@angular/forms';
 export class FiltersComponent {
     public filterForm: FormGroup = this._form.getFilterForm();
     @Output() public madeSearch: EventEmitter<null> = new EventEmitter<null>();
+
+    @Input()
+    public isConcreteDepartment: boolean = false;
 
     public schedule: ISelectOption[] = getScheduleRussianAsArray();
     public employment: ISelectOption[] = getEmploymentRussianAsArray();
