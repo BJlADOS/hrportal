@@ -198,6 +198,14 @@ class FiltersOrderingsPaginationTests(TestCase):
         self.assertTrue("previous" in result)
         self.assertTrue("results" in result)
 
+    def test_GetNotificationsWithPagination_ShouldReturnCorrectPage(self):
+        response = self.client.get(f'{reverse("notification-list")}?limit=2&offset=1')
+        result: dict = json.loads(*response)
+        self.assertTrue("count" in result)
+        self.assertTrue("next" in result)
+        self.assertTrue("previous" in result)
+        self.assertTrue("results" in result)
+
     def test_GetVacanciesWithSearching_ShouldReturnMatchedVacancies(self):
         ids = self.vac_ids
         test_cases = {
