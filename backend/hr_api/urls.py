@@ -8,7 +8,7 @@ from .views import *
 schema_view = get_schema_view(
     openapi.Info(
         title='HR Portal API',
-        default_version='v1.2',
+        default_version='v1.3',
         description='Backend API для HR-портала большой IT-компании "Очень интересно" \n'
                     '(Для аутентификации используйте запрос <b>/login</b>)\n'
                     '\n'
@@ -28,10 +28,16 @@ schema_view = get_schema_view(
                     '- Добавлены запросы для деактивации и окончательного удаления пользователя\n'
                     '- Добавлены запросы для окончательного удаления вакансии и резюме\n'
                     '- В модель <b>User</b> добавлено поле <b>isActive</b>\n'
-                    '- Из модели <b>User</b> удалено поле <b>resume</b>\n'
+                    '- <s>Из модели <b>User</b> удалено поле <b>resumeId</b></s>\n'
                     '- Ответы вида <code>{"detail": ["string"]}</code>, обратно'
                     ' заменены на <code>{"detail": "string"}</code> для унификации'
                     ' <i>(если это правило не соблюдено - это пропущенная ошибка)</i>\n'
+                    '\nИзменения с версии <b>v1.2</b>:\n'
+                    '- В модели Резюме поле <code>resume</code> переименовано в <code>file</code>\n'
+                    '- Добавлены запросы для уведомлений. <a href="https://www.notion.so/725dc127beea4f30be0ab8a188d06aa2">Документация по содержимому уведомлений</a>\n'
+                    '- При отклике на вакансию теперь автоматически рассылаются уведомления (как и email-отклики)\n'
+                    '- Критические изменения в модели данных - <b>необходимо</b> сбросить БД (<code>python manage.py flush</code>)\n'
+                    '- В модель <b>User</b> возвращено поле <b>resumeId</b>\n'
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
@@ -46,6 +52,7 @@ router.register('vacancies', VacancyView, basename='vacancy')
 router.register('resumes', ResumeView, basename='resume')
 router.register('skills', SkillView, basename='skill')
 router.register('departments', DepartmentView, basename='department')
+router.register('user/notifications', NotificationView, basename='notification')
 
 urlpatterns = router.urls + [
     path('user/', AuthorizedUserView.as_view(), name='auth-user'),
