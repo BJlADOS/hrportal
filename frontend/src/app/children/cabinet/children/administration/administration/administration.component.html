@@ -1,0 +1,28 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <!--   Сева, тут для тебя место <3   -->
+            <div class="list-selector">
+                <h2>
+                    Удалённые
+                </h2>
+
+                <div class="list-selector__buttons">
+                    <span class="list-selector__button"
+                          routerLink="deleted-vacancies"
+                          [class.active]="isActive('deleted-vacancies')">
+                        Вакансии
+                    </span>
+                    <span class="list-selector__button"
+                          routerLink="deleted-resumes"
+                          [class.active]="isActive('deleted-resumes')">
+                        Резюме
+                    </span>
+                </div>
+            </div>
+            <div class="lists">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

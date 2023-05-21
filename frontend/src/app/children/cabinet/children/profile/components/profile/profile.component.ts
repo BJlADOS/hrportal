@@ -47,7 +47,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     public isEditing: boolean = false;
     public isAddingSkill: boolean = false;
-    public isEditingName: boolean = false;
     public isUserEdited: IUserEditing = {
         name: false,
         photo: false,

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IResume, UserService } from '../../../../../../common';
-import { Modal } from '../../../../../../lib';
+import { Modal } from '../../../../../../lib/ui-modals/classes/modal';
 
 @Component({
     selector: 'app-resume-response-modal',

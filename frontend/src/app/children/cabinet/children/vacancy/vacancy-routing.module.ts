@@ -1,12 +1,12 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateVacancyComponent, VacancyListComponent, VacancyDetailComponent } from './components';
+import { CreateVacancyComponent, VacancyListMainComponent, VacancyDetailComponent } from './components';
 import { VacancyResolverService } from '../../../../common';
 
 const routes: Routes = [
     {
         path: '',
-        component: VacancyListComponent,
+        component: VacancyListMainComponent,
         pathMatch: 'full',
         data: {
             breadcrumb: null

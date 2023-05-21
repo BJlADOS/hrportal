@@ -1,18 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UploadModalComponent } from '../upload-modal/upload-modal.component';
-import { IVacancy } from '../../../../../../common';
-import { ModalService } from '../../../../../../lib';
+import { IVacancy } from '../../../../../../../common';
+import { ModalService } from '../../../../../../../lib';
+import { UploadModalComponent } from '../../upload-modal/upload-modal.component';
+
+
 
 
 @Component({
-    selector: 'app-vacancy',
-    templateUrl: './vacancy.component.html',
-    styleUrls: ['./vacancy.component.scss']
+    selector: 'app-vacancy-card',
+    templateUrl: './vacancy-card.component.html',
+    styleUrls: ['./vacancy-card.component.scss']
 })
-export class VacancyComponent implements OnInit {
+export class VacancyCardComponent implements OnInit {
 
     @Input() public vacancy!: IVacancy;
+    @Input() public hideButtons: boolean = false;
 
     public description: string = '';
 
@@ -23,7 +26,7 @@ export class VacancyComponent implements OnInit {
 
     public ngOnInit(): void {
         const maxDescriptionLength: number = 400;
-        const stringWithoutTags = this.vacancy.description.replace( /(<([^>]+)>)/ig, '');
+        const stringWithoutTags: string = this.vacancy.description.replace( /(<([^>]+)>)/ig, '');
         if (stringWithoutTags.length < maxDescriptionLength) {
             this.description = stringWithoutTags;
         } else {
