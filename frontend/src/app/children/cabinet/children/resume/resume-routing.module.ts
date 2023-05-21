@@ -1,12 +1,12 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ResumeDetailComponent, ResumeListComponent } from './components';
-import {ResumeResolverService} from "../../../../common";
+import { ResumeDetailComponent, ResumeListMainComponent } from './components';
+import { ResumeResolverService } from '../../../../common';
 
 const routes: Routes = [
     {
         path: '',
-        component: ResumeListComponent,
+        component: ResumeListMainComponent,
         pathMatch: 'full',
         data: {
             breadcrumb: null

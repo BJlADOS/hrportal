@@ -44,6 +44,11 @@ const routes: Routes = [
                 loadChildren: () => import('./children/department/department.module').then((m: any) => m.DepartmentModule),
                 canActivate: [AdminGuard]
             },
+            {
+                path: 'administration',
+                loadChildren: () => import('./children/administration/administration.module').then(m => m.AdministrationModule),
+                canActivate: [AdminGuard],
+            }
         ],
         data: {
             breadcrumb: 'HR-портал'

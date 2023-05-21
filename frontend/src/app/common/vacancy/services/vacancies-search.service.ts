@@ -4,6 +4,7 @@ import { IFilter, IFilterRequest, IVacancyPage } from '../interfaces';
 import { DestroyService, Ordering } from '../../../lib';
 import { VacancyService } from './vacancy.service';
 import { IDepartment } from '../../department';
+import { Status } from "../../../lib/utils/enums/status.enum";
 
 @Injectable()
 export class VacanciesSearchService {
@@ -15,7 +16,8 @@ export class VacanciesSearchService {
     private _filterRequest: IFilterRequest = {
         salary_min: undefined,
         salary_max: undefined,
-        department: [],
+        status: undefined,
+        departments: [],
         employment: [],
         schedule: [],
         skills: undefined,
@@ -49,6 +51,10 @@ export class VacanciesSearchService {
         this._filterRequest.search = search;
         this._filterRequest.offset = 0;
         this.makeSearch();
+    }
+
+    public changeStatus(type: Status): void {
+        this._filterRequest.status = type;
     }
 
     public sort(ordering: Ordering): void {
@@ -85,6 +91,7 @@ export class VacanciesSearchService {
             salary_min: undefined,
             salary_max: undefined,
             department: [],
+            status: undefined,
             employment: [],
             schedule: [],
             skills: undefined,

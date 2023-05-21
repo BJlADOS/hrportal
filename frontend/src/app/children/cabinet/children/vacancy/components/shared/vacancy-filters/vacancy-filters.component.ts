@@ -5,17 +5,25 @@ import {
     getEmploymentRussianAsArray,
     getScheduleRussianAsArray,
     ISelectOption
-} from '../../../../../../lib';
+} from '../../../../../../../lib';
+import {
+    DepartmentService,
+    IDepartment,
+    ISkill,
+    SkillsService,
+    VacanciesSearchService
+} from '../../../../../../../common';
 import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 
 
+
 @Component({
-    selector: 'app-filters',
-    templateUrl: './filters.component.html',
-    styleUrls: ['./filters.component.scss']
+    selector: 'app-vacancy-filters',
+    templateUrl: './vacancy-filters.component.html',
+    styleUrls: ['./vacancy-filters.component.scss']
 })
-export class FiltersComponent {
+export class VacancyFiltersComponent {
     public filterForm: FormGroup = this._form.getFilterForm();
     @Output() public madeSearch: EventEmitter<null> = new EventEmitter<null>();
 

@@ -5,6 +5,7 @@ import { IResumeRequest } from '../interfaces/resume-request.interface';
 import { DestroyService, Ordering } from '../../../lib';
 import { ResumeService } from './resume.service';
 import { IFilterRequest } from '../../vacancy';
+import { Status } from '../../../lib/utils/enums/status.enum';
 
 @Injectable({
     providedIn: 'root',
@@ -21,7 +22,7 @@ export class ResumeSearchService {
         status: undefined,
         ordering: Ordering['-time'],
         search: undefined,
-        limit: 3,
+        limit: 5,
         offset: 0,
         salary_min: undefined,
         salary_max: undefined,
@@ -47,6 +48,10 @@ export class ResumeSearchService {
         this._filterRequest.search = search;
         this._filterRequest.offset = 0;
         this.makeSearch();
+    }
+
+    public changeStatus(type: Status): void {
+        this._filterRequest.status = type;
     }
 
     public sort(ordering: Ordering): void {

@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { NgxMaskModule } from 'ngx-mask';
 import {
-    CreateVacancyComponent, FiltersComponent,
-    SearchComponent,
-    UploadModalComponent, VacancyListComponent,
-    VacancyComponent,
+    CreateVacancyComponent,
+    UploadModalComponent, VacancyListMainComponent,
     VacancyDetailComponent
 } from './components';
 import { vacancyRouting } from './vacancy-routing.module';
@@ -15,17 +13,23 @@ import { SharedModule } from '../../../../lib/shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { VacanciesSearchService, VacancyDeclinationPipe, VacancyResolverService } from '../../../../common';
 import { PlusIconComponent, Cross2IconComponent, MagnifierIconComponent, Cross1IconComponent, FilterIconComponent, CrossIconComponent, UploadIconComponent, SuccessIconComponent, EditIconComponent, ArchiveIconComponent, UpArrowIconComponent } from '../../../../../assets/img';
+import { VacancyCardComponent } from './components';
+import { VacancyFiltersComponent } from './components';
+import { VacancyListComponent } from './components';
+import { VacancySearchComponent } from './components';
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
     declarations: [
-        VacancyListComponent,
-        VacancyComponent,
+        VacancyListMainComponent,
         VacancyDetailComponent,
         UploadModalComponent,
         CreateVacancyComponent,
-        SearchComponent,
-        FiltersComponent,
+        VacancyCardComponent,
+        VacancyFiltersComponent,
+        VacancyListComponent,
+        VacancySearchComponent,
         VacancyDeclinationPipe,
     ],
     exports: [
@@ -56,6 +60,12 @@ import { PlusIconComponent, Cross2IconComponent, MagnifierIconComponent, Cross1I
         EditIconComponent,
         ArchiveIconComponent,
         UpArrowIconComponent
-    ]
+    ],
+    exports: [
+        VacancyListComponent,
+        VacancySearchComponent,
+        VacancyCardComponent,
+        VacancyFiltersComponent,
+    ],
 })
 export class VacancyModule { }

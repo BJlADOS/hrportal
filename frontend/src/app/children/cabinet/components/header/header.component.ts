@@ -55,7 +55,9 @@ export class HeaderComponent implements OnInit {
     }
 
     public isActive(path: string): boolean {
-        return this._router.url === path;
+        const pathChecker: RegExp = new RegExp(`${path}+`);
+
+        return pathChecker.test(this._router.url);
     }
 
     public getUserName(fullname: string): string {

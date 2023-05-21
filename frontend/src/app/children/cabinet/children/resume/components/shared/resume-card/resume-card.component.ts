@@ -1,15 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ResumeResponseModalComponent } from '../resume-response-modal/resume-response-modal.component';
-import { IResume, ISkill, IUser, ResumeService, UserService } from '../../../../../../common';
-import { ModalService } from '../../../../../../lib';
+import { IResume, ISkill, IUser, ResumeService, UserService } from '../../../../../../../common';
+import { ModalService } from '../../../../../../../lib';
+import { ResumeResponseModalComponent } from '../../resume-response-modal/resume-response-modal.component';
+
 
 @Component({
-    selector: 'app-resume',
-    templateUrl: './resume.component.html',
-    styleUrls: ['./resume.component.scss']
+    selector: 'app-resume-card',
+    templateUrl: './resume-card.component.html',
+    styleUrls: ['./resume-card.component.scss']
 })
-export class ResumeComponent implements OnInit {
+export class ResumeCardComponent implements OnInit {
     @Input() public resume!: IResume;
 
     public user: IUser | null = null;
