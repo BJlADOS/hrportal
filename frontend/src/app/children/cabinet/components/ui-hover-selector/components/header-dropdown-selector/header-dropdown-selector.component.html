@@ -3,13 +3,10 @@
         <p class="title" [ngClass]="{'selected': isHeaderSelected}" (click)="model.children ? setOpenState(true) : itemSelected(model)" >{{model.buttonTitle}}</p>
         <ng-container *ngIf="isHover && model.children">
             <div class="selector-dropdown" (outer-click)="setOpenState(false)">
-                    <div class="selector-dropdown__item"
-                         *ngFor="let buttonModel of model.children"
-                         [ngClass]="{'selected': isSelected(buttonModel)}">
-                        <a (click)="itemSelected(buttonModel)">
-                            <span>{{ buttonModel.buttonTitle }}</span>
-                        </a>
-                    </div>
+                <a (click)="itemSelected(buttonModel)" class="selector-dropdown__item"
+                   *ngFor="let buttonModel of model.children" [ngClass]="{'selected': isSelected(buttonModel)}">
+                    <span>{{ buttonModel.buttonTitle }}</span>
+                </a>
             </div>
         </ng-container>
     </ng-container>

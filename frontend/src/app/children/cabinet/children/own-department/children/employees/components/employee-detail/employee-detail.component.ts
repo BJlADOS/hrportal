@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { map, Observable, of, switchMap } from 'rxjs';
+import {BehaviorSubject, map, Observable, of, Subject, switchMap, tap} from 'rxjs';
 import { EmployeeDetailViewModel } from '../../view-models/employee-detail.view-model';
 import { ActivatedRoute } from '@angular/router';
 import { IUser } from '../../../../../../../../common';
@@ -13,6 +13,7 @@ import { EmployeeService } from '../../services/employee.service';
 })
 export class EmployeeDetailComponent {
     public viewModel$!: Observable<EmployeeDetailViewModel | null>;
+    public iconUrl$: Subject<string> = new Subject<string>();
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -20,6 +21,10 @@ export class EmployeeDetailComponent {
         private _employeeService: EmployeeService
     ) {
         this.viewModel$ = this.getViewModelDataStream();
+    }
+
+    public setDefaultIcon(): void {
+        this.iconUrl$.next('assets/img/profile-placeholder.png');
     }
 
     private getViewModelDataStream(): Observable<EmployeeDetailViewModel | null> {
@@ -47,6 +52,11 @@ export class EmployeeDetailComponent {
                         ? new EmployeeDetailViewModel(employeeData)
                         : null;
                 }),
+                tap((viewModel: EmployeeDetailViewModel | null) => {
+                    if (viewModel) {
+                        this.iconUrl$.next(viewModel.avatarUrl);
+                    }
+                })
             );
     }
 }

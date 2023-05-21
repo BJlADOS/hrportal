@@ -1,7 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import {Observable, Subject, take, takeUntil} from 'rxjs';
 import {
+    IDepartment,
     IUser,
     IVacancy,
     IVacancyPage,
@@ -11,7 +12,7 @@ import {
 } from '../../../../../../../common';
 import { Status } from '../../../../../../../lib/utils/enums/status.enum';
 import { contentExpansionHorizontal, DestroyService } from '../../../../../../../lib';
-
+import { USER_DEPARTMENT_TOKEN } from '../../../../own-department/tokens/user-department.token';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class VacancyListComponent implements OnInit, OnDestroy {
         private _user: UserService,
         private _router: Router,
         private _destroy$: DestroyService,
+        @Optional() @Inject(USER_DEPARTMENT_TOKEN) protected department$: Subject<IDepartment>
     ) { }
 
     public ngOnInit(): void {
@@ -60,8 +62,21 @@ export class VacancyListComponent implements OnInit, OnDestroy {
                     this.loadingError = error;
                 }
             });
-        this._vacancySearch.changeStatus(this.defaultStatus);
-        this._vacancySearch.search();
+
+        if (this.department$) {
+            this.department$
+                .pipe(
+                    take(1)
+                )
+                .subscribe((department: IDepartment) => {
+                    this._vacancySearch.setDepartment(department);
+                    this._vacancySearch.changeStatus(this.defaultStatus);
+                    this._vacancySearch.search();
+                });
+        } else {
+            this._vacancySearch.changeStatus(this.defaultStatus);
+            this._vacancySearch.search();
+        }
 
         window.addEventListener('scroll', this.callback);
         window.addEventListener('resize', this.callback);

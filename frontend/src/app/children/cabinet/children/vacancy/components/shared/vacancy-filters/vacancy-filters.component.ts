@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DepartmentService, IDepartment, ISkill, SkillsService, VacanciesSearchService } from '../../../../../../common';
 import {
     FormGenerator,
     getEmploymentRussianAsArray,

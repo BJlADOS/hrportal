@@ -3,7 +3,7 @@
         <div class="wrapper-flex column-1-6">
             <div class="user-profile" *ngIf="viewModel$ | async as viewModel">
                 <div class="user-profile__header">
-                    <img [src]="viewModel.avatarUrl" class="user-profile__photo">
+                    <img [src]="iconUrl$ | async" class="user-profile__photo" (error)="setDefaultIcon()">
                     <div class="user-profile__header-info">
                         <div class="user-profile__name">
                             {{viewModel.name}}
@@ -30,11 +30,11 @@
                 </div>
                 <div class="user-profile__skills">
                     <h3>Навыки</h3>
-                    <ng-container *ngIf="viewModel.skills.length else skillsMissing">
+                    <div class="user-profile__skill-array" *ngIf="viewModel.skills.length else skillsMissing">
                         <div class="skill" *ngFor="let skill of viewModel.skills">
                             {{skill.name}}
                         </div>
-                    </ng-container>
+                    </div>
                     <ng-template #skillsMissing>
                         <span class="user-profile__no-skills">Навыков нет</span>
                     </ng-template>

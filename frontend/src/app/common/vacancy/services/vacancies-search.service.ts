@@ -4,7 +4,7 @@ import { IFilter, IFilterRequest, IVacancyPage } from '../interfaces';
 import { DestroyService, Ordering } from '../../../lib';
 import { VacancyService } from './vacancy.service';
 import { IDepartment } from '../../department';
-import { Status } from "../../../lib/utils/enums/status.enum";
+import { Status } from '../../../lib/utils/enums/status.enum';
 
 @Injectable()
 export class VacanciesSearchService {
@@ -17,7 +17,7 @@ export class VacanciesSearchService {
         salary_min: undefined,
         salary_max: undefined,
         status: undefined,
-        departments: [],
+        department: [],
         employment: [],
         schedule: [],
         skills: undefined,

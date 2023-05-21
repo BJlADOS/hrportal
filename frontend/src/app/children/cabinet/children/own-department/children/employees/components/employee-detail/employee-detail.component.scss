@@ -63,6 +63,13 @@
     &__skills {
         margin-top: 40px;
     }
+
+    &__skill-array {
+        display: flex;
+        flex-direction: row;
+        max-width: 100%;
+        flex-wrap: wrap;
+    }
 }
 
 .skill {
@@ -70,6 +77,8 @@
     border-radius: 1rem;
     padding: 0.3rem 0.8rem;
     max-width: max-content;
+    margin-right: 5px;
+    margin-bottom: 10px;
 
     &:hover {
         cursor: pointer;

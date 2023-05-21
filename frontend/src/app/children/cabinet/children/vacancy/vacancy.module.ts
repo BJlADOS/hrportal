@@ -17,7 +17,6 @@ import { VacancyCardComponent } from './components';
 import { VacancyFiltersComponent } from './components';
 import { VacancyListComponent } from './components';
 import { VacancySearchComponent } from './components';
-import {RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -31,9 +30,6 @@ import {RouterModule} from "@angular/router";
         VacancyListComponent,
         VacancySearchComponent,
         VacancyDeclinationPipe,
-    ],
-    exports: [
-        VacancyListComponent
     ],
     providers: [
         VacanciesSearchService,
