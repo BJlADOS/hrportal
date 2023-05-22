@@ -1,4 +1,4 @@
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdministrationComponent } from './administration/administration.component';
 import { DeletedVacanciesComponent } from './administration/children/deleted-vacancies/deleted-vacancies.component';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { IPage } from '../../../../../../../lib';
 import { BehaviorSubject, Observable, Subject, take } from 'rxjs';
+import { IPage } from '../../utils';
 
 @Injectable()
 export abstract class PageLazyLoadingService<TData, TParams> {
@@ -11,6 +11,7 @@ export abstract class PageLazyLoadingService<TData, TParams> {
     public lastPage: IPage<TData> | null = null;
     public itemsCount: number = 0;
     public itemsLoaded: number = 0;
+    private _dataClearPlanned: boolean = false;
     private _list$: BehaviorSubject<TData[] | null> = new BehaviorSubject<TData[] | null>(null);
 
     /**
@@ -26,8 +27,13 @@ export abstract class PageLazyLoadingService<TData, TParams> {
                 take(1)
             )
             .subscribe((newPage: IPage<TData>) => {
+                if (this._dataClearPlanned) {
+                    this.clearPageData();
+                    this._dataClearPlanned = false;
+                }
+
                 this.lastPage = newPage;
-                this.itemsCount = newPage.count;
+                this.itemsCount = newPage.count ?? this.itemsCount;
                 this.itemsLoaded += newPage.results?.length;
                 this._list$.next(this._list$.value?.concat(newPage.results) ?? newPage.results);
                 valueReceived$.next();
@@ -42,5 +48,9 @@ export abstract class PageLazyLoadingService<TData, TParams> {
         this.lastPage = null;
         this.itemsCount = 0;
         this.itemsLoaded = 0;
+    }
+
+    public planClear(): void {
+        this._dataClearPlanned = true;
     }
 }

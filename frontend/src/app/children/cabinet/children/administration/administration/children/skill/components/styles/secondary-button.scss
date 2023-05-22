@@ -1,0 +1,27 @@
+.secondary-button {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid var(--main-accent-color);
+    border-radius: 1rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    background-color: var(--white);
+    color: var(--main-accent-color);
+    font-weight: 600;
+    font-size: 16px;
+    align-items: center;
+
+    &:hover {
+        background-color: rgba(var(--main-accent-color-rgb), 0.2);
+    }
+
+    &__text {
+        &_right {
+            margin-right: 10px;
+        }
+
+        &_left {
+            margin-left: 10px;
+        }
+    }
+}

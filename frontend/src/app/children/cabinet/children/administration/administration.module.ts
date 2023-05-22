@@ -11,6 +11,7 @@ import { UpArrowIconComponent } from '../../../../../assets/img';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { VacancyModule } from '../vacancy';
 import { ResumeModule } from '../resume/resume.module';
+import { SkillAdministrationModule } from './administration/children/skill/skill-administration.module';
 
 @NgModule({
     declarations: [
@@ -29,6 +30,7 @@ import { ResumeModule } from '../resume/resume.module';
         NgxStickySidebarModule.withConfig({
             minWidth: '280px',
         }),
+        SkillAdministrationModule
     ]
 })
 export class AdministrationModule { }

@@ -1,0 +1,9 @@
+<ng-container *ngIf="viewModel$ | async as viewModel">
+    <form [formGroup]="viewModel.form">
+        <div class="search-field">
+            <input class="search-field__input" [formControlName]="'searchString'">
+            <cross1-icon class="search-field__icon" appHoverListener (click)="reset()" *ngIf="viewModel.form.value"></cross1-icon>
+            <magnifier-icon class="search-field__icon" appHoverListener (click)="search()"></magnifier-icon>
+        </div>
+    </form>
+</ng-container>

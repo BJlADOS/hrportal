@@ -1,8 +1,7 @@
-import { PageLazyLoadingService } from './page-lazy-loading.service';
 import { IDepartment, IUser } from '../../../../../../../common';
 import { Inject, Injectable } from '@angular/core';
 import { IEmployeeRequestParams } from '../data/param-interfaces/employee-request-params.interface';
-import { IPage } from '../../../../../../../lib';
+import { IPage, PageLazyLoadingService } from '../../../../../../../lib';
 import { Observable, Subject, switchMap } from 'rxjs';
 import { EmployeeService } from './employee.service';
 import { USER_DEPARTMENT_TOKEN } from '../../../tokens/user-department.token';
