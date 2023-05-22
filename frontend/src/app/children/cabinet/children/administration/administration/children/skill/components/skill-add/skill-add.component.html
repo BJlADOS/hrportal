@@ -1,0 +1,14 @@
+<ng-container *ngIf="viewModel$ | async as viewModel">
+    <button *ngIf="(viewModel.isAdditionMode$ | async) === false; else addSkill" class="secondary-button" (click)="viewModel.toggleAdditionMode()">
+        <plus-icon></plus-icon><span class="secondary-button__text_left">ДОБАВИТЬ</span>
+    </button>
+    <ng-template #addSkill>
+        <form [formGroup]="viewModel.form" class="add-skill">
+            <input class="add-skill__name-field" [formControlName]="'skillName'">
+            <button class="add-skill__add-button" (click)="addNewSkill()">
+                <span class="add-skill__button-text">ДОБАВИТЬ</span>
+            </button>
+            <cross2-icon class="add-skill__close" (click)="viewModel.toggleAdditionMode()"></cross2-icon>
+        </form>
+    </ng-template>
+</ng-container>

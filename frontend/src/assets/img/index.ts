@@ -24,3 +24,4 @@ export * from './success/success-icon';
 export * from './union/union-icon';
 export * from './up-arrow/up-arrow-icon';
 export * from './upload/upload-icon';
+export * from './minus/minus-icon';

@@ -1,0 +1,46 @@
+<div class="skill-block">
+    <div class="skill-less-mode" *ngIf="!(viewModel.searchViewModel.showMoreMode$ | async); else moreMode">
+        <skill-add [viewModel]="viewModel.additionViewModel"></skill-add>
+        <ng-container *let="lazyLoadingSkillService.list$ | async as skills">
+            <div class="skill-less-mode__skill-row" *ngIf="skills?.length">
+                <div class="skill-less-mode__skill-fade-row">
+                    <div class="skill" *ngFor="let skill of skills">
+                        {{skill.name}}
+                        <cross2-icon class="skill__close" (click)="removeSkill(skill.id)"></cross2-icon>
+                    </div>
+                </div>
+                <button class="secondary-button" (click)="viewModel.toggleShowMore()">
+                    <span class="secondary-button__text_right">БОЛЬШЕ</span><plus-icon></plus-icon>
+                </button>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #moreMode>
+    <div class="skill-more-mode">
+        <div class="skill-more-mode__header-line">
+            <skill-search [viewModel]="viewModel.searchViewModel"></skill-search>
+            <skill-add [viewModel]="viewModel.additionViewModel"></skill-add>
+        </div>
+        <div class="skill-more-mode__skill-row" *ngIf="skillService.searchIsNotEmpty$ | async; else skillNotFound">
+            <div class="skill" *ngFor="let skill of lazyLoadingSkillService.list$ | async">
+                {{skill.name}}
+                <cross2-icon class="skill__close" (click)="removeSkill(skill.id)"></cross2-icon>
+            </div>
+        </div>
+        <button class="secondary-button" (click)="viewModel.toggleShowMore()">
+            <span class="secondary-button__text_right">СВЕРНУТЬ</span><minus-icon></minus-icon>
+        </button>
+        <ng-template #skillNotFound>
+            <div class="not-found">
+                <search-lens-icon class="not-found__image"></search-lens-icon>
+                <p class="not-found__title">НЕТ СОВПАДЕНИЙ</p>
+                <p class="not-found__text">
+                    Попробуйте изменить условия поиска или
+                    <span class="not-found__add-more-text" (click)="viewModel.enableAdditionMode()">добавьте навык</span>!
+                </p>
+            </div>
+        </ng-template>
+    </div>
+</ng-template>
