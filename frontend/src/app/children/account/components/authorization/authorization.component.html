@@ -12,9 +12,10 @@
                 <input id="password" formControlName="password" type="password" class="form-control"
                     [placeholder]="passwordPlaceholder" (blur)="passwordBlur()" (focus)="passwordFocus()"
                     (input)="passwordChange()">
-                <label class="forgot-password" (click)="forgotPassword()">Забыли пароль?</label>
                 <app-errors [errors]="errors"></app-errors>
-                <input type="submit" value="ВХОД" [disabled]="signInForm.invalid">
+                <label class="forgot-password" (click)="forgotPassword()">Забыли пароль?</label>
+                <input *ngIf="!isLoading" type="submit" value="ВХОД" [disabled]="signInForm.invalid">
+                <app-loader *ngIf="isLoading"></app-loader>
                 <p class="error" [@contentExpansion]="submitError ? 'expanded' : 'collapsed'">{{ submitError?.message }}
                 </p>
             </form>

@@ -21,6 +21,7 @@ import {
 } from '../../../../../../lib';
 import { UploadModalComponent } from '../upload-modal/upload-modal.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import {Status} from "../../../../../../lib/utils/enums/status.enum";
 
 
 @Component({
@@ -249,4 +250,6 @@ export class VacancyDetailComponent implements OnInit {
 
         return vacancyUpdate;
     }
+
+    protected readonly Status = Status;
 }

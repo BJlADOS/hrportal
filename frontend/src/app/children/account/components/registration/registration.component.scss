@@ -10,7 +10,7 @@
 }
 
 .wrapper-flex {
-    margin-top: 5%; 
+    margin-top: 5%;
     box-sizing: border-box;
     padding: 3em 2em 4em 2em;
     border: 1px solid var(--border-color);
@@ -43,7 +43,7 @@
 .form {
     padding: 2em 1em 1em 1em;
 
-    & .forgot-password {    
+    & .forgot-password {
         text-decoration: underline;
         text-decoration-skip-ink: none;
         &:hover {
@@ -108,7 +108,7 @@ input {
     &:focus {
         outline: none;
         border-color: var(--main-accent-color);
-    }  
+    }
 }
 
 .error {

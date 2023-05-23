@@ -5,6 +5,6 @@ export interface IResumeUpdate {
     desiredSalary: number;
     desiredEmployment: Employment;
     desiredSchedule: Schedule;
-    resume: File;
+    file: File;
     isActive: boolean;
 }

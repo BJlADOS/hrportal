@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {BehaviorSubject, map, Observable, of, Subject, switchMap, tap} from 'rxjs';
+import { map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { EmployeeDetailViewModel } from '../../view-models/employee-detail.view-model';
 import { ActivatedRoute } from '@angular/router';
 import { IUser } from '../../../../../../../../common';

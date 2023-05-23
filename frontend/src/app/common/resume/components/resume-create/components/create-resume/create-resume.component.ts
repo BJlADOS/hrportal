@@ -166,7 +166,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
             desiredEmployment: (this.resumeForm.value.employment.id?? this.resumeForm.value.employment) as Employment,
             desiredSchedule: (this.resumeForm.value.schedule.id?? this.resumeForm.value.schedule) as Schedule,
             isActive: this.resumeForm.value.isActive as boolean,
-            resume: this.file!,
+            file: this.file!,
         };
 
         return resume;

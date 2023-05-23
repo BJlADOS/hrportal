@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { ownDepartmentEmployeeRoutes } from './own-department-employees.routing-module';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
@@ -42,7 +42,8 @@ import { EmployeeListMainLayoutComponent } from './components/employee-list-main
         CheckStaticIconComponent,
         Cross2IconComponent,
         EditWhiteIconComponent,
-        PlusIconComponent
+        PlusIconComponent,
+        NgOptimizedImage
     ],
     declarations: [
         EmployeeListComponent,

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { IFilter, IFilterRequest, IVacancyPage } from '../interfaces';
-import { DestroyService, Ordering } from '../../../lib';
-import { VacancyService } from './vacancy.service';
-import { IDepartment } from '../../department';
-import { Status } from '../../../lib/utils/enums/status.enum';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {IFilter, IFilterRequest, IVacancyPage} from '../interfaces';
+import {DestroyService, Ordering} from '../../../lib';
+import {VacancyService} from './vacancy.service';
+import {IDepartment} from '../../department';
+import {Status} from '../../../lib/utils/enums/status.enum';
 
 @Injectable()
 export class VacanciesSearchService {
@@ -12,11 +12,12 @@ export class VacanciesSearchService {
     public vacanciesSubject$: BehaviorSubject<IVacancyPage> = new BehaviorSubject<IVacancyPage>({ count: 0, next: null, previous: null, results: [] });
     public vacancies$: Observable<IVacancyPage> = this.vacanciesSubject$.asObservable();
     private _concreteDepartment?: IDepartment;
+    private _forceStatus: Status = Status.public;
 
     private _filterRequest: IFilterRequest = {
         salary_min: undefined,
         salary_max: undefined,
-        status: undefined,
+        status: this._forceStatus,
         department: [],
         employment: [],
         schedule: [],
@@ -54,6 +55,7 @@ export class VacanciesSearchService {
     }
 
     public changeStatus(type: Status): void {
+        this._forceStatus = type;
         this._filterRequest.status = type;
     }
 
