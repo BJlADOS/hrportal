@@ -8,6 +8,7 @@ import { IEmployeeFilterParams } from '../interfaces/employee-filter-params.inte
 export class EmployeeSearchService {
     private _searchString: string | undefined;
     private _filterParams: IEmployeeFilterParams | undefined;
+    private _searchActive: boolean = true;
     /** Когда запрос уже отправлен, невозможно отправить новый до получения ответа старого */
     private _requestingLocked: boolean = false;
 
@@ -23,6 +24,14 @@ export class EmployeeSearchService {
         this._filterParams = filter;
         this._requestingLocked = true;
         this.makeRequest();
+    }
+
+    /**
+     * Постаивть статус для поиска по умолчанию
+     * @param active Статус пользователя
+     */
+    public setDefaultStatus(active: boolean): void {
+        this._searchActive = active;
     }
 
     /**
@@ -62,6 +71,7 @@ export class EmployeeSearchService {
     private getRequestData(): IEmployeeRequestParams {
         return clearFromNullable({
             ...this._filterParams,
+            active: this._searchActive,
             search: this._searchString,
             offset: this._pageDataService.itemsLoaded,
             limit: 3

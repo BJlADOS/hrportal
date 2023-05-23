@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
-import {Observable, Subject, take, takeUntil} from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 import {
     IDepartment,
     IUser,
@@ -34,6 +34,8 @@ export class VacancyListComponent implements OnInit, OnDestroy {
     public canScrollBack: boolean = false;
     public filtersExpanded: boolean = false;
     public update$: Subject<boolean> = new Subject<boolean>();
+
+    public readonly Status = Status;
 
     private vacanciesAmount: number = 0;
     private callback = this.throttle(this.checkPosition.bind(this), 250);

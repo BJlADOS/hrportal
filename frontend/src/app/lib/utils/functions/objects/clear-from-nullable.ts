@@ -3,7 +3,7 @@ export function clearFromNullable<T extends object>(data: T): Partial<T> {
 
     Object.entries(data)
         .forEach(([key, value]: [string, any]) => {
-            if (value) {
+            if (value || typeof value === 'boolean') {
                 request[key] = value;
             }
         });

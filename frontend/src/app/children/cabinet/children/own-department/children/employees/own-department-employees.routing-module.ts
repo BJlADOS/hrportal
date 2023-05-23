@@ -1,8 +1,10 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EmployeeListLayoutComponent } from './components/employee-list-layout/employee-list-layout.component';
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
 import { EmployeeLayoutComponent } from './components/employee-layout/employee-layout.component';
+import {
+    EmployeeListMainLayoutComponent
+} from './components/employee-list-main-layout/employee-list-main-layout.component';
 
 const routes: Routes = [
     {
@@ -11,7 +13,7 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                component: EmployeeListLayoutComponent,
+                component: EmployeeListMainLayoutComponent,
             },
             {
                 path: ':id',

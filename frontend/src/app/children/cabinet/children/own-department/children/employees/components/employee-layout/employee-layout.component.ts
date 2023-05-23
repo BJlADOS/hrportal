@@ -6,7 +6,7 @@ import { EmployeePageLazyLoadingService } from '../../services/employee-page-laz
 
 @Component({
     template: `
-    <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
     `,
     providers: [
         EmployeeService,

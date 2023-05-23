@@ -23,6 +23,7 @@ import {
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
 import { EmployeeDeclinationPipe } from './pipes/employee-declination.pipe';
 import { EmployeeLayoutComponent } from './components/employee-layout/employee-layout.component';
+import { EmployeeListMainLayoutComponent } from './components/employee-list-main-layout/employee-list-main-layout.component';
 
 @NgModule({
     imports: [
@@ -51,7 +52,11 @@ import { EmployeeLayoutComponent } from './components/employee-layout/employee-l
         EmployeeFiltersComponent,
         EmployeeDetailComponent,
         EmployeeDeclinationPipe,
-        EmployeeLayoutComponent
+        EmployeeLayoutComponent,
+        EmployeeListMainLayoutComponent
+    ],
+    exports: [
+        EmployeeListLayoutComponent,
     ]
 })
 export class OwnDepartmentEmployeesModule {

@@ -1,4 +1,4 @@
-<ng-container *ngIf="viewModel$ | async as viewModel">
+<ng-container *let="viewModel$ | async as viewModel">
     <form [formGroup]="viewModel.form">
         <div class="search-field">
             <input class="search-field__input" [formControlName]="'searchString'">

@@ -7,47 +7,39 @@
     padding: 30px 24px 40px;
 }
 
-.skill-less-mode {
-    &__skill-fade-row {
-        display: flex;
-        flex-direction: row;
-        position: relative;
-        max-width: 90%;
-        overflow: hidden;
+.skill-container {
+    transition: .4s ease;
 
-        &::after {
-            content: "";
-            box-shadow: inset -76px 0px 35px -37px var(--additional-accent-color);
-            height: 32px;
-            width: 100px;
-            position: absolute;
-            right: 0;
-            pointer-events: none;
-        }
-    }
-
-    &__skill-row {
-        display: flex;
-        flex-direction: row;
-        margin-top: 20px;
-    }
-}
-
-.skill-more-mode {
     &__header-line {
         display: flex;
         flex-direction: row;
+        justify-content: flex-start;
+        margin-bottom: 2rem;
+        transition: .4s ease;
+    }
+
+    &__skill-fade-row {
+        display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
-        justify-content: space-between;
-        margin-bottom: 30px;
+        gap: .25rem;
+        transition: .5s ease-in-out;
+        position: relative;
     }
 
     &__skill-row {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        margin-bottom: 30px;
-        row-gap: 10px;
+        gap: .5rem;
+        margin-bottom: .75rem;
+        transition: .5s ease-in-out;
+    }
+
+    &.expanded {
+        &>.skill-container__header-line {
+            justify-content: space-between;
+        }
     }
 }
 

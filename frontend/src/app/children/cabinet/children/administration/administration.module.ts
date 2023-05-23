@@ -11,6 +11,7 @@ import { UpArrowIconComponent } from '../../../../../assets/img';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { VacancyModule } from '../vacancy';
 import { ResumeModule } from '../resume/resume.module';
+import { OwnDepartmentEmployeesModule } from '../own-department/children/employees/own-department-employees.module';
 import { SkillAdministrationModule } from './administration/children/skill/skill-administration.module';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { SkillAdministrationModule } from './administration/children/skill/skill
         AdministrationRoutingModule,
         VacancyModule,
         ResumeModule,
+        OwnDepartmentEmployeesModule,
         SharedModule,
         UpArrowIconComponent,
         NgxStickySidebarModule.withConfig({

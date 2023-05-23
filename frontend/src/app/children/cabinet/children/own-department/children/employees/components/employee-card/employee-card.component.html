@@ -1,4 +1,4 @@
-<a class="link-wrapper" (click)="openEmployeeDetail($event)">
+<a class="link-wrapper" [routerLink]="viewModel.userId.toString()">
     <div class="employee-card">
         <div class="employee-card__name">
             <span>{{viewModel.name}}</span>

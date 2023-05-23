@@ -63,7 +63,7 @@
                     </div>
                     <div class="career">
                         <label class="block-label">Карьера</label>
-                        <div class="input-label" *ngIf="!user.isManager && !user.isAdmin">
+                        <div class="input-label" *ngIf="!user.isManager">
                             <label [@contentExpansion]="isEditing ? 'expanded' : 'collapsed'">Ваш департамент:</label>
                             <app-select [title]="'Департамент'" [options]="(departments | async)!"
                                 formControlName="department"

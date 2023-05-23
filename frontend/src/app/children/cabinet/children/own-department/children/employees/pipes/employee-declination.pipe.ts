@@ -6,6 +6,6 @@ import { declination } from '../../../../../../../lib';
 })
 export class EmployeeDeclinationPipe implements PipeTransform {
     public transform(value: number): string {
-        return declination(value ?? 0, ['сотрудник', 'сотрудника', 'сотрудников']);
+        return declination(value ?? 0, ['Сотрудник', 'Сотрудника', 'Сотрудников']);
     }
 }
