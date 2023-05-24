@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiURL: 'http://hrportal.sergei-kiprin.ru/api',
-  mediaURL: 'http://hrportal.sergei-kiprin.ru/media/',
+  apiURL: 'https://hrportal.sergei-kiprin.ru/api',
+  mediaURL: 'https://hrportal.sergei-kiprin.ru/media/',
 };
