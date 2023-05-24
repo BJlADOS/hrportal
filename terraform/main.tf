@@ -36,9 +36,27 @@ resource "yandex_iam_service_account" "django" {
   name = "${local.common_prefix}-django"
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "django" {
+resource "yandex_resourcemanager_folder_iam_member" "django-os-uploader" {
   member    = "serviceAccount:${yandex_iam_service_account.django.id}"
-  role      = "storage.editor"
+  role      = "storage.uploader"
+  folder_id = var.folder_id
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "django-os-viewer" {
+  member    = "serviceAccount:${yandex_iam_service_account.django.id}"
+  role      = "storage.viewer"
+  folder_id = var.folder_id
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "django-lb-viewer" {
+  member    = "serviceAccount:${yandex_iam_service_account.django.id}"
+  role      = "lockbox.viewer"
+  folder_id = var.folder_id
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "django-lb-payloadViewer" {
+  member    = "serviceAccount:${yandex_iam_service_account.django.id}"
+  role      = "lockbox.payloadViewer"
   folder_id = var.folder_id
 }
 
@@ -163,6 +181,32 @@ resource "yandex_mdb_postgresql_database" "hrportal" {
   owner      = yandex_mdb_postgresql_user.hrportal.name
 }
 
+### Lockbox secrets ###
+
+resource "yandex_lockbox_secret" "django-secret" {
+  name = "${local.common_prefix}-django-secret"
+}
+
+resource "yandex_lockbox_secret_version" "hrportal" {
+  secret_id = yandex_lockbox_secret.django-secret.id
+  entries {
+    key        = "SECRET_KEY"
+    text_value = var.django_secret_key
+  }
+  entries {
+    key        = "SECRET_ACCESS_KEY"
+    text_value = yandex_iam_service_account_static_access_key.django-key.secret_key
+  }
+  entries {
+    key        = "EMAIL_HOST_PASSWORD"
+    text_value = var.email_host_password
+  }
+  entries {
+    key        = "POSTGRES_PASSWORD"
+    text_value = var.db_user_password
+  }
+}
+
 ### Serverless Container ###
 
 resource "yandex_serverless_container" "django" {
@@ -174,8 +218,6 @@ resource "yandex_serverless_container" "django" {
     url         = "cr.yandex/${yandex_container_registry.hrportal.id}/${local.django_container_tag}"
     environment = {
       DEBUG      = "True"
-      # TODO Transfer some variables to secrets
-      SECRET_KEY = var.django_secret_key
 
       ### CORS settings ###
       ALLOWED_HOSTS = yandex_cm_certificate.hrportal.domains[0]
@@ -186,7 +228,6 @@ resource "yandex_serverless_container" "django" {
       POSTGRES_PORT     = local.db_port
       POSTGRES_DB_NAME  = yandex_mdb_postgresql_database.hrportal.name
       POSTGRES_USER     = yandex_mdb_postgresql_user.hrportal.name
-      POSTGRES_PASSWORD = yandex_mdb_postgresql_user.hrportal.password
       POSTGRES_SSLMODE  = "require"
 
       ### Storage settings ###
@@ -196,19 +237,41 @@ resource "yandex_serverless_container" "django" {
       STATIC_BUCKET_NAME = yandex_storage_bucket.static.id
       # Service account #
       ACCESS_KEY_ID      = yandex_iam_service_account_static_access_key.django-key.access_key
-      SECRET_ACCESS_KEY  = yandex_iam_service_account_static_access_key.django-key.secret_key
 
       ### SMTP settings ###
-      EMAIL_HOST          = local.email_host
-      EMAIL_HOST_USER     = var.email_host_user
-      EMAIL_HOST_PASSWORD = var.email_host_password
-      EMAIL_PORT          = local.email_port
-      DEFAULT_FROM_EMAIL  = local.default_from_email
+      EMAIL_HOST         = local.email_host
+      EMAIL_HOST_USER    = var.email_host_user
+      EMAIL_PORT         = local.email_port
+      DEFAULT_FROM_EMAIL = local.default_from_email
 
       ### URLs for emails ###
       VERIFICATION_URL = "https://${yandex_cm_certificate.hrportal.domains[0]}${local.verification_path}"
       RECOVERY_URL     = "https://${yandex_cm_certificate.hrportal.domains[0]}${local.recovery_path}"
     }
+  }
+  secrets {
+    id                   = yandex_lockbox_secret.django-secret.id
+    version_id           = yandex_lockbox_secret_version.hrportal.id
+    key                  = "SECRET_KEY"
+    environment_variable = "SECRET_KEY"
+  }
+  secrets {
+    id                   = yandex_lockbox_secret.django-secret.id
+    version_id           = yandex_lockbox_secret_version.hrportal.id
+    key                  = "SECRET_ACCESS_KEY"
+    environment_variable = "SECRET_ACCESS_KEY"
+  }
+  secrets {
+    id                   = yandex_lockbox_secret.django-secret.id
+    version_id           = yandex_lockbox_secret_version.hrportal.id
+    key                  = "EMAIL_HOST_PASSWORD"
+    environment_variable = "EMAIL_HOST_PASSWORD"
+  }
+  secrets {
+    id                   = yandex_lockbox_secret.django-secret.id
+    version_id           = yandex_lockbox_secret_version.hrportal.id
+    key                  = "POSTGRES_PASSWORD"
+    environment_variable = "POSTGRES_PASSWORD"
   }
 }
 
