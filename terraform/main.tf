@@ -19,9 +19,9 @@ resource "yandex_iam_service_account" "editor" {
   name = "${local.common_prefix}-editor"
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "editor" {
+resource "yandex_resourcemanager_folder_iam_member" "admin" {
   member    = "serviceAccount:${yandex_iam_service_account.editor.id}"
-  role      = "storage.editor"
+  role      = "storage.admin"
   folder_id = var.folder_id
 }
 
@@ -81,15 +81,21 @@ resource "yandex_resourcemanager_folder_iam_member" "gateway" {
 
 resource "yandex_storage_bucket" "media" {
   bucket     = "${local.common_prefix}-media"
+  max_size = -2147483648
   access_key = yandex_iam_service_account_static_access_key.editor-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.editor-key.secret_key
 }
 
 // TODO automatically upload site files
-// TODO run python manage.py collectstatic
 
 resource "yandex_storage_bucket" "static" {
-  bucket     = "${local.common_prefix}-static"
+  bucket   = "${local.common_prefix}-static"
+  max_size = -2147483648
+
+  anonymous_access_flags {
+    read = true // TODO to private
+  }
+
   access_key = yandex_iam_service_account_static_access_key.editor-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.editor-key.secret_key
 }
@@ -113,7 +119,7 @@ output "dns_challenge_cname" {
 
 ### Container Registry ###
 
-# TODO Push image automatically
+# TODO push image automatically
 
 resource "yandex_container_registry" "hrportal" {
   name      = "${local.common_prefix}-registry"
@@ -130,7 +136,7 @@ resource "yandex_container_registry_iam_binding" "puller" {
 }
 
 output "django_image_tag" {
-  value = "cr.yandex/${yandex_container_registry.hrportal.id}/${local.django_container_tag}"
+  value = "cr.yandex/${yandex_container_registry.hrportal.id}/${var.django_container_tag}"
 }
 
 ### Virtual Private Network ###
@@ -214,10 +220,11 @@ resource "yandex_serverless_container" "django" {
   cores              = 1
   memory             = 1024
   service_account_id = yandex_iam_service_account.django.id
+  execution_timeout  = "600s"
   image {
-    url         = "cr.yandex/${yandex_container_registry.hrportal.id}/${local.django_container_tag}"
+    url         = "cr.yandex/${yandex_container_registry.hrportal.id}/${var.django_container_tag}"
     environment = {
-      DEBUG      = "True"
+      DEBUG = "True"
 
       ### CORS settings ###
       ALLOWED_HOSTS = yandex_cm_certificate.hrportal.domains[0]

@@ -1,6 +1,5 @@
 locals {
   common_prefix        = "hrportal"
-  django_container_tag = "django:serverless"
   cert_name            = "${local.common_prefix}-sergei-kiprin"
   domain               = "hrportal.sergei-kiprin.ru"
   db_port              = "6432"
@@ -42,6 +41,10 @@ variable "email_host_password" {
 }
 
 variable "django_secret_key" {
+  type = string
+}
+
+variable "django_container_tag" {
   type = string
 }
 

@@ -109,4 +109,8 @@ terraform -chdir=terraform apply -target yandex_container_registry.hrportal
 docker build backend -t <tag>
 docker push <tag>
 terraform -chdir=terraform apply
+aws --endpoint-url=https://storage.yandexcloud.net/ s3 sync frontend/dist/out/assets s3://hrportal-static/assets
+cd frontend
+ng build
+# перенести файлы сайта в браузер
 ```
