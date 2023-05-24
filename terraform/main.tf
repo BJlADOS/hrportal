@@ -10,11 +10,8 @@ provider "yandex" {
   token     = var.iam_token
   cloud_id  = var.cloud_id
   folder_id = var.folder_id
-  zone      = "ru-central1-b"
+  zone      = local.main_zone
 }
-
-# TODO create VPC by Terraform
-# TODO create Postgres DB by Terraform
 
 ### Editor Service Account ###
 
@@ -81,6 +78,8 @@ resource "yandex_storage_bucket" "static" {
 
 ### Certificate Manager ###
 
+// TODO validate certificate automatically
+
 resource "yandex_cm_certificate" "hrportal" {
   name    = local.cert_name
   domains = [local.domain]
@@ -116,6 +115,54 @@ output "django_image_tag" {
   value = "cr.yandex/${yandex_container_registry.hrportal.id}/${local.django_container_tag}"
 }
 
+### Virtual Private Network ###
+
+resource "yandex_vpc_network" "hrportal" {
+  name = "${local.common_prefix}-network"
+}
+
+resource "yandex_vpc_subnet" "b" {
+  name           = "${local.common_prefix}-b-subnet"
+  zone           = local.main_zone
+  network_id     = yandex_vpc_network.hrportal.id
+  v4_cidr_blocks = ["10.5.0.0/24"]
+}
+
+### Postgres DB ###
+
+resource "yandex_mdb_postgresql_cluster" "hrportal" {
+  name        = "${local.common_prefix}-postgres-db"
+  environment = "PRODUCTION"
+  network_id  = var.old_network_id
+
+  config {
+    version = 14
+    resources {
+      resource_preset_id = "s3-c2-m8"
+      disk_type_id       = "network-ssd"
+      disk_size          = 10
+    }
+  }
+
+  host {
+    assign_public_ip = true
+    zone      = local.main_zone
+    subnet_id = var.old_subnet_id
+  }
+}
+
+resource "yandex_mdb_postgresql_user" "hrportal" {
+  cluster_id = yandex_mdb_postgresql_cluster.hrportal.id
+  name       = var.db_user_name
+  password   = var.db_user_password
+}
+
+resource "yandex_mdb_postgresql_database" "hrportal" {
+  cluster_id = yandex_mdb_postgresql_cluster.hrportal.id
+  name       = local.db_name
+  owner      = yandex_mdb_postgresql_user.hrportal.name
+}
+
 ### Serverless Container ###
 
 resource "yandex_serverless_container" "django" {
@@ -135,11 +182,11 @@ resource "yandex_serverless_container" "django" {
       DJANGO_URL    = "https://${yandex_cm_certificate.hrportal.domains[0]}"
 
       ### Database settings ###
-      POSTGRES_HOST     = var.db_host # TODO set Postgres DB host
-      POSTGRES_PORT     = local.db_port # TODO set Postgres DB port
-      POSTGRES_DB_NAME  = local.db_name
-      POSTGRES_USER     = var.db_user_name
-      POSTGRES_PASSWORD = var.db_user_password
+      POSTGRES_HOST     = yandex_mdb_postgresql_cluster.hrportal.host[0].fqdn
+      POSTGRES_PORT     = local.db_port
+      POSTGRES_DB_NAME  = yandex_mdb_postgresql_database.hrportal.name
+      POSTGRES_USER     = yandex_mdb_postgresql_user.hrportal.name
+      POSTGRES_PASSWORD = yandex_mdb_postgresql_user.hrportal.password
       POSTGRES_SSLMODE  = "require"
 
       ### Storage settings ###

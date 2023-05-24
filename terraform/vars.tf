@@ -10,6 +10,7 @@ locals {
   default_from_email   = "server@hrportal.com"
   verification_path    = "/account/confirm-email/"
   recovery_path        = "/account/recovery-password/"
+  main_zone            = "ru-central1-b"
 }
 
 variable "iam_token" {
@@ -21,10 +22,6 @@ variable "cloud_id" {
 }
 
 variable "folder_id" {
-  type = string
-}
-
-variable "db_host" {
   type = string
 }
 
@@ -45,5 +42,13 @@ variable "email_host_password" {
 }
 
 variable "django_secret_key" {
+  type = string
+}
+
+variable "old_network_id" {
+  type = string
+}
+
+variable "old_subnet_id" {
   type = string
 }
