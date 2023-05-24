@@ -26,7 +26,8 @@ export class EmployeePageLazyLoadingService extends PageLazyLoadingService<IUser
                             params = {
                                 limit: 3,
                                 offset: 0,
-                                department: [department.id]
+                                department: [department.id],
+                                active: true,
                             };
                         }
 

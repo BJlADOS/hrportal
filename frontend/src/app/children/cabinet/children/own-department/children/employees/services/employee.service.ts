@@ -12,6 +12,10 @@ export class EmployeeService {
 
     }
 
+    public deleteEmployee(id: number): Observable<void> {
+        return this._employeeRequestService.deleteEmployee(id.toString());
+    }
+
     public getEmployeeList(queryParams?: IEmployeeRequestParams): Observable<IUser[]> {
         return this._employeeRequestService.getEmployeeList(queryParams ?? {})
             .pipe(

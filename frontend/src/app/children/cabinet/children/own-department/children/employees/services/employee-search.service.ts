@@ -31,6 +31,7 @@ export class EmployeeSearchService {
      * @param active Статус пользователя
      */
     public setDefaultStatus(active: boolean): void {
+        console.log('set default');
         this._searchActive = active;
     }
 
@@ -59,6 +60,7 @@ export class EmployeeSearchService {
      * Отправить запрос для получения данных списка
      * */
     private makeRequest(): void {
+        console.log('req');
         this._pageDataService.addPage(this.getRequestData())
             .subscribe(() => {
                 this._requestingLocked = false;

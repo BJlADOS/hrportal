@@ -5,10 +5,11 @@ import { EmployeeListComponent } from './components/employee-list/employee-list.
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { EmployeeCardComponent } from './components/employee-card/employee-card.component';
 import {
+    ArchiveIconComponent,
     CheckStaticIconComponent,
-    Cross1IconComponent, Cross2IconComponent, EditWhiteIconComponent,
+    Cross1IconComponent, Cross2IconComponent, CrossIconComponent, EditIconComponent, EditWhiteIconComponent,
     FilterIconComponent,
-    MagnifierIconComponent, PlusIconComponent,
+    MagnifierIconComponent, PlusIconComponent, SuccessIconComponent,
     UpArrowIconComponent
 } from '../../../../../../../assets/img';
 import { LetDirective } from '../../../../../../lib/directives/let.directive';
@@ -24,6 +25,7 @@ import { EmployeeDetailComponent } from './components/employee-detail/employee-d
 import { EmployeeDeclinationPipe } from './pipes/employee-declination.pipe';
 import { EmployeeLayoutComponent } from './components/employee-layout/employee-layout.component';
 import { EmployeeListMainLayoutComponent } from './components/employee-list-main-layout/employee-list-main-layout.component';
+import { DeleteEmployeeComponent } from './components/modals/delete-employee/delete-employee.component';
 
 @NgModule({
     imports: [
@@ -43,7 +45,11 @@ import { EmployeeListMainLayoutComponent } from './components/employee-list-main
         Cross2IconComponent,
         EditWhiteIconComponent,
         PlusIconComponent,
-        NgOptimizedImage
+        NgOptimizedImage,
+        ArchiveIconComponent,
+        EditIconComponent,
+        CrossIconComponent,
+        SuccessIconComponent
     ],
     declarations: [
         EmployeeListComponent,
@@ -54,10 +60,12 @@ import { EmployeeListMainLayoutComponent } from './components/employee-list-main
         EmployeeDetailComponent,
         EmployeeDeclinationPipe,
         EmployeeLayoutComponent,
-        EmployeeListMainLayoutComponent
+        EmployeeListMainLayoutComponent,
+        DeleteEmployeeComponent
     ],
     exports: [
         EmployeeListLayoutComponent,
+        EmployeeDetailComponent,
     ]
 })
 export class OwnDepartmentEmployeesModule {

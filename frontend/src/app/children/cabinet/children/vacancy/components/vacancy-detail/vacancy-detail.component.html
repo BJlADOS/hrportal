@@ -108,11 +108,20 @@
                 <span>Редактировать</span>
                 <edit-icon></edit-icon>
             </div>
-            <div *ngIf="vacancy?.status === Status.public" appHoverListener class="manager-button">
+            <div *ngIf="vacancy?.status === Status.public"
+                 appHoverListener class="manager-button"
+            (click)="archiveVacancy()">
                 <span>Архивировать</span>
                 <archive-icon></archive-icon>
             </div>
-            <div *ngIf="vacancy?.status === Status.archived" class="manager-button">
+            <div (click)="removeVacancyFromArchive()"
+                 *ngIf="vacancy?.status === Status.archived"
+                 class="manager-button">
+                <span>Убрать из архива</span>
+            </div>
+            <div (click)="deleteVacancy()"
+                 *ngIf="vacancy?.status === Status.archived"
+                 class="manager-button">
                 <span>Удалить</span>
             </div>
         </div>

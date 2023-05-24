@@ -30,8 +30,8 @@ export class VacancyService {
         return this.http.get<IVacancy>(`${this._apiUrl}/vacancies/${vacancyId}`);
     }
 
-    public deleteVacancy(vacancyId: string): Observable<Object> {
-        return this.http.delete(`${this._apiUrl}/vacancies/${vacancyId}`);
+    public deleteVacancy(vacancyId: string): Observable<void> {
+        return this.http.delete<void>(`${this._apiUrl}/vacancies/${vacancyId}`);
     }
 
     public editVacancy(vacancyId: string, vacancy: IVacancyResponseModel): Observable<IVacancyResponseModel> {

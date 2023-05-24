@@ -54,6 +54,11 @@ export class VacanciesSearchService {
         this.makeSearch();
     }
 
+    public reload(): void {
+        this._filterRequest.offset = 0;
+        this.makeSearch();
+    }
+
     public changeStatus(type: Status): void {
         this._forceStatus = type;
         this._filterRequest.status = type;

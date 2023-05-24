@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { contentExpansionHorizontal } from '../../../../../../../../lib';
 import { EmployeePageLazyLoadingService } from '../../services/employee-page-lazy-loading.service';
+import {EmployeeFiltersComponent} from "../employee-filters/employee-filters.component";
 
 @Component({
     selector: 'app-employee-list',
@@ -10,6 +11,8 @@ import { EmployeePageLazyLoadingService } from '../../services/employee-page-laz
     animations: [contentExpansionHorizontal],
 })
 export class EmployeeListLayoutComponent {
+    @ViewChild(EmployeeFiltersComponent) public filters!: EmployeeFiltersComponent;
+
     protected filtersOpened$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(

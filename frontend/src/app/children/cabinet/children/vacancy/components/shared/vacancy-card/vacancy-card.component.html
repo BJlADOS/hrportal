@@ -18,9 +18,21 @@
          *ngIf="vacancy.requiredSkills.length">
         {{skillsToString(vacancy.requiredSkills)}}
     </div>
-    <button class="response"
-            *ngIf="!hideButtons"
-            (click)="responseVacancy()">
-        Откликнуться
-    </button>
+    <div class="buttons">
+        <button class="response"
+                *ngIf="status === Status.public"
+                (click)="responseVacancy()">
+            Откликнуться
+        </button>
+        <button class="delete"
+                *ngIf="status === Status.archived"
+                (click)="deleteVacancy()">
+            Удалить
+        </button>
+        <button class="response"
+                *ngIf="status === Status.archived"
+                (click)="removeVacancyFromArchive()">
+            Убрать из архива
+        </button>
+    </div>
 </div>

@@ -6,6 +6,7 @@ export interface IUser {
     id: number,
     fullname: string,
     email: string,
+    isActive: boolean;
     contact: string,
     experience: Experience,
     currentDepartment: IDepartment | null,

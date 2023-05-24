@@ -4,6 +4,7 @@ import { AdministrationComponent } from './administration/administration.compone
 import { DeletedVacanciesComponent } from './administration/children/deleted-vacancies/deleted-vacancies.component';
 import { DeletedResumesComponent } from './administration/children/deleted-resumes/deleted-resumes.component';
 import { DeletedUsersComponent } from './administration/children/deleted-users/deleted-users.component';
+import { DeletedUserDetailComponent } from './administration/children/deleted-user-detail/deleted-user-detail.component';
 
 const routes: Routes = [
     {
@@ -27,19 +28,36 @@ const routes: Routes = [
                 path: 'deleted-vacancies',
                 pathMatch: 'full',
                 component: DeletedVacanciesComponent,
+                data: {
+                    breadcrumb: 'Удалённые вакансии'
+                },
             },
             {
                 path: 'deleted-resumes',
                 pathMatch: 'full',
                 component: DeletedResumesComponent,
+                data: {
+                    breadcrumb: 'Удалённые резюме'
+                },
             },
             {
                 path: 'deleted-users',
                 pathMatch: 'full',
                 component: DeletedUsersComponent,
+                data: {
+                    breadcrumb: 'Удалённые сотрудники'
+                },
             },
         ],
     },
+    {
+        path:'lists/deleted-users/:id',
+        component: DeletedUserDetailComponent,
+        pathMatch: 'full',
+        data: {
+            breadcrumb: 'Удалённый сотрудник'
+        },
+    }
 ];
 
 @NgModule({

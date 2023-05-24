@@ -20,6 +20,10 @@ export class EmployeeRequestService {
         );
     }
 
+    public deleteEmployee(id: string): Observable<void> {
+        return this._httpClient.delete<void>(`${EmployeeEndpoints.employeeList}/${id}/`);
+    }
+
     public getEmployeePage(params: IEmployeeRequestParams): Observable<IPage<IEmployeeResponse>> {
         return this._httpClient.get<IPage<IEmployeeResponse>>(
             EmployeeEndpoints.employeeList,

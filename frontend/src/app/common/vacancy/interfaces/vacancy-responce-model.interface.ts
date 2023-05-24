@@ -1,4 +1,5 @@
 import { Employment, Schedule } from '../../../lib';
+import { Status } from '../../../lib/utils/enums/status.enum';
 
 
 export interface IVacancyResponseModel {
@@ -8,4 +9,5 @@ export interface IVacancyResponseModel {
     schedule?: Schedule;
     description?: string;
     requiredSkillsIds?: number[];
+    status?: Status
 }

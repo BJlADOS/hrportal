@@ -101,6 +101,12 @@ export class VacancyListComponent implements OnInit, OnDestroy {
         this.vacanciesAmount = 0;
     }
 
+    public reloadPage(event: any): void {
+        console.log('reloaded');
+        this.resetSearch();
+        this._vacancySearch.reload();
+    }
+
     public scrollBack(): void {
         window.scroll({
             top: 0,
