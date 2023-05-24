@@ -1,12 +1,17 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable, takeUntil } from 'rxjs';
+import { finalize, Observable, takeUntil } from 'rxjs';
 import {
     DepartmentService,
-    IDepartment, ISkill, ISubmitError, IUser,
-    IVacancy, IVacancyEditing,
+    IDepartment,
+    ISkill,
+    ISubmitError,
+    IUser,
+    IVacancy,
+    IVacancyEditing,
     IVacancyFormError,
-    IVacancyResponseModel, SkillsService,
+    IVacancyResponseModel,
+    SkillsService,
     UserService,
     VacancyService
 } from '../../../../../../common';
@@ -16,11 +21,17 @@ import {
     DestroyService,
     FormGenerator,
     FormManager,
-    getEmploymentRussianAsArray, getScheduleRussianAsArray,
-    ISelectOption, ModalService
+    getEmploymentRussianAsArray,
+    getScheduleRussianAsArray,
+    ISelectOption,
+    ModalService
 } from '../../../../../../lib';
 import { UploadModalComponent } from '../upload-modal/upload-modal.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Status } from '../../../../../../lib/utils/enums/status.enum';
+import { ArchiveVacancyComponent } from '../modals/archive-vacancy/archive-vacancy.component';
+import { RemoveFromArchiveComponent } from '../modals/remove-from-archive/remove-from-archive.component';
+import { DeleteVacancyComponent } from '../modals/delete-vacancy/delete-vacancy.component';
 
 
 @Component({
@@ -222,6 +233,35 @@ export class VacancyDetailComponent implements OnInit {
         );
     }
 
+    public archiveVacancy(): void {
+        this._modalServise.open(ArchiveVacancyComponent, { vacancy: this.vacancy })
+            .onResult()
+            .pipe(finalize(() => this.reloadVacancy()))
+            .subscribe();
+    }
+
+    public removeVacancyFromArchive(): void {
+        this._modalServise.open(RemoveFromArchiveComponent, { vacancy: this.vacancy })
+            .onResult()
+            .pipe(finalize(() => this.reloadVacancy()))
+            .subscribe();
+    }
+
+    public deleteVacancy(): void {
+        this._modalServise.open(DeleteVacancyComponent, { vacancy: this.vacancy })
+            .onResult()
+            .pipe(finalize(() => this.reloadVacancy()))
+            .subscribe();
+    }
+
+    private reloadVacancy(): void {
+        this._vacancy.getVacancyById(this.vacancy!.id.toString())
+            .pipe(takeUntil(this._destroy$))
+            .subscribe((vacancy: IVacancy) => {
+                this.vacancy = vacancy;
+            });
+    }
+
     private resetForm(): void {
         this.vacancyForm = this._form.getVacancyForm(this.vacancy);
         this.vacancyForm.disable();
@@ -249,4 +289,6 @@ export class VacancyDetailComponent implements OnInit {
 
         return vacancyUpdate;
     }
+
+    protected readonly Status = Status;
 }

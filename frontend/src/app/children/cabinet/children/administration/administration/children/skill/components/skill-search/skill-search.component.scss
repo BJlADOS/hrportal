@@ -8,6 +8,7 @@
     border-radius: 10px;
     padding: 0.35rem 0.7rem;
     width: min-content;
+    gap: .5rem;
 
     &__input {
         border: none;
@@ -23,9 +24,5 @@
         &::placeholder {
             color: var(--input-placeholder-color);
         }
-    }
-
-    &__icon {
-        margin-left: 10px;
     }
 }

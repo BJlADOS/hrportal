@@ -1,9 +1,9 @@
-<div class="wrapper">
-    <div class="wrapper-grid">
+<div class="wrapper" *ngIf="user$ | async as user">
+    <div class="wrapper-grid" *ngIf="viewModel$ | async as viewModel">
         <div class="wrapper-flex column-1-6">
-            <div class="user-profile" *ngIf="viewModel$ | async as viewModel">
+            <div class="user-profile">
                 <div class="user-profile__header">
-                    <img [src]="iconUrl$ | async" class="user-profile__photo" (error)="setDefaultIcon()">
+                    <img [src]="(iconUrl$ | async)" class="user-profile__photo" (error)="setDefaultIcon()">
                     <div class="user-profile__header-info">
                         <div class="user-profile__name">
                             {{viewModel.name}}
@@ -39,6 +39,13 @@
                         <span class="user-profile__no-skills">Навыков нет</span>
                     </ng-template>
                 </div>
+            </div>
+        </div>
+        <div class="wrapper-flex column-11-13" *ngIf="(user.isAdmin || user.isManager) && user.id !== viewModel.id">
+            <div (click)="deleteEmployee(viewModel)"
+                 *ngIf="viewModel.isActive"
+                 class="manager-button">
+                <span>Удалить</span>
             </div>
         </div>
     </div>

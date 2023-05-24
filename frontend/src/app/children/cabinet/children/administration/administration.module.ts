@@ -11,7 +11,9 @@ import { UpArrowIconComponent } from '../../../../../assets/img';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { VacancyModule } from '../vacancy';
 import { ResumeModule } from '../resume/resume.module';
+import { OwnDepartmentEmployeesModule } from '../own-department/children/employees/own-department-employees.module';
 import { SkillAdministrationModule } from './administration/children/skill/skill-administration.module';
+import { DeletedUserDetailComponent } from './administration/children/deleted-user-detail/deleted-user-detail.component';
 
 @NgModule({
     declarations: [
@@ -19,12 +21,14 @@ import { SkillAdministrationModule } from './administration/children/skill/skill
         DeletedVacanciesComponent,
         DeletedResumesComponent,
         DeletedUsersComponent,
+        DeletedUserDetailComponent,
     ],
     imports: [
         CommonModule,
         AdministrationRoutingModule,
         VacancyModule,
         ResumeModule,
+        OwnDepartmentEmployeesModule,
         SharedModule,
         UpArrowIconComponent,
         NgxStickySidebarModule.withConfig({

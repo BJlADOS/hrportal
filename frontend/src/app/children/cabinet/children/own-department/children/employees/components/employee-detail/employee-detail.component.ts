@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import {BehaviorSubject, map, Observable, of, Subject, switchMap, tap} from 'rxjs';
+import { map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { EmployeeDetailViewModel } from '../../view-models/employee-detail.view-model';
 import { ActivatedRoute } from '@angular/router';
-import { IUser } from '../../../../../../../../common';
+import { IUser, UserService } from '../../../../../../../../common';
 import { EmployeePageLazyLoadingService } from '../../services/employee-page-lazy-loading.service';
 import { EmployeeService } from '../../services/employee.service';
+import { Status } from '../../../../../../../../lib/utils/enums/status.enum';
+import { ModalService } from '../../../../../../../../lib';
+import { DeleteEmployeeComponent } from '../modals/delete-employee/delete-employee.component';
 
 @Component({
     selector: 'app-profile',
@@ -14,17 +17,24 @@ import { EmployeeService } from '../../services/employee.service';
 export class EmployeeDetailComponent {
     public viewModel$!: Observable<EmployeeDetailViewModel | null>;
     public iconUrl$: Subject<string> = new Subject<string>();
+    public user$: Observable<IUser | null> = this._userService.currentUser$;
 
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _lazyLoadingService: EmployeePageLazyLoadingService,
-        private _employeeService: EmployeeService
+        private _employeeService: EmployeeService,
+        private _userService: UserService,
+        private _modalService: ModalService,
     ) {
         this.viewModel$ = this.getViewModelDataStream();
     }
 
     public setDefaultIcon(): void {
         this.iconUrl$.next('assets/img/profile-placeholder.png');
+    }
+
+    public deleteEmployee(employee: EmployeeDetailViewModel): void {
+        this._modalService.open(DeleteEmployeeComponent, { employee });
     }
 
     private getViewModelDataStream(): Observable<EmployeeDetailViewModel | null> {
@@ -59,4 +69,6 @@ export class EmployeeDetailComponent {
                 })
             );
     }
+
+    protected readonly Status = Status;
 }

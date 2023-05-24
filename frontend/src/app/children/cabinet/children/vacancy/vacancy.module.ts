@@ -17,6 +17,9 @@ import { VacancyCardComponent } from './components';
 import { VacancyFiltersComponent } from './components';
 import { VacancyListComponent } from './components';
 import { VacancySearchComponent } from './components';
+import { ArchiveVacancyComponent } from './components/modals/archive-vacancy/archive-vacancy.component';
+import { DeleteVacancyComponent } from './components/modals/delete-vacancy/delete-vacancy.component';
+import { RemoveFromArchiveComponent } from './components/modals/remove-from-archive/remove-from-archive.component';
 
 
 @NgModule({
@@ -30,6 +33,9 @@ import { VacancySearchComponent } from './components';
         VacancyListComponent,
         VacancySearchComponent,
         VacancyDeclinationPipe,
+        ArchiveVacancyComponent,
+        DeleteVacancyComponent,
+        RemoveFromArchiveComponent,
     ],
     providers: [
         VacanciesSearchService,

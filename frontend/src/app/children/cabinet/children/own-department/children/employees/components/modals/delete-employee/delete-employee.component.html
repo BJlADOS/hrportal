@@ -1,0 +1,25 @@
+<div class="modal">
+    <div class="modal__content">
+        <div class="modal__header">
+            <cross-icon appHoverListener (click)="close()"></cross-icon>
+        </div>
+    </div>
+    <div class="modal__body success"
+         *ngIf="!submitted else submit">
+        <span class="success-text"><span class="bold">Удалить</span> сотрудника <span
+            class="bold">«{{this.employee.name}}»</span>?</span>
+        <div class="modal__buttons" *ngIf="!isLoading">
+            <button class="input-button confirm" (click)="deleteEmployee()">Да</button>
+            <button class="input-button cancel" (click)="close()">Отмена</button>
+        </div>
+        <app-loader *ngIf="isLoading"></app-loader>
+        <app-error *ngIf="error.message" [error]="error"></app-error>
+    </div>
+</div>
+<ng-template #submit>
+    <div class="modal__body success">
+        <success-icon></success-icon>
+        <span class="success-text">Пользователь <span
+            class="bold">«{{this.employee.name}}»</span> успешно удален!</span>
+    </div>
+</ng-template>

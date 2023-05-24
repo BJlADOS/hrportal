@@ -30,6 +30,8 @@ import { MagnifierIconComponent } from '../../../assets/img/magnifier/magnifier-
 import { Cross1IconComponent } from '../../../assets/img/cross1/cross1-icon';
 import { FilterIconComponent, UpArrowIconComponent } from '../../../assets/img';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
+import { LoaderComponent } from './components/loader/loader.component';
+import { GlobalLoaderComponent } from './components/global-loader/global-loader.component';
 
 const exportingComponents: any[] = [
     SchedulePipe,
@@ -54,8 +56,13 @@ const exportingComponents: any[] = [
 @NgModule({
     declarations: [
         ...exportingComponents,
+        LoaderComponent,
+        GlobalLoaderComponent,
     ],
-    exports: exportingComponents,
+    exports: [
+        exportingComponents,
+        LoaderComponent
+    ],
     imports: [
         CommonModule,
         RouterModule,

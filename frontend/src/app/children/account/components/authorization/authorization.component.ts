@@ -3,6 +3,8 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IAuthError, ISubmitError, AuthorizationService } from '../../../../common';
 import { contentExpansion, FormGenerator, FormManager } from '../../../../lib';
+import {PageBase} from "../../../../lib/shared/components/page-base/page-base.component";
+import {finalize} from "rxjs";
 
 @Component({
     selector: 'app-authorization',
@@ -10,7 +12,7 @@ import { contentExpansion, FormGenerator, FormManager } from '../../../../lib';
     styleUrls: ['./authorization.component.scss'],
     animations: [contentExpansion],
 })
-export class AuthorizationComponent implements OnInit {
+export class AuthorizationComponent extends PageBase implements OnInit {
 
     public passwordPlaceholder: string = 'Пароль';
     public emailPlaceholder: string = 'Электронная почта';
@@ -26,7 +28,9 @@ export class AuthorizationComponent implements OnInit {
         public router: Router,
         public activeRoute: ActivatedRoute,
         private _formGenerator: FormGenerator
-    ) { }
+    ) {
+        super();
+    }
 
     public ngOnInit(): void {
         this.activeRoute.queryParams.subscribe(params => {
@@ -35,7 +39,11 @@ export class AuthorizationComponent implements OnInit {
     }
 
     public signIn(): void {
+        this.startLoading();
         this.auth.signIn(this.signInForm.value.email, this.signInForm.value.password, this._returnUrl)
+            .pipe(
+                finalize(() => this.stopLoading())
+            )
             .subscribe({
                 next: () => {
                     if (this._returnUrl) {

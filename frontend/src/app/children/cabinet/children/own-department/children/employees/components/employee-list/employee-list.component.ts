@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import {Component, EventEmitter, Inject, Output} from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, takeUntil } from 'rxjs';
 import { contentExpansionHorizontal, DestroyService } from '../../../../../../../../lib';
 import { IUser } from '../../../../../../../../common';
@@ -25,6 +25,8 @@ export class EmployeeListComponent {
     public employeesModelList$: BehaviorSubject<IUser[] | null> = new BehaviorSubject<IUser[] | null>(null);
     public loadingError: string | undefined;
 
+    @Output() public reloadPage: EventEmitter<void> = new EventEmitter<void>();
+
     constructor(
         private _employeeSearchService: EmployeeSearchService,
         private _destroyService$: DestroyService,
@@ -44,6 +46,10 @@ export class EmployeeListComponent {
 
     public getMoreEmployees(): void {
         this._employeeSearchService.loadMore();
+    }
+
+    public userEdited(): void {
+        this.reloadPage.emit();
     }
 
     private configureDataReceiving(): void {

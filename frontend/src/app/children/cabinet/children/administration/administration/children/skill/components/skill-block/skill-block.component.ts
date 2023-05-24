@@ -3,6 +3,7 @@ import { SkillAdministrationService } from '../../services/skill-administration.
 import { SkillLazyLoadingService } from '../../services/skill-lazy-loading.service';
 import { SkillBlockViewModel } from '../../view-models/skill-block.view-model';
 import { SkillManagerService } from '../../services/skill-manager.service';
+import { contentExpansion, contentExpansionHorizontal } from '../../../../../../../../../lib';
 
 @Component({
     selector: 'skill-block',
@@ -13,7 +14,8 @@ import { SkillManagerService } from '../../services/skill-manager.service';
         SkillAdministrationService,
         SkillLazyLoadingService,
         SkillManagerService
-    ]
+    ],
+    animations: [contentExpansion, contentExpansionHorizontal],
 })
 export class SkillBlockComponent implements OnInit {
     public viewModel: SkillBlockViewModel;

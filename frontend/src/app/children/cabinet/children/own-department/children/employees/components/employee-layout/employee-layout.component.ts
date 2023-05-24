@@ -6,7 +6,7 @@ import { EmployeePageLazyLoadingService } from '../../services/employee-page-laz
 
 @Component({
     template: `
-    <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
     `,
     providers: [
         EmployeeService,
@@ -17,7 +17,7 @@ import { EmployeePageLazyLoadingService } from '../../services/employee-page-laz
 })
 export class EmployeeLayoutComponent {
     constructor(
-        public pageDataService: EmployeePageLazyLoadingService
+        public pageDataService: EmployeePageLazyLoadingService,
     ) {
         pageDataService.addPage();
     }

@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IUser, ResumeService } from '../../../../../../../../common';
+import {IUser, ResumeService, UserService} from '../../../../../../../../common';
 import { ModalService } from '../../../../../../../../lib';
 import { EmployeeListItemViewModel } from '../../view-models/employee-list-item.view-model';
+import {DeleteEmployeeComponent} from "../modals/delete-employee/delete-employee.component";
+import {finalize, Observable} from "rxjs";
 
 @Component({
     selector: 'employee-card',
@@ -15,15 +17,18 @@ export class EmployeeCardComponent  {
         this.viewModel = new EmployeeListItemViewModel(data);
         this._model = data;
     }
+    @Output() public userEdited: EventEmitter<void> = new EventEmitter<void>();
 
     public viewModel!: EmployeeListItemViewModel;
+    public user$: Observable<IUser | null> = this._user.currentUser$;
     private _model!: IUser;
 
     constructor(
         private _router: Router,
         private _modal: ModalService,
         private _resumeService: ResumeService,
-        private _activatedRoute: ActivatedRoute
+        private _activatedRoute: ActivatedRoute,
+        private _user: UserService,
     ) { }
 
     public openEmployeeDetail(event?: Event): void {
@@ -34,5 +39,13 @@ export class EmployeeCardComponent  {
     public toResume(event?: Event): void {
         event?.stopPropagation();
         this._router.navigate([`cabinet/resumes/${this.viewModel.resumeId}`]);
+    }
+
+    public deleteEmployee(viewModel: EmployeeListItemViewModel,event?: Event): void {
+        event?.stopPropagation();
+        this._modal.open(DeleteEmployeeComponent, { employee: viewModel })
+            .onResult()
+            .pipe(finalize(() => this.userEdited.emit()))
+            .subscribe();
     }
 }

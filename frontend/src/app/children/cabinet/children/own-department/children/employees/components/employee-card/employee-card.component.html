@@ -1,5 +1,5 @@
-<a class="link-wrapper" (click)="openEmployeeDetail($event)">
-    <div class="employee-card">
+<div class="employee-card">
+    <a class="link-wrapper" [routerLink]="viewModel.userId.toString()">
         <div class="employee-card__name">
             <span>{{viewModel.name}}</span>
         </div>
@@ -12,8 +12,16 @@
         <div class="employee-card__skills">
             {{viewModel.skillString}}
         </div>
+    </a>
+    <div class="buttons" *ngIf="user$ | async as user">
         <ng-container *ngIf="viewModel.resumeExists">
             <button class="employee-card__resume-button" (click)="toResume($event)">Резюме</button>
         </ng-container>
+        <ng-container *ngIf="viewModel.isActive && viewModel.id !== user.id">
+            <button class="employee-card__resume-button" (click)="deleteEmployee(viewModel, $event)">Удалить</button>
+        </ng-container>
     </div>
-</a>
+</div>
+
+
+

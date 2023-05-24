@@ -1,7 +1,10 @@
 import { ISkill, IUser } from '../../../../../../../common';
 import { ExperienceRussian } from '../../../../../../../lib';
+import { environment } from '../../../../../../../../environments/environment';
 
 export class EmployeeDetailViewModel {
+    public id: number;
+    public isActive: boolean;
     public name: string;
     public email: string;
     public workExperience: string;
@@ -14,9 +17,11 @@ export class EmployeeDetailViewModel {
 
     constructor(data: IUser) {
         this.name = data.fullname;
+        this.id = data.id;
+        this.isActive = data.isActive;
         this.email = data.email;
         this.workExperience = ExperienceRussian[data.experience];
-        this.avatarUrl = data.photo || 'assets/img/profile-placeholder.png';
+        this.avatarUrl = (environment.mediaURL + data.photo) || 'assets/img/profile-placeholder.png';
         this.role = this.getRole(data.isManager, data.isAdmin);
         this.skills = data.existingSkills;
         this.contact = data.contact;

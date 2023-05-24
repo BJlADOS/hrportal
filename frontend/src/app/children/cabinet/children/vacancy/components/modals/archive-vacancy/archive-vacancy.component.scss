@@ -1,0 +1,88 @@
+.modal {
+    z-index: 1200;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+
+    &__header {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        transform: translate(1.5rem, 100%);
+    }
+
+    &__title {
+        color: var(--main-accent-color);
+    }
+
+    &__body {
+        padding: 2rem 2.5rem;
+        border-radius: 20px;
+        box-shadow: var(--box-shadow-main);
+        border: 3px solid var(--main-accent-color);
+        background-color: var(--white);
+
+        h2 {
+            font-size: 16px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        &.success {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+    }
+
+
+    &__buttons {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        & .input-button {
+            border: none;
+            border-radius: 20px;
+            font-size: var(--font-size--main);
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 0.75rem 1.5rem;
+            color: var(--white);
+
+            &:hover {
+                color: var(--font-primary);
+                cursor: pointer;
+            }
+
+            &.confirm {
+                background-color: var(--main-accent-color);
+            }
+
+            &.cancel {
+                background-color: var(--border-color);
+            }
+
+        }
+
+    }
+}
+
+.success-text {
+    text-align: center;
+
+    & .bold {
+        font-weight: 700;
+    }
+
+    & .uppercase {
+        text-transform: uppercase;
+    }
+}

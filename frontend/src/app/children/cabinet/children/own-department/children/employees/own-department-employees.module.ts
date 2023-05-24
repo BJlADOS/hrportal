@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { ownDepartmentEmployeeRoutes } from './own-department-employees.routing-module';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { EmployeeCardComponent } from './components/employee-card/employee-card.component';
 import {
+    ArchiveIconComponent,
     CheckStaticIconComponent,
-    Cross1IconComponent, Cross2IconComponent, EditWhiteIconComponent,
+    Cross1IconComponent, Cross2IconComponent, CrossIconComponent, EditIconComponent, EditWhiteIconComponent,
     FilterIconComponent,
-    MagnifierIconComponent, PlusIconComponent,
+    MagnifierIconComponent, PlusIconComponent, SuccessIconComponent,
     UpArrowIconComponent
 } from '../../../../../../../assets/img';
 import { LetDirective } from '../../../../../../lib/directives/let.directive';
@@ -23,6 +24,8 @@ import {
 import { EmployeeDetailComponent } from './components/employee-detail/employee-detail.component';
 import { EmployeeDeclinationPipe } from './pipes/employee-declination.pipe';
 import { EmployeeLayoutComponent } from './components/employee-layout/employee-layout.component';
+import { EmployeeListMainLayoutComponent } from './components/employee-list-main-layout/employee-list-main-layout.component';
+import { DeleteEmployeeComponent } from './components/modals/delete-employee/delete-employee.component';
 
 @NgModule({
     imports: [
@@ -41,7 +44,12 @@ import { EmployeeLayoutComponent } from './components/employee-layout/employee-l
         CheckStaticIconComponent,
         Cross2IconComponent,
         EditWhiteIconComponent,
-        PlusIconComponent
+        PlusIconComponent,
+        NgOptimizedImage,
+        ArchiveIconComponent,
+        EditIconComponent,
+        CrossIconComponent,
+        SuccessIconComponent
     ],
     declarations: [
         EmployeeListComponent,
@@ -51,7 +59,13 @@ import { EmployeeLayoutComponent } from './components/employee-layout/employee-l
         EmployeeFiltersComponent,
         EmployeeDetailComponent,
         EmployeeDeclinationPipe,
-        EmployeeLayoutComponent
+        EmployeeLayoutComponent,
+        EmployeeListMainLayoutComponent,
+        DeleteEmployeeComponent
+    ],
+    exports: [
+        EmployeeListLayoutComponent,
+        EmployeeDetailComponent,
     ]
 })
 export class OwnDepartmentEmployeesModule {

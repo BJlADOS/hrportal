@@ -1,17 +1,18 @@
 .layout {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 
     &__top {
         display: flex;
         flex-direction: row;
-        gap: 20px;
+        gap: 16px;
     }
 
     &__top-left {
         display: flex;
         flex-direction: column;
+        gap: 16px;
     }
 
     &__top-right {
@@ -26,8 +27,7 @@
     }
 
     &__entities-count {
-        margin-bottom: 25px;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 16px;
     }
 
@@ -63,15 +63,4 @@
     &__employee-list {
         width: 100%
     }
-}
-
-.wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.wrapper-grid {
-    width: auto;
-    grid-template-columns: repeat(12, 80px);
 }

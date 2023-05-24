@@ -13,7 +13,10 @@
         </div>
         <div class="vacancies" *ngIf="vacancies.length else noVacancies">
             <app-vacancy-card class="width" *ngFor="let vacancy of vacancies"
-                              [vacancy]="vacancy"></app-vacancy-card>
+                              [vacancy]="vacancy"
+                              [status]="defaultStatus"
+                              (editedFromCard)="reloadPage($event)">
+            </app-vacancy-card>
         </div>
     </div>
     <div class="scroll-back" *ngIf="canScrollBack" (click)="scrollBack()">

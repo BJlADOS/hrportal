@@ -25,6 +25,7 @@ export function employeeMapper(data: IEmployeeResponse): IUser {
         contact: data.contact,
         experience: data.experience,
         currentDepartment: data.currentDepartment,
+        isActive: data.isActive,
         photo: data.photo,
         existingSkills: data.existingSkills,
         filled: data.filled,

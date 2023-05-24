@@ -1,7 +1,4 @@
 .department-page{
-    display: flex;
-    flex-direction: column;
-
     &__department-title {
         border-radius: 20px;
         border: 1px var(--grey) solid;
@@ -21,9 +18,4 @@
     display: flex;
     justify-content: center;
     width: 100%;
-}
-
-.wrapper-grid {
-    width: auto;
-    grid-template-columns: repeat(12, 80px);
 }

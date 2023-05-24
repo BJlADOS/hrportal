@@ -6,7 +6,8 @@
         <div class="resumes">
             <employee-card class="width"
                         *ngFor="let employee of employeeList"
-                        [employeeData]="employee">
+                        [employeeData]="employee"
+            (userEdited)="userEdited()">
             </employee-card>
         </div>
     </div>
