@@ -7,5 +7,5 @@ export enum HeaderButton {
     departmentVacancies,
     departmentResumes,
     departmentEmployees,
-    departmentResponces,
+    archivedEntities
 }

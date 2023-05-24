@@ -32,7 +32,14 @@ const routes: Routes = [
                 data: {
                     breadcrumb: 'Сотрудники'
                 }
-            }
+            },
+            {
+                path: 'archived',
+                loadChildren: () => import('./children/archived-entities/archived-entities.module').then((m) => m.ArchivedEntitiesModule),
+                data: {
+                    breadcrumb: 'Архивированные'
+                }
+            },
         ]
     }
 ];

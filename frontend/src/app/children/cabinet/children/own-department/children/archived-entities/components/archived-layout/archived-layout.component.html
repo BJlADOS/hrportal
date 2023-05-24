@@ -1,0 +1,27 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <div class="list-selector">
+                <h2>
+                    Архивированные
+                </h2>
+
+                <div class="list-selector__buttons">
+                    <span class="list-selector__button"
+                          routerLink="archived-vacancies"
+                          [class.active]="isActive('archived-vacancies')">
+                        Вакансии
+                    </span>
+                    <span class="list-selector__button"
+                          routerLink="archived-resumes"
+                          [class.active]="isActive('archived-resumes')">
+                        Резюме
+                    </span>
+                </div>
+            </div>
+            <div class="lists">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
