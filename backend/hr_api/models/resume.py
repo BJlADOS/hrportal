@@ -37,4 +37,4 @@ class Resume(PDFResume):
         self.save()
 
     def __str__(self):
-        return f"Resume({self.desired_position}, {self.employee.fullname})"
+        return f"Resume({self.desired_position}, {'-' if self.employee is None else self.employee.fullname})"

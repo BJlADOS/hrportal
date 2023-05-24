@@ -3,14 +3,6 @@ from django.contrib import admin
 from .models import *
 
 
-@admin.register(Notification)
-class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'type', 'owner', 'read', 'notify_time')
-    list_display_links = ('type',)
-    list_filter = ('read', 'type')
-    ordering = ('id','notify_time')
-
-
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'fullname', 'email', 'email_verified', 'filled_view', 'is_manager_view', 'admin_view')
@@ -42,7 +34,10 @@ class ResumeAdmin(admin.ModelAdmin):
 
     @admin.display(description="employee")
     def employee_fullname_view(self, obj):
-        return obj.employee.fullname
+        if obj.employee is None:
+            return None
+        else:
+            return obj.employee.fullname
 
 
 @admin.register(Vacancy)
@@ -76,3 +71,11 @@ class DepartmentAdmin(admin.ModelAdmin):
     @admin.display(description="manager")
     def manager_name_view(self, obj):
         return obj.manager.fullname if obj.manager else '-'
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type', 'owner', 'read', 'notify_time')
+    list_display_links = ('type',)
+    list_filter = ('read', 'type')
+    ordering = ('id', 'notify_time')

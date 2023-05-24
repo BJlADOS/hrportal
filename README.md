@@ -99,3 +99,18 @@ python manage.py createsuperuser
 собственные
 EMAIL_HOST_USER и EMAIL_HOST_PASSWORD (либо оставить имеющиеся, но письма будут приходить в
 ящик [@angstorm](https://github.com/angst-storm))
+
+### Развертывание с Terraform:
+
+```bash
+terraform -chdir=terraform apply -target yandex_cm_certificate.hrportal
+# подтвердить сертификат по DNS
+terraform -chdir=terraform apply -target yandex_container_registry.hrportal
+docker build backend -t <tag>
+docker push <tag>
+terraform -chdir=terraform apply
+aws --endpoint-url=https://storage.yandexcloud.net/ s3 sync frontend/dist/out/assets s3://hrportal-static/assets
+cd frontend
+ng build
+# перенести файлы сайта в браузер
+```

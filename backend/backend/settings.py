@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'hr_api.apps.HrApiConfig',
     'django_filters',
-    'drf_yasg'
+    'drf_yasg',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -86,11 +87,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': os.environ['POSTGRES_HOST'],
+        'PORT': os.environ['POSTGRES_PORT'],
         'NAME': os.environ['POSTGRES_DB_NAME'],
         'USER': os.environ['POSTGRES_USER'],
         'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-        'HOST': os.environ['POSTGRES_HOST'],
-        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': os.environ['POSTGRES_SSLMODE']
+        }
     }
 }
 
@@ -163,14 +167,36 @@ CORS_ALLOW_CREDENTIALS = True
 
 SESSION_COOKIE_HTTPONLY = True
 
-EMAIL_HOST = 'smtp.mailtrap.io'
+# SMTP Settings
+EMAIL_HOST = os.environ['EMAIL_HOST']
 EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
-EMAIL_PORT = '2525'
-DEFAULT_FROM_EMAIL = 'server@hrportal.com'
+EMAIL_PORT = os.environ['EMAIL_PORT']
+DEFAULT_FROM_EMAIL = os.environ['DEFAULT_FROM_EMAIL']
 
 MAX_EMAIL_TEXT_SIZE = 1048576
 MAX_EMAIL_ATTACHMENT_SIZE = 4194304
+
+# Storages settings
+
+REMOTE_STORAGE = os.environ['REMOTE_STORAGE'] == 'True'
+
+if REMOTE_STORAGE:
+    AWS_S3_ENDPOINT_URL = os.environ['S3_ENDPOINT_URL']
+    AWS_ACCESS_KEY_ID = os.environ['ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['SECRET_ACCESS_KEY']
+
+    MEDIA_BUCKET_NAME = os.environ['MEDIA_BUCKET_NAME']
+    STATIC_BUCKET_NAME = os.environ['STATIC_BUCKET_NAME']
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "hr_api.storages.MediaStorage"
+        },
+        "staticfiles": {
+            "BACKEND": "hr_api.storages.StaticStorage"
+        }
+    }
 
 VERIFICATION_URL = os.environ['VERIFICATION_URL']
 SET_PASSWORD_URL = os.environ['RECOVERY_URL']
