@@ -104,13 +104,18 @@ EMAIL_HOST_USER и EMAIL_HOST_PASSWORD (либо оставить имеющие
 
 ```bash
 terraform -chdir=terraform apply -target yandex_cm_certificate.hrportal
-# подтвердить сертификат по DNS
+# output dns_challenge_cname = <dns challenge>
+# подтвердить сертификат по DNS, создав cname запись <dns challenge>
+
 terraform -chdir=terraform apply -target yandex_container_registry.hrportal
+# output django_image_tag = <tag>
 docker build backend -t <tag>
 docker push <tag>
+
 terraform -chdir=terraform apply
-aws --endpoint-url=https://storage.yandexcloud.net/ s3 sync frontend/dist/out/assets s3://hrportal-static/assets
+
 cd frontend
 ng build
-# перенести файлы сайта в браузер
+aws --endpoint-url=https://storage.yandexcloud.net/ s3 sync dist/out/assets s3://hrportal-static/assets
+# перенести файлы сайта в браузер, в бакет hrportal-static
 ```
