@@ -11,6 +11,8 @@ class ResumeFilter(django_filters.FilterSet):
                                                       queryset=Skill.objects.all(),
                                                       conjoined=True)
     status = django_filters.ChoiceFilter(field_name='status', choices=STATUS_CHOICES)
+    employeeDepartment = django_filters.ModelChoiceFilter(field_name='employee__current_department',
+                                                          queryset=Department.objects.all())
 
     ordering = django_filters.OrderingFilter(fields=[
         ('desired_salary', 'salary'),

@@ -83,5 +83,8 @@ class FilterPaginatorInspector(CoreAPICompatInspector):
                 case 'experience':
                     param.description = 'Опыт пользователя'
                     param.enum = [e[0] for e in User.EXPERIENCE_CHOICES]
+                case 'employeeDepartment':
+                    param.description = 'ID текущего отдела сотрудника'
+                    param.type = openapi.TYPE_INTEGER
 
         return [p for p in result if not 'salary' in p.name]

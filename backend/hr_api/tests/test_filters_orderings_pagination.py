@@ -38,6 +38,11 @@ class FiltersOrderingsPaginationTests(TestCase):
         departments = [dep1, dep2, dep3, dep4]
         cls.dep_ids = [dep.id for dep in departments]
 
+        employee.current_department = dep2
+        employee.save()
+        admin.current_department = dep3
+        admin.save()
+
         skills = [
             create_skill(),
             create_skill(),
@@ -104,6 +109,7 @@ class FiltersOrderingsPaginationTests(TestCase):
     def test_GetResumesWithFilters_ShouldReturnFilteredResumes(self):
         ids = self.res_ids
         sks = self.skills_ids
+        dps = self.dep_ids
         test_cases = {
             '': ids,
             'salary_min=15000': ids[1:],
@@ -121,6 +127,10 @@ class FiltersOrderingsPaginationTests(TestCase):
             'status=PUBLIC': ids[:1],
             'status=ARCHIVED': ids[1:2],
             'status=DELETED': ids[2:],
+            f'employeeDepartment={dps[0]}': [ids[1]],
+            f'employeeDepartment={dps[1]}': [ids[0]],
+            f'employeeDepartment={dps[2]}': [ids[2]],
+            f'employeeDepartment={dps[3]}': [],
         }
         for path, expected in test_cases.items():
             result = to_id_list(self.client.get(reverse('resume-list') + f'?{path}'))
@@ -131,8 +141,8 @@ class FiltersOrderingsPaginationTests(TestCase):
         test_cases = {
             '': ids,
             f'department={self.dep_ids[0]}': [ids[1]],
-            f'department={self.dep_ids[1]}': [],
-            f'department={self.dep_ids[0]}&department={self.dep_ids[1]}': [ids[1]],
+            f'department={self.dep_ids[3]}': [],
+            f'department={self.dep_ids[0]}&department={self.dep_ids[1]}': [ids[0], ids[1]],
             'experience=<1': [ids[0]],
             'experience=1-3': [ids[1]],
             'experience=3-6': [],

@@ -38,6 +38,7 @@ schema_view = get_schema_view(
                     '- При отклике на вакансию теперь автоматически рассылаются уведомления (как и email-отклики)\n'
                     '- Критические изменения в модели данных - <b>необходимо</b> сбросить БД (<code>python manage.py flush</code>)\n'
                     '- В модель <b>User</b> возвращено поле <b>resumeId</b>\n'
+                    '- Добавлена фильтрация резюме по отделу сотрудника\n'
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
