@@ -7,8 +7,6 @@ resource "yandex_storage_bucket" "media" {
   secret_key = yandex_iam_service_account_static_access_key.editor-key.secret_key
 }
 
-// TODO automatically upload site files
-
 resource "yandex_storage_bucket" "static" {
   bucket     = "${local.common_prefix}-static"
   max_size   = -2147483648

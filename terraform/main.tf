@@ -15,8 +15,6 @@ provider "yandex" {
 
 ### Certificate Manager ###
 
-// TODO validate certificate automatically
-
 resource "yandex_cm_certificate" "hrportal" {
   name    = local.cert_name
   domains = [local.domain]
@@ -31,8 +29,6 @@ output "dns_challenge_cname" {
 }
 
 ### Container Registry ###
-
-# TODO push image automatically
 
 resource "yandex_container_registry" "hrportal" {
   name      = "${local.common_prefix}-registry"
