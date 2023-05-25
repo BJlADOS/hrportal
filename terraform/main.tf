@@ -91,11 +91,6 @@ resource "yandex_storage_bucket" "media" {
 resource "yandex_storage_bucket" "static" {
   bucket   = "${local.common_prefix}-static"
   max_size = -2147483648
-
-  anonymous_access_flags {
-    read = true // TODO to private
-  }
-
   access_key = yandex_iam_service_account_static_access_key.editor-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.editor-key.secret_key
 }
@@ -149,7 +144,7 @@ resource "yandex_vpc_subnet" "b" {
   name           = "${local.common_prefix}-b-subnet"
   zone           = local.main_zone
   network_id     = yandex_vpc_network.hrportal.id
-  v4_cidr_blocks = ["10.5.0.0/24"]
+  v4_cidr_blocks = ["10.129.0.0/24"]
 }
 
 ### Postgres DB ###
@@ -157,7 +152,7 @@ resource "yandex_vpc_subnet" "b" {
 resource "yandex_mdb_postgresql_cluster" "hrportal" {
   name        = "${local.common_prefix}-postgres-db"
   environment = "PRODUCTION"
-  network_id  = var.old_network_id
+  network_id  = yandex_vpc_network.hrportal.id
 
   config {
     version = 14
@@ -171,7 +166,7 @@ resource "yandex_mdb_postgresql_cluster" "hrportal" {
   host {
     assign_public_ip = true
     zone      = local.main_zone
-    subnet_id = var.old_subnet_id
+    subnet_id = yandex_vpc_subnet.b.id
   }
 }
 
@@ -241,7 +236,9 @@ resource "yandex_serverless_container" "django" {
       REMOTE_STORAGE     = "True"
       S3_ENDPOINT_URL    = "https://storage.yandexcloud.net"
       MEDIA_BUCKET_NAME  = yandex_storage_bucket.media.id
+      MEDIA_BUCKET_URL  = "${yandex_cm_certificate.hrportal.domains[0]}${local.media_storage_path}"
       STATIC_BUCKET_NAME = yandex_storage_bucket.static.id
+      STATIC_BUCKET_URL = "${yandex_cm_certificate.hrportal.domains[0]}${local.static_storage_path}"
       # Service account #
       ACCESS_KEY_ID      = yandex_iam_service_account_static_access_key.django-key.access_key
 
@@ -333,6 +330,22 @@ paths:
      x-yc-apigateway-integration:
        type: object_storage
        bucket: ${yandex_storage_bucket.media.id}
+       object: '{file}'
+       error_object: index.html
+       service_account_id: ${yandex_iam_service_account.gateway.id}
+     parameters:
+     - explode: false
+       in: path
+       name: file
+       required: true
+       schema:
+         type: string
+       style: simple
+  /static/{file+}:
+   get:
+     x-yc-apigateway-integration:
+       type: object_storage
+       bucket: ${yandex_storage_bucket.static.id}
        object: '{file}'
        error_object: index.html
        service_account_id: ${yandex_iam_service_account.gateway.id}

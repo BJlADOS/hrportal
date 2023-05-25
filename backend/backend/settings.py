@@ -187,7 +187,9 @@ if REMOTE_STORAGE:
     AWS_SECRET_ACCESS_KEY = os.environ['SECRET_ACCESS_KEY']
 
     MEDIA_BUCKET_NAME = os.environ['MEDIA_BUCKET_NAME']
+    MEDIA_BUCKET_URL = os.environ['MEDIA_BUCKET_URL']
     STATIC_BUCKET_NAME = os.environ['STATIC_BUCKET_NAME']
+    STATIC_BUCKET_URL = os.environ['STATIC_BUCKET_URL']
 
     STORAGES = {
         "default": {
