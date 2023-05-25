@@ -32,6 +32,9 @@ resource "yandex_serverless_container" "django" {
   memory             = 1024
   service_account_id = yandex_iam_service_account.django.id
   execution_timeout  = "600s"
+  connectivity {
+    network_id = yandex_vpc_network.hrportal.id
+  }
   image {
     url         = "cr.yandex/${yandex_container_registry.hrportal.id}/${var.django_container_tag}"
     environment = {

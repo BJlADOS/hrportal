@@ -6,6 +6,9 @@ resource "yandex_api_gateway" "hrportal" {
     fqdn           = yandex_cm_certificate.hrportal.domains[0]
     certificate_id = yandex_cm_certificate.hrportal.id
   }
+  connectivity {
+    network_id = yandex_vpc_network.hrportal.id
+  }
   spec = <<-EOT
 openapi: 3.0.0
 info:
