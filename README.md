@@ -1,8 +1,8 @@
 ## Демонстрация
 
-Сервис развернут по адресу: http://hrportal.sergei-kiprin.ru
+Сервис развернут по адресу: https://hrportal.sergei-kiprin.ru
 
-Автогенерируемая [Swagger-документация](http://hrportal.sergei-kiprin.ru/api/docs/) для backend
+Автогенерируемая [Swagger-документация](https://hrportal.sergei-kiprin.ru/api/docs/) для backend
 
 ## Запуск Frontend
 
