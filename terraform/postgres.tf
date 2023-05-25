@@ -28,7 +28,6 @@ resource "yandex_mdb_postgresql_cluster" "hrportal" {
   }
 
   host {
-    assign_public_ip = true
     zone             = local.main_zone
     subnet_id        = yandex_vpc_subnet.b.id
   }
