@@ -28,25 +28,16 @@ const routes: Routes = [
                 path: 'deleted-vacancies',
                 pathMatch: 'full',
                 component: DeletedVacanciesComponent,
-                data: {
-                    breadcrumb: 'Удалённые вакансии'
-                },
             },
             {
                 path: 'deleted-resumes',
                 pathMatch: 'full',
                 component: DeletedResumesComponent,
-                data: {
-                    breadcrumb: 'Удалённые резюме'
-                },
             },
             {
                 path: 'deleted-users',
                 pathMatch: 'full',
                 component: DeletedUsersComponent,
-                data: {
-                    breadcrumb: 'Удалённые сотрудники'
-                },
             },
         ],
     },

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, Output} from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, of, takeUntil } from 'rxjs';
 import { contentExpansionHorizontal, DestroyService } from '../../../../../../../../lib';
 import { IUser } from '../../../../../../../../common';

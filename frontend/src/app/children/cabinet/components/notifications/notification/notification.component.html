@@ -1,0 +1,26 @@
+<div class="layout" [class.read]="notificationViewModel.read" (click)="markRead()">
+    <div class="layout__top">
+        <div class="state">
+            {{ notificationViewModel.readState }}
+        </div>
+        <div class="time">
+            {{ notificationViewModel.notifyTime | date: 'dd.MM.yyyy HH:mm' }}
+        </div>
+    </div>
+    <div class="content"
+         [ngSwitch]="notificationViewModel.type"
+         *ngIf="employee$ | async as employee">
+        <div class="content" *ngSwitchCase="NotificationType.RESUME_RESPONSE">
+        <span>На ваше резюме <span class="bold highlight" *ngIf="resume$ | async as resume">{{resume.desiredPosition}}</span> получен отклик
+        от руководителя <span class="highlight">{{getEmployeeName(employee.fullname)}}</span> из отдела "{{department$ | async}}".</span>
+        </div>
+        <div class="content" *ngSwitchCase="NotificationType.VACANCY_RESPONSE">
+        <span>На вашу вакансию <span class="highlight bold">{{(vacancy$ | async)?.position}}</span> получен отклик от руководителя
+        <span class="highlight">{{getEmployeeName(employee.fullname)}}</span>.</span>
+        </div>
+    </div>
+    <div class="layout__bottom" *ngIf="employee$ | async as employee">
+        <span class="contact">{{employee.email}}</span>
+        <span class="contact" *ngIf="employee.contact">{{employee.contact}}</span>
+    </div>
+</div>

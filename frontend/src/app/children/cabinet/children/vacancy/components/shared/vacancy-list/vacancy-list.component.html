@@ -4,10 +4,15 @@
     </div>
     <div class="error" *ngIf="loadingError">{{loadingError}}</div>
     <div class="content">
-        <div class="filters" [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'"
-             stickySidebar containerSelector=".content" innerWrapperSelector=".inner" topSpacing="24"
-             bottomSpacing="24" [minWidth]="400" [updateSticky]="update$">
-            <div class="inner">
+        <div class="filters"
+             [@contentExpansionHorizontal]="filtersExpanded ? 'expanded' : 'collapsed'"
+             stickySidebar
+             topSpacing="24"
+             bottomSpacing="24"
+             innerWrapperSelector=".filters-inner"
+             [minWidth]="'400px'"
+             [updateSticky]="update$">
+            <div class="filters-inner">
                 <app-vacancy-filters (madeSearch)="resetSearch()"></app-vacancy-filters>
             </div>
         </div>

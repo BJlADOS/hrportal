@@ -13,7 +13,6 @@
 }
 
 .content {
-    position: relative;
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -26,8 +25,8 @@
     }
 
     & .filters {
-        width: calc(280px + 130px);
-        margin-right: 1rem;
+        width: calc(240px + 60px);
+        margin-right: 20px;
     }
 
     & .no-vacancies {

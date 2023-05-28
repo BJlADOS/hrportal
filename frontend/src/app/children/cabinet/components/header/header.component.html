@@ -18,6 +18,7 @@
                         <img [src]="user.photo || 'assets/img/profile-placeholder.png'">
                         <p>{{getUserName(user.fullname)}}</p>
                     </div>
+                    <app-notifications></app-notifications>
                     <logout-icon appHoverListener (click)="logout()"></logout-icon>
                     <settings-icon appHoverListener *ngIf="user.isAdmin"></settings-icon>
                 </div>
