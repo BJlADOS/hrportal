@@ -1,0 +1,33 @@
+<div class="dropdown-collection"
+     [class.opened]="dropdownOpen"
+     appClickOutside
+     (clickOutside)="dropdownOpen = false"
+     *let="(notifications$ | async)?? [] as notifications">
+    <div appHoverListener class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label" (click)="toggleDropdown()">
+        <notification-icon [forceHover]="dropdownOpen"></notification-icon>
+        <div class="notifications-count">
+            <span>{{page.itemsCount > 9 ? '9+' : page.itemsCount}}</span>
+        </div>
+    </div>
+    <div class="dropdown-list"
+         role="listbox"
+         aria-expanded="false"
+         [@contentExpansion]="dropdownOpen ? 'expanded' : 'collapsed'">
+        <div appScrolledToBottom
+             class="dropdown-list__scroll"
+             [style.height.px]="124 * visibleOptions"
+             [class.no-scroll]="visibleOptions >= notifications.length"
+             (scrolledToBottom)="onScrolledToBottom()">
+            <div class="dropdown-item empty" *ngIf="!notifications.length && !isLoading"
+                 [class.no-scroll]="visibleOptions >= notifications.length"
+                 (click)="toggleDropdown()"
+            ><span>У вас нет уведомлений</span></div>
+
+            <div class="dropdown-item" [class.no-scroll]="visibleOptions >= notifications.length"
+                 *ngFor="let option of notifications">
+                <app-notification [notification]="option"></app-notification>
+            </div>
+            <app-loader *ngIf="isLoading"></app-loader>
+        </div>
+    </div>
+</div>

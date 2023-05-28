@@ -90,6 +90,10 @@ export class HeaderComponent implements OnInit {
         this._router.navigate(['cabinet/profile']);
     }
 
+    public toggleNotifications(): void {
+
+    }
+
     /**
      * Получить модель селектора
      * */

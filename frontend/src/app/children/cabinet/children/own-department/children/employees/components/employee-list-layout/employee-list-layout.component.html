@@ -18,13 +18,12 @@
         <div class="layout__filter-block"
              [@contentExpansionHorizontal]="filtersOpened ? 'expanded' : 'collapsed'"
              stickySidebar
-             containerSelector=".content__main"
-             innerWrapperSelector=".inner"
+             innerWrapperSelector=".layout__filter-block-inner"
              topSpacing="24"
              bottomSpacing="24"
              [minWidth]="400"
              [updateSticky]="filtersOpened$">
-            <div class="layout__filter-block">
+            <div class="layout__filter-block-inner">
                 <employee-filters></employee-filters>
             </div>
         </div>

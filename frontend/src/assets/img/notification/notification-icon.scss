@@ -1,0 +1,11 @@
+:host.hover {
+    & .fill {
+        fill: var(--main-accent-color);
+    }
+}
+
+svg {
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    width: 24px;
+    height: 24px;
+}
