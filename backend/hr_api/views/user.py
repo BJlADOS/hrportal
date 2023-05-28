@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -46,6 +46,8 @@ class UserView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
     pagination_class = LimitOffsetPagination
 
     def get_permissions(self):
+        if self.action == 'retrieve':
+            return [IsAuthenticated()]
         if self.request.method == 'GET':
             return [(IsManagerUser | IsAdminUser)()]
         else:
@@ -57,7 +59,7 @@ class UserView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
         elif self.request.user.is_manager:
             return User.objects.filter(is_active=True)
         else:
-            return User.objects.none()
+            return User.objects.filter(is_active=True)
 
     @swagger_auto_schema(
         tags=['Пользователь'],
