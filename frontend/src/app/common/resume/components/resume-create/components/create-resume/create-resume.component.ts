@@ -13,6 +13,7 @@ import {
     ISelectOption, Modal,
     Schedule
 } from '../../../../../../lib';
+import {finalize, flatMap} from "rxjs";
 
 @Component({
     selector: 'app-create-employee-card',
@@ -26,6 +27,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
     public resumeForm!: FormGroup;
     public schedule: ISelectOption[] = getScheduleRussianAsArray();
     public employment: ISelectOption[] = getEmploymentRussianAsArray();
+    public isLoading: boolean = false;
 
     public errors: IResumeFormError = {
         desiredPosition: null,
@@ -57,12 +59,14 @@ export class CreateResumeComponent extends Modal implements OnInit {
     }
 
     public ngOnInit(): void {
+        this.isLoading = true;
         this.user.getResume()
+            .pipe(finalize(() => this.isLoading = false))
             .subscribe({
                 next: (resume: IResume) => {
                     this.resume = resume;
                     //Парсим имя файла из ссылки или ставим заглушку
-                    this.loadPlaceholder = resume.resume.split('/').pop();
+                    this.loadPlaceholder = resume.file.split('/').pop();
                     this.resumeForm = this._formGenerator.getResumeForm(this.resume);
                 }, error: (error: any) => {
                     this.resumeForm = this._formGenerator.getResumeForm(null);
@@ -91,9 +95,10 @@ export class CreateResumeComponent extends Modal implements OnInit {
 
     public submit(): void {
         const resume: IResumeUpdate = this.createUpdateResumeObject();
-
+        this.isLoading = true;
         if (this.resume) {
             this.user.updateResume(resume)
+                .pipe(finalize(() => this.isLoading = false))
                 .subscribe({
                     next: (resume: IResume) => {
                         this.isSubmitted = true;
@@ -103,6 +108,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
                 });
         } else {
             this.user.createResume(resume)
+                .pipe(finalize(() => this.isLoading = false))
                 .subscribe({
                     next: (resume: IResume) => {
                         this.isSubmitted = true;
@@ -136,7 +142,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
         this.isUserChanged.desiredSalary = form.salary !== resume?.desiredSalary;
         this.isUserChanged.desiredEmployment = (form.employment.id?? form.employment) !== resume?.desiredEmployment;
         this.isUserChanged.desiredSchedule = (form.schedule.id?? form.desiredSchedule) !== resume?.desiredSchedule;
-        this.isUserChanged.resume = this.file !== null || this.loadPlaceholder !== resume?.resume?.split('/').pop();
+        this.isUserChanged.resume = this.file !== null || this.loadPlaceholder !== resume?.file?.split('/').pop();
 
         return this.isUserChanged.desiredPosition || this.isUserChanged.desiredSalary || this.isUserChanged.desiredEmployment || this.isUserChanged.desiredSchedule || this.isUserChanged.resume;
     }

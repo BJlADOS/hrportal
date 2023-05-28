@@ -8,7 +8,7 @@ export interface IResume {
     desiredSalary: number;
     desiredEmployment: Employment;
     desiredSchedule: Schedule;
-    resume: string;
+    file: string;
     isActive: boolean;
     modifiedAt: number;
     createdAt: number;

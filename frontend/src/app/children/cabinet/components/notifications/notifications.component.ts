@@ -60,6 +60,18 @@ export class NotificationsComponent extends PageBase implements OnInit, OnDestro
         this.dropdownElement.setAttribute('aria-expanded', this.dropdownOpen ? 'true' : 'false');
     }
 
+    public calculateHeight(elements: number): number | null {
+        if (elements <= 3) {
+            return null;
+        }
+
+        return 152 * this.visibleOptions;
+    }
+
+    public countUnread(notifications: INotification[]): number {
+        return notifications.filter((n: INotification) => !n.read).length;
+    }
+
     private checkOptions(length: number): void {
         if(length < 3) {
             this.visibleOptions = length === 0 ? 1 : length;

@@ -65,7 +65,7 @@ export class ResumeDetailComponent implements OnInit {
     }
 
     public showResume(): void {
-        window.open(`${environment.mediaURL}/${this.resume?.resume}`);
+        window.open(`${environment.mediaURL}/${this.resume?.file}`);
     }
 
 }

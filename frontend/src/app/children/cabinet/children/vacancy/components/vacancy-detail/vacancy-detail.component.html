@@ -5,7 +5,7 @@
             <div class="title">
                 <div class="title__position">
                     <h1>{{vacancyForm.controls['position'].value}}</h1>
-                    <span class="department">{{ vacancy.department.name }}</span>
+                    <span class="department" *ngIf="vacancy.department">{{ vacancy.department.name }}</span>
                 </div>
                 <p class="title__date">{{vacancy.createdAt | date: 'dd.MM.yyyy'}}</p>
             </div>
