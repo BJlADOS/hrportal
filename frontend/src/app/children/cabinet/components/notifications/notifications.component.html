@@ -5,7 +5,7 @@
      *let="(notifications$ | async)?? [] as notifications">
     <div appHoverListener class="dropdown-button" aria-haspopup="listbox" aria-labelledby="dropdown-label" (click)="toggleDropdown()">
         <notification-icon [forceHover]="dropdownOpen"></notification-icon>
-        <div class="notifications-count">
+        <div class="notifications-count" *ngIf="notifications.length">
             <span>{{page.itemsCount > 9 ? '9+' : page.itemsCount}}</span>
         </div>
     </div>

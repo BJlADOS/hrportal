@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { contentExpansion, DestroyService } from '../../../../lib';
 import { finalize, Observable } from 'rxjs';
 import { INotification } from './interfaces/notification.interface';
@@ -13,7 +13,7 @@ import { PageBase } from '../../../../lib/shared/components/page-base/page-base.
     animations: [contentExpansion],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NotificationsComponent extends PageBase implements OnInit {
+export class NotificationsComponent extends PageBase implements OnInit, OnDestroy {
 
     public notifications$: Observable<INotification[] | null> = this.page.list$;
 
@@ -34,6 +34,10 @@ export class NotificationsComponent extends PageBase implements OnInit {
         this.page.addPage()
             .pipe(finalize(() => this.stopLoading()))
             .subscribe();
+    }
+
+    public ngOnDestroy(): void {
+        this.page.clearPageData();
     }
 
     public get dropdownElement(): Element { return this.elem.nativeElement.querySelector('.dropdown-list'); }
