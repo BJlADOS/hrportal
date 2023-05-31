@@ -24,6 +24,7 @@
                         <h2 *ngIf="user.isAdmin">Администратор</h2>
                     </div>
                 </div>
+                <div *ngIf="isEditing">Размер картинки должен быть не больше 2.4 МБ</div>
                 <div class="data">
                     <div class="success" [@contentExpansion]="isSavedChanges ? 'expanded' : 'collapsed'">
                         <check-static-icon></check-static-icon>

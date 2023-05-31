@@ -1,11 +1,12 @@
 
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { Status } from '../../../../../../../lib/utils/enums/status.enum';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { contentExpansionHorizontal, DestroyService } from '../../../../../../../lib';
 import { IResumePage } from '../../../../../../../common/resume/interfaces/resume-page.interface';
-import { IResume, ResumeService } from '../../../../../../../common';
+import { IDepartment, IResume, ResumeService } from '../../../../../../../common';
 import { ResumeSearchService } from '../../../../../../../common/resume/services/resume-search.service';
+import { USER_DEPARTMENT_TOKEN } from '../../../../own-department/tokens/user-department.token';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class ResumeListComponent implements OnInit, OnDestroy {
         private _resume: ResumeService,
         private _resumeSearch: ResumeSearchService,
         private _destroy$: DestroyService,
+        @Optional() @Inject(USER_DEPARTMENT_TOKEN) protected department$: Subject<IDepartment>
     ) { }
 
     public ngOnInit(): void {
@@ -49,8 +51,21 @@ export class ResumeListComponent implements OnInit, OnDestroy {
                     this.loadingError = error;
                 }
             });
-        this._resumeSearch.changeStatus(this.defaultStatus);
-        this._resumeSearch.search();
+
+        if (this.department$) {
+            this.department$
+                .pipe(
+                    take(1)
+                )
+                .subscribe((department: IDepartment) => {
+                    this._resumeSearch.setDepartment(department);
+                    this._resumeSearch.changeStatus(this.defaultStatus);
+                    this._resumeSearch.search();
+                });
+        } else {
+            this._resumeSearch.changeStatus(this.defaultStatus);
+            this._resumeSearch.search();
+        }
 
         window.addEventListener('scroll', this._callback);
         window.addEventListener('resize', this._callback);

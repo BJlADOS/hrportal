@@ -6,6 +6,7 @@ import { DestroyService, Ordering } from '../../../lib';
 import { ResumeService } from './resume.service';
 import { IFilterRequest } from '../../vacancy';
 import { Status } from '../../../lib/utils/enums/status.enum';
+import { IDepartment } from '../../department';
 
 @Injectable({
     providedIn: 'root',
@@ -14,6 +15,7 @@ export class ResumeSearchService {
 
     public resumesSubject$: BehaviorSubject<IResumePage> = new BehaviorSubject<IResumePage>( { count: 0, next: null, previous: null, results: [] });
     public resumes$ : Observable<IResumePage> = this.resumesSubject$.asObservable();
+    private _concreteDepartment?: IDepartment;
 
     private _filterRequest: IResumeRequest = {
         employment: [],
@@ -32,6 +34,10 @@ export class ResumeSearchService {
         private _resume: ResumeService,
         private _destroy$: DestroyService,
     ) { }
+
+    public setDepartment(department: IDepartment): void {
+        this._concreteDepartment = department;
+    }
 
     public setFilters(filter: IResumeRequest): void {
         if (filter.salary_min && filter.salary_max) {
@@ -85,6 +91,10 @@ export class ResumeSearchService {
     }
 
     private makeSearch(): void {
+        if (this._concreteDepartment) {
+            this._filterRequest.department = [this._concreteDepartment as any];
+        }
+
         this._resume.getResumes(this.buildRequestObject())
             .subscribe({ next: (data : IResumePage) => {
                 this.resumesSubject$.next(data);

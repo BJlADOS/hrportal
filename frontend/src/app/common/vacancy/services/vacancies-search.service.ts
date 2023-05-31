@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {IFilter, IFilterRequest, IVacancyPage} from '../interfaces';
-import {DestroyService, Ordering} from '../../../lib';
-import {VacancyService} from './vacancy.service';
-import {IDepartment} from '../../department';
-import {Status} from '../../../lib/utils/enums/status.enum';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { IFilter, IFilterRequest, IVacancyPage } from '../interfaces';
+import { DestroyService, Ordering } from '../../../lib';
+import { VacancyService } from './vacancy.service';
+import { IDepartment } from '../../department';
+import { Status } from '../../../lib/utils/enums/status.enum';
 
 @Injectable()
 export class VacanciesSearchService {

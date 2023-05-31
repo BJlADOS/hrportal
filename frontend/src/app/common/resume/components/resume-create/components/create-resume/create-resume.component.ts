@@ -13,7 +13,7 @@ import {
     ISelectOption, Modal,
     Schedule
 } from '../../../../../../lib';
-import {finalize, flatMap} from "rxjs";
+import { finalize } from 'rxjs';
 
 @Component({
     selector: 'app-create-employee-card',
@@ -154,7 +154,7 @@ export class CreateResumeComponent extends Modal implements OnInit {
             return false;
         }
 
-        if (file.size > 4194304) {
+        if (file.size > 4 * 1024 * 1024) {
             this.uploadError = 'Файл слишком большой';
 
             return false;

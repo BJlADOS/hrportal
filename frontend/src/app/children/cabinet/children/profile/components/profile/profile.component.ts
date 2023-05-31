@@ -87,6 +87,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     public onPhotoChange(event: any): void {
         const file: File = event.target.files[0];
+        if (file.size > 2.4 * 1024 * 1024) {
+            return;
+        }
 
         const mimeType = file.type;
         if (mimeType.match(/.(jpe?g?|png|gif)$/) == null) {
@@ -214,11 +217,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
 
         // Проверка на изменения в форме
-        // console.log(this.isUserEdited);
-        // console.log(form);
-        // console.log(user);
+        console.log(this.isUserEdited);
+        console.log(this.userForm);
+        console.log(user);
 
-        return this.isUserEdited.name || this.isUserEdited.photo || this.isUserEdited.email || this.isUserEdited.contact || this.isUserEdited.experience || this.isUserEdited.department || this.isUserEdited.skills;
+        return this.isUserEdited.name
+            || this.isUserEdited.photo
+            || this.isUserEdited.email
+            || this.isUserEdited.contact
+            || this.isUserEdited.experience
+            || this.isUserEdited.department
+            || this.isUserEdited.skills;
     }
 
 

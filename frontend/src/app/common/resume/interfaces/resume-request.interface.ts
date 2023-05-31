@@ -6,6 +6,7 @@ export interface IResumeRequest {
     employment?: Employment[],
     schedule?: Schedule[],
     skills?: number[],
+    department?: number[],
     status?: Status,
     ordering?: Ordering,
     search?: string,

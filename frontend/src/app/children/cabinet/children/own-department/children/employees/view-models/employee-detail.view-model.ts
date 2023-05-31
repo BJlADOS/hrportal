@@ -10,6 +10,7 @@ export class EmployeeDetailViewModel {
     public workExperience: string;
     public skills: ISkill[];
     public avatarUrl: string;
+    public defaultAvatarImage: string;
     public contact: string;
     public personalCanBeViewed: boolean;
     public careerCanBeViewed: boolean;
@@ -21,7 +22,8 @@ export class EmployeeDetailViewModel {
         this.isActive = data.isActive;
         this.email = data.email;
         this.workExperience = ExperienceRussian[data.experience];
-        this.avatarUrl = (environment.mediaURL + data.photo) || 'assets/img/profile-placeholder.png';
+        this.defaultAvatarImage = 'assets/img/profile-placeholder.png';
+        this.avatarUrl = (environment.mediaURL + data.photo) || this.defaultAvatarImage;
         this.role = this.getRole(data.isManager, data.isAdmin);
         this.skills = data.existingSkills;
         this.contact = data.contact;

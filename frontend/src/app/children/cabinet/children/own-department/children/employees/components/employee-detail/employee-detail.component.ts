@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap, tap } from 'rxjs';
 import { EmployeeDetailViewModel } from '../../view-models/employee-detail.view-model';
 import { ActivatedRoute } from '@angular/router';
 import { IUser, UserService } from '../../../../../../../../common';
@@ -16,7 +16,7 @@ import { DeleteEmployeeComponent } from '../modals/delete-employee/delete-employ
 })
 export class EmployeeDetailComponent {
     public viewModel$!: Observable<EmployeeDetailViewModel | null>;
-    public iconUrl$: Subject<string> = new Subject<string>();
+    public iconUrl$: BehaviorSubject<string> = new BehaviorSubject<string>('assets/img/profile-placeholder.png');
     public user$: Observable<IUser | null> = this._userService.currentUser$;
 
     constructor(
