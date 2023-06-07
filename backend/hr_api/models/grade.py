@@ -9,5 +9,9 @@ class Grade(models.Model):
     in_work = models.BooleanField(default=True)
     expiration_date = models.DateTimeField(default=False)
 
+    def complete(self):
+        self.in_work = False
+        self.save()
+
     def __str__(self):
         return f"Grade({self.id}, {self.name})"

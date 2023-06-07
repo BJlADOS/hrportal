@@ -34,3 +34,14 @@ class GradePostDataSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return GradeSerializer(instance).data
+
+
+class GradePatchDataSerializer(serializers.ModelSerializer):
+    expirationDate = TimestampField(source='expiration_date')
+
+    class Meta:
+        model = Grade
+        fields = ['name', 'expirationDate']
+
+    def to_representation(self, instance):
+        return GradeSerializer(instance).data
