@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from rest_framework import serializers
 

@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
-from ..models import Notification
 from .shared import TimestampField
+from ..models import Notification
 
 
 class NotificationSerializer(ModelSerializer):
