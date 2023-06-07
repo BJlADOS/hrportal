@@ -32,3 +32,11 @@ class ActivityPatchDataSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return ActivitySerializer(instance).data
+
+
+class ActivityReportSerializer(serializers.ModelSerializer):
+    employeeReport = serializers.CharField(source='employee_report', required=False)
+
+    class Meta:
+        model = Activity
+        fields = ['employeeReport']

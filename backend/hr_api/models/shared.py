@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 from django.utils import timezone
 from django.utils.text import slugify
@@ -22,12 +23,21 @@ STATUS_CHOICES = [
     ('DELETED', 'Удалено')
 ]
 
+
+class ActivityStatus(Enum):
+    IN_WORK = 'inWork'
+    ON_REVIEW = 'onReview'
+    RETURNED = 'returned'
+    COMPLETED = 'completed'
+    CANCELED = 'canceled'
+
+
 ACTIVITY_STATUS_CHOICES = [
-    ('inWork', 'В работе'),
-    ('onReview', 'На согласовании'),
-    ('returned', 'Возвращена'),
-    ('completed', 'Выполнена'),
-    ('canceled', 'Отменена'),
+    (ActivityStatus.IN_WORK.value, 'В работе'),
+    (ActivityStatus.ON_REVIEW.value, 'На согласовании'),
+    (ActivityStatus.RETURNED.value, 'Возвращена'),
+    (ActivityStatus.COMPLETED.value, 'Выполнена'),
+    (ActivityStatus.CANCELED.value, 'Отменена'),
 ]
 
 
