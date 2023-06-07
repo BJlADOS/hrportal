@@ -54,6 +54,8 @@ router.register('resumes', ResumeView, basename='resume')
 router.register('skills', SkillView, basename='skill')
 router.register('departments', DepartmentView, basename='department')
 router.register('user/notifications', NotificationView, basename='notification')
+router.register('grades', GradeView, basename='grade')
+router.register('activities', ActivityView, basename='activity')
 
 urlpatterns = router.urls + [
     path('user/', AuthorizedUserView.as_view(), name='auth-user'),

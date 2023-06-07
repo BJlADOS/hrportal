@@ -1,10 +1,10 @@
 from datetime import datetime
 
 from rest_framework.exceptions import ValidationError
-from rest_framework.serializers import Field
+from rest_framework.serializers import IntegerField
 
 
-class TimestampField(Field):
+class TimestampField(IntegerField):
     def to_internal_value(self, timestamp):
         return datetime.fromtimestamp(timestamp / 1000)
 

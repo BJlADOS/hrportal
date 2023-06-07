@@ -12,3 +12,9 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ['id', 'gradeId', 'employeeId', 'name', 'description', 'employeeReport', 'status']
+
+
+class ActivityPostDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ['name', 'description']
