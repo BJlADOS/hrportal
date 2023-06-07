@@ -8,3 +8,6 @@ class Grade(models.Model):
     name = models.CharField(max_length=255)
     in_work = models.BooleanField(default=True)
     expiration_date = models.DateTimeField(default=False)
+
+    def __str__(self):
+        return f"Grade({self.id}, {self.name})"

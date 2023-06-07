@@ -79,3 +79,23 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display_links = ('type',)
     list_filter = ('read', 'type')
     ordering = ('id', 'notify_time')
+
+
+@admin.register(Grade)
+class GradeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'employee', 'in_work', 'expiration_date')
+    list_display_links = ('name',)
+    list_filter = ('in_work',)
+    ordering = ('id', 'expiration_date')
+
+
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'grade', 'employee_view', 'status')
+    list_display_links = ('name',)
+    list_filter = ('status',)
+    ordering = ('id',)
+
+    @admin.display(description="employee")
+    def employee_view(self, obj):
+        return obj.grade.employee

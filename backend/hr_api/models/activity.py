@@ -10,3 +10,9 @@ class Activity(models.Model):
     description = models.TextField(blank=True)
     employee_report = models.TextField(blank=True)
     status = models.CharField(max_length=255, choices=ACTIVITY_STATUS_CHOICES)
+
+    class Meta:
+        verbose_name_plural = 'Activities'
+
+    def __str__(self):
+        return f"Activity({self.id}, {self.name})"
