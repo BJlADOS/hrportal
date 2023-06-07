@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from .shared import forbidden_response, not_found_response, detail_schema
 from .shared import response_with_detail
-from ..models import Activity, User, ActivityStatus
+from ..models import Activity, User, ActivityStatus, Notification
 from ..permissions import IsEmployeeOwner, IsManagerUser
 from ..serializers import ActivitySerializer, ActivityPatchDataSerializer, ActivityPostDataSerializer, \
     ActivityReportSerializer
@@ -98,6 +98,9 @@ class ActivityView(ModelViewSet):
     def to_review(self, request, pk):
         activity = self.get_object()
         if activity.to_review(request.data.get('employeeReport', None)):
+            department = request.user.current_department
+            if department is not None and department.manager is not None:
+                Notification.activity_to_review(department.manager, request.user, activity)
             return Response(status=status.HTTP_200_OK)
         return response_with_detail('Failed to submit activity for review', status.HTTP_400_BAD_REQUEST)
 
@@ -117,6 +120,8 @@ class ActivityView(ModelViewSet):
     def return_activity(self, request, pk):
         activity = self.get_object()
         if activity.return_activity():
+            Notification.activity_review_decision(activity.grade.employee, request.user, activity,
+                                                  ActivityStatus.RETURNED)
             return Response(status=status.HTTP_200_OK)
         return response_with_detail('Failed to return activity', status.HTTP_400_BAD_REQUEST)
 
@@ -132,6 +137,8 @@ class ActivityView(ModelViewSet):
     def complete(self, request, pk):
         activity = self.get_object()
         if activity.complete():
+            Notification.activity_review_decision(activity.grade.employee, request.user, activity,
+                                                  ActivityStatus.COMPLETED)
             return Response(status=status.HTTP_200_OK)
         return response_with_detail('Failed to complete activity', status.HTTP_400_BAD_REQUEST)
 
@@ -147,6 +154,8 @@ class ActivityView(ModelViewSet):
     def cancel(self, request, pk):
         activity = self.get_object()
         if activity.cancel():
+            Notification.activity_review_decision(activity.grade.employee, request.user, activity,
+                                                  ActivityStatus.CANCELED)
             return Response(status=status.HTTP_200_OK)
         return response_with_detail('Failed to cancel activity', status.HTTP_400_BAD_REQUEST)
 

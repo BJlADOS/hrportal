@@ -1,13 +1,16 @@
 from django.conf import settings
 from django.db import models
 
+from .activity import Activity, ActivityStatus
 from .resume import Resume, PDFResume
 from .user import User
 from .vacancy import Vacancy
 
 NOTIFICATION_CHOICES = [
     ('RESUME-RESPONSE', 'Отклик на резюме'),
-    ('VACANCY-RESPONSE', 'Отклик на вакансию')
+    ('VACANCY-RESPONSE', 'Отклик на вакансию'),
+    ('ACTIVITY-TO-REVIEW', 'Активность отправлена на согласование'),
+    ('ACTIVITY-REVIEW-DECISION', 'Решение по результатам согласования')
 ]
 
 
@@ -45,6 +48,31 @@ class Notification(models.Model):
                 'department': vacancy.department.id,
                 'vacancy': vacancy.id,
                 'resume': resume.file.url[len(settings.MEDIA_URL):]
+            })
+        notification.save()
+        return notification
+
+    @staticmethod
+    def activity_to_review(manager: User, employee: User, activity: Activity):
+        notification = Notification(
+            owner=manager,
+            type=NOTIFICATION_CHOICES[2][0],
+            value={
+                'employeeId': employee.id,
+                'activityId': activity.id
+            })
+        notification.save()
+        return notification
+
+    @staticmethod
+    def activity_review_decision(employee: User, manager: User, activity: Activity, decision: ActivityStatus):
+        notification = Notification(
+            owner=employee,
+            type=NOTIFICATION_CHOICES[3][0],
+            value={
+                'managerId': manager.id,
+                'activityId': activity.id,
+                'decision': decision.value
             })
         notification.save()
         return notification
