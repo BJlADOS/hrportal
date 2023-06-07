@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .activity import ActivitySerializer, ActivityPostDataSerializer
+from .activity import ActivitySerializer, ActivityPatchDataSerializer
 from .shared import TimestampField
 from ..models import Grade, User, Activity
 
@@ -19,7 +19,7 @@ class GradeSerializer(serializers.ModelSerializer):
 class GradePostDataSerializer(serializers.ModelSerializer):
     employeeId = serializers.PrimaryKeyRelatedField(source='employee', queryset=User.objects.all())
     expirationDate = TimestampField(source='expiration_date')
-    activities = ActivityPostDataSerializer(many=True)
+    activities = ActivityPatchDataSerializer(many=True)
 
     class Meta:
         model = Grade

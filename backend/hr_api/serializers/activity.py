@@ -4,7 +4,7 @@ from ..models import Activity, Grade, ACTIVITY_STATUS_CHOICES
 
 
 class ActivitySerializer(serializers.ModelSerializer):
-    gradeId = serializers.PrimaryKeyRelatedField(source='grade', queryset=Grade.objects.all())
+    gradeId = serializers.PrimaryKeyRelatedField(source='grade', read_only=True)
     employeeId = serializers.PrimaryKeyRelatedField(source='grade.employee', read_only=True)
     status = serializers.ChoiceField(choices=ACTIVITY_STATUS_CHOICES)
     employeeReport = serializers.CharField(source='employee_report')
@@ -15,6 +15,20 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 class ActivityPostDataSerializer(serializers.ModelSerializer):
+    gradeId = serializers.PrimaryKeyRelatedField(source='grade', queryset=Grade.objects.all())
+
+    class Meta:
+        model = Activity
+        fields = ['name', 'gradeId', 'description']
+
+    def to_representation(self, instance):
+        return ActivitySerializer(instance).data
+
+
+class ActivityPatchDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Activity
         fields = ['name', 'description']
+
+    def to_representation(self, instance):
+        return ActivitySerializer(instance).data

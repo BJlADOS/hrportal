@@ -71,11 +71,10 @@ class GradeView(ModelViewSet):
         elif self.action == 'partial_update':
             return GradePatchDataSerializer
         else:
-            return GradeSerializer
+            return None
 
     @swagger_auto_schema(
         tags=['Грейды'],
-        request_body=no_body,
         operation_summary='Завершает грейд (inWork = false)',
         responses={
             200: 'OK',

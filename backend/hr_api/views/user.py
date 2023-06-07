@@ -15,7 +15,7 @@ from .shared import *
 from ..authentication import add_auth
 from ..filters import UserFilter
 from ..models import User
-from ..permissions import IsManagerUser, IsOwner
+from ..permissions import IsManagerUser, IsEmployeeOwner
 from ..serializers import UserSerializer, UserPatchDataSerializer, GradeSerializer
 
 
@@ -49,7 +49,7 @@ class UserView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
         if self.action == 'retrieve':
             return [IsAuthenticated()]
         if self.action == 'user_grades':
-            return [(IsOwner | IsManagerUser | IsAdminUser)()]
+            return [(IsEmployeeOwner | IsManagerUser | IsAdminUser)()]
         if self.request.method == 'GET':
             return [(IsManagerUser | IsAdminUser)()]
         else:
