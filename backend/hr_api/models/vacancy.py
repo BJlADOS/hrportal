@@ -40,4 +40,4 @@ class Vacancy(models.Model):
         self.save()
 
     def __str__(self):
-        return f"Vacancy({self.position}, {self.department.name})"
+        return f"Vacancy({self.position}, {self.department.name if self.department is not None else None})"

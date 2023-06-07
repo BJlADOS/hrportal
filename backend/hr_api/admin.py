@@ -50,7 +50,7 @@ class VacancyAdmin(admin.ModelAdmin):
 
     @admin.display(description="department")
     def department_name_view(self, obj):
-        return obj.department.name
+        return obj.department.name if obj.department is not None else None
 
 
 @admin.register(Skill)
@@ -70,7 +70,7 @@ class DepartmentAdmin(admin.ModelAdmin):
 
     @admin.display(description="manager")
     def manager_name_view(self, obj):
-        return obj.manager.fullname if obj.manager else '-'
+        return obj.manager.fullname if obj.manager else None
 
 
 @admin.register(Notification)

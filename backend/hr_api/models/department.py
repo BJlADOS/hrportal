@@ -16,5 +16,10 @@ class Department(models.Model):
     def __str__(self):
         return f"Department({self.name})"
 
+    def delete(self, using=None, keep_parents=False):
+        for vacancy in self.vacancy_set.all():
+            vacancy.soft_delete()
+        super().delete(using, keep_parents)
+
 
 post_save.connect(Department.change_manager_department, sender=Department)
