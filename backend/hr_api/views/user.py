@@ -16,7 +16,7 @@ from ..authentication import add_auth
 from ..filters import UserFilter
 from ..models import User
 from ..permissions import IsManagerUser
-from ..serializers import UserSerializer, UserPatchDataSerializer
+from ..serializers import UserSerializer, UserPatchDataSerializer, GradeSerializer
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -87,6 +87,19 @@ class UserView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
         user.deactivate()
         self.perform_destroy(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @swagger_auto_schema(
+        tags=['Пользователь'],
+        operation_summary='Грейды пользователя',
+        responses={
+            403: forbidden_response,
+            404: not_found_response,
+        }
+    )
+    @action(methods=['get'], detail=True, url_path='grades', url_name='grade-list')
+    def user_grades(self, request, *args, **kwargs):
+        user = self.get_object()
+        return Response(GradeSerializer(user.grade_set.all(), many=True).data)
 
 
 class AuthorizedUserView(APIView):
