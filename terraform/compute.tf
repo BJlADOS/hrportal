@@ -25,9 +25,22 @@ resource "yandex_compute_instance" "hrportal" {
 version: "3"
 
 services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: ${var.db_user_name}
+      POSTGRES_PASSWORD: ${var.db_user_password}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
   django:
     container_name: django
     image: "cr.yandex/${yandex_container_registry.hrportal.id}/${var.django_container_tag}"
+    depends_on:
+      - postgres
     environment:
       - DEBUG=True
       - SECRET_KEY=${var.django_secret_key}
@@ -38,13 +51,13 @@ services:
       - DJANGO_URL=https://${yandex_cm_certificate.hrportal.domains[0]}
 
       ### Database settings ###
-      - POSTGRES_HOST=${yandex_mdb_postgresql_cluster.hrportal.host[0].fqdn}
-      - POSTGRES_PORT=${local.db_port}
-      - POSTGRES_DB_NAME=${yandex_mdb_postgresql_database.hrportal.name}
-      - POSTGRES_USER=${yandex_mdb_postgresql_user.hrportal.name}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB_NAME=postgres
+      - POSTGRES_USER=${var.db_user_name}
       - POSTGRES_PASSWORD=${var.db_user_password}
       # sslmode: disable or require
-      - POSTGRES_SSLMODE=require
+      - POSTGRES_SSLMODE=disable
 
       ### Storage settings ###
       - REMOTE_STORAGE=True
@@ -69,6 +82,8 @@ services:
       - RECOVERY_URL=https://${yandex_cm_certificate.hrportal.domains[0]}${local.recovery_path}
     ports:
       - "80:8000"
+volumes:
+  postgres-data:
 EOT
     ssh-keys = "kiprin:${var.ssh_pub}"
   }
