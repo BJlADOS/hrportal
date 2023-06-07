@@ -8,7 +8,8 @@ class IsManagerUser(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.method in permissions.SAFE_METHODS \
             or hasattr(obj, 'department') and request.user.department == obj.department \
-            or hasattr(obj, 'employee') and request.user.department == obj.employee.current_department
+            or hasattr(obj, 'employee') and request.user.department == obj.employee.current_department \
+            or hasattr(obj, 'grade') and request.user.department == obj.grade.employee.current_department
 
 
 class IsEmployeeOwner(permissions.BasePermission):

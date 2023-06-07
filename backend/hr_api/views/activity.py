@@ -166,7 +166,7 @@ class ActivityView(ModelViewSet):
             200: ActivitySerializer(many=True),
             403: forbidden_response
         })
-    @action(methods=['get'], detail=False, url_path='onReview', url_name='on-review')
+    @action(methods=['get'], detail=False, url_path='onReview', url_name='list-on-review')
     def on_review(self, request):
         manager: User = request.user
         department = manager.current_department
