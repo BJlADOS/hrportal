@@ -8,7 +8,7 @@ from .views import *
 schema_view = get_schema_view(
     openapi.Info(
         title='HR Portal API',
-        default_version='v1.3',
+        default_version='v1.4',
         description='Backend API для HR-портала большой IT-компании "Очень интересно" \n'
                     '(Для аутентификации используйте запрос <b>/login</b>)\n'
                     '\n'
@@ -39,6 +39,10 @@ schema_view = get_schema_view(
                     '- Критические изменения в модели данных - <b>необходимо</b> сбросить БД (<code>python manage.py flush</code>)\n'
                     '- В модель <b>User</b> возвращено поле <b>resumeId</b>\n'
                     '- Добавлена фильтрация резюме по отделу сотрудника\n'
+                    '\nИзменения с версии <b>v1.3</b>:\n'
+                    '- Добавлены запросы из категории "Грейды"\n'
+                    '- Добавлены запросы из категории "Активности"\n'
+                    '- В категорию "Пользователь" добавлен запрос <code>GET /users/{id}/grades</code>'
     ),
     public=True,
     permission_classes=[permissions.AllowAny],
