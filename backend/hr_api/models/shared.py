@@ -22,6 +22,14 @@ STATUS_CHOICES = [
     ('DELETED', 'Удалено')
 ]
 
+ACTIVITY_STATUS_CHOICES = [
+    ('inWork', 'В работе'),
+    ('onReview', 'На согласовании'),
+    ('returned', 'Возвращена'),
+    ('completed', 'Выполнена'),
+    ('canceled', 'Отменена'),
+]
+
 
 def get_upload_path(instance, filename):
     date = timezone.now().strftime('%d.%m.%Y')

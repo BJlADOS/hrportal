@@ -1,8 +1,10 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core import validators
 from django.db import models
-from .shared import get_upload_path
+
 from .department import Department
+from .shared import get_upload_path
+
 
 class UserManager(BaseUserManager):
     def _create_user(self, fullname, email, password, **extra_fields):
