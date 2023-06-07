@@ -15,3 +15,7 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"Grade({self.id}, {self.name})"
+
+    @property
+    def department(self):
+        return self.employee.department

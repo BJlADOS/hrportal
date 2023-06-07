@@ -3,11 +3,13 @@ from drf_yasg.utils import swagger_auto_schema, no_body
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .shared import forbidden_response, not_found_response
 from ..models import Grade
+from ..permissions import IsManagerUser, IsEmployeeOwner
 from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDataSerializer
 
 
@@ -54,6 +56,12 @@ from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDa
 class GradeView(ModelViewSet):
     queryset = Grade.objects.all()
     http_method_names = ['get', 'post', 'patch', 'delete']
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [(IsEmployeeOwner | IsManagerUser | IsAdminUser)()]
+        else:
+            return [(IsManagerUser | IsAdminUser)()]
 
     def get_serializer_class(self):
         if self.action in ['list', 'retrieve']:
