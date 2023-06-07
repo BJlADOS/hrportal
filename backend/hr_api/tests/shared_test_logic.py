@@ -3,7 +3,7 @@ from django.core.files import File
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 
-from ..models import User, Resume, Vacancy, Department, Skill, Notification
+from ..models import User, Resume, Vacancy, Department, Skill, Notification, Grade, Activity
 
 
 class UserData:
@@ -185,4 +185,27 @@ def get_notification_serialized_dict(notification: Notification) -> dict:
         'value': notification.value,
         'read': notification.read,
         'notifyTime': int(notification.notify_time.timestamp()) * 1000
+    }
+
+
+def get_grade_serialized_dict(grade: Grade) -> dict:
+    return {
+        "id": grade.id,
+        "employeeId": grade.employee.id,
+        "name": grade.name,
+        "inWork": grade.in_work,
+        "expirationDate": int(grade.expiration_date.timestamp()) * 1000,
+        "activities": [get_activity_serialized_dict(activity) for activity in grade.activity_set.all()]
+    }
+
+
+def get_activity_serialized_dict(activity: Activity) -> dict:
+    return {
+        "id": activity.id,
+        "gradeId": activity.grade.id,
+        "employeeId": activity.grade.employee.id,
+        "name": activity.name,
+        "description": activity.description,
+        "employeeReport": activity.employee_report,
+        "status": activity.status
     }
