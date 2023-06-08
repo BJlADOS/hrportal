@@ -94,6 +94,7 @@ class UserView(ReadOnlyModelViewSet, mixins.DestroyModelMixin):
         tags=['Пользователь'],
         operation_summary='Грейды пользователя',
         responses={
+            200: GradeSerializer(many=True),
             403: forbidden_response,
             404: not_found_response,
         }
