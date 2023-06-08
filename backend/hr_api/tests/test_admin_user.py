@@ -140,4 +140,3 @@ class ResumeArchivingTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(result['detail'], 'Not found.')
-

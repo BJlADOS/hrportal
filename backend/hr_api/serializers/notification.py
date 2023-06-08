@@ -6,6 +6,7 @@ from ..models import Notification
 
 class NotificationSerializer(ModelSerializer):
     notifyTime = TimestampField(source='notify_time')
+
     class Meta:
         model = Notification
         fields = [

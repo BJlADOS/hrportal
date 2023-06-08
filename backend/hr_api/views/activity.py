@@ -16,14 +16,14 @@ from ..serializers import ActivitySerializer, ActivityPatchDataSerializer, Activ
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Активности'],
+    tags=['Активность'],
     operation_summary='Все активности',
     responses={
         403: forbidden_response
     }
 ))
 @method_decorator(name='create', decorator=swagger_auto_schema(
-    tags=['Активности'],
+    tags=['Активность'],
     operation_summary='Создает активность',
     responses={
         200: ActivitySerializer,
@@ -31,7 +31,7 @@ from ..serializers import ActivitySerializer, ActivityPatchDataSerializer, Activ
     }
 ))
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Активности'],
+    tags=['Активность'],
     operation_summary='Активность по ID',
     responses={
         403: forbidden_response,
@@ -39,7 +39,7 @@ from ..serializers import ActivitySerializer, ActivityPatchDataSerializer, Activ
     }
 ))
 @method_decorator(name='partial_update', decorator=swagger_auto_schema(
-    tags=['Активности'],
+    tags=['Активность'],
     operation_summary='Изменить активность по ID',
     responses={
         200: ActivitySerializer,
@@ -48,7 +48,7 @@ from ..serializers import ActivitySerializer, ActivityPatchDataSerializer, Activ
     }
 ))
 @method_decorator(name='destroy', decorator=swagger_auto_schema(
-    tags=['Активности'],
+    tags=['Активность'],
     operation_summary='Удалить активность по ID',
     responses={
         403: forbidden_response,
@@ -83,7 +83,7 @@ class ActivityView(ModelViewSet):
             return [(IsManagerUser | IsAdminUser)()]
 
     @swagger_auto_schema(
-        tags=['Активности'],
+        tags=['Активность'],
         operation_summary='Отправить активность на согласование',
         responses={
             200: 'OK',
@@ -105,7 +105,7 @@ class ActivityView(ModelViewSet):
         return response_with_detail('Failed to submit activity for review', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        tags=['Активности'],
+        tags=['Активность'],
         operation_summary='Вернуть активность исполнителю',
         responses={
             200: 'OK',
@@ -126,7 +126,7 @@ class ActivityView(ModelViewSet):
         return response_with_detail('Failed to return activity', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        tags=['Активности'],
+        tags=['Активность'],
         operation_summary='Отметить активность как выполненную',
         responses={
             200: 'OK',
@@ -143,7 +143,7 @@ class ActivityView(ModelViewSet):
         return response_with_detail('Failed to complete activity', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        tags=['Активности'],
+        tags=['Активность'],
         operation_summary='Отменить выполнение активности',
         responses={
             200: 'OK',
@@ -160,7 +160,7 @@ class ActivityView(ModelViewSet):
         return response_with_detail('Failed to cancel activity', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        tags=['Активности'],
+        tags=['Активность'],
         operation_summary='Список активностей на согласовании (для руководителя)',
         responses={
             200: ActivitySerializer(many=True),

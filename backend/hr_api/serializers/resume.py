@@ -13,7 +13,7 @@ class ResumeSerializer(serializers.ModelSerializer):
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES)
     file = serializers.FileField(use_url=False, validators=[FileExtensionValidator(['pdf']),
-                                                              validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
+                                                            validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     modifiedAt = TimestampField(source='modified_at', required=False)
     createdAt = TimestampField(source='created_at', required=False)
 
@@ -39,8 +39,8 @@ class ResumePatchDataSerializer(serializers.ModelSerializer):
     desiredEmployment = serializers.ChoiceField(source='desired_employment', choices=EMPLOYMENT_CHOICES, required=False)
     desiredSchedule = serializers.ChoiceField(source='desired_schedule', choices=SCHEDULE_CHOICES, required=False)
     file = serializers.FileField(required=False, allow_null=True,
-                                   validators=[FileExtensionValidator(['pdf']),
-                                               validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
+                                 validators=[FileExtensionValidator(['pdf']),
+                                             validate_filesize(settings.MAX_EMAIL_ATTACHMENT_SIZE)])
     status = serializers.ChoiceField(choices=STATUS_CHOICES, required=False)
 
     class Meta:

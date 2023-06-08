@@ -323,7 +323,8 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         detail = json.loads(*response)['detail']
-        self.assertEqual(detail, f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) mail sending successful')
+        self.assertEqual(detail,
+                         f'Response from Employee(ID={employee_id}) to Manager(ID={manager.id}) mail sending successful')
 
     def test_VacancyResponse_ShouldSendResponse_WithUserResume(self):
         vacancy_id = self.get_existing_vacancy_id()
@@ -338,7 +339,8 @@ class VacancyTests(TestCase):
 
         self.assertEqual(response.status_code, 200, msg=f"result body - {result}")
         detail = result['detail']
-        self.assertEqual(detail, f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail sending successful')
+        self.assertEqual(detail,
+                         f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail sending successful')
         resume.delete()
 
     @staticmethod

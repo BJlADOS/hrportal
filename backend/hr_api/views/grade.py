@@ -1,5 +1,5 @@
 from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema, no_body
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -14,14 +14,14 @@ from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDa
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Грейды'],
+    tags=['Грейд'],
     operation_summary='Все грейды',
     responses={
         403: forbidden_response
     }
 ))
 @method_decorator(name='create', decorator=swagger_auto_schema(
-    tags=['Грейды'],
+    tags=['Грейд'],
     operation_summary='Создает грейд',
     responses={
         200: GradeSerializer,
@@ -29,7 +29,7 @@ from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDa
     }
 ))
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Грейды'],
+    tags=['Грейд'],
     operation_summary='Грейд по ID',
     responses={
         403: forbidden_response,
@@ -37,7 +37,7 @@ from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDa
     }
 ))
 @method_decorator(name='partial_update', decorator=swagger_auto_schema(
-    tags=['Грейды'],
+    tags=['Грейд'],
     operation_summary='Изменить грейд по ID',
     responses={
         200: GradeSerializer,
@@ -46,7 +46,7 @@ from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDa
     }
 ))
 @method_decorator(name='destroy', decorator=swagger_auto_schema(
-    tags=['Грейды'],
+    tags=['Грейд'],
     operation_summary='Удалить грейд по ID',
     responses={
         403: forbidden_response,
@@ -74,7 +74,7 @@ class GradeView(ModelViewSet):
             return None
 
     @swagger_auto_schema(
-        tags=['Грейды'],
+        tags=['Грейд'],
         operation_summary='Завершает грейд (inWork = false)',
         responses={
             200: 'OK',

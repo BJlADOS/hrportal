@@ -12,7 +12,6 @@ from rest_framework.viewsets import ModelViewSet
 from .shared import *
 from ..email import send_vacancy_response
 from ..filters import *
-from ..models import get_upload_path
 from ..permissions import IsManagerUser
 from ..serializers.vacancy import *
 

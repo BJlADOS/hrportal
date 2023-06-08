@@ -11,7 +11,7 @@ from ..serializers import NotificationSerializer
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
-    tags=['Уведомления'],
+    tags=['Уведомление'],
     operation_summary='Все уведомления пользователя',
     operation_description='Если не указывать параметры пагинации - будет возвращен не объект пагинации, а просто список объектов',
     paginator_inspectors=[FilterPaginatorInspector],
@@ -20,7 +20,7 @@ from ..serializers import NotificationSerializer
     }
 ))
 @method_decorator(name='retrieve', decorator=swagger_auto_schema(
-    tags=['Уведомления'],
+    tags=['Уведомление'],
     operation_summary='Уведомление пользователя по ID уведомления',
     responses={
         403: forbidden_response,
@@ -39,7 +39,7 @@ class NotificationView(ReadOnlyModelViewSet):
             return None
 
     @swagger_auto_schema(
-        tags=['Уведомления'],
+        tags=['Уведомление'],
         operation_summary='Отмечает уведомление как прочитанное',
         responses={
             403: forbidden_response,
