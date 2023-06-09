@@ -167,7 +167,7 @@ class ActivitiesTests(TestCase):
         activities: list[dict] = json.loads(*response)
         for activity in activities:
             db_activity = db_activities.get(id=activity['id'])
-            self.assertDictEqual(activity, get_activity_serialized_dict(db_activity))
+            self.assertDictEqual(activity, get_activity_on_review_serialized_dict(db_activity))
 
     def test_NotificationSends_WhenActivitySubmitToReview(self):
         notifications = Notification.objects.filter(owner__email=self.manager_data.email)

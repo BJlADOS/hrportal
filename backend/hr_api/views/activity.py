@@ -9,10 +9,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from .shared import forbidden_response, not_found_response, detail_schema
 from .shared import response_with_detail
-from ..models import Activity, User, ActivityStatus, Notification
+from ..models import User, ActivityStatus, Notification
 from ..permissions import IsEmployeeOwner, IsManagerUser
-from ..serializers import ActivitySerializer, ActivityPatchDataSerializer, ActivityPostDataSerializer, \
-    ActivityReportSerializer
+from ..serializers.activity import *
 
 
 @method_decorator(name='list', decorator=swagger_auto_schema(
@@ -69,6 +68,8 @@ class ActivityView(ModelViewSet):
             return ActivityPatchDataSerializer
         if self.action == 'to_review':
             return ActivityReportSerializer
+        if self.action == 'on_review':
+            return ActivityOnReviewSerializer
         else:
             return None
 
@@ -172,7 +173,7 @@ class ActivityView(ModelViewSet):
         tags=['Активность'],
         operation_summary='Список активностей на согласовании (для руководителя)',
         responses={
-            200: ActivitySerializer(many=True),
+            200: ActivityOnReviewSerializer(many=True),
             403: forbidden_response
         })
     @action(methods=['get'], detail=False, url_path='onReview', url_name='list-on-review')
@@ -181,4 +182,4 @@ class ActivityView(ModelViewSet):
         department = manager.current_department
         activities = Activity.objects.filter(status=ActivityStatus.ON_REVIEW.value,
                                              grade__employee__current_department=department)
-        return Response(ActivitySerializer(activities, many=True).data)
+        return Response(ActivityOnReviewSerializer(activities, many=True).data)

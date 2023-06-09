@@ -203,9 +203,16 @@ def get_activity_serialized_dict(activity: Activity) -> dict:
     return {
         "id": activity.id,
         "gradeId": activity.grade.id,
-        "employeeId": activity.grade.employee.id,
         "name": activity.name,
         "description": activity.description,
         "employeeReport": activity.employee_report,
         "status": activity.status
     }
+
+
+def get_activity_on_review_serialized_dict(activity: Activity) -> dict:
+    serialized_dict = get_activity_serialized_dict(activity)
+    serialized_dict['gradeName'] = activity.grade.name
+    serialized_dict['employeeId'] = activity.grade.employee.id
+    serialized_dict['employeeFullname'] = activity.grade.employee.fullname
+    return serialized_dict
