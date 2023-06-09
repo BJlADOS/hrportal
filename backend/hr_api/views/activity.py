@@ -102,7 +102,8 @@ class ActivityView(ModelViewSet):
             if department is not None and department.manager is not None:
                 Notification.activity_to_review(department.manager, request.user, activity)
             return Response(status=status.HTTP_200_OK)
-        return response_with_detail('Failed to submit activity for review', status.HTTP_400_BAD_REQUEST)
+        return response_with_detail(f'Failed to submit activity for review - it\'s {activity.status}',
+                                    status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         tags=['Активность'],
@@ -110,7 +111,7 @@ class ActivityView(ModelViewSet):
         responses={
             200: 'OK',
             400: openapi.Response(
-                'Отправка не удалась, активность не находится в статусе onReview',
+                'Не удалось вернуть активность - она не на согласовании',
                 detail_schema
             ),
             403: forbidden_response,
@@ -123,13 +124,17 @@ class ActivityView(ModelViewSet):
             Notification.activity_review_decision(activity.grade.employee, request.user, activity,
                                                   ActivityStatus.RETURNED)
             return Response(status=status.HTTP_200_OK)
-        return response_with_detail('Failed to return activity', status.HTTP_400_BAD_REQUEST)
+        return response_with_detail('Failed to return activity - it\'s not on review', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         tags=['Активность'],
         operation_summary='Отметить активность как выполненную',
         responses={
             200: 'OK',
+            400: openapi.Response(
+                'Не удалось завершить активность, она уже в конечном состоянии',
+                detail_schema
+            ),
             403: forbidden_response,
             404: not_found_response
         })
@@ -140,13 +145,17 @@ class ActivityView(ModelViewSet):
             Notification.activity_review_decision(activity.grade.employee, request.user, activity,
                                                   ActivityStatus.COMPLETED)
             return Response(status=status.HTTP_200_OK)
-        return response_with_detail('Failed to complete activity', status.HTTP_400_BAD_REQUEST)
+        return response_with_detail('Failed to complete activity - it\'s in final state', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         tags=['Активность'],
         operation_summary='Отменить выполнение активности',
         responses={
             200: 'OK',
+            400: openapi.Response(
+                'Не удалось отменить активность, она уже в конечном состоянии',
+                detail_schema
+            ),
             403: forbidden_response,
             404: not_found_response
         })
@@ -157,7 +166,7 @@ class ActivityView(ModelViewSet):
             Notification.activity_review_decision(activity.grade.employee, request.user, activity,
                                                   ActivityStatus.CANCELED)
             return Response(status=status.HTTP_200_OK)
-        return response_with_detail('Failed to cancel activity', status.HTTP_400_BAD_REQUEST)
+        return response_with_detail('Failed to cancel activity - it\'s in final state', status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         tags=['Активность'],
