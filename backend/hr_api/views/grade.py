@@ -1,5 +1,6 @@
 from django.utils.decorators import method_decorator
-from drf_yasg.utils import swagger_auto_schema, no_body
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .shared import forbidden_response, not_found_response
+from .shared import forbidden_response, not_found_response, response_with_detail, detail_schema
 from ..models import Grade
 from ..permissions import IsManagerUser, IsEmployeeOwner
 from ..serializers import GradeSerializer, GradePostDataSerializer, GradePatchDataSerializer
@@ -78,11 +79,16 @@ class GradeView(ModelViewSet):
         operation_summary='Завершает грейд (inWork = false)',
         responses={
             200: 'OK',
+            400: openapi.Response(
+                'Не удалось завершить грейд, есть незаконченные активности',
+                detail_schema
+            ),
             403: forbidden_response,
             404: not_found_response
         })
     @action(methods=['patch'], detail=True, url_path='complete', url_name='complete')
     def complete(self, request, pk):
-        resume = get_object_or_404(Grade, id=pk)
-        resume.complete()
-        return Response(status=status.HTTP_200_OK)
+        grade = get_object_or_404(Grade, id=pk)
+        if grade.complete():
+            return Response(status=status.HTTP_200_OK)
+        return response_with_detail('Failed to complete grade', status.HTTP_400_BAD_REQUEST)
