@@ -73,9 +73,12 @@ paths:
   /admin/{proxy+}:
     x-yc-apigateway-any-method:
       x-yc-apigateway-integration:
-        type: serverless_containers
-        container_id: ${yandex_serverless_container.django.id}
-        service_account_id: ${yandex_iam_service_account.gateway.id}
+        type: http
+        url: http://${yandex_compute_instance.hrportal.network_interface[0].nat_ip_address}/admin/{proxy}/
+        query:
+          '*': '*'
+        headers:
+          '*': '*'
       parameters:
       - explode: false
         in: path
@@ -87,9 +90,12 @@ paths:
   /api/{proxy+}:
     x-yc-apigateway-any-method:
       x-yc-apigateway-integration:
-        type: serverless_containers
-        container_id: ${yandex_serverless_container.django.id}
-        service_account_id: ${yandex_iam_service_account.gateway.id}
+        type: http
+        url: http://${yandex_compute_instance.hrportal.network_interface[0].nat_ip_address}/api/{proxy}/
+        query:
+          '*': '*'
+        headers:
+          '*': '*'
       parameters:
       - explode: false
         in: path
