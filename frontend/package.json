@@ -28,6 +28,7 @@
     "crypto-js": "^4.1.1",
     "css-element-queries": "^1.2.3",
     "loader-utils": "^3.2.1",
+    "ngx-autosize-input": "^14.1.0",
     "ngx-mask": "^14.2.4",
     "rxjs": "~7.5.0",
     "sticky-sidebar": "^3.3.1",

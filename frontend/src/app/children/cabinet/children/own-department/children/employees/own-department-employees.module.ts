@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ownDepartmentEmployeeRoutes } from './own-department-employees.routing-module';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
@@ -26,6 +26,11 @@ import { EmployeeDeclinationPipe } from './pipes/employee-declination.pipe';
 import { EmployeeLayoutComponent } from './components/employee-layout/employee-layout.component';
 import { EmployeeListMainLayoutComponent } from './components/employee-list-main-layout/employee-list-main-layout.component';
 import { DeleteEmployeeComponent } from './components/modals/delete-employee/delete-employee.component';
+import {
+    ActivityListComponent
+} from '../../../../../../common/cabinet/grade/components/activity-list/activity-list.component';
+import { AttentionIconComponent } from '../../../../../../../assets/img/attention/attention-icon';
+import {GradeFormComponent} from "./components/employee-detail/components/grade-form/grade-form.component";
 
 @NgModule({
     imports: [
@@ -49,7 +54,10 @@ import { DeleteEmployeeComponent } from './components/modals/delete-employee/del
         ArchiveIconComponent,
         EditIconComponent,
         CrossIconComponent,
-        SuccessIconComponent
+        SuccessIconComponent,
+        ActivityListComponent,
+        AttentionIconComponent,
+        GradeFormComponent
     ],
     declarations: [
         EmployeeListComponent,
@@ -61,7 +69,7 @@ import { DeleteEmployeeComponent } from './components/modals/delete-employee/del
         EmployeeDeclinationPipe,
         EmployeeLayoutComponent,
         EmployeeListMainLayoutComponent,
-        DeleteEmployeeComponent
+        DeleteEmployeeComponent,
     ],
     exports: [
         EmployeeListLayoutComponent,

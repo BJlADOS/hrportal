@@ -16,6 +16,11 @@ import {
     getExperienceRussianAsArray,
     ISelectOption
 } from '../../../../../../lib';
+import { ActivityState } from '../../../../../../common/cabinet/grade/enums/activity-state.enum';
+import { ActivityService } from '../../../../../../common/cabinet/grade/services/activity.service';
+import { GradeModel } from '../../../../../../common/cabinet/grade/models/grade.model';
+import { GradeService } from '../../../../../../common/cabinet/grade/services/grade-service';
+import { GradeRequestService } from '../../../../../../common/cabinet/grade/services/grade-request.service';
 
 
 @Component({
@@ -23,6 +28,10 @@ import {
     templateUrl: './profile.component.html',
     styleUrls: ['./profile.component.scss'],
     animations: [contentExpansion],
+    providers: [
+        GradeService,
+        GradeRequestService,
+    ]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
@@ -58,6 +67,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     };
     public isSavedChanges: boolean = false;
 
+    public inactiveGrades: GradeModel[] = [];
+    public activeGrade?: GradeModel;
+    public grades?: GradeModel[];
+
     private _destroy$: Subject<boolean> = new Subject<boolean>();
 
     constructor(
@@ -65,6 +78,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         private _user: UserService,
         private _form: FormGenerator,
         private _skills: SkillsService,
+        private _grade: GradeService,
     ) { }
 
     public ngOnInit(): void {
@@ -76,6 +90,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.user = user;
                 if (user) {
                     this.resetForm();
+                    this.getGrades(user.id);
+                }
+            });
+    }
+
+    public getGrades(userId: number): void {
+        this._grade.getUserGrades(userId)
+            .subscribe({
+                next: (grades: GradeModel[]) => {
+                    this.inactiveGrades = grades.filter(g => !g.inWork).reverse();
+                    this.activeGrade = grades.find(g => g.inWork);
+                    this.grades = grades;
                 }
             });
     }
@@ -217,9 +243,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
 
         // Проверка на изменения в форме
-        console.log(this.isUserEdited);
-        console.log(this.userForm);
-        console.log(user);
+        // console.log(this.isUserEdited);
+        // console.log(this.userForm);
+        // console.log(user);
 
         return this.isUserEdited.name
             || this.isUserEdited.photo
@@ -276,4 +302,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
         return userUpdate;
     }
 
+    protected readonly ActivityState = ActivityState;
 }

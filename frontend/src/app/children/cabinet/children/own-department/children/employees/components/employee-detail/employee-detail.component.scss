@@ -1,11 +1,26 @@
 @mixin input-field-block {
     padding: 0.75rem 1rem;
+    margin-top: 1rem;
     border-radius: 10px;
     font-size: var(--font-size--main);
     font-family: var(--main-font-family);
     color: var(--font-primary);
     border: 1px solid var(--border-color);
     background-color: var(--white);
+}
+
+h3 {
+    margin-bottom: 0.5rem;
+    font-size: var(--font-size--main);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.top-layout {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .user-profile {
@@ -17,6 +32,11 @@
 
     &__header-info {
         margin-left: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        align-items: flex-start;
+        justify-content: center;
     }
 
     &__name {
@@ -53,7 +73,7 @@
     }
 
     &__personal {
-        margin-top: 40px;
+        //margin-top: 40px;
     }
 
     &__career {
@@ -131,6 +151,18 @@
     margin-bottom: 4rem;
 }
 
+.grade {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.grades {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
 .wrapper-flex {
     width: 100%;
     display: flex;
@@ -143,10 +175,18 @@
     .column-1-6 {
         grid-column: 1 / 9;
     }
+
+    .column-7-13 {
+        grid-column: 1 / 9;
+    }
 }
 
 @media screen and (max-width: 950px) {
     .column-1-6 {
+        grid-column: 1 / 13;
+    }
+
+    .column-7-13 {
         grid-column: 1 / 13;
     }
 

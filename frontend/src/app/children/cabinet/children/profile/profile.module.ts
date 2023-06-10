@@ -5,6 +5,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ProfileComponent, ResumeComponent } from './components';
 import { SharedModule } from '../../../../lib';
 import { SuccessIconComponent, CheckStaticIconComponent, PlusIconComponent, Cross2IconComponent, EditWhiteIconComponent } from '../../../../../assets/img';
+import {
+    GradeFormComponent
+} from "../own-department/children/employees/components/employee-detail/components/grade-form/grade-form.component";
 
 
 @NgModule({
@@ -21,7 +24,8 @@ import { SuccessIconComponent, CheckStaticIconComponent, PlusIconComponent, Cros
         CheckStaticIconComponent,
         PlusIconComponent,
         Cross2IconComponent,
-        EditWhiteIconComponent
+        EditWhiteIconComponent,
+        GradeFormComponent
     ]
 })
 export class ProfileModule { }

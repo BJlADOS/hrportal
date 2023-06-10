@@ -1,0 +1,97 @@
+<div class="grade" *ngIf="user$ | async as user">
+    <div class="grade__notification"
+         *ngIf="!gradeModel">
+        <attention-icon></attention-icon>
+
+        <span>Создайте новый грейд для сотрудника</span>
+    </div>
+    <div class="form-wrapper">
+        <form class="form"
+              *ngIf="form"
+              [formGroup]="form"
+              (ngSubmit)="createGrade()">
+            <div class="form__top-layout" *ngIf="!isEditing">
+                <div class="grade-name">
+                    <span class="name">
+                        {{gradeModel?.name}}
+                    </span>
+
+                    <span class="status">
+                        {{gradeModel?.inWork ? 'В работе' : 'Выполнен'}}
+                    </span>
+                </div>
+
+                <div class="grade-date">
+                    <span class="date">Дата окончания: {{gradeModel?.expirationDate | date: 'dd.MM.yyyy'}}</span>
+                </div>
+            </div>
+            <div class="content-wrapper" [@contentExpansion]="isOpened ? 'expanded' : 'collapsed'">
+                <div class="input-block" *ngIf="isEditing">
+                    <p>Введите название грейда</p>
+
+                    <input class="input"
+                           type="text"
+                           formControlName="name"
+                           placeholder="Введите название">
+
+                    <app-error [@contentExpansion]="form.controls['name'].invalid ? 'expanded' : 'collapsed'"
+                               [error]="{ message: 'Введите название грейда' }"></app-error>
+                </div>
+
+                <div class="input-block" *ngIf="isEditing">
+                    <p>Выберите дату финала</p>
+                    <input class="input"
+                           type="date"
+                           formControlName="expirationDate">
+
+                    <app-error [@contentExpansion]="form.controls['expirationDate'].invalid ? 'expanded' : 'collapsed'"
+                               [error]="{ message: 'Выберите корректную дату' }"></app-error>
+                </div>
+
+                <app-activity-list [userId]="userId" [gradeId]="gradeModel?.id" [activityState]="state"></app-activity-list>
+
+                <div class="grade-management" *ngIf="state !== ActivityState.userReport">
+                    <div class="management-line">
+                        <div class="add-activity" (click)="addActivity()">
+                            <span>+ Активность</span>
+                        </div>
+
+                        <div class="manage-buttons" *ngIf="!isEditing">
+                            <div appHoverListener
+                                 *ngIf="gradeModel"
+                                 class="manage-button"
+                                 (click)="editGrade()">
+                                <edit-activity-icon></edit-activity-icon>
+                            </div>
+
+                            <div appHoverListener
+                                 *ngIf="gradeModel && user.isAdmin"
+                                 class="manage-button"
+                                 (click)="deleteGrade()">
+                                <delete-activity-icon></delete-activity-icon>
+                            </div>
+                        </div>
+
+                        <div class="manage-buttons" *ngIf="isEditing && gradeModel">
+                            <div class="transparent-button" (click)="cancelEditing()">
+                                <span>Отмена</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <input class="create-grade" *ngIf="!gradeModel" type="submit" value="Добавить грейд" [disabled]="form.invalid || isActivitiesInvalid()">
+                    <input class="create-grade" *ngIf="isEditing && gradeModel" type="submit" value="Сохранить" [disabled]="form.invalid">
+                    <div class="create-grade" *ngIf="gradeModel?.id && !isEditing" (click)="completeGrade()" [class.disabled]="!isGradeReadyForClosing()">
+                        <span>Завершить грейд</span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="open-toggle" appHoverListener (click)="isOpened = !isOpened" *ngIf="!(gradeModel ? gradeModel.inWork : true)">
+        <span>{{isOpened ? 'Скрыть' : 'Открыть'}}</span>
+        <accordion-arrow-icon [@rotate180]="isOpened? 'still' : 'rotated'" [forceHover]="isOpened"></accordion-arrow-icon>
+    </div>
+</div>
