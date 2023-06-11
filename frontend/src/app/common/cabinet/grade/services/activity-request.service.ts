@@ -25,6 +25,13 @@ export class ActivityRequestService {
             );
     }
 
+    public getAllActivityById(id: number): Observable<ActivityModel> {
+        return this._http.get<IActivity>(`${this._apiUrl}/activities/${id}`)
+            .pipe(
+                map((activity: IActivity) => new ActivityModel(activity))
+            );
+    }
+
     public getActivitiesForReview(): Observable<ActivityModel[]> {
         return this._http.get<IActivity[]>(`${this._apiUrl}/activities/onReview/`)
             .pipe(

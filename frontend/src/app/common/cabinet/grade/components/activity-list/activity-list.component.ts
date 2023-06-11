@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivityService} from '../../services/activity.service';
-import {ActivityComponent} from '../activity/activity.component';
-import {NgForOf} from '@angular/common';
-import {ActivityState} from "../../enums/activity-state.enum";
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivityService } from '../../services/activity.service';
+import { ActivityComponent } from '../activity/activity.component';
+import { NgForOf } from '@angular/common';
+import { ActivityState } from '../../enums/activity-state.enum';
 
 @Component({
     selector: 'app-activity-list',

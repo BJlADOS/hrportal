@@ -1,6 +1,6 @@
 import { ActivityStatus } from '../enums/activity-status.enum';
 
-export const ActivityStateModelConst = {
+export const ActivityStateModelConst: Record<any, any> = {
     [ActivityStatus.active]: {
         className: '_state-active',
         text: 'Активна',

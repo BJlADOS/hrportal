@@ -34,7 +34,7 @@
                            formControlName="name"
                            placeholder="Введите название">
 
-                    <app-error [@contentExpansion]="form.controls['name'].invalid ? 'expanded' : 'collapsed'"
+                    <app-error class="input-block__error-message" [@contentExpansion]="form.controls['name'].invalid ? 'expanded' : 'collapsed'"
                                [error]="{ message: 'Введите название грейда' }"></app-error>
                 </div>
 
@@ -44,11 +44,11 @@
                            type="date"
                            formControlName="expirationDate">
 
-                    <app-error [@contentExpansion]="form.controls['expirationDate'].invalid ? 'expanded' : 'collapsed'"
+                    <app-error class="input-block__error-message" [@contentExpansion]="form.controls['expirationDate'].invalid ? 'expanded' : 'collapsed'"
                                [error]="{ message: 'Выберите корректную дату' }"></app-error>
                 </div>
 
-                <app-activity-list [userId]="userId" [gradeId]="gradeModel?.id" [activityState]="state"></app-activity-list>
+                <app-activity-list class="activity-list" [userId]="userId" [gradeId]="gradeModel?.id" [activityState]="state"></app-activity-list>
 
                 <div class="grade-management" *ngIf="state !== ActivityState.userReport">
                     <div class="management-line">

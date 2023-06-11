@@ -1,21 +1,21 @@
-import {AfterContentInit, ChangeDetectorRef, Component, Input} from '@angular/core';
-import {ActivityModel} from '../../models/activity.model';
-import {ActivityService} from '../../services/activity.service';
-import {ActivityViewModel} from '../../models/activity.view-model';
-import {LetDirective} from '../../../../../lib/directives/let.directive';
-import {contentExpansion, DestroyService, FormGenerator, rotate180, SharedModule} from '../../../../../lib';
-import {NgIf} from '@angular/common';
-import {FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {finalize, takeUntil} from 'rxjs';
-import {ActivityState} from '../../enums/activity-state.enum';
-import {ActivityStatus} from '../../enums/activity-status.enum';
-import {AutoSizeInputModule} from 'ngx-autosize-input';
-import {AccordionArrowIconComponent} from '../../../../../../assets/img';
-import {EmptyCircleIconComponent} from '../../../../../../assets/img/empty-circle/empty-circle-icon';
-import {ActivityStateModelConst} from '../../models/activity-state-model.const';
-import {EditActivityIconComponent} from '../../../../../../assets/img/edit-activity/edit-activity-icon';
-import {DeleteActivityIconComponent} from '../../../../../../assets/img/delete-activity/delete-activity-icon';
-import {PageBase} from '../../../../../lib/shared/components/page-base/page-base.component';
+import { AfterContentInit, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ActivityModel } from '../../models/activity.model';
+import { ActivityService } from '../../services/activity.service';
+import { ActivityViewModel } from '../../models/activity.view-model';
+import { LetDirective } from '../../../../../lib/directives/let.directive';
+import { contentExpansion, DestroyService, FormGenerator, rotate180, SharedModule } from '../../../../../lib';
+import { NgIf } from '@angular/common';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { finalize, takeUntil } from 'rxjs';
+import { ActivityState } from '../../enums/activity-state.enum';
+import { ActivityStatus } from '../../enums/activity-status.enum';
+import { AutoSizeInputModule } from 'ngx-autosize-input';
+import { AccordionArrowIconComponent } from '../../../../../../assets/img';
+import { EmptyCircleIconComponent } from '../../../../../../assets/img/empty-circle/empty-circle-icon';
+import { ActivityStateModelConst } from '../../models/activity-state-model.const';
+import { EditActivityIconComponent } from '../../../../../../assets/img/edit-activity/edit-activity-icon';
+import { DeleteActivityIconComponent } from '../../../../../../assets/img/delete-activity/delete-activity-icon';
+import { PageBase } from '../../../../../lib/shared/components/page-base/page-base.component';
 
 @Component({
     selector: 'app-activity',

@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {ActivityModel} from '../models/activity.model';
-import {ActivityRequestService} from './activity-request.service';
-import {Observable, of, tap} from 'rxjs';
-import {IActivityRequest, IEmployeeReportRequest} from '../interfaces/activity-request.interface';
-import {ActivityStatus} from "../enums/activity-status.enum";
+import { Injectable } from '@angular/core';
+import { ActivityModel } from '../models/activity.model';
+import { ActivityRequestService } from './activity-request.service';
+import { Observable, of, tap } from 'rxjs';
+import { IActivityRequest, IEmployeeReportRequest } from '../interfaces/activity-request.interface';
+import { ActivityStatus } from '../enums/activity-status.enum';
 
 @Injectable()
 export class ActivityService {
