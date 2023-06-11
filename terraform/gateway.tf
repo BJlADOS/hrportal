@@ -74,7 +74,7 @@ paths:
     x-yc-apigateway-any-method:
       x-yc-apigateway-integration:
         type: http
-        url: http://${yandex_compute_instance.hrportal.network_interface[0].nat_ip_address}/admin/{proxy}/
+        url: http://${yandex_compute_instance.hrportal.network_interface[0].ip_address}/admin/{proxy}/
         query:
           '*': '*'
         headers:
@@ -91,7 +91,7 @@ paths:
     x-yc-apigateway-any-method:
       x-yc-apigateway-integration:
         type: http
-        url: http://${yandex_compute_instance.hrportal.network_interface[0].nat_ip_address}/api/{proxy}/
+        url: http://${yandex_compute_instance.hrportal.network_interface[0].ip_address}/api/{proxy}/
         query:
           '*': '*'
         headers:

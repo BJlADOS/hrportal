@@ -13,7 +13,6 @@ resource "yandex_compute_instance" "hrportal" {
   }
   network_interface {
     subnet_id = yandex_vpc_subnet.b.id
-    nat = true
   }
   resources {
     cores  = 2
