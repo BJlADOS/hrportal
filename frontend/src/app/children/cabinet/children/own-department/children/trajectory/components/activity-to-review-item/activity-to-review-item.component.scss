@@ -1,0 +1,55 @@
+.activity-card {
+    background-color: var(--white);
+    padding: 30px 24px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+
+    &__grade-header {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 60px;
+    }
+
+    &__name-line {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    &__grade-status {
+        border: 1px solid var(--main-accent-color);
+        border-radius: 20px;
+        padding: 8px 14px;
+        color: var(--font-primary);
+        font-size: 14px;
+    }
+
+    &__grade-name {
+        margin: 0;
+    }
+
+    &__employee-name {
+        margin: 0;
+    }
+
+    &__activity {
+        margin-top: 30px;
+    }
+}
+
+.activity {
+    &__name {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        cursor: pointer;
+    }
+
+    &__white-point {
+        border-radius: 50%;
+        border: 1px solid var(--border-color);
+        height: 14px;
+        width: 14px;
+    }
+}

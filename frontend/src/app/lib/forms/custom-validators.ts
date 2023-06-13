@@ -33,4 +33,14 @@ export class CustomValidators {
 
         return null;
     }
+
+    public dateValidator(): ValidatorFn {
+        return (control: AbstractControl): { [key:string]: boolean } | null => {
+            if(new Date(control.value).getTime() < Date.now()) {
+                return { dateNotValid: true };
+            }
+
+            return null;
+        };
+    }
 }

@@ -1,0 +1,109 @@
+<div class="activity" *ngIf="viewModel">
+    <form *ngIf="form"
+          [formGroup]="form"
+          class="form">
+        <div class="input-block" appHoverListener (click)="isOpened = !isOpened">
+            <empty-circle-icon></empty-circle-icon>
+            <input autoSizeInput
+                   [usePlaceHolderWhenEmpty]="true"
+                   (click)="$event.stopPropagation();"
+                   (input)="isOpened = !!form.controls['name'].value"
+                   [includePadding]="false"
+                   [includeBorders]="false"
+                   type="text"
+                   class="input"
+                   formControlName="name"
+                   placeholder="Новая активность">
+            <accordion-arrow-icon [@rotate180]="isOpened? 'rotated' : 'still'" [forceHover]="isOpened"></accordion-arrow-icon>
+        </div>
+
+        <app-error *ngIf="form.controls['name'].invalid"
+                   [error]="{ message: 'Заполните название активности'}"></app-error>
+
+        <div class="content" [@contentExpansion]="isOpened ? 'expanded' : 'collapsed'">
+            <div *ngIf="state !== ActivityState.creating"
+                 class="status">
+                <svg class="status-img {{statusObject[viewModel.status].className}}" width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="6" cy="6.5" r="6" fill="#9DC7ED"/>
+                </svg>
+                <span>{{statusObject[viewModel.status].text}}</span>
+            </div>
+
+             <textarea appAutoResizeTextarea
+                       *ngIf="form.controls['description'].value || isEditing"
+                       class="textarea"
+                       [class.readonly]="(state === ActivityState.userReport) || !isEditing"
+                       type="text"
+                       formControlName="description"
+                       placeholder="Описание активности">
+            </textarea>
+
+            <textarea appAutoResizeTextarea
+                      *ngIf="form.controls['employeeReport'].value || (state === ActivityState.userReport
+                      && (viewModel.status === ActivityStatus.inWork || viewModel.status === ActivityStatus.returned))"
+                      class="textarea"
+                      [class.hidden]="state === ActivityState.creating"
+                      type="text"
+                      formControlName="employeeReport"
+                      [placeholder]="'Напишите отчёт по активности'">
+            </textarea>
+
+            <app-error *ngIf="form.controls['employeeReport'].invalid" [error]="{ message: 'Заполните отчёт'}"></app-error>
+
+            <div class="buttons" *ngIf="viewModel.status !== ActivityStatus.completed && !isLoading">
+                <div class="buttons-block" *ngIf="state === ActivityState.userReport && !isEditing && viewModel.status === ActivityStatus.inWork">
+                    <div class="button" (click)="sendToReview()" [class.disabled]="form.invalid">
+                        <span>Отправить на согласование</span>
+                    </div>
+                </div>
+
+                <div class="buttons-block" *ngIf="isEditing && (state !== ActivityState.creating)">
+                    <div class="button" [class.disabled]="form.invalid" (click)="updateActivity()">
+                        <span>Сохранить</span>
+                    </div>
+
+                    <div class="transparent-button" (click)="cancelEditing()">
+                        <span>Отмена</span>
+                    </div>
+                </div>
+
+                <div class="buttons-block" *ngIf="(state === ActivityState.editing && !isEditing && viewModel.status !== ActivityStatus.canceled) || reviewMode">
+                    <div class="button" (click)="approveActivity()" [class.disabled]="form.invalid"
+                                        *ngIf="viewModel.status !== ActivityStatus.inWork">
+                        <span>Согласовать</span>
+                    </div>
+
+                    <div class="button" (click)="returnActivity()" *ngIf="reviewMode">
+                        <span>Вернуть в работу</span>
+                    </div>
+
+                    <div class="button" (click)="cancelActivity()" *ngIf="reviewMode" [class.disabled]="form.invalid">
+                        <span>Отменить</span>
+                    </div>
+                </div>
+
+                <div class="buttons-block" *ngIf="state === ActivityState.creating && gradeId">
+                    <div class="button" (click)="createActivity()" [class.disabled]="form.invalid">
+                        <span>Добавить активность</span>
+                    </div>
+                </div>
+
+                <div class="manage-buttons">
+                    <div appHoverListener
+                         *ngIf="!isEditing && (state !== ActivityState.userReport)"
+                         class="manage-button"
+                         (click)="editActivity()">
+                        <edit-activity-icon></edit-activity-icon>
+                    </div>
+                    <div appHoverListener
+                         *ngIf="(state !== ActivityState.userReport)"
+                         class="manage-button"
+                         (click)="deleteActivity()">
+                        <delete-activity-icon></delete-activity-icon>
+                    </div>
+                </div>
+            </div>
+            <app-loader *ngIf="isLoading"></app-loader>
+        </div>
+    </form>
+</div>

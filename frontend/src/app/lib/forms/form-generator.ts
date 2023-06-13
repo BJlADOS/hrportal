@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from './custom-validators';
-import { IDepartment, IFilter, IResume, IUser, IVacancy } from '../../common';
-import { ISelectOption } from './controls';
-import { Ordering } from '../utils';
-import { IResumeRequest } from '../../common/resume/interfaces/resume-request.interface';
+import {Injectable} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {CustomValidators} from './custom-validators';
+import {IDepartment, IFilter, IResume, IUser, IVacancy} from '../../common';
+import {ISelectOption} from './controls';
+import {Ordering} from '../utils';
+import {IResumeRequest} from '../../common/resume/interfaces/resume-request.interface';
+import {ActivityModel} from "../../common/cabinet/grade/models/activity.model";
+import {GradeModel} from "../../common/cabinet/grade/models/grade.model";
+import {ActivityState} from "../../common/cabinet/grade/enums/activity-state.enum";
 
 @Injectable({
     providedIn: 'root'
@@ -214,6 +217,25 @@ export class FormGenerator {
         return this._fb.group(
             {
                 ordering: new FormControl(ordering?? Ordering['-time']),
+            }
+        );
+    }
+
+    public getActivityForm(state: ActivityState, activity?: ActivityModel): FormGroup {
+        return this._fb.group(
+            {
+                name: new FormControl(activity?.name?? '', Validators.required),
+                description: new FormControl(activity?.description?? ''),
+                employeeReport: new FormControl(activity?.employeeReport?? '', state === ActivityState.userReport ? Validators.required : null),
+            }
+        );
+    }
+
+    public getGradeForm(grade?: GradeModel, date?: string): FormGroup {
+        return this._fb.group(
+            {
+                name: new FormControl(grade?.name?? '', Validators.required),
+                expirationDate: new FormControl(date?? '', [Validators.required, this._customValidators.dateValidator()]),
             }
         );
     }

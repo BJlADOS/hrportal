@@ -1,0 +1,24 @@
+<div class="activity-card">
+    <div class="activity-card__grade-header">
+        <div class="activity-card__name-line">
+            <h2 class="activity-card__grade-name">
+                {{viewModel.gradeName}}
+            </h2>
+            <div class="activity-card__grade-status">
+                НА ПРОВЕРКЕ
+            </div>
+        </div>
+        <p class="activity-card__employee-name">
+            {{viewModel.employeeName}}
+        </p>
+    </div>
+    <div class="activity-card__activity activity" *ngFor="let activity of viewModel.activityList">
+        <app-activity
+            [activityId]="activity.id!"
+            [gradeId]="activity.gradeId"
+            [initialState]="ActivityState.userReport"
+            [reviewMode]="true"
+            (loading$)="update($event)">
+        </app-activity>
+    </div>
+</div>

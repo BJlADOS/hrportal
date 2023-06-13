@@ -32,6 +32,8 @@ import { FilterIconComponent, UpArrowIconComponent } from '../../../assets/img';
 import { NgxStickySidebarModule } from '@smip/ngx-sticky-sidebar';
 import { LoaderComponent } from './components/loader/loader.component';
 import { GlobalLoaderComponent } from './components/global-loader/global-loader.component';
+import { AutoResizeTextareaDirective } from '../../common/cabinet/grade/directives/auto-resize-textarea.directive';
+import {AutoResizeInputDirective} from "../../common/cabinet/grade/directives/auto-resize-input.directive";
 
 const exportingComponents: any[] = [
     SchedulePipe,
@@ -51,6 +53,8 @@ const exportingComponents: any[] = [
     SelectWithRadioMultipleSearchComponent,
     LimitInputDirective,
     HoverListenerDirective,
+    AutoResizeTextareaDirective,
+    AutoResizeInputDirective,
 ];
 
 @NgModule({

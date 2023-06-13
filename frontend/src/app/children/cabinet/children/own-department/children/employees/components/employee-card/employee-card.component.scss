@@ -62,5 +62,9 @@ a {
             color: var(--font-primary-color);
             cursor: pointer;
         }
+
+        &:not(:last-child) {
+            margin-right: 20px
+        }
     }
 }
