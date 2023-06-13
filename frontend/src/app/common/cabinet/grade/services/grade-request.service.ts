@@ -23,6 +23,13 @@ export class GradeRequestService {
             );
     }
 
+    public getGradeById(id: number): Observable<GradeModel> {
+        return this._http.get<IGrade>(`${this._apiUrl}/grades/${id}`)
+            .pipe(
+                map((grade: IGrade) => new GradeModel(grade))
+            );
+    }
+
     public createGrade(grade: IGradeRequest): Observable<GradeModel> {
         return this._http.post<IGrade>(`${this._apiUrl}/grades/`, grade)
             .pipe(

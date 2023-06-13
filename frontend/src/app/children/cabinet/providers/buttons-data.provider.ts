@@ -24,7 +24,8 @@ export const BUTTONS_DATA_PROVIDER: Provider = {
                 HeaderButton.departmentVacancies,
                 HeaderButton.departmentResumes,
                 HeaderButton.departmentEmployees,
-                HeaderButton.archivedEntities
+                HeaderButton.archivedEntities,
+                HeaderButton.trajectory
             ]
         },
         [HeaderButton.departmentVacancies]: {
@@ -42,6 +43,10 @@ export const BUTTONS_DATA_PROVIDER: Provider = {
         [HeaderButton.archivedEntities]: {
             name: 'Архивированные',
             path: 'cabinet/own-department/archived',
+        },
+        [HeaderButton.trajectory]: {
+            name: 'Траектория',
+            path: 'cabinet/own-department/trajectory',
         },
         [HeaderButton.administration]: {
             name: 'Администрирование',

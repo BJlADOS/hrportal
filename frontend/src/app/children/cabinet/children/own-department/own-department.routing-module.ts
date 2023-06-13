@@ -40,6 +40,13 @@ const routes: Routes = [
                     breadcrumb: 'Архивированные'
                 }
             },
+            {
+                path: 'trajectory',
+                loadChildren: () => import('./children/trajectory/trajectory.module').then((m) => m.TrajectoryModule),
+                data: {
+                    breadcrumb: 'Траектория'
+                }
+            },
         ]
     }
 ];

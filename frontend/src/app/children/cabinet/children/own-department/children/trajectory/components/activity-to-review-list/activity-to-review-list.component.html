@@ -1,0 +1,13 @@
+<div class="wrapper">
+    <div class="wrapper-grid">
+        <div class="wrapper-flex column-1-13">
+            <h1>
+                На согласовании
+            </h1>
+            <ng-container *ngFor="let activity of activitiesOnReview | async">
+                <activity-to-review-item [viewModel]="activity" (updateList)="updateList()">
+                </activity-to-review-item>
+            </ng-container>
+        </div>
+    </div>
+</div>

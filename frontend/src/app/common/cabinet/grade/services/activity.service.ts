@@ -49,7 +49,7 @@ export class ActivityService {
     }
 
     public getActivity(index: number): ActivityModel {
-        return this.activities[index];
+        return this.activities.find((a) => a.id === index)!;
     }
 
     //Requests
