@@ -3,11 +3,9 @@
           [formGroup]="form"
           class="form">
         <div class="input-block" appHoverListener (click)="isOpened = !isOpened">
-            <empty-circle-icon *ngIf="(viewModel.status !== ActivityStatus.canceled && viewModel.status !== ActivityStatus.completed)
-else activityDone"></empty-circle-icon>
-            <ng-template #activityDone>
-                <activity-done-icon></activity-done-icon>
-            </ng-template>
+            <svg class="status-img {{statusObject[viewModel.status].className}}" width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="6" cy="6.5" r="6" fill="#9DC7ED"/>
+            </svg>
             <input autoSizeInput
                    [usePlaceHolderWhenEmpty]="true"
                    (click)="$event.stopPropagation();"
@@ -73,8 +71,7 @@ else activityDone"></empty-circle-icon>
                 </div>
 
                 <div class="buttons-block" *ngIf="(state === ActivityState.editing && !isEditing && viewModel.status !== ActivityStatus.canceled) || reviewMode">
-                    <div class="button" (click)="approveActivity()" [class.disabled]="form.invalid"
-                                        *ngIf="viewModel.status !== ActivityStatus.inWork && viewModel.status !== ActivityStatus.returned">
+                    <div class="button" (click)="approveActivity()" [class.disabled]="form.invalid">
                         <span>Согласовать</span>
                     </div>
 
