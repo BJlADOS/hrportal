@@ -96,16 +96,16 @@
 
 .add-activity {
     width: fit-content;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--main-accent-color);
     border-radius: 1rem;
-    color: var(--border-color);
     text-transform: uppercase;
     padding: .25rem .5rem;
-
+    color: var(--main-accent-color);
+    
     &:hover {
         cursor: pointer;
-        border-color: var(--main-accent-color);
-        color: var(--main-accent-color);
+        border-color: var(--main-accent-color-hover);
+        color: var(--main-accent-color-hover);
     }
 }
 
