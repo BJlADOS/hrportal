@@ -3,7 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 
 from .authentication import *
-from .models import *
+from .models import User, Vacancy, Resume, PDFResume
 
 
 def send_mail_with(
@@ -41,9 +41,9 @@ def send_email_verification_mail(user: User):
 def send_change_password_mail(user: User):
     return send_mail_with(
         'Смена (восстановление) пароля на HR-портале "Очень Интересно"',
-        get_template('change-password.txt'),
-        get_template('change-password.html'),
-        {'url': settings.SET_PASSWORD_URL + f'?code={create_user_token(user)}'},
+        get_template('change-password/change-password.txt'),
+        get_template('change-password/change-password.html'),
+        {'url': settings.SET_PASSWORD_URL + f'?code={create_user_token(user)}', 'user': user},
         [user.email],
         f'Change password mail to User(ID={user.id})'
     )
@@ -52,8 +52,8 @@ def send_change_password_mail(user: User):
 def send_resume_response(resume: Resume, manager: User):
     return send_mail_with(
         'Отклик на ваше резюме на HR-портале "Очень Интересно"',
-        get_template('resume-response.txt'),
-        get_template('resume-response.html'),
+        get_template('resume-response/resume-response.txt'),
+        get_template('resume-response/resume-response.html'),
         {'resume': resume, 'manager': manager},
         [resume.employee.email],
         f'Response from Manager(ID={manager.id}) to Employee(ID={resume.employee.id}) mail'

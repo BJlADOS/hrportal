@@ -1,77 +1,65 @@
-<!DOCTYPE HTML>
-{% load static %}
-<html>
-<head>
-    <meta charset="utf-8">
-    <title></title>
-</head>
-<body>
-<div class="page">
-    <div class="page__header">
+{% load inlinecss %}
+{% inlinecss 'css/vacancy-response.css' %}
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <body>
+    <div class="page">
+        <div class="page__header">
                 <span class="page__header-lk inscription-10-11">
                     личный кабинет
                 </span>
-        <div class="page__header-title-line">
-            <h1 class="page__header-title header-20-28-bold">
-                ОТКЛИК НА РЕЗЮМЕ
-            </h1>
-            <img src="{% static 'magnifier.svg' %}" class="page__header-header-icon">
+            <div class="page__header-title-line">
+                <h1 class="page__header-title header-20-28-bold">
+                    ОТКЛИК НА РЕЗЮМЕ
+                </h1>
+                {% include 'vacancy-response/magnifier.svg' %}
+            </div>
         </div>
-    </div>
-    <div class="page__content">
-        <span class="page__content-user-name inscription-12-17-bold">{{ resume.employee.fullname }},</span>
-        <p class="page__content-appeal inscription-12-14">
-            На Вашу вакансию
-            <a class="page__content-vacancy-link" target="_blank" href="{{ vacancy.link }}">
-                "{{ resume.name }}"<!--
+        <div class="page__content">
+            <span class="page__content-user-name inscription-12-17-bold">{{ resume.employee.fullname }},</span>
+            <p class="page__content-appeal inscription-12-14">
+                На Вашу вакансию
+                <a class="page__content-vacancy-link" target="_blank" href="{{ vacancy.link }}">
+                    "{{ resume.name }}"<!--
         --></a> получен отклик.<br>
-            Резюме соискателя прикреплено к письму.
-        </p>
-        <div class="page__content-contact-block inscription-12-14">
-            Контакты для связи:
-            <ul class="page__content-contact-list inscription-12-14">
-                <li>{{ manager.fullname }}</li>
-                <li>{{ manager.email }}</li>
-                {% if manager.contact %}
-                <li>{{ manager.contact }}}</li>
-                {% endif %}
-            </ul>
-        </div>
-        <div class="page__content-button-wrapper">
-            <button class="page__content-button inscription-12-14">
-                <a class="page__content-button-link inscription-12-14" target="_blank" href="{{ url }}">
-                    ПЕРЕЙТИ К ОТКЛИКУ
-                </a>
-            </button>
-            <p class="page__content-button-inscription inscription-10-11">
-                Или скопируйте и вставьте в браузере эту ссылку:<br>
-                {{ url }}
+                Резюме соискателя прикреплено к письму.
             </p>
+            <div class="page__content-contact-block inscription-12-14">
+                Контакты для связи:
+                <ul class="page__content-contact-list inscription-12-14">
+                    <li>{{ manager.fullname }}</li>
+                    <li>{{ manager.email }}</li>
+                    {% if manager.contact %}
+                        <li>{{ manager.contact }}}</li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="page__content-button-wrapper">
+                <button class="page__content-button inscription-12-14">
+                    <a class="page__content-button-link inscription-12-14" target="_blank" href="{{ url }}">
+                        ПЕРЕЙТИ К ОТКЛИКУ
+                    </a>
+                </button>
+                <p class="page__content-button-inscription inscription-10-11">
+                    Или скопируйте и вставьте в браузере эту ссылку:<br>
+                    {{ url }}
+                </p>
+            </div>
+        </div>
+        <div class="page__footer">
+            По любым вопросам всегда поможет <a class="page__footer-support-link" target="_blank"
+                                                href="https://t.me/A2n98">служба поддержки</a>.
+            <br>
+            <br>
+            С заботой о вас,
+            команда HR-портала
         </div>
     </div>
-    <div class="page__footer">
-        По любым вопросам всегда поможет <a class="page__footer-support-link" target="_blank" href="https://t.me/A2n98" >служба поддержки</a>.
-        <br>
-        <br>
-        С заботой о вас,
-        команда HR-портала
-    </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 
-
-
-
-Уважаемый {{ manager.fullname }}!<br>
-<br>
-На вашу вакансию на должность "{{ vacancy.position }}" получен отклик<br>
-<br>
-Контакты для связи:<br>
-ФИО - {{ employee.fullname }}<br>
-Email - {{ employee.email }}
-{% if employee.contact %}
-    <br>Дополнительный контакт: {{ employee.contact }}<br>
-{% endif %}
-<br>
-Резюме сотрудника приложено к письму
+{% endinlinecss %}

@@ -16,6 +16,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import django
+from django.utils.encoding import smart_str
+
+django.utils.encoding.smart_text = smart_str
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,7 +52,8 @@ INSTALLED_APPS = [
     'hr_api.apps.HrApiConfig',
     'django_filters',
     'drf_yasg',
-    'storages'
+    'storages',
+    'django_inlinecss'
 ]
 
 MIDDLEWARE = [
@@ -147,6 +153,10 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+STATICFILES_DIRS = [
+    BASE_DIR / "hr_api/static"
+]
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
