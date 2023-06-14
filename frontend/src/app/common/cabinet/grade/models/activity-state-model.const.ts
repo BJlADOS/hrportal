@@ -11,7 +11,7 @@ export const ActivityStateModelConst: Record<any, any> = {
     },
     [ActivityStatus.onReview]: {
         className: '_state-on-review',
-        text: 'На рассмотрении',
+        text: 'На проверке',
     },
     [ActivityStatus.returned]: {
         className: '_state-returned',

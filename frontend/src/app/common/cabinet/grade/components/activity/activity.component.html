@@ -3,7 +3,11 @@
           [formGroup]="form"
           class="form">
         <div class="input-block" appHoverListener (click)="isOpened = !isOpened">
-            <empty-circle-icon></empty-circle-icon>
+            <empty-circle-icon *ngIf="(viewModel.status !== ActivityStatus.canceled && viewModel.status !== ActivityStatus.completed)
+else activityDone"></empty-circle-icon>
+            <ng-template #activityDone>
+                <activity-done-icon></activity-done-icon>
+            </ng-template>
             <input autoSizeInput
                    [usePlaceHolderWhenEmpty]="true"
                    (click)="$event.stopPropagation();"
@@ -51,7 +55,8 @@
             <app-error *ngIf="form.controls['employeeReport'].invalid" [error]="{ message: 'Заполните отчёт'}"></app-error>
 
             <div class="buttons" *ngIf="viewModel.status !== ActivityStatus.completed && !isLoading">
-                <div class="buttons-block" *ngIf="state === ActivityState.userReport && !isEditing && viewModel.status === ActivityStatus.inWork">
+                <div class="buttons-block" *ngIf="state === ActivityState.userReport && !isEditing && (viewModel.status === ActivityStatus.inWork
+                || viewModel.status === ActivityStatus.returned)">
                     <div class="button" (click)="sendToReview()" [class.disabled]="form.invalid">
                         <span>Отправить на согласование</span>
                     </div>
@@ -69,7 +74,7 @@
 
                 <div class="buttons-block" *ngIf="(state === ActivityState.editing && !isEditing && viewModel.status !== ActivityStatus.canceled) || reviewMode">
                     <div class="button" (click)="approveActivity()" [class.disabled]="form.invalid"
-                                        *ngIf="viewModel.status !== ActivityStatus.inWork">
+                                        *ngIf="viewModel.status !== ActivityStatus.inWork && viewModel.status !== ActivityStatus.returned">
                         <span>Согласовать</span>
                     </div>
 
@@ -77,7 +82,7 @@
                         <span>Вернуть в работу</span>
                     </div>
 
-                    <div class="button" (click)="cancelActivity()" *ngIf="reviewMode" [class.disabled]="form.invalid">
+                    <div class="button" (click)="cancelActivity()" [class.disabled]="form.invalid">
                         <span>Отменить</span>
                     </div>
                 </div>

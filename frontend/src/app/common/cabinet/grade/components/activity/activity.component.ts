@@ -16,6 +16,7 @@ import { ActivityStateModelConst } from '../../models/activity-state-model.const
 import { EditActivityIconComponent } from '../../../../../../assets/img/edit-activity/edit-activity-icon';
 import { DeleteActivityIconComponent } from '../../../../../../assets/img/delete-activity/delete-activity-icon';
 import { PageBase } from '../../../../../lib/shared/components/page-base/page-base.component';
+import {ActivityDoneIconComponent} from "../../../../../../assets/img/activity-done/activity-done-icon";
 
 @Component({
     selector: 'app-activity',
@@ -35,6 +36,7 @@ import { PageBase } from '../../../../../lib/shared/components/page-base/page-ba
         EmptyCircleIconComponent,
         EditActivityIconComponent,
         DeleteActivityIconComponent,
+        ActivityDoneIconComponent,
     ],
     animations: [
         contentExpansion,
