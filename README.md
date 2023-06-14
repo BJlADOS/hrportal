@@ -115,6 +115,7 @@ docker push <tag>
 terraform -chdir=terraform apply
 
 cd frontend
+npm install
 ng build
 aws --endpoint-url=https://storage.yandexcloud.net/ s3 sync dist/out/assets s3://hrportal-static/assets
 # перенести файлы сайта в браузер, в бакет hrportal-static
