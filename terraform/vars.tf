@@ -49,3 +49,7 @@ variable "django_secret_key" {
 variable "django_container_tag" {
   type = string
 }
+
+variable "ssh_pub" {
+  type = string
+}
