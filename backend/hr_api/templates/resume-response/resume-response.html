@@ -16,14 +16,15 @@
                 <h1 class="page__header-title header-20-28-bold">
                     ОТКЛИК НА РЕЗЮМЕ
                 </h1>
-                {% include 'resume-response/resume.svg' %}}
+                {% include 'resume-response/resume.svg' %}
             </div>
         </div>
         <div class="page__content">
             <span class="page__content-user-name inscription-12-17-bold">{{ resume.employee.fullname }},</span>
             <p class="page__content-appeal inscription-12-14">
                 На Ваше резюме
-                <a class="page__content-resume-link" target="_blank" href="{{ resume_link }}">
+                <a class="page__content-resume-link" target="_blank"
+                   href="https://hrportal.sergei-kiprin.ru/cabinet/resumes/{{ resume.id }}">
                     "{{ resume.name }}"<!--
         --></a> получен отклик от руководителя отдела
                 "{{ manager.department }}".

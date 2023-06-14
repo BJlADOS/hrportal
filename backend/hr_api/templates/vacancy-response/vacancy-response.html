@@ -14,27 +14,28 @@
                 </span>
             <div class="page__header-title-line">
                 <h1 class="page__header-title header-20-28-bold">
-                    ОТКЛИК НА РЕЗЮМЕ
+                    ОТКЛИК НА ВАКАНСИЮ
                 </h1>
                 {% include 'vacancy-response/magnifier.svg' %}
             </div>
         </div>
         <div class="page__content">
-            <span class="page__content-user-name inscription-12-17-bold">{{ resume.employee.fullname }},</span>
+            <span class="page__content-user-name inscription-12-17-bold">{{ manager.fullname }},</span>
             <p class="page__content-appeal inscription-12-14">
                 На Вашу вакансию
-                <a class="page__content-vacancy-link" target="_blank" href="{{ vacancy.link }}">
-                    "{{ resume.name }}"<!--
+                <a class="page__content-vacancy-link" target="_blank"
+                   href="https://hrportal.sergei-kiprin.ru/cabinet/vacancies/{{ vacancy.id }}">
+                    "{{ vacancy.position }}"<!--
         --></a> получен отклик.<br>
                 Резюме соискателя прикреплено к письму.
             </p>
             <div class="page__content-contact-block inscription-12-14">
                 Контакты для связи:
                 <ul class="page__content-contact-list inscription-12-14">
-                    <li>{{ manager.fullname }}</li>
-                    <li>{{ manager.email }}</li>
-                    {% if manager.contact %}
-                        <li>{{ manager.contact }}}</li>
+                    <li>{{ employee.fullname }}</li>
+                    <li>{{ employee.email }}</li>
+                    {% if employee.contact %}
+                        <li>{{ employee.contact }}}</li>
                     {% endif %}
                 </ul>
             </div>

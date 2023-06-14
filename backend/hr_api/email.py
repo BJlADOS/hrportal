@@ -30,9 +30,9 @@ def send_mail_with(
 def send_email_verification_mail(user: User):
     return send_mail_with(
         'Подтверждение адреса электронной почты на HR-портале "Очень Интересно"',
-        get_template('verification.txt'),
-        get_template('verification.html'),
-        {'url': settings.VERIFICATION_URL + f'?code={create_user_token(user)}'},
+        get_template('verification/verification.txt'),
+        get_template('verification/verification.html'),
+        {'url': settings.VERIFICATION_URL + f'?code={create_user_token(user)}', 'user': user},
         [user.email],
         f'Email verification mail to User(ID={user.id})'
     )
@@ -63,8 +63,8 @@ def send_resume_response(resume: Resume, manager: User):
 def send_vacancy_response(employee: User, manager: User, vacancy: Vacancy, pdf_resume: PDFResume):
     return send_mail_with(
         'Отклик на вакансию вашего отдела на HR-портале "Очень Интересно"',
-        get_template('vacancy-response.txt'),
-        get_template('vacancy-response.html'),
+        get_template('vacancy-response/vacancy-response.txt'),
+        get_template('vacancy-response/vacancy-response.html'),
         {'employee': employee, 'manager': manager, 'vacancy': vacancy},
         [manager.email],
         f'Response from Employee(ID={employee.id}) to Manager(ID={manager.id}) mail',
