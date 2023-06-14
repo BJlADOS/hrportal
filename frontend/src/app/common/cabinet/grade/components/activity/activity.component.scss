@@ -90,7 +90,7 @@
 .status-img {
     &._state-active {
         &>circle {
-            fill: #FDC04E;
+            fill: #D9D9D9;
         }
     }
 
@@ -118,9 +118,9 @@
         }
     }
 
-    &._state-cancelled {
+    &._state-canceled {
         &>circle {
-            fill: #BABABA;
+            fill: #949597;
         }
     }
 }
