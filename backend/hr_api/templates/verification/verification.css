@@ -1,0 +1,160 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+a {
+    color: inherit;
+}
+
+a:visited {
+    color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 600px;
+    height: 573px;
+    background-color: #FFFFFF;
+}
+
+.page__header {
+    background-color: #FDC04E;
+    padding: 30px 40px 0;
+    min-height: 140px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+}
+
+.page__header-lk {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    color: #F9F9F9;
+}
+
+.page__header-title-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: end;
+}
+
+.page__header-title {
+    color: #F9F9F9;
+
+    width: max-content;
+    margin: 0;
+    padding-bottom: 16px;
+}
+
+.page__header-header-icon {
+    position: relative;
+    margin-left: 40px;
+    bottom: -10px;
+}
+
+.page__content {
+    padding: 40px 40px 50px;
+    height: 100%;
+}
+
+.page__content-portal-link {
+    color: #FDC04E;
+}
+
+.page__content-portal-link:hover {
+    color: #FDC04E;
+}
+
+.page__content-user-name {
+    color: #FDC04E;
+}
+
+.page__content-appeal {
+    margin-top: 20px;
+}
+
+.page__content-button-wrapper {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.page__content-button {
+    background: #FDC04E;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: #FFFFFF;
+}
+
+.page__content-button-link {
+    text-decoration: none;
+}
+
+.page__footer {
+    padding: 25px 40px 60px;
+    box-sizing: border-box;
+    width: 100%;
+
+    font-family: 'Arial';
+    color: #939393;
+    background-color: #FFFFFF;
+
+    border-top: solid 1px #939393;
+}
+
+
+
+.inscription-12-14 {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.inscription-12-17-bold {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.inscription-10-11 {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+}
+
+.header-20-28-bold {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 32px;
+}

@@ -1,0 +1,16 @@
+{{ resume.employee.fullname }},
+
+На Ваше резюме "{{ resume.name }}" получен отклик от руководителя отдела "{{ manager.department }}"
+
+
+Контакты для связи:
+ФИО - {{ manager.fullname }}
+Email - {{ manager.email }} {% if manager.contact %}
+Дополнительный контакт: {{ manager.contact }} {% endif %}
+
+
+По любым вопросам всегда поможет служба поддержки - https://t.me/A2n98
+
+
+С заботой о вас,
+команда HR-портала

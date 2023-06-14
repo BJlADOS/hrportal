@@ -1,0 +1,15 @@
+{{ manager.fullname }}, на вашу вакансию "{{ vacancy.position }}" получен отклик
+
+Резюме соискателя прикреплено к письму.
+
+Контакты для связи:
+ФИО - {{ employee.fullname }}
+Email - {{ employee.email }} {% if employee.contact %}
+Дополнительный контакт: {{ employee.contact }} {% endif %}
+
+
+По любым вопросам всегда поможет служба поддержки - https://t.me/A2n98
+
+
+С заботой о вас,
+команда HR-портала
