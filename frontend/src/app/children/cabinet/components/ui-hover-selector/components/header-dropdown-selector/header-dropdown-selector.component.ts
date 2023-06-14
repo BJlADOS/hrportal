@@ -39,11 +39,13 @@ export class HeaderDropdownSelectorComponent {
     }
 
     protected itemSelected(selectItemModel: IHoverSelectItem): void {
-        this._router.navigate([selectItemModel.path])
-            .then(() => {
-                this.updater$.next();
-            });
-        this.setOpenState(false);
+        if (!this.isSelected(selectItemModel)) {
+            this._router.navigate([selectItemModel.path])
+                .then(() => {
+                    this.updater$.next();
+                });
+            this.setOpenState(false);
+        }
     }
 
     protected isSelected(item: IHoverSelectItem): boolean {
@@ -53,5 +55,9 @@ export class HeaderDropdownSelectorComponent {
     protected get isHeaderSelected(): boolean {
         return this.model$.value?.children
             ?.find((child: IHoverSelectItem) => this.isSelected(child)) !== undefined;
+    }
+
+    protected get childrenSelected(): boolean {
+        return (this.model$.value?.children?.length ?? 0) > 0;
     }
 }

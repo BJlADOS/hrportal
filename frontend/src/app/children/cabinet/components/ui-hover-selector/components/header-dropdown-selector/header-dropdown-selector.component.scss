@@ -1,11 +1,18 @@
-:host.selected {
-    .title {
+@mixin title-lightning() {
+    font-weight: bold;
+
+    &:not(.children-selected) {
         cursor: default;
-        font-weight: bold;
 
         &:hover {
             color: var(--font-primary);
         }
+    }
+}
+
+:host.selected {
+    .title {
+        @include title-lightning()
     }
 }
 
@@ -23,12 +30,7 @@
     }
 
     &.selected {
-        cursor: default;
-        font-weight: bold;
-
-        &:hover {
-            color: var(--font-primary);
-        }
+        @include title-lightning()
     }
 }
 
@@ -41,6 +43,7 @@
     border: var(--main-accent-color) 1px solid;
     border-radius: 10px;
     top: 40px;
+    z-index: 1;
 
     &__item {
         cursor: pointer;

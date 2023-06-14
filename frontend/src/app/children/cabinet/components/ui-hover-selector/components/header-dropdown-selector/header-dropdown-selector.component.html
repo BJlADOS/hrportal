@@ -1,6 +1,10 @@
 <div class="container" *ngIf="model$ | async as model">
     <ng-container *let="updater$ | async">
-        <p class="title" [ngClass]="{'selected': isHeaderSelected}" (click)="model.children ? setOpenState(true) : itemSelected(model)" >{{model.buttonTitle}}</p>
+        <p class="title"
+           [ngClass]="{'selected': isHeaderSelected, 'children-selected': childrenSelected}"
+           (click)="model.children ? setOpenState(true) : itemSelected(model)">
+            {{model.buttonTitle}}
+        </p>
         <ng-container *ngIf="isHover && model.children">
             <div class="selector-dropdown" (outer-click)="setOpenState(false)">
                 <a (click)="itemSelected(buttonModel)" class="selector-dropdown__item"
