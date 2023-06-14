@@ -1,7 +1,7 @@
 <div class="activities">
     <div class="activity"
          *ngFor="let activity of activityService.activities; let i = index">
-            <app-activity [activityId]="i"
+            <app-activity [activityIndex]="i"
                           [initialState]="activityState"
                           [gradeId]="gradeId"></app-activity>
     </div>

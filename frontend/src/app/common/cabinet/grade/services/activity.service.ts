@@ -48,8 +48,12 @@ export class ActivityService {
         }
     }
 
-    public getActivity(index: number): ActivityModel {
-        return this.activities.find((a) => a.id === index)!;
+    public getActivityById(id: number): ActivityModel {
+        return this.activities.find((a) => a.id === id)!;
+    }
+
+    public getActivityByIndex(index: number): ActivityModel {
+        return this.activities[index];
     }
 
     //Requests

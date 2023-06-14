@@ -43,7 +43,8 @@ import { PageBase } from '../../../../../lib/shared/components/page-base/page-ba
 })
 export class ActivityComponent extends PageBase implements AfterContentInit {
 
-    @Input() public activityId!: number;
+    @Input() public activityId?: number;
+    @Input() public activityIndex?: number;
     @Input() public gradeId: number | undefined; //Для добавления активностей к существующему грейду
     //Проверка сохранять нам активность сразу или грейд новый и надо сохранить всё разом
     @Input() public initialState: ActivityState = ActivityState.userReport;
@@ -69,7 +70,7 @@ export class ActivityComponent extends PageBase implements AfterContentInit {
     }
 
     public ngAfterContentInit(): void {
-        this._model = this._activityService.getActivity(this.activityId);
+        this._model = this.activityId ? this._activityService.getActivityById(this.activityId) : this._activityService.getActivityByIndex(this.activityIndex!);
         this._initialModel = { ...this._model };
         this.state = this.initialState;
         if (!this._model.id) {
