@@ -19,7 +19,7 @@
             <accordion-arrow-icon [@rotate180]="isOpened? 'rotated' : 'still'" [forceHover]="isOpened"></accordion-arrow-icon>
         </div>
 
-        <app-error *ngIf="form.controls['name'].invalid"
+        <app-error *ngIf="form.controls['name'].invalid && form.controls['name'].touched"
                    [error]="{ message: 'Заполните название активности'}"></app-error>
 
         <div class="content" [@contentExpansion]="isOpened ? 'expanded' : 'collapsed'">

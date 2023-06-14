@@ -34,7 +34,7 @@
                            formControlName="name"
                            placeholder="Введите название">
 
-                    <app-error class="input-block__error-message" [@contentExpansion]="form.controls['name'].invalid ? 'expanded' : 'collapsed'"
+                    <app-error class="input-block__error-message" [@contentExpansion]="form.controls['name'].invalid && form.controls['name'].touched ? 'expanded' : 'collapsed'"
                                [error]="{ message: 'Введите название грейда' }"></app-error>
                 </div>
 
@@ -44,7 +44,7 @@
                            type="date"
                            formControlName="expirationDate">
 
-                    <app-error class="input-block__error-message" [@contentExpansion]="form.controls['expirationDate'].invalid ? 'expanded' : 'collapsed'"
+                    <app-error class="input-block__error-message" [@contentExpansion]="form.controls['expirationDate'].invalid  && form.controls['expirationDate'].touched ? 'expanded' : 'collapsed'"
                                [error]="{ message: 'Выберите корректную дату' }"></app-error>
                 </div>
 
