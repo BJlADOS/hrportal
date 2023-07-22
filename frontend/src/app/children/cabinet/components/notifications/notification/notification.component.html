@@ -39,7 +39,7 @@
 
 <ng-template #vacancyResponse>
     <span>
-        На вашу вакансию <span class="highlight bold">{{(vacancy$ | async)?.position}}</span> получен отклик от руководителя
+        На вашу вакансию <span class="highlight bold">{{(vacancy$ | async)?.position}}</span> получен отклик от
         <span class="highlight">{{getEmployeeName((employee$ | async)?.fullname ?? '')}}</span>.
     </span>
 </ng-template>

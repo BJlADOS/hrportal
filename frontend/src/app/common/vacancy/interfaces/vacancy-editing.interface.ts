@@ -1,4 +1,4 @@
-export interface IVacancyEditing {
+export interface IVacancyEdit {
     position: boolean;
     department: boolean;
     salary: boolean;

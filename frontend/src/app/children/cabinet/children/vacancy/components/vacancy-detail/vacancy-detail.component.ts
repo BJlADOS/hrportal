@@ -1,6 +1,6 @@
-import { Component, Injector, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { finalize, Observable, takeUntil } from 'rxjs';
+import {Component, Injector, OnInit} from '@angular/core';
+import {ActivatedRoute, ParamMap, Router} from '@angular/router';
+import {finalize, Observable, takeUntil} from 'rxjs';
 import {
     DepartmentService,
     IDepartment,
@@ -8,17 +8,18 @@ import {
     ISubmitError,
     IUser,
     IVacancy,
-    IVacancyEditing,
+    IVacancyEdit,
     IVacancyFormError,
     IVacancyResponseModel,
     SkillsService,
     UserService,
     VacancyService
 } from '../../../../../../common';
-import { FormGroup } from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {
     contentExpansion,
     DestroyService,
+    Employment,
     FormGenerator,
     FormManager,
     getEmploymentRussianAsArray,
@@ -26,12 +27,12 @@ import {
     ISelectOption,
     ModalService
 } from '../../../../../../lib';
-import { UploadModalComponent } from '../upload-modal/upload-modal.component';
-import { HttpErrorResponse } from '@angular/common/http';
-import { Status } from '../../../../../../lib/utils/enums/status.enum';
-import { ArchiveVacancyComponent } from '../modals/archive-vacancy/archive-vacancy.component';
-import { RemoveFromArchiveComponent } from '../modals/remove-from-archive/remove-from-archive.component';
-import { DeleteVacancyComponent } from '../modals/delete-vacancy/delete-vacancy.component';
+import {UploadModalComponent} from '../upload-modal/upload-modal.component';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Status} from '../../../../../../lib/utils/enums/status.enum';
+import {ArchiveVacancyComponent} from '../modals/archive-vacancy/archive-vacancy.component';
+import {RemoveFromArchiveComponent} from '../modals/remove-from-archive/remove-from-archive.component';
+import {DeleteVacancyComponent} from '../modals/delete-vacancy/delete-vacancy.component';
 
 
 @Component({
@@ -57,7 +58,7 @@ export class VacancyDetailComponent implements OnInit {
 
     public isEditing: boolean = false;
     public isAddingSkill: boolean = false;
-    public isUserEdited: IVacancyEditing = {
+    public isUserEdited: IVacancyEdit = {
         position: false,
         department: false,
         salary: false,
@@ -148,8 +149,27 @@ export class VacancyDetailComponent implements OnInit {
     public cancelEditing(): void {
         this.resetForm();
         this.isEditing = false;
-        this.isUserEdited = { position: false, department: false, salary: false, employment: false, schedule: false, description: false, skills: false };
-        this.errors = { position: null, salary: null, department: null, employment: null, schedule: null, description: null, requiredSkills: null };
+
+        this.isUserEdited = {
+            position: false,
+            department: false,
+            salary: false,
+            employment: false,
+            schedule: false,
+            description: false,
+            skills: false
+        };
+
+        this.errors = {
+            position: null,
+            salary: null,
+            department: null,
+            employment: null,
+            schedule: null,
+            description: null,
+            requiredSkills: null
+        };
+
         this.submitError = null;
         this.isAddingSkill = false;
     }
@@ -283,7 +303,7 @@ export class VacancyDetailComponent implements OnInit {
             vacancyUpdate.schedule = form.schedule.id;
         }
         if (this.isUserEdited.employment) {
-            vacancyUpdate.employment = form.employment;
+            vacancyUpdate.employment = form.employment.id;
         }
         vacancyUpdate.requiredSkillsIds = (form.requiredSkills as ISkill[]).map((skill: ISkill) => skill.id);
 
